@@ -15,8 +15,10 @@ module.exports = {
           100: "#1E1E2D",
           200: "#232533",
         },
-        gray: {
-          100: "#CDCDE0",
+        orange: { DEFAULT: "rgb(243, 112, 33)" },
+        purple: {
+          DEFAULT: "rgb(88, 28, 150)",
+          100: "rgb(71, 21 124)",
         },
       },
       fontFamily: {
