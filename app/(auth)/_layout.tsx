@@ -9,7 +9,7 @@ SplashScreen.preventAutoHideAsync();
 export default function TabLayout() {
   return (
     <GestureHandlerRootView>
-      <Stack >
+      <Stack>
         <Stack.Screen
           name="sign-in"
           options={{ headerShown: false }}

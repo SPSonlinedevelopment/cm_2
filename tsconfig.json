@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "app/components/FormField/FormField.test.js", "app/components/CustomButton/CustomButton.test.js"  ]
 }

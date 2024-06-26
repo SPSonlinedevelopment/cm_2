@@ -26,6 +26,5 @@ describe("Button", () => {
     render(<CustomButton title={titleMessage} handlePress={() => {}} />);
     const buttonText = screen.getByText(titleMessage);
     expect(buttonText).toBeTruthy;
-    screen.debug();
   });
 });

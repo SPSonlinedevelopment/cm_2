@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
+import Loading from "../Loading";
 
 interface CustomButtonProps {
   title: string;
@@ -22,14 +23,21 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       onPress={() => {
         handlePress();
       }}
-      className={`bg-purple-100 rounded-xl min-h-[62px] justify-center items-center ${containerStyles} ${
+      className={` bg-orange rounded-3xl my-4 h-[45px] w-[330px] justify-center items-center ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       } `}
       testID="custom_button"
     >
-      <Text testID="custom_button_text" className={`text-white font-psemibold  text-center ${textStyles} `}>
-        {title}
-      </Text>
+      {isLoading ? (
+        <Loading size={62} />
+      ) : (
+        <Text
+          testID="custom_button_text"
+          className={`text-white font-psemibold  text-center ${textStyles} `}
+        >
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
