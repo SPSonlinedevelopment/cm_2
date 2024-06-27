@@ -9,8 +9,10 @@ import {
 
 interface KavProps {
   children: any;
-  inChat: boolean;
+  inChat?: boolean;
 }
+
+const ios = Platform.OS == "ios";
 
 const CustomKeyboardView: React.FC<KavProps> = ({ children, inChat }) => {
   let kavConfig = {};
@@ -21,8 +23,18 @@ const CustomKeyboardView: React.FC<KavProps> = ({ children, inChat }) => {
     scrollViewConfig = { contentContainerStyle: { flex: 1 } };
   }
   return (
-    <KeyboardAvoidingView>
-      <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
+    <KeyboardAvoidingView
+      behavior={ios ? "padding" : "height"}
+      style={{
+        flex: 1,
+      }}
+      {...kavConfig}
+    >
+      <ScrollView
+        {...scrollViewConfig}
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+      >
         {children}
       </ScrollView>
     </KeyboardAvoidingView>

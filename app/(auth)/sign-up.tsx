@@ -12,13 +12,9 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-const SignUp = () => {
-  const [loading, setLoading] = useState(false);
+import SignUpForm from "../components/Auth/SignUpForm";
 
-  const handleClick = () => {
-    setLoading(true);
-  };
-  const handleChange = () => {};
+const SignUp = () => {
   return (
     <SafeAreaView className="bg-purple h-full flex justify-between items-center">
       <View className="flex flex-row  justify-between   w-full">
@@ -43,37 +39,7 @@ const SignUp = () => {
           To sign up, enter your school email and choose a new password
         </Text>
       </View>
-
-      <View>
-        <FormField
-          type="name"
-          icon={<Feather name="user" size={hp(2.7)} color="grey" />}
-          placeholderText="First Name"
-          handlePress={handleChange}
-        ></FormField>
-      </View>
-      <FormField
-        type="email"
-        icon={
-          <MaterialCommunityIcons name="email-outline" size={24} color="grey" />
-        }
-        placeholderText="Email"
-        handlePress={handleChange}
-      ></FormField>
-      <FormField
-        type="password"
-        icon={<AntDesign name="lock" size={24} color="grey" />}
-        placeholderText="Password"
-        handlePress={handleChange}
-      ></FormField>
-      <CustomButton
-        isLoading={loading}
-        containerStyles=""
-        handlePress={() => {
-          handleClick();
-        }}
-        title="Sign Up"
-      ></CustomButton>
+      <SignUpForm />
       <View>
         <Text className="text-white text-base my-1">
           Already have an account?

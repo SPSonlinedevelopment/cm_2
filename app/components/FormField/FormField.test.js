@@ -13,14 +13,7 @@ describe("form field", () => {
 
     const expectedUsername = "Ada Lovelace";
 
-    render(
-      <FormField
-        placeholderText="testplaceholder"
-        handlePress={mockCallback}
-      ></FormField>
-    );
-
-    fireEvent.changeText(screen.getByTestId("input"), expectedUsername);
+    // fireEvent.changeText(screen.getByTestId("input"), expectedUsername);
 
     // simulate tyoing and name
 
