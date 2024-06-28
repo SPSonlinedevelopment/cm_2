@@ -14,8 +14,6 @@ import {
 
 const SignInForm = () => {
   const [loading, setLoading] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
 
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);

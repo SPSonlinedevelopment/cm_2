@@ -10,8 +10,19 @@ interface CustomFormFieldProps {
   icon?: React.ReactNode;
   type?: string;
   refName?: any;
-  error?: boolean;
-  seterror?: React.Dispatch<React.SetStateAction<boolean>>;
+  editable?: boolean;
+  error: {
+    name: { isError: boolean; message: string };
+    email: { isError: boolean; message: string };
+    password: { isError: boolean; message: string };
+  };
+  seterror: React.Dispatch<
+    React.SetStateAction<{
+      name: { isError: boolean; message: string };
+      email: { isError: boolean; message: string };
+      password: { isError: boolean; message: string };
+    }>
+  >;
 }
 
 const FormField: React.FC<CustomFormFieldProps> = ({
@@ -22,6 +33,7 @@ const FormField: React.FC<CustomFormFieldProps> = ({
   refName,
   error,
   seterror,
+  editable,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [passwordVisible, setPasswordVisble] = useState(true);
@@ -34,41 +46,85 @@ const FormField: React.FC<CustomFormFieldProps> = ({
     setIsFocused(false);
   };
 
-  let inputValidationErrorMessage = "";
+  let errorObj: { isError: boolean; message: string } = {
+    isError: false,
+    message: "",
+  };
 
-  if (!refName.current) {
-    inputValidationErrorMessage = `Hey! This ${type} field cannot be empty`;
+  if (type === "password") {
+    errorObj = error.password;
+  } else if (type === "email") {
+    errorObj = error.email;
+  } else if (type === "name") {
+    errorObj = error.name;
   }
 
+  const handleInputChange = (value: any) => {
+    refName.current = value;
+
+    if (type === "name") {
+      seterror((prevErrors) => {
+        const newErrors = {
+          ...prevErrors,
+          name: { isError: false, message: "" },
+        };
+        return newErrors;
+      });
+    }
+
+    if (type === "email") {
+      seterror((prevErrors) => {
+        const newErrors = {
+          ...prevErrors,
+          email: { isError: false, message: "" },
+        };
+        return newErrors;
+      });
+    }
+
+    if (type === "password") {
+      seterror((prevErrors) => {
+        const newErrors = {
+          ...prevErrors,
+          password: { isError: false, message: "" },
+        };
+        return newErrors;
+      });
+    }
+  };
+
   return (
-    <View className="">
+    <View>
       <View
-        className={`h-[50px] w-[330px] my-1 flex-row justify-start ${
+        className={`h-[50px] w-[330px] my-1 flex-row items-center justify-start ${
           isFocused
-            ? `border border-white`
-            : error
+            ? `border border-white `
+            : errorObj.isError
             ? `border border-red-500`
             : `border-none`
-        } items-center pl-3  rounded-3xl font-semibold  bg-purple-100 ${otherStyles}`}
+        } pl-3  rounded-full font-semibold  bg-purple-100 ${otherStyles}`}
       >
         {icon}
 
         <TextInput
+          testID="input"
+          editable={!editable}
           placeholderTextColor="grey"
           secureTextEntry={type === "password" ? passwordVisible : false}
-          style={{ borderColor: "white", color: "white" }}
+          style={{
+            borderColor: "white",
+            justifyContent: "center",
+            color: "white",
+            fontSize: 16,
+          }}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className={` pl-2  placeholder-white-500  w-[80%] h-full  
+          className={` h-full w-[80%] pl-2 justify-center items-center 
         }`}
           placeholder={placeholderText}
           onChangeText={(value) => {
-            refName.current = value;
-            if (seterror) {
-              seterror(false);
-            }
+            handleInputChange(value);
           }}
-          testID="input"
         ></TextInput>
 
         {type === "password" && (
@@ -81,10 +137,8 @@ const FormField: React.FC<CustomFormFieldProps> = ({
           </BaseButton>
         )}
       </View>
-      {error && (
-        <Text className="text-red-500 ml-5 py-1">
-          {inputValidationErrorMessage}
-        </Text>
+      {errorObj?.isError && (
+        <Text className="text-red-500 ml-5 py-1">{errorObj.message}</Text>
       )}
     </View>
   );

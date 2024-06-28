@@ -11,32 +11,65 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import * as EmailValidator from "email-validator";
+
+const initialState = {
+  name: { isError: false, message: "" },
+  email: { isError: false, message: "" },
+  password: { isError: false, message: "" },
+};
 
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [nameError, setNameError] = useState(false);
+  const [errors, setErrors] = useState(initialState);
 
   const nameRef = useRef(undefined);
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);
 
-  const handleClick = () => {
-    setPasswordError(false);
-    setNameError(false);
-    setEmailError(false);
+  const validateInputs = () => {
+    let newErrors = {
+      name: { isError: false, message: "" },
+      email: { isError: false, message: "" },
+      password: { isError: false, message: "" },
+    };
 
     if (!nameRef.current) {
-      setNameError(true);
+      newErrors.name = {
+        isError: true,
+        message: "Hey! This name field cannot be empty",
+      };
     }
 
     if (!passwordRef.current) {
-      setPasswordError(true);
+      newErrors.password = {
+        isError: true,
+        message: "Hey! This password field cannot be empty",
+      };
     }
 
     if (!emailRef.current) {
-      setEmailError(true);
+      newErrors.email = {
+        isError: true,
+        message: "Hey! This email field cannot be empty",
+      };
+    } else if (!EmailValidator.validate(emailRef.current)) {
+      newErrors.email = {
+        isError: true,
+        message: "Hey! Incorrect email type",
+      };
+    }
+
+    setErrors(newErrors);
+
+    const { name, email, password } = newErrors;
+
+    return [name, email, password].every((error) => !error.isError);
+  };
+
+  const handleClick = () => {
+    if (validateInputs()) {
+      setLoading(true);
     }
   };
 
@@ -48,8 +81,9 @@ const SignUpForm = () => {
           type="name"
           icon={<Feather name="user" size={hp(2.7)} color="white" />}
           placeholderText="First Name"
-          error={nameError}
-          seterror={setNameError}
+          error={errors}
+          seterror={setErrors}
+          editable={loading}
         ></FormField>
       </View>
       <FormField
@@ -63,16 +97,18 @@ const SignUpForm = () => {
           />
         }
         placeholderText="Email"
-        error={emailError}
-        seterror={setEmailError}
+        error={errors}
+        seterror={setErrors}
+        editable={loading}
       ></FormField>
       <FormField
         refName={passwordRef}
         type="password"
         icon={<AntDesign name="lock" size={24} color="white" />}
         placeholderText="Password"
-        error={passwordError}
-        seterror={setPasswordError}
+        error={errors}
+        seterror={setErrors}
+        editable={loading}
       ></FormField>
       <CustomButton
         isLoading={loading}

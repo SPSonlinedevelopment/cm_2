@@ -35,7 +35,7 @@ const SignUp = () => {
 
       <View className="w-[80%]   flex-col justify-center items-center">
         <Text className="text-white text-2xl mt-3">Sign up to get started</Text>
-        <Text className="text-neutral-300  text-center text-base p-4 leading-1">
+        <Text className="text-neutral-300  text-center text-base p-2 leading-1">
           To sign up, enter your school email and choose a new password
         </Text>
       </View>

@@ -47,6 +47,7 @@ const SignIn = () => {
           Sign in to join our community
         </Text>
       </View>
+
       <SignInForm />
 
       <View>
