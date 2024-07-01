@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import React, { useContext } from "react";
 import { Link, Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,15 +17,15 @@ const RootLayout = () => {
     <SafeAreaView className="bg-purple h-full flex justify-center items-center">
       {/* <ScrollView contentContainerStyle={{ height: "90%" }}></ScrollView> */}
 
-      <View>
-        <Link href={"sign-up"}>
-          <Text className="text-white"> Continue to sign in </Text>
-        </Link>
+      <View className="m-6">
+        <Pressable onPress={() => router.push("sign-up")}>
+          <Text className="text-white text-lg"> Continue to sign up </Text>
+        </Pressable>
       </View>
       <View>
-        <Link className="mt-4" href={"sign-up"}>
-          <Text className="text-white"> Continue to sign UP </Text>
-        </Link>
+        <Pressable onPress={() => router.push("sign-in")}>
+          <Text className="text-white text-lg"> Continue to sign in </Text>
+        </Pressable>
       </View>
 
       {/* <StatusBar style="light"></StatusBar> */}

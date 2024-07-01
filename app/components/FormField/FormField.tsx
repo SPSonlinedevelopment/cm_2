@@ -4,12 +4,18 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import CustomButton from "../CustomButton/CustomButton";
 import { BaseButton, RawButton } from "react-native-gesture-handler";
 
+export const initialFormState = {
+  name: { isError: false, message: "" },
+  email: { isError: false, message: "" },
+  password: { isError: false, message: "" },
+};
+
 interface CustomFormFieldProps {
   placeholderText: string;
+  refName: any;
   otherStyles?: string;
   icon?: React.ReactNode;
-  type?: string;
-  refName?: any;
+  type: string;
   editable?: boolean;
   error: {
     name: { isError: boolean; message: string };
@@ -59,6 +65,7 @@ const FormField: React.FC<CustomFormFieldProps> = ({
     errorObj = error.name;
   }
 
+  console.log("errorObj", errorObj);
   const handleInputChange = (value: any) => {
     refName.current = value;
 

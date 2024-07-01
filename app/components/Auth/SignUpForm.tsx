@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Children, useEffect, useRef, useState } from "react";
 import { Link } from "expo-router";
 import CustomButton from "../CustomButton/CustomButton";
 import FormField from "../FormField/FormField";
@@ -11,7 +11,10 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import * as EmailValidator from "email-validator";
+
+import { validateInputs } from "./validateInputs";
+import { auth } from "@/firebaseConfig";
+import { useAuth } from "@/context/authContext";
 
 const initialState = {
   name: { isError: false, message: "" },
@@ -22,70 +25,48 @@ const initialState = {
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialState);
+  const { createNewUser } = useAuth();
 
   const nameRef = useRef(undefined);
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);
 
-  const validateInputs = () => {
-    let newErrors = {
-      name: { isError: false, message: "" },
-      email: { isError: false, message: "" },
-      password: { isError: false, message: "" },
-    };
+  const validateParams = [
+    { type: "name", ref: nameRef },
+    { type: "email", ref: emailRef },
+    { type: "password", ref: passwordRef },
+  ];
 
-    if (!nameRef.current) {
-      newErrors.name = {
-        isError: true,
-        message: "Hey! This name field cannot be empty",
-      };
-    }
-
-    if (!passwordRef.current) {
-      newErrors.password = {
-        isError: true,
-        message: "Hey! This password field cannot be empty",
-      };
-    }
-
-    if (!emailRef.current) {
-      newErrors.email = {
-        isError: true,
-        message: "Hey! This email field cannot be empty",
-      };
-    } else if (!EmailValidator.validate(emailRef.current)) {
-      newErrors.email = {
-        isError: true,
-        message: "Hey! Incorrect email type",
-      };
-    }
-
-    setErrors(newErrors);
-
-    const { name, email, password } = newErrors;
-
-    return [name, email, password].every((error) => !error.isError);
-  };
-
-  const handleClick = () => {
-    if (validateInputs()) {
+  let message;
+  const handleClick = async () => {
+    if (validateInputs(validateParams, setErrors)) {
       setLoading(true);
+    }
+
+    const result = await createNewUser(
+      nameRef.current,
+      emailRef.current,
+      passwordRef.current
+    );
+
+    setLoading(false);
+    if (!result.success) {
+      message = result.message;
     }
   };
 
   return (
     <>
-      <View>
-        <FormField
-          refName={nameRef}
-          type="name"
-          icon={<Feather name="user" size={hp(2.7)} color="white" />}
-          placeholderText="First Name"
-          error={errors}
-          seterror={setErrors}
-          editable={loading}
-        ></FormField>
-      </View>
+      <FormField
+        refName={nameRef}
+        type="name"
+        icon={<Feather name="user" size={hp(2.7)} color="white" />}
+        placeholderText="First Name"
+        error={errors}
+        seterror={setErrors}
+        editable={loading}
+      ></FormField>
+
       <FormField
         refName={emailRef}
         type="email"
@@ -110,6 +91,7 @@ const SignUpForm = () => {
         seterror={setErrors}
         editable={loading}
       ></FormField>
+      {message}
       <CustomButton
         isLoading={loading}
         containerStyles=""
