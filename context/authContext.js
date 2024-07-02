@@ -42,20 +42,13 @@ export const AuthContextProvider = ({ children }) => {
       console.log("error", error);
       let msg = error.message;
       if (msg.includes("(auth/invalid-email)"))
-        msg = <Text>This email is invalid please check its correct!</Text>;
-      if (msg.includes("(auth/email-already-in-use)"))
-        msg = (
-          <Text>
-            There is already an account associated with that email. Please try
-            again. If you already have an account please{" "}
-            <Link className="text-orange" href={"sign-in"}>
-              {" "}
-              sign in{" "}
-            </Link>
-          </Text>
-        );
+        msg = "This email is invalid please check its correct!";
+      if (msg.includes("(auth/email-already-in-use)")) {
+        msg =
+          "There is already an account associated with that email. Please try again";
+      }
 
-      return { success: false, alertComponent: msg };
+      return { success: false, message: msg };
     }
   };
 

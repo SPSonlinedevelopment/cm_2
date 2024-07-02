@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { Children, useEffect, useRef, useState } from "react";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import CustomButton from "../CustomButton/CustomButton";
 import FormField from "../FormField/FormField";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,6 +25,7 @@ const initialState = {
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialState);
+  const [alertMessage, setAlertMessage] = useState("");
   const { createNewUser } = useAuth();
 
   const nameRef = useRef(undefined);
@@ -37,7 +38,6 @@ const SignUpForm = () => {
     { type: "password", ref: passwordRef },
   ];
 
-  let message;
   const handleClick = async () => {
     if (validateInputs(validateParams, setErrors)) {
       setLoading(true);
@@ -50,9 +50,8 @@ const SignUpForm = () => {
     );
 
     setLoading(false);
-    if (!result.success) {
-      message = result.message;
-    }
+    setAlertMessage(result.message);
+    router.push("profile");
   };
 
   return (
@@ -91,7 +90,7 @@ const SignUpForm = () => {
         seterror={setErrors}
         editable={loading}
       ></FormField>
-      {message}
+      <Text className="text-white text-center w-[80%]"> {alertMessage}</Text>
       <CustomButton
         isLoading={loading}
         containerStyles=""

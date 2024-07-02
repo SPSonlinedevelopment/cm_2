@@ -17,7 +17,7 @@ import SignInForm from "../components/Auth/SignInForm";
 
 const SignIn = () => {
   return (
-    <SafeAreaView className="h-full bg-purple">
+    <CustomKeyboardView>
       <View className="bg-purple flex-1 justify-between items-center">
         <View className="flex flex-row  justify-between   w-full">
           <Link
@@ -66,7 +66,7 @@ const SignIn = () => {
           </Text>
         </View>
       </View>
-    </SafeAreaView>
+    </CustomKeyboardView>
   );
 };
 

@@ -19,8 +19,8 @@ import { useAuth } from "@/context/authContext";
 const SignUp = () => {
   return (
     <CustomKeyboardView>
-      <View className="h-full bg-purple-100 ">
-        <View className="bg-purple-100 h-full">
+      <View className="flex flex-col items-center bg-purple h-full  ">
+        <View className=" w-full flex flex-row justify-between">
           <Link
             className="ml-6 text-neutral-300 font-pmedium text-lg"
             href={"index"}

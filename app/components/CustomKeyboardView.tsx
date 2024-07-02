@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -26,32 +27,38 @@ const CustomKeyboardView: React.FC<KavProps> = ({
 
   if (inChat) {
     kavConfig = { keyboardVerticalOffset: 90 };
-    scrollViewConfig = { contentContainerStyle: { flex: 1 } };
+    scrollViewConfig = { contentContainerStyle: { flex: 1, height: "100%" } };
   }
   return (
     <KeyboardAvoidingView
+      className="h-full"
       behavior={ios ? "padding" : "height"}
-      style={{
-        flex: 1,
-      }}
-      {...kavConfig}
-      // contentContainerStyle={{ flex: 1 }}
+      keyboardVerticalOffset={10}
+      style={styles.container}
+      // {...kavConfig}
     >
-      <ScrollView
-        {...scrollViewConfig}
-        contentContainerStyle={{
-          display: "flex",
-          height: 100,
-          alignItems: "center",
-          backgroundColor: "black",
-        }}
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-      >
-        {children}
-      </ScrollView>
+      <SafeAreaView className="h-full">
+        <ScrollView
+          bounces={false}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {children}
+        </ScrollView>
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollContent: { flexGrow: 1 },
+  safeArea: {
+    height: "100%",
+    flex: 1,
+  },
+});
 
 export default CustomKeyboardView;
