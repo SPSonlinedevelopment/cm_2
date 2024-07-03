@@ -7,8 +7,6 @@ import {
   userEvent,
 } from "@testing-library/react-native";
 
-
-
 describe("TextInput", () => {
   const user = userEvent.setup();
   // test("renders correctly", () => {
@@ -26,18 +24,20 @@ describe("TextInput", () => {
     const otherStyles = "custom-styles";
 
     const type = "password";
-    const refName = {current: ''}
+    const refName = { current: "" };
     const error = {
       name: { isError: false, message: "" },
       email: { isError: false, message: "" },
       password: { isError: false, message: "" },
     };
     const seterror = jest.fn();
+    const setAlertMessage = jest.fn();
     const editable = true;
 
     // Render the component
     const { getByTestId } = render(
       <FormField
+        setAlertMessage={setAlertMessage}
         placeholderText={placeholderText}
         otherStyles={otherStyles}
         type={type}

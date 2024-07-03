@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
 import { Link } from "expo-router";
-import CustomButton from "../components/CustomButton/CustomButton";
+import CustomButton from "../components/Buttons/CustomButton";
 import FormField from "../components/FormField/FormField";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Octicons } from "@expo/vector-icons";
@@ -13,8 +13,8 @@ import {
 } from "react-native-responsive-screen";
 import CustomKeyboardView from "../components/CustomKeyboardView";
 
-import SignUpForm from "../components/Auth/SignUpForm";
-import { useAuth } from "@/context/authContext";
+import SignUpForm from "../components/Auth/SignUp/SignUpForm";
+import { useAuth } from "../context/authContext";
 
 const SignUp = () => {
   return (

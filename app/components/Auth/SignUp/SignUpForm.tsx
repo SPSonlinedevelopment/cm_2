@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import { Link } from "expo-router";
-import CustomButton from "../CustomButton/CustomButton";
-import FormField from "../FormField/FormField";
+import React, { Children, useEffect, useRef, useState } from "react";
+import { Link, router } from "expo-router";
+import CustomButton from "../../Buttons/CustomButton";
+import FormField from "../../FormField/FormField";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Octicons } from "@expo/vector-icons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -11,20 +11,29 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { validateInputs } from "./validateInputs";
-import { initialFormState } from "../FormField/FormField";
-import { useAuth } from "@/context/authContext";
-import { auth } from "@/firebaseConfig";
 
-const SignInForm = () => {
+import { validateInputs } from "../validateInputs/validateInputs";
+import { auth } from "../../../../firebaseConfig";
+import { useAuth } from "../../../context/authContext";
+
+const initialState = {
+  name: { isError: false, message: "" },
+  email: { isError: false, message: "" },
+  password: { isError: false, message: "" },
+};
+
+const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState(initialFormState);
+  const [errors, setErrors] = useState(initialState);
+  const [alertMessage, setAlertMessage] = useState("");
   const { createNewUser } = useAuth();
 
+  const nameRef = useRef(undefined);
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);
 
   const validateParams = [
+    { type: "name", ref: nameRef },
     { type: "email", ref: emailRef },
     { type: "password", ref: passwordRef },
   ];
@@ -32,14 +41,36 @@ const SignInForm = () => {
   const handleClick = async () => {
     if (validateInputs(validateParams, setErrors)) {
       setLoading(true);
-    }
 
- 
+      const result = await createNewUser(
+        nameRef.current,
+        emailRef.current,
+        passwordRef.current
+      );
+
+      if (result.success) {
+        setLoading(false);
+        router.push("profile");
+      } else setAlertMessage(result.message);
+      setLoading(false);
+    }
   };
 
   return (
     <>
       <FormField
+        setAlertMessage={setAlertMessage}
+        refName={nameRef}
+        type="name"
+        icon={<Feather name="user" size={hp(2.7)} color="white" />}
+        placeholderText="First Name"
+        error={errors}
+        seterror={setErrors}
+        editable={loading}
+      ></FormField>
+
+      <FormField
+        setAlertMessage={setAlertMessage}
         refName={emailRef}
         type="email"
         icon={
@@ -55,6 +86,7 @@ const SignInForm = () => {
         editable={loading}
       ></FormField>
       <FormField
+        setAlertMessage={setAlertMessage}
         refName={passwordRef}
         type="password"
         icon={<AntDesign name="lock" size={24} color="white" />}
@@ -63,23 +95,17 @@ const SignInForm = () => {
         seterror={setErrors}
         editable={loading}
       ></FormField>
-      <View>
-        <View className="  border-white  flex flex-row justify-end w-[80%]">
-          <Link href={"forgot-password"} className=" text-orange-400 text-xs  ">
-            Forgot password?{" "}
-          </Link>
-        </View>
-      </View>
+      <Text className="text-white text-center w-[80%]"> {alertMessage}</Text>
       <CustomButton
         isLoading={loading}
         containerStyles=""
         handlePress={() => {
           handleClick();
         }}
-        title="Sign In"
+        title="Sign Up"
       ></CustomButton>
     </>
   );
 };
 
-export default SignInForm;
+export default SignUpForm;

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Stack, SplashScreen } from "expo-router";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { AuthContextProvider } from "@/context/authContext";
+import { AuthContextProvider } from "../context/authContext";
 
 SplashScreen.preventAutoHideAsync();
 

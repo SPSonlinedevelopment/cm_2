@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
 import { Link } from "expo-router";
-import CustomButton from "../components/CustomButton/CustomButton";
+import CustomButton from "../components/Buttons/CustomButton";
 import FormField from "../components/FormField/FormField";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Octicons } from "@expo/vector-icons";
@@ -13,7 +13,7 @@ import {
 } from "react-native-responsive-screen";
 
 import CustomKeyboardView from "../components/CustomKeyboardView";
-import SignInForm from "../components/Auth/SignInForm";
+import SignInForm from "../components/Auth/SignIn/SignInForm";
 
 const SignIn = () => {
   return (
@@ -57,8 +57,8 @@ const SignIn = () => {
             By continuing, you agree to our{" "}
             <Link className="text-orange-400 text-xs" href={""}>
               Terms
-            </Link>
-            and
+            </Link>{" "}
+            and{" "}
             <Link className="text-orange-400 text-xs" href={""}>
               Privacy Policy
             </Link>

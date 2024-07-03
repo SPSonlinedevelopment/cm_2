@@ -3,8 +3,8 @@ import React, { useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import FormField, { initialFormState } from "../components/FormField/FormField";
-import { validateInputs } from "../components/Auth/validateInputs";
-import CustomButton from "../components/CustomButton/CustomButton";
+import { validateInputs } from "../components/Auth/validateInputs/validateInputs";
+import CustomButton from "../components/Buttons/CustomButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CustomKeyboardView from "../components/CustomKeyboardView";
 
@@ -12,6 +12,7 @@ const ForgotPassword = () => {
   const emailRef = useRef(undefined);
   const [errors, setErrors] = useState(initialFormState);
   const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const validateParams = [{ type: "email", ref: emailRef }];
 
@@ -32,6 +33,7 @@ const ForgotPassword = () => {
           </Text>
 
           <FormField
+            setAlertMessage={setAlertMessage}
             type="email"
             icon={
               <MaterialCommunityIcons

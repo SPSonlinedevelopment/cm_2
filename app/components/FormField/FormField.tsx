@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Button } from "react-native";
 import React, { useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import CustomButton from "../CustomButton/CustomButton";
+import CustomButton from "../Buttons/CustomButton";
 import { BaseButton, RawButton } from "react-native-gesture-handler";
 
 export const initialFormState = {
@@ -17,6 +17,7 @@ interface CustomFormFieldProps {
   icon?: React.ReactNode;
   type: string;
   editable?: boolean;
+  setAlertMessage: React.Dispatch<React.SetStateAction<string>>;
   error: {
     name: { isError: boolean; message: string };
     email: { isError: boolean; message: string };
@@ -40,6 +41,7 @@ const FormField: React.FC<CustomFormFieldProps> = ({
   error,
   seterror,
   editable,
+  setAlertMessage,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [passwordVisible, setPasswordVisble] = useState(true);
@@ -65,9 +67,12 @@ const FormField: React.FC<CustomFormFieldProps> = ({
     errorObj = error.name;
   }
 
-  console.log("errorObj", errorObj);
   const handleInputChange = (value: any) => {
     refName.current = value;
+
+    setAlertMessage("");
+
+    console.log("change");
 
     if (type === "name") {
       seterror((prevErrors) => {

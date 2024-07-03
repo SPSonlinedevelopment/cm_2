@@ -7,9 +7,10 @@ import {
   signOut,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { Try } from "expo-router/build/views/Try";
 import { Link } from "expo-router";
+import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
 
 export const AuthContext = createContext();
 
@@ -34,21 +35,27 @@ export const AuthContextProvider = ({ children }) => {
         email,
         password
       );
-
-      console.log("response", response);
-
+      setUser(response);
       return { success: true };
     } catch (error) {
       console.log("error", error);
-      let msg = error.message;
-      if (msg.includes("(auth/invalid-email)"))
-        msg = "This email is invalid please check its correct!";
-      if (msg.includes("(auth/email-already-in-use)")) {
-        msg =
-          "There is already an account associated with that email. Please try again";
-      }
 
-      return { success: false, message: msg };
+      const editedMessage = editFirebaseMessage(error.message);
+
+      return { success: false, message: editedMessage };
+    }
+  };
+
+  const signIn = async (email, password) => {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      console.log("result", result);
+
+      return { success: true };
+    } catch (error) {
+      console.log("sign in error", error);
+      const editedMessage = editFirebaseMessage(error.message);
+      return { success: false, message: editedMessage };
     }
   };
 
@@ -56,6 +63,7 @@ export const AuthContextProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         createNewUser,
+        signIn,
         user,
         setUser,
       }}
