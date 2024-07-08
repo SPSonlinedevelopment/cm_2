@@ -7,12 +7,16 @@ interface IconButtonProps {
   containerStyles?: string;
   handlePress: () => void;
   isLoading?: boolean;
+  title?: string;
+  textStyles?: string;
 }
 const IconButton: React.FC<IconButtonProps> = ({
   containerStyles,
+  textStyles,
   handlePress,
   icon,
   isLoading,
+  title,
 }) => {
   return (
     <TouchableOpacity
@@ -21,7 +25,7 @@ const IconButton: React.FC<IconButtonProps> = ({
       onPress={() => {
         handlePress();
       }}
-      className={` bg-orange-500   rounded-full my-4 h-[80px] w-[80px] justify-center items-center  ${containerStyles} ${
+      className={` bg-orange-500   rounded-full my-4 justify-center items-center  ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       } `}
       testID="custom_button"
@@ -30,6 +34,9 @@ const IconButton: React.FC<IconButtonProps> = ({
         <Loading size={62} />
       ) : (
         <View testID="icon_button_test">{icon}</View>
+      )}
+      {title && !isLoading && (
+        <Text className={`text-white ${textStyles} mt-2`}>{title}</Text>
       )}
     </TouchableOpacity>
   );

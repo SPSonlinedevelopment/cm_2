@@ -9,15 +9,21 @@ SplashScreen.preventAutoHideAsync();
 
 export default function TabLayout() {
   return (
-    <AuthContextProvider>
-      <GestureHandlerRootView>
-        <Stack>
-          <Stack.Screen
-            name="profile"
-            options={{ headerShown: false }}
-          ></Stack.Screen>
-        </Stack>
-      </GestureHandlerRootView>
-    </AuthContextProvider>
+    <>
+      <Stack>
+        <Stack.Screen
+          name="profile"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
+      </Stack>
+    </>
   );
 }
+
+//    // <AuthContextProvider>
+//       {/* <GestureHandlerRootView> */}
+// <></>
+
+//       {/* </GestureHandlerRootView> */}
+//     // </AuthContextProvider>
+//   );
