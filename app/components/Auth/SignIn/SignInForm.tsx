@@ -74,7 +74,7 @@ const SignInForm = () => {
         <View className="  border-white  flex flex-row justify-end w-[80%]">
           <Link
             href={"forgot-password"}
-            className=" text-orange-400  mt-2 text-xs  "
+            className=" text-orange-400  mt-2 text-sm  "
           >
             Forgot password?{" "}
           </Link>

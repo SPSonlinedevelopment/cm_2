@@ -17,7 +17,7 @@ module.exports = {
         },
         orange: { DEFAULT: "rgb(243, 112, 33)" },
         purple: {
-          DEFAULT: "rgb(88, 28, 150)",
+          DEFAULT: "rgb(99,0,148)",
           100: "rgb(71, 21 124)",
         },
       },

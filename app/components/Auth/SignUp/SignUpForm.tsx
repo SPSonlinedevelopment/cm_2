@@ -98,7 +98,7 @@ const SignUpForm = () => {
       <Text className="text-white text-center w-[80%]"> {alertMessage}</Text>
       <CustomButton
         isLoading={loading}
-        containerStyles=""
+        containerStyles="my-0"
         handlePress={() => {
           handleClick();
         }}

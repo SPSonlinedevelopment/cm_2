@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Stack, SplashScreen } from "expo-router";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { AuthContextProvider } from "../context/authContext";
+import { AuthContextProvider } from "./context/authContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -12,7 +12,12 @@ export default function AuthLayout() {
     <AuthContextProvider>
       <GestureHandlerRootView>
         <Stack>
-          <Stack.Screen
+          {/* <Stack.Screen
+            name="index"
+            options={{ headerShown: false }}
+          ></Stack.Screen> */}
+
+          {/* <Stack.Screen
             name="sign-in"
             options={{ headerShown: false }}
           ></Stack.Screen>
@@ -22,6 +27,11 @@ export default function AuthLayout() {
           ></Stack.Screen>
           <Stack.Screen
             name="forgot-password"
+            options={{ headerShown: false }}
+          ></Stack.Screen> */}
+
+          <Stack.Screen
+            name="profile"
             options={{ headerShown: false }}
           ></Stack.Screen>
         </Stack>

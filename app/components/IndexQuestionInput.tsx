@@ -7,6 +7,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import CustomKeyboardView from "./CustomKeyboardView";
 import { AuthContextProvider, useAuth } from "../context/authContext";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface IndexQuestionInputProps {
   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,37 +41,37 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
   };
 
   return (
-    // <CustomKeyboardView inChat={false}>
-    <View className="h-full w-full bg-gray-200 flex flex-col justify-center items-center">
-      <IconButton
-        containerStyles="h-[50px] w-[50px] bg-white absolute left-4 top-2 "
-        handlePress={() => {
-          toggleDisplayInput(false);
-        }}
-        icon={<Entypo name="cross" size={34} color="black" />}
-      ></IconButton>
+    <CustomKeyboardView>
+      <SafeAreaView className=" w-full h-full flex flex-col bg-grey-200 border  items-center justify-around">
+        <IconButton
+          containerStyles="h-[50px] w-[50px] bg-white absolute left-4 top-10 "
+          handlePress={() => {
+            toggleDisplayInput(false);
+          }}
+          icon={<Entypo name="cross" size={34} color="black" />}
+        ></IconButton>
 
-      <TextInput
-        ref={inputRef}
-        multiline={true}
-        maxLength={1000}
-        placeholder="Type your question"
-        className={`w-full text-center height-[500px]  text-xl `}
-        cursorColor="orange"
-        selectionColor="orange"
-      />
-      <IconButton
-        isLoading={isLoading}
-        handlePress={() => {
-          handleSendQuestion();
-        }}
-        textStyles="ml-2"
-        title="Send"
-        containerStyles="flex flex-row  px-4 h-[50px] absolute bottom-2 right-2"
-        icon={<FontAwesome name="send" size={24} color="white" />}
-      />
-    </View>
-    // </CustomKeyboardView>
+        <TextInput
+          ref={inputRef}
+          multiline={true}
+          maxLength={1000}
+          placeholder="Type your question"
+          className={`w-full text-center height-[500px]  text-xl `}
+          cursorColor="orange"
+          selectionColor="orange"
+        />
+        <IconButton
+          isLoading={isLoading}
+          handlePress={() => {
+            handleSendQuestion();
+          }}
+          textStyles="ml-2"
+          title="Send"
+          containerStyles="flex flex-row  px-4 h-[50px] absolute bottom-2 right-2"
+          icon={<FontAwesome name="send" size={24} color="white" />}
+        />
+      </SafeAreaView>
+    </CustomKeyboardView>
   );
 };
 

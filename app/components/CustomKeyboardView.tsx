@@ -26,43 +26,31 @@ const CustomKeyboardView: React.FC<KavProps> = ({
   let scrollViewConfig = {};
 
   if (inChat) {
-    kavConfig = { keyboardVerticalOffset: 90 };
-    scrollViewConfig = { contentContainerStyle: { flex: 1, height: "100%" } };
+    kavConfig = { keyboardVerticalOffset: 10 };
+    scrollViewConfig = { contentContainerStyle: { flex: 1 } };
   }
   return (
-    <View className="h-full">
-      {/* <KeyboardAvoidingView
-        className="h-full"
-        behavior={ios ? "padding" : "height"}
-        keyboardVerticalOffset={10}
-        style={styles.container}
-        // {...kavConfig}
-      > */}
-      {/* <SafeAreaView> */}
-      {/* <ScrollView
-        className="h-full"
-        bounces={false}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      > */}
-      {children}
-      {/* </ScrollView> */}
-      {/* </SafeAreaView> */}
-      {/* </KeyboardAvoidingView> */}
-    </View>
+    <KeyboardAvoidingView
+      behavior={ios ? "padding" : "height"}
+      contentContainerStyle={styles.container}
+    >
+      <View style={{ height: "100%" }}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          {...scrollViewConfig}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+        >
+          {children}
+        </ScrollView>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: "100%",
-  },
+  container: { flex: 1 },
   scrollContent: { flexGrow: 1 },
-  safeArea: {
-    height: "100%",
-    flex: 1,
-  },
 });
 
 export default CustomKeyboardView;

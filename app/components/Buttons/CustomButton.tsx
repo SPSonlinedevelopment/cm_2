@@ -33,7 +33,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       ) : (
         <Text
           testID="custom_button_text"
-          className={`text-white font-psemibold  text-center ${textStyles} `}
+          className={`text-white font-psemibold  text-base text-center ${textStyles} `}
         >
           {title}
         </Text>

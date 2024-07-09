@@ -127,7 +127,7 @@ const FormField: React.FC<CustomFormFieldProps> = ({
             borderColor: "white",
             justifyContent: "center",
             color: "white",
-            fontSize: 16,
+            fontSize: 18,
           }}
           onFocus={handleFocus}
           onBlur={handleBlur}
