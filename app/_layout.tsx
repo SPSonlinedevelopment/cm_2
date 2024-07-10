@@ -12,12 +12,12 @@ export default function AuthLayout() {
     <AuthContextProvider>
       <GestureHandlerRootView>
         <Stack>
-          {/* <Stack.Screen
+          <Stack.Screen
             name="index"
             options={{ headerShown: false }}
-          ></Stack.Screen> */}
+          ></Stack.Screen>
 
-          {/* <Stack.Screen
+          <Stack.Screen
             name="sign-in"
             options={{ headerShown: false }}
           ></Stack.Screen>
@@ -28,7 +28,7 @@ export default function AuthLayout() {
           <Stack.Screen
             name="forgot-password"
             options={{ headerShown: false }}
-          ></Stack.Screen> */}
+          ></Stack.Screen>
 
           <Stack.Screen
             name="profile"

@@ -15,7 +15,7 @@ const ProgressBar = () => {
   };
 
   return (
-    <View className="w-full mt-3 ">
+    <View className=" mt-3  ">
       <View
         style={{
           position: "relative",
