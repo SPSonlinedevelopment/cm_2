@@ -20,7 +20,7 @@ const OtherListItemComponent: React.FC<OtherListItemProps> = ({
 }) => {
   return (
     <View className="w-[93%] mt-3 ">
-      <Pressable onPress={() => handlePress()}>
+      <Pressable className="" onPress={() => handlePress()}>
         <View className="flex flex-row items-center  w-full justify-start ">
           <View
             className={`${iconColor} h-[40px] w-[40px] rounded-full flex items-center justify-center ${iconStyles} `}

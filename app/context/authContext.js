@@ -35,7 +35,7 @@ export const AuthContextProvider = ({ children }) => {
     return unsub;
   }, []);
 
-  const createNewUser = async (username, email, password) => {
+  const createNewUser = async (email, password) => {
     try {
       const response = await createUserWithEmailAndPassword(
         auth,

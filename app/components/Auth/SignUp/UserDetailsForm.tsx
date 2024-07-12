@@ -17,48 +17,21 @@ import { auth } from "../../../../firebaseConfig";
 import { useAuth } from "../../../context/authContext";
 import { initialFormState } from "../initalFormState";
 
-const SignUpForm = () => {
+const UserDetailsForm = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialFormState);
   const [alertMessage, setAlertMessage] = useState("");
   const { createNewUser } = useAuth();
 
-  const firstName = useRef(undefined);
-  const emailRef = useRef(undefined);
-  const passwordRef = useRef(undefined);
-
-  const validateParams = [
-    { type: "firstName", ref: firstName },
-    { type: "email", ref: emailRef },
-    { type: "password", ref: passwordRef },
-  ];
-
-  const handleClick = async () => {
-    if (validateInputs(validateParams, setErrors)) {
-      setLoading(true);
-
-      const result = await createNewUser(
-        firstName.current,
-        emailRef.current,
-        passwordRef.current
-      );
-
-      if (result.success) {
-        setLoading(false);
-
-        router.push("user-details");
-        // display user Profile setup
-      } else setAlertMessage(result.message);
-      setLoading(false);
-    }
-  };
+  const firstNameRef = useRef(undefined);
+  const lastNameRef = useRef(undefined);
 
   return (
     <>
       <FormField
         setAlertMessage={setAlertMessage}
-        refName={emailRef}
-        type="email"
+        refName={firstNameRef}
+        type="firstName"
         icon={
           <MaterialCommunityIcons
             name="email-outline"
@@ -66,32 +39,30 @@ const SignUpForm = () => {
             color="white"
           />
         }
-        placeholderText="Email"
+        placeholderText="First Name"
         error={errors}
         seterror={setErrors}
         editable={loading}
       ></FormField>
+
       <FormField
         setAlertMessage={setAlertMessage}
-        refName={passwordRef}
-        type="password"
-        icon={<AntDesign name="lock" size={24} color="white" />}
-        placeholderText="Password"
+        refName={lastNameRef}
+        type="lastName"
+        icon={
+          <MaterialCommunityIcons
+            name="email-outline"
+            size={24}
+            color="white"
+          />
+        }
+        placeholderText="Last Name"
         error={errors}
         seterror={setErrors}
         editable={loading}
       ></FormField>
-      <Text className="text-white text-center w-[80%]"> {alertMessage}</Text>
-      <CustomButton
-        isLoading={loading}
-        containerStyles="my-0"
-        handlePress={() => {
-          handleClick();
-        }}
-        title="Sign Up"
-      ></CustomButton>
     </>
   );
 };
 
-export default SignUpForm;
+export default UserDetailsForm;

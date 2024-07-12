@@ -24,6 +24,7 @@ const SignIn = () => {
           <Link
             className="ml-6 text-neutral-300 font-pmedium text-lg"
             href={"index"}
+            push={true}
           >
             Go back
           </Link>

@@ -6,7 +6,7 @@ import FormField from "../../FormField/FormField";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { validateInputs } from "../validateInputs/validateInputs";
-import { initialFormState } from "../../FormField/FormField";
+import { initialFormState } from "../initalFormState";
 import { useAuth } from "@/app/context/authContext";
 
 const SignInForm = () => {

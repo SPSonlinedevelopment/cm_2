@@ -11,6 +11,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import IndexQuestionInput from "./components/IndexQuestionInput";
 import { AuthContext, AuthContextProvider } from "./context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
+import HomeNavButtons from "../app/components/HomeNavButtons/HomeNavButtons";
 
 const RootLayout = () => {
   const [facing, setFacing] = useState("back");
@@ -47,23 +48,24 @@ const RootLayout = () => {
           className="bg-purple flex flex-col items-center justify-between"
           style={{ height: "100%" }}
         >
-          <View className="flex flex-col items-center">
-            <View className="flex flex-col justify-center pt-10">
-              <Text className="text-white pt-5 text-xl font-bold">
-                Hello there 👋
-              </Text>
+          <View className="flex flex-col items-center justify-between  h-[100%]  ">
+            <View className="flex flex-col items-center ">
+              <View className="flex flex-col justify-center pt-10 ">
+                <Text className="text-white pt-5 text-xl font-bold">
+                  Hello there 👋
+                </Text>
+              </View>
+
+              <View className="w-[80%] flex justify-center items-center ">
+                <Text className="mt-4 text-white text-2xl font-bold text-center">
+                  What do you need help with?
+                </Text>
+              </View>
             </View>
 
-            <View className="w-[80%] flex justify-center items-center">
-              <Text className="mt-4 text-white text-2xl font-bold text-center">
-                What do you need help with?
-              </Text>
-            </View>
-          </View>
-
-          <View>
-            <View className="flex-row w-full justify-center items-center">
-              <View className="h-[80px] w-[80px]"></View>
+            {/* // camera and keyboard icon buttons  */}
+            <View className="flex flex-row justify-center items-center relative z-40 bottom-[-280px]">
+              <View className=" h-[80] w-[80]"></View>
               <IconButton
                 icon={<AntDesign name="camera" size={35} color="white" />}
                 containerStyles="h-[80] w-[80]"
@@ -78,28 +80,8 @@ const RootLayout = () => {
                 }}
               />
             </View>
-            <View className="flex-row w-full justify-between p-4">
-              <IconButton
-                title="Chat"
-                icon={<Entypo name="chat" size={24} color="white" />}
-                handlePress={() => {}}
-                containerStyles="h-[60] w-[60] bg-transparent m-3"
-              />
 
-              <IconButton
-                icon={
-                  <MaterialIcons name="perm-media" size={24} color="white" />
-                }
-                handlePress={() => {}}
-                containerStyles="h-[60] w-[60] bg-transparent m-3"
-              />
-              <IconButton
-                title="Profile"
-                icon={<Entypo name="user" size={24} color="white" />}
-                handlePress={() => {}}
-                containerStyles="h-[60] w-[60] bg-transparent m-3"
-              />
-            </View>
+            <HomeNavButtons />
           </View>
         </CameraView>
       )}

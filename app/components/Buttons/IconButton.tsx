@@ -20,6 +20,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 }) => {
   return (
     <TouchableOpacity
+      style={{ pointerEvents: "box-only" }}
       disabled={isLoading}
       activeOpacity={0.7}
       onPress={() => {

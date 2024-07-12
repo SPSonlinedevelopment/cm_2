@@ -19,6 +19,12 @@ const Others = () => {
       console.log(error);
     }
   };
+
+  const handleDelete = () => {
+    try {
+      console.log("delete btn clicked");
+    } catch (error) {}
+  };
   return (
     <View className="w-[93%]">
       <View className="flex flex-row items-center">
@@ -50,7 +56,7 @@ const Others = () => {
 
       <OtherListItemComponent
         icon={<MaterialIcons name="delete" size={20} color="white" />}
-        handlePress={handleLogout}
+        handlePress={handleDelete}
         iconColor="bg-red-500"
         text="Delete Account"
       />
