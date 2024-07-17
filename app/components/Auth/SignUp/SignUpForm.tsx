@@ -15,20 +15,25 @@ import {
 import { validateInputs } from "../validateInputs/validateInputs";
 import { auth } from "../../../../firebaseConfig";
 import { useAuth } from "../../../context/authContext";
-import { initialFormState } from "../initalFormState";
+
+const initialState = {
+  name: { isError: false, message: "" },
+  email: { isError: false, message: "" },
+  password: { isError: false, message: "" },
+};
 
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState(initialFormState);
+  const [errors, setErrors] = useState(initialState);
   const [alertMessage, setAlertMessage] = useState("");
   const { createNewUser } = useAuth();
 
-  const firstName = useRef(undefined);
+  const nameRef = useRef(undefined);
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);
 
   const validateParams = [
-    { type: "firstName", ref: firstName },
+    // { type: "name", ref: nameRef },
     { type: "email", ref: emailRef },
     { type: "password", ref: passwordRef },
   ];
@@ -38,16 +43,14 @@ const SignUpForm = () => {
       setLoading(true);
 
       const result = await createNewUser(
-        firstName.current,
+        nameRef.current,
         emailRef.current,
         passwordRef.current
       );
 
       if (result.success) {
         setLoading(false);
-
         router.push("user-details");
-        // display user Profile setup
       } else setAlertMessage(result.message);
       setLoading(false);
     }

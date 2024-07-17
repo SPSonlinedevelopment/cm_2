@@ -4,6 +4,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import CustomButton from "../Buttons/CustomButton";
 import { BaseButton, RawButton } from "react-native-gesture-handler";
 
+export const initialFormState = {
+  name: { isError: false, message: "" },
+  email: { isError: false, message: "" },
+  password: { isError: false, message: "" },
+};
+
 interface CustomFormFieldProps {
   placeholderText: string;
   refName: any;
@@ -13,21 +19,15 @@ interface CustomFormFieldProps {
   editable?: boolean;
   setAlertMessage: React.Dispatch<React.SetStateAction<string>>;
   error: {
+    name: { isError: boolean; message: string };
     email: { isError: boolean; message: string };
     password: { isError: boolean; message: string };
-    firstName: { isError: boolean; message: string };
-    lastName: { isError: boolean; message: string };
-    dob: { isError: boolean; message: string };
-    school: { isError: boolean; message: string };
   };
   seterror: React.Dispatch<
     React.SetStateAction<{
+      name: { isError: boolean; message: string };
       email: { isError: boolean; message: string };
       password: { isError: boolean; message: string };
-      firstName: { isError: boolean; message: string };
-      lastName: { isError: boolean; message: string };
-      dob: { isError: boolean; message: string };
-      school: { isError: boolean; message: string };
     }>
   >;
 }
@@ -63,14 +63,8 @@ const FormField: React.FC<CustomFormFieldProps> = ({
     errorObj = error.password;
   } else if (type === "email") {
     errorObj = error.email;
-  } else if (type === "firstName") {
-    errorObj = error.firstName;
-  } else if (type === "lastName") {
-    errorObj = error.firstName;
-  } else if (type === "dob") {
-    errorObj = error.dob;
-  } else if (type === "school") {
-    errorObj = error.school;
+  } else if (type === "name") {
+    errorObj = error.name;
   }
 
   const handleInputChange = (value: any) => {
@@ -80,11 +74,11 @@ const FormField: React.FC<CustomFormFieldProps> = ({
 
     console.log("change");
 
-    if (type === "firstName") {
+    if (type === "name") {
       seterror((prevErrors) => {
         const newErrors = {
           ...prevErrors,
-          firstName: { isError: false, message: "" },
+          name: { isError: false, message: "" },
         };
         return newErrors;
       });
@@ -105,36 +99,6 @@ const FormField: React.FC<CustomFormFieldProps> = ({
         const newErrors = {
           ...prevErrors,
           password: { isError: false, message: "" },
-        };
-        return newErrors;
-      });
-    }
-
-    if (type === "lastName") {
-      seterror((prevErrors) => {
-        const newErrors = {
-          ...prevErrors,
-          lastName: { isError: false, message: "" },
-        };
-        return newErrors;
-      });
-    }
-
-    if (type === "school") {
-      seterror((prevErrors) => {
-        const newErrors = {
-          ...prevErrors,
-          school: { isError: false, message: "" },
-        };
-        return newErrors;
-      });
-    }
-
-    if (type === "dob") {
-      seterror((prevErrors) => {
-        const newErrors = {
-          ...prevErrors,
-          dob: { isError: false, message: "" },
         };
         return newErrors;
       });

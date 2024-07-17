@@ -12,6 +12,7 @@ import IndexQuestionInput from "./components/IndexQuestionInput";
 import { AuthContext, AuthContextProvider } from "./context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeNavButtons from "../app/components/HomeNavButtons/HomeNavButtons";
+import UserDetails from "./user-details";
 
 const RootLayout = () => {
   const [facing, setFacing] = useState("back");
@@ -40,6 +41,9 @@ const RootLayout = () => {
 
   return (
     <AuthContextProvider>
+      <UserDetails />
+
+      {/* 
       {displayQuestionInput ? (
         <IndexQuestionInput toggleDisplayInput={setDisplayQuestionInput} />
       ) : (
@@ -64,7 +68,7 @@ const RootLayout = () => {
             </View>
 
             {/* // camera and keyboard icon buttons  */}
-            <View className="flex flex-row justify-center items-center relative z-40 bottom-[-280px]">
+      {/* <View className="flex flex-row justify-center items-center relative z-40 bottom-[-280px]">
               <View className=" h-[80] w-[80]"></View>
               <IconButton
                 icon={<AntDesign name="camera" size={35} color="white" />}
@@ -84,7 +88,7 @@ const RootLayout = () => {
             <HomeNavButtons />
           </View>
         </CameraView>
-      )}
+      )} */}
     </AuthContextProvider>
   );
 };
