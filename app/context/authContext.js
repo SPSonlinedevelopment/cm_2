@@ -35,14 +35,22 @@ export const AuthContextProvider = ({ children }) => {
     return unsub;
   }, []);
 
-  const createNewUser = async (username, email, password) => {
+  const createNewUser = async (email, password) => {
     try {
       const response = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      setUser(response);
+
+      if (response) {
+        setUser(response);
+
+        console.log("response", response.uid);
+      } else {
+        return;
+      }
+
       return { success: true };
     } catch (error) {
       console.log("error", error);
@@ -51,6 +59,58 @@ export const AuthContextProvider = ({ children }) => {
 
       return { success: false, message: editedMessage };
     }
+  };
+
+  const addUserDetailsOnSignup = async (userDetails, uid) => {
+    const { firstName, lastName, mode, dob, partnership, subjectSelection } =
+      userDetails;
+
+    console.log(mode, uid);
+
+    const commonData = {
+      firstName,
+      lastName,
+      mode,
+      dob,
+      partnership,
+    };
+
+    // try {
+    // Add a new document in collection "cities"
+
+    // await setDoc(doc(db, "cities", "LA"), {
+    //   name: "Los Angeles",
+    //   state: "CA",
+    //   country: "USA",
+    // });
+
+    // let result;
+    // if (mode === "mentee") {
+    //   await setDoc(
+    //     doc(db, "mentees", uid),
+    //     firstName,
+    //     lastName,
+    //     mode,
+    //     dob,
+    //     partnership
+    //   );
+    // }
+
+    // else if (mode === "mentor") {
+    //       const mentorData = {
+    //         ...commonData,
+    //         // subjectSelection,
+    //       };
+    //       result = await setDoc(doc(db, "mentors", uid), mentorData);
+    //     }
+
+    // console.log("result", result);
+
+    //   return { success: true };
+    // } catch (error) {
+    //   console.log("error", error);
+    //   return { success: false };
+    //  }
   };
 
   const signIn = async (email, password) => {
@@ -91,6 +151,7 @@ export const AuthContextProvider = ({ children }) => {
         user,
         setUser,
         isAuthenticated,
+        addUserDetailsOnSignup,
       }}
     >
       {children}

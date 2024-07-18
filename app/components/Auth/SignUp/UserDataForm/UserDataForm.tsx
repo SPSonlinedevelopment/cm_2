@@ -12,6 +12,9 @@ import SelectUserMode from "./SelectUserMode";
 import { router } from "expo-router";
 import FormField from "@/app/components/FormField/FormField";
 import Names from "./Names";
+import { useAuth } from "@/app/context/authContext";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../../../../firebaseConfig";
 
 export interface FormDetailProps {
   firstName: string;
@@ -37,7 +40,10 @@ interface ErrorProperty {
 }
 
 const UserDataForm = () => {
+  const { addUserDetailsOnSignup, user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {}, [user]);
 
   const [errorObj, setErrorObj] = useState<ErrorObject>({
     dob: { isError: false, message: "" },
@@ -57,7 +63,7 @@ const UserDataForm = () => {
     lastName: "",
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const setFieldError = (field: keyof ErrorObject, message: string) => {
       setErrorObj((prev) => ({
         ...prev,
@@ -76,7 +82,7 @@ const UserDataForm = () => {
       setFieldError("dob", "Select your Date of Birth");
     }
 
-    if (!formDetails.subjectSelection.length) {
+    if (formDetails.mode === "mentor" && !formDetails.subjectSelection.length) {
       setFieldError("subjectSelection", "Select your subjects you can mentor");
     }
 
@@ -92,16 +98,29 @@ const UserDataForm = () => {
       setFieldError("lastName", "Please enter your last name");
     }
 
-    // submit form data
+    const submitForm = async () => {
+      const result = await addUserDetailsOnSignup(formDetails, user.uid);
 
-    // router.push("profile");
+      console.log("result", result);
+
+      return result;
+    };
+
+    const result = await submitForm();
+
+    if (result.success) {
+      // router.push("profile");
+    }
+
+    console.log(result.data);
   };
 
   return (
     <View className="flex flex-col  items-center py-4 w-full">
       <Text className="text-white m-5 text-base font-semibold ">
-        Personal details
+        Personal details user {user?.uid}
       </Text>
+
       <Names
         error={errorObj}
         setErrorObj={setErrorObj}

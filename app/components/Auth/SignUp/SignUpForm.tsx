@@ -42,11 +42,7 @@ const SignUpForm = () => {
     if (validateInputs(validateParams, setErrors)) {
       setLoading(true);
 
-      const result = await createNewUser(
-        nameRef.current,
-        emailRef.current,
-        passwordRef.current
-      );
+      const result = await createNewUser(emailRef.current, passwordRef.current);
 
       if (result.success) {
         setLoading(false);
