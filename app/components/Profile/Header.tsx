@@ -16,9 +16,12 @@ const Header = () => {
     <View className="w-[90%] mt-3 relative bg-white flex flex-row items-center justify-between">
       <View className="  flex flex-col justify-start items-start">
         <Avatar />
-        <Text className="text-lg font-semibold">{user?.name}name</Text>
+        <Text className="text-lg font-semibold">{user?.firstName}</Text>
         <Text className="text-sm text-neutral-400 font-medium">
           {user?.email}
+        </Text>
+        <Text className="text-sm text-neutral-400 font-medium">
+          {user?.mode}
         </Text>
       </View>
 

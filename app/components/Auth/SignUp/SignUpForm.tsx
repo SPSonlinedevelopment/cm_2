@@ -26,7 +26,7 @@ const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialState);
   const [alertMessage, setAlertMessage] = useState("");
-  const { createNewUser } = useAuth();
+  const { createNewUser, setUser } = useAuth();
 
   const nameRef = useRef(undefined);
   const emailRef = useRef(undefined);
@@ -46,6 +46,7 @@ const SignUpForm = () => {
 
       if (result.success) {
         setLoading(false);
+        setUser(result.data);
         router.push("user-details");
       } else setAlertMessage(result.message);
       setLoading(false);

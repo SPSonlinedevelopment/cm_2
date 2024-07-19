@@ -1,4 +1,4 @@
-import { View, TextInput, Text, Button, Image } from "react-native";
+import { View, TextInput, Text, Button, Image, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomButton from "../../../Buttons/CustomButton";
 import { RadioButton } from "react-native-paper";
@@ -40,18 +40,18 @@ interface ErrorProperty {
 }
 
 const UserDataForm = () => {
-  const { addUserDetailsOnSignup, user } = useAuth();
+  const { addUserDetailsOnSignup, user, setUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {}, [user]);
+  const [loaded, setLoaded] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
   const [errorObj, setErrorObj] = useState<ErrorObject>({
-    dob: { isError: false, message: "" },
-    mode: { isError: false, message: "" },
-    subjectSelection: { isError: false, message: "" },
-    partnership: { isError: false, message: "" },
-    firstName: { isError: false, message: "" },
-    lastName: { isError: false, message: "" },
+    dob: { isError: false, message: " " },
+    mode: { isError: false, message: " " },
+    subjectSelection: { isError: false, message: " " },
+    partnership: { isError: false, message: " " },
+    firstName: { isError: false, message: " " },
+    lastName: { isError: false, message: " " },
   });
 
   const [formDetails, setFormDetails] = useState<FormDetailProps>({
@@ -63,7 +63,11 @@ const UserDataForm = () => {
     lastName: "",
   });
 
-  const handleSubmit = async () => {
+  // useEffect(() => {
+  //   console.log(formDetails);
+  // }, [formDetails]);
+
+  const formValidation = async () => {
     const setFieldError = (field: keyof ErrorObject, message: string) => {
       setErrorObj((prev) => ({
         ...prev,
@@ -97,28 +101,44 @@ const UserDataForm = () => {
     if (!formDetails.lastName) {
       setFieldError("lastName", "Please enter your last name");
     }
-
-    const submitForm = async () => {
-      const result = await addUserDetailsOnSignup(formDetails, user.uid);
-
-      console.log("result", result);
-
-      return result;
-    };
-
-    const result = await submitForm();
-
-    if (result.success) {
-      // router.push("profile");
-    }
-
-    console.log(result.data);
   };
+
+  // issue with form submitting when input is added then removed as it
+
+  const submitform = async () => {
+    const result = await addUserDetailsOnSignup(formDetails);
+    console.log("result", result);
+    if (result.success) {
+      setIsLoading(false);
+      router.push("profile");
+    } else if (!result.success) {
+      setIsLoading(false);
+      router.push("sign-in");
+      Alert.alert("error");
+    }
+    return result;
+  };
+
+  useEffect(() => {
+    setLoaded(true);
+
+    const hasErrors = Object.values(errorObj).some(
+      (error) => error.isError === true
+    );
+
+    if (!hasErrors && loaded) {
+      setCompleted(true);
+    }
+  }, [errorObj]);
 
   return (
     <View className="flex flex-col  items-center py-4 w-full">
       <Text className="text-white m-5 text-base font-semibold ">
         Personal details user {user?.uid}
+      </Text>
+
+      <Text className="text-white m-5 text-base font-semibold ">
+        email: {user?.email}
       </Text>
 
       <Names
@@ -174,7 +194,11 @@ const UserDataForm = () => {
       <CustomButton
         isLoading={isLoading}
         handlePress={() => {
-          handleSubmit();
+          formValidation();
+
+          if (completed) {
+            submitform();
+          }
         }}
         title="Submit"
       />

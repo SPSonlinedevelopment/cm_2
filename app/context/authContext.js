@@ -43,15 +43,11 @@ export const AuthContextProvider = ({ children }) => {
         password
       );
 
-      if (response) {
-        setUser(response);
+      setUser((prev) => response);
 
-        console.log("response", response.uid);
-      } else {
-        return;
-      }
+      // return { success: true, data: response };
 
-      return { success: true };
+      return { success: true, data: response?.user };
     } catch (error) {
       console.log("error", error);
 
@@ -61,11 +57,11 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-  const addUserDetailsOnSignup = async (userDetails, uid) => {
+  const addUserDetailsOnSignup = async (userDetails) => {
     const { firstName, lastName, mode, dob, partnership, subjectSelection } =
       userDetails;
 
-    console.log(mode, uid);
+    const { uid, email } = user;
 
     const commonData = {
       firstName,
@@ -73,44 +69,46 @@ export const AuthContextProvider = ({ children }) => {
       mode,
       dob,
       partnership,
+      uid,
+      email,
     };
 
-    // try {
-    // Add a new document in collection "cities"
+    const getData = async (mode) => {
+      const docRef = doc(db, mode, uid);
+      getDoc(docRef)
+        .then((doc) => {
+          if (doc.exists()) {
+            console.log("Document data:", doc.data());
+            setUser(doc.data());
+          } else {
+            console.log("Document data not exists:");
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting document:", error);
+        });
+    };
 
-    // await setDoc(doc(db, "cities", "LA"), {
-    //   name: "Los Angeles",
-    //   state: "CA",
-    //   country: "USA",
-    // });
+    try {
+      if (mode === "mentee") {
+        await setDoc(doc(db, "mentees", uid), commonData).then(
+          getData("mentees")
+        );
+      } else if (mode === "mentor") {
+        const mentorData = {
+          ...commonData,
+          subjectSelection,
+        };
+        await setDoc(doc(db, "mentors", uid), mentorData).then(
+          getData("mentors")
+        );
+      }
 
-    // let result;
-    // if (mode === "mentee") {
-    //   await setDoc(
-    //     doc(db, "mentees", uid),
-    //     firstName,
-    //     lastName,
-    //     mode,
-    //     dob,
-    //     partnership
-    //   );
-    // }
-
-    // else if (mode === "mentor") {
-    //       const mentorData = {
-    //         ...commonData,
-    //         // subjectSelection,
-    //       };
-    //       result = await setDoc(doc(db, "mentors", uid), mentorData);
-    //     }
-
-    // console.log("result", result);
-
-    //   return { success: true };
-    // } catch (error) {
-    //   console.log("error", error);
-    //   return { success: false };
-    //  }
+      return { success: true };
+    } catch (error) {
+      console.log("error", error);
+      return { success: false };
+    }
   };
 
   const signIn = async (email, password) => {
@@ -125,6 +123,8 @@ export const AuthContextProvider = ({ children }) => {
       return { success: false, message: editedMessage };
     }
   };
+
+  const getUserDataFromFirebase = async () => {};
 
   const logOut = async () => {
     try {
