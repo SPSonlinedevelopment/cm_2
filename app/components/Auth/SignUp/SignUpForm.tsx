@@ -26,7 +26,7 @@ const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialState);
   const [alertMessage, setAlertMessage] = useState("");
-  const { createNewUser, setUser } = useAuth();
+  const { createNewUser, setUser, verifyEmail } = useAuth();
 
   const nameRef = useRef(undefined);
   const emailRef = useRef(undefined);
@@ -47,7 +47,18 @@ const SignUpForm = () => {
       if (result.success) {
         setLoading(false);
         setUser(result.data);
-        router.push("user-details");
+
+        try {
+          const sendVerifyEmail = await verifyEmail();
+
+          if (sendVerifyEmail) {
+            console.log("sendVerifyEmail", sendVerifyEmail);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+
+        router.push("verify-email");
       } else setAlertMessage(result.message);
       setLoading(false);
     }

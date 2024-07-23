@@ -4,6 +4,7 @@ import IconButton from "../Buttons/IconButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import { MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 export const ChatNavBtn = () => {
   return (
@@ -36,7 +37,7 @@ export const ProfileNavBtn = () => {
       title="Profile"
       icon={<Entypo name="user" size={24} color="white" />}
       handlePress={() => {
-        console.log("user btn clicked");
+        router.push("profile");
       }}
       containerStyles="h-[60] w-[60] bg-transparent m-3 "
     />
@@ -55,6 +56,8 @@ export const ActivateCameraBtn = () => {
     />
   );
 };
+
+
 
 const HomeNavButtons = () => {
   return (

@@ -1,15 +1,15 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import HomeNavButtons, {
+import {
   ActivateCameraBtn,
   ChatNavBtn,
   ProfileNavBtn,
-} from "../../HomeNavButtons/HomeNavButtons";
+} from "../../../HomeNavButtons/HomeNavButtons";
 
 const GradientNavigation = () => {
   return (
-    <View className="absolute h-[20vh] w-[100%] z-10 bottom-0  flex flex-col justify-end   ">
+    <View className="absolute h-[20vh] w-[100%] z-20 bottom-0  flex flex-col justify-end   ">
       <LinearGradient
         // Background Linear Gradient
         colors={["transparent", "rgba(0,0,0,0.6)"]}

@@ -15,6 +15,7 @@ import Names from "./Names";
 import { useAuth } from "@/app/context/authContext";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../../../../firebaseConfig";
+import YearGroupSelection from "./YearGroupSelection";
 
 export interface FormDetailProps {
   firstName: string;
@@ -23,6 +24,7 @@ export interface FormDetailProps {
   dob: Date;
   subjectSelection: string[];
   partnership: string;
+  year: string;
 }
 
 interface ErrorObject {
@@ -32,6 +34,7 @@ interface ErrorObject {
   partnership: ErrorProperty;
   firstName: ErrorProperty;
   lastName: ErrorProperty;
+  year: ErrorProperty;
 }
 
 interface ErrorProperty {
@@ -42,8 +45,7 @@ interface ErrorProperty {
 const UserDataForm = () => {
   const { addUserDetailsOnSignup, user, setUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const [completed, setCompleted] = useState(false);
+  const [hasErrors, setHasErrors] = useState(true);
 
   const [errorObj, setErrorObj] = useState<ErrorObject>({
     dob: { isError: false, message: " " },
@@ -52,6 +54,7 @@ const UserDataForm = () => {
     partnership: { isError: false, message: " " },
     firstName: { isError: false, message: " " },
     lastName: { isError: false, message: " " },
+    year: { isError: false, message: " " },
   });
 
   const [formDetails, setFormDetails] = useState<FormDetailProps>({
@@ -61,11 +64,8 @@ const UserDataForm = () => {
     partnership: "",
     firstName: "",
     lastName: "",
+    year: "",
   });
-
-  // useEffect(() => {
-  //   console.log(formDetails);
-  // }, [formDetails]);
 
   const formValidation = async () => {
     const setFieldError = (field: keyof ErrorObject, message: string) => {
@@ -86,6 +86,10 @@ const UserDataForm = () => {
       setFieldError("dob", "Select your Date of Birth");
     }
 
+    if (!formDetails.year) {
+      setFieldError("year", "Choose which year you are currentky in");
+    }
+
     if (formDetails.mode === "mentor" && !formDetails.subjectSelection.length) {
       setFieldError("subjectSelection", "Select your subjects you can mentor");
     }
@@ -101,15 +105,20 @@ const UserDataForm = () => {
     if (!formDetails.lastName) {
       setFieldError("lastName", "Please enter your last name");
     }
-  };
+    const Errors = Object.values(errorObj).some(
+      (error) => error.isError === true
+    );
 
-  // issue with form submitting when input is added then removed as it
+    setHasErrors(Errors);
+    setIsLoading(false);
+  };
 
   const submitform = async () => {
     const result = await addUserDetailsOnSignup(formDetails);
     console.log("result", result);
     if (result.success) {
       setIsLoading(false);
+
       router.push("profile");
     } else if (!result.success) {
       setIsLoading(false);
@@ -119,26 +128,11 @@ const UserDataForm = () => {
     return result;
   };
 
-  useEffect(() => {
-    setLoaded(true);
-
-    const hasErrors = Object.values(errorObj).some(
-      (error) => error.isError === true
-    );
-
-    if (!hasErrors && loaded) {
-      setCompleted(true);
-    }
-  }, [errorObj]);
-
   return (
     <View className="flex flex-col  items-center py-4 w-full">
       <Text className="text-white m-5 text-base font-semibold ">
-        Personal details user {user?.uid}
-      </Text>
-
-      <Text className="text-white m-5 text-base font-semibold ">
-        email: {user?.email}
+        An email has been sent to you to veryify your email, please check and
+        follow the link :)
       </Text>
 
       <Names
@@ -153,6 +147,13 @@ const UserDataForm = () => {
         error={errorObj.mode}
         setErrorObj={setErrorObj}
         setFormDetails={setFormDetails}
+      />
+
+      <YearGroupSelection
+        error={errorObj.year}
+        setErrorObj={setErrorObj}
+        setFormDetails={setFormDetails}
+        formDetails={formDetails}
       />
 
       {formDetails?.mode === "mentor" && (
@@ -194,9 +195,11 @@ const UserDataForm = () => {
       <CustomButton
         isLoading={isLoading}
         handlePress={() => {
+          setIsLoading(true);
+
           formValidation();
 
-          if (completed) {
+          if (!hasErrors) {
             submitform();
           }
         }}

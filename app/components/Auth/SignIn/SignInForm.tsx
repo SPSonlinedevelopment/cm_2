@@ -13,7 +13,7 @@ const SignInForm = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialFormState);
   const [alertMessage, setAlertMessage] = useState("");
-  const { signIn } = useAuth();
+  const { user, signIn, getUserDataFromFirebase, setUser } = useAuth();
 
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);
@@ -28,7 +28,6 @@ const SignInForm = () => {
       try {
         setLoading(true);
         const result = await signIn(emailRef.current, passwordRef.current);
-
         if (result.success) {
           router.push("profile");
         } else {
@@ -80,6 +79,10 @@ const SignInForm = () => {
           </Link>
         </View>
       </View>
+
+      <Text>{user?.uid}</Text>
+
+      <Text>{user?.firstName}</Text>
 
       {alertMessage && (
         <Text className="text-white font-pextrabold  mt-2 text-center w-[80%]">

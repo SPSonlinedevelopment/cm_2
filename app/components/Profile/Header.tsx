@@ -9,6 +9,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 
 const Header = () => {
   const { user } = useAuth();
+  console.log(user);
 
   console.log(user?.email);
 
