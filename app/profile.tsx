@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import MenteeProfile from "./components/Profile/MenteeProfile";
+import MenteeProfile from "./components/Profile/Profiles";
 import { useAuth } from "./context/authContext";
 import { router } from "expo-router";
 import { Text, View } from "react-native";
-import MentorProfile from "./components/Profile/MentorProfile/MentorProfile";
+import MentorProfile from "./components/Profile/MenteeProfile/MentorProfile";
 
 const profile = () => {
   const { setUser, user, getUserDataFromFirebase, isAuthenticated } = useAuth();
@@ -29,12 +29,10 @@ const profile = () => {
     val = getdataFn();
   }, []);
 
-  console.log("isAuthenticated: ", isAuthenticated, user);
-
   if (!isAuthenticated || !user) {
     router.push("sign-in");
     return;
-  } else if (isAuthenticated) {
+  } else if (isAuthenticated && user) {
     return <MenteeProfile />;
   }
 };

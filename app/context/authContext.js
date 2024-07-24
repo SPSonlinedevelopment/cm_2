@@ -29,22 +29,22 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(undefined);
 
-  // useEffect(() => {
-  //   // on auth state change
+  useEffect(() => {
+    // on auth state change
 
-  //   const unsub = onAuthStateChanged(auth, (user) => {
-  //     console.log("authState changed");
-  //     if (user) {
-  //       setIsAuthenticated(true);
-  //       setUser(user);
-  //     } else {
-  //       setIsAuthenticated(false);
-  //       setUser(null);
-  //     }
-  //   });
-  //   // when component unmounts clears hook
-  //   return unsub;
-  // }, []);
+    const unsub = onAuthStateChanged(auth, (user) => {
+      console.log("authState changed");
+      if (user) {
+        setIsAuthenticated(true);
+        setUser(user);
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    });
+    // when component unmounts clears hook
+    return unsub;
+  }, []);
 
   const getUpdatedAuthObj = async () => {
     const auth = getAuth();
@@ -53,34 +53,6 @@ export const AuthContextProvider = ({ children }) => {
     return user;
   };
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      console.log("authState changed");
-      if (user) {
-        // Force token refresh
-        user
-          .getIdToken(true)
-          .then((idToken) => {
-            console.log("ID Token refreshed:", idToken);
-            setIsAuthenticated(true);
-          })
-          .finally(() => {
-            setUser(user);
-            // Refresh the user data to get the latest email verification status
-            user.reload().then(() => {
-              console.log("after useEffect email verified", user.emailVerified);
-            });
-          })
-          .catch((error) => {
-            console.error("Error refreshing ID token:", error);
-          });
-      } else {
-        setIsAuthenticated(false);
-        setUser(null);
-      }
-    });
-    return unsub;
-  }, []);
 
   const verifyEmail = async () => {
     const auth = getAuth();

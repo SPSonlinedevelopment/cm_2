@@ -13,6 +13,7 @@ export const ChatNavBtn = () => {
       icon={<Entypo name="chat" size={24} color="white" />}
       handlePress={() => {
         console.log("chat btn clicked");
+        router.push("chats");
       }}
       containerStyles="h-[60] w-[60] bg-transparent m-3 "
     />
@@ -51,13 +52,12 @@ export const ActivateCameraBtn = () => {
       icon={<AntDesign name="camera" size={35} color="white" />}
       handlePress={() => {
         console.log("user btn clicked");
+        router.push("/");
       }}
       containerStyles="h-[60] w-[60] bg-transparent m-3 "
     />
   );
 };
-
-
 
 const HomeNavButtons = () => {
   return (

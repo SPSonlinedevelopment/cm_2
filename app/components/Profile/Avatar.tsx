@@ -1,12 +1,29 @@
-import { View, Text, Image } from "react-native";
 import React from "react";
+import { View, Text, Image, ImageSourcePropType } from "react-native";
 
-const Avatar = () => {
+type AvatarName = "Colin" | "Stuart" | "Ben" | "Janet";
+
+interface AvatarProps {
+  avatarName: AvatarName;
+}
+
+const Avatar: React.FC<AvatarProps> = ({ avatarName }) => {
+  let avatarPath = require("../../../assets/images/CMlogo.png");
+
+  if (avatarName === "Colin") {
+    avatarPath = require("../../../assets/images/avatars/Colin.png");
+  } else if (avatarName === "Ben") {
+    avatarPath = require("../../../assets/images/avatars/Ben.png");
+  } else if (avatarName === "Janet") {
+    avatarPath = require("../../../assets/images/avatars/Janet.png");
+  } else if (avatarName === "Stuart") {
+    avatarPath = require("../../../assets/images/avatars/Stuart.png");
+  }
   return (
     <View>
       <Image
-        className="   rounded-full h-[60px] w-[60px]"
-        source={require("../../../assets/images/CMlogo.png")}
+        style={{ borderRadius: 30, width: 60, height: 60 }}
+        source={avatarPath}
       />
     </View>
   );

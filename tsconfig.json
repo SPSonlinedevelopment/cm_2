@@ -14,5 +14,5 @@
     "app/components/FormField/FormField.test.js",
     "app/components/Buttons/CustomButton.test.js",
     "app/context/authContext.test.js"
-, "app/user-details.tsx"  ]
+, "app/user-details.tsx", "app/components/Chats/MentorChatList.jsx", "app/components/Chats/ChatItem.jsx"  ]
 }

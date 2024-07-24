@@ -15,6 +15,8 @@ import HomeNavButtons from "../app/components/HomeNavButtons/HomeNavButtons";
 import UserDetails from "./user-details";
 import CustomKeyboardView from "./components/CustomKeyboardView";
 import VerifyEmail from "./verify-email";
+import Chats from "./chats";
+import { ChatContextProvider } from "./context/chatContext";
 
 const RootLayout = () => {
   const [facing, setFacing] = useState("back");
@@ -41,56 +43,58 @@ const RootLayout = () => {
     );
   }
 
-  const testComponent = <VerifyEmail />;
+  const testComponent = <Chats />;
 
   const cameraView = (
     <AuthContextProvider>
-      {displayQuestionInput ? (
-        <IndexQuestionInput toggleDisplayInput={setDisplayQuestionInput} />
-      ) : (
-        <CameraView
-          facing={"back"}
-          className="bg-purple flex flex-col items-center justify-between"
-          style={{ height: "100%" }}
-        >
-          <View className="flex flex-col items-center justify-between  h-[100%]  ">
-            <View className="flex flex-col items-center ">
-              <View className="flex flex-col justify-center pt-10 ">
-                <Text className="text-white pt-5 text-xl font-bold">
-                  Hello there 👋
-                </Text>
+      <ChatContextProvider>
+        {displayQuestionInput ? (
+          <IndexQuestionInput toggleDisplayInput={setDisplayQuestionInput} />
+        ) : (
+          <CameraView
+            facing={"back"}
+            className="bg-purple flex flex-col items-center justify-between"
+            style={{ height: "100%" }}
+          >
+            <View className="flex flex-col items-center justify-between  h-[100%]  ">
+              <View className="flex flex-col items-center ">
+                <View className="flex flex-col justify-center pt-10 ">
+                  <Text className="text-white pt-5 text-xl font-bold">
+                    Hello there 👋
+                  </Text>
+                </View>
+
+                <View className="w-[80%] flex justify-center items-center ">
+                  <Text className="mt-4 text-white text-2xl font-bold text-center">
+                    What do you need help with?
+                  </Text>
+                </View>
               </View>
 
-              <View className="w-[80%] flex justify-center items-center ">
-                <Text className="mt-4 text-white text-2xl font-bold text-center">
-                  What do you need help with?
-                </Text>
+              {/* // camera and keyboard icon buttons  */}
+
+              <View className="flex flex-row justify-center items-center relative z-40 bottom-[-280px]">
+                <View className=" h-[80] w-[80]"></View>
+                <IconButton
+                  icon={<AntDesign name="camera" size={35} color="white" />}
+                  containerStyles="h-[80] w-[80]"
+                  handlePress={() => {}}
+                />
+
+                <IconButton
+                  icon={<Entypo name="keyboard" size={24} color="black" />}
+                  containerStyles="h-[60] w-[60] bg-white m-3"
+                  handlePress={() => {
+                    handleKeyboardButtonPressed();
+                  }}
+                />
               </View>
+
+              <HomeNavButtons />
             </View>
-
-            {/* // camera and keyboard icon buttons  */}
-
-            <View className="flex flex-row justify-center items-center relative z-40 bottom-[-280px]">
-              <View className=" h-[80] w-[80]"></View>
-              <IconButton
-                icon={<AntDesign name="camera" size={35} color="white" />}
-                containerStyles="h-[80] w-[80]"
-                handlePress={() => {}}
-              />
-
-              <IconButton
-                icon={<Entypo name="keyboard" size={24} color="black" />}
-                containerStyles="h-[60] w-[60] bg-white m-3"
-                handlePress={() => {
-                  handleKeyboardButtonPressed();
-                }}
-              />
-            </View>
-
-            <HomeNavButtons />
-          </View>
-        </CameraView>
-      )}
+          </CameraView>
+        )}
+      </ChatContextProvider>
     </AuthContextProvider>
   );
 

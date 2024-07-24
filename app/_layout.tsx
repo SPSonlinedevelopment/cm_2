@@ -43,6 +43,10 @@ export default function AuthLayout() {
             name="verify-email"
             options={{ headerShown: false }}
           ></Stack.Screen>
+          <Stack.Screen
+            name="chats"
+            options={{ headerShown: false }}
+          ></Stack.Screen>
         </Stack>
       </GestureHandlerRootView>
     </AuthContextProvider>

@@ -38,7 +38,7 @@ const UserDetails = () => {
           source={require("../assets/images/CMlogo.png")}
         />
         <View className="w-[80%]   flex-col justify-center items-center">
-          <Text className="text-white text-2xl mt-3">Welcome Colin</Text>
+          <Text className="text-white text-2xl mt-3">Welcome </Text>
         </View>
         <UserDataForm />
       </SafeAreaView>

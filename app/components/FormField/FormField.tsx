@@ -72,7 +72,7 @@ const FormField: React.FC<CustomFormFieldProps> = ({
 
     setAlertMessage("");
 
-    console.log("change");
+
 
     if (type === "name") {
       seterror((prevErrors) => {

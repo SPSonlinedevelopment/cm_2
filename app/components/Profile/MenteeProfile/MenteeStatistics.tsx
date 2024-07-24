@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { styled } from "nativewind";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "../ProgressBar";
 
 const StyledView = styled(View);
 const StyledText = styled(Text);
@@ -14,13 +14,13 @@ interface CardProps {
   text: string;
 }
 
-const Card: React.FC<CardProps> = ({ icon, text }) => {
+export const Card: React.FC<CardProps> = ({ icon, text }) => {
   return (
     <View className="  w-[170px] h-[50px] mt-2 rounded-2xl flex flex-row  items-center justify-start  bg-white shadow-md  ">
       <View className="p-2">{icon}</View>
 
       <StyledView className="flex flex-col ">
-        <Text> 10 {text}</Text>
+        <Text>{text}</Text>
       </StyledView>
     </View>
   );

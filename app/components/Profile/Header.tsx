@@ -3,7 +3,7 @@ import React from "react";
 import Avatar from "./Avatar";
 import { useAuth } from "@/app/context/authContext";
 import ProgressBar from "./ProgressBar";
-import Statistics from "./Statistics";
+import Statistics from "./MenteeProfile/MenteeStatistics";
 
 import Entypo from "@expo/vector-icons/Entypo";
 

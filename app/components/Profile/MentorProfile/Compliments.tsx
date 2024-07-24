@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const MentorProfile = () => {
+const Compliments = () => {
   return (
     <View>
-      <Text>MentorProfile</Text>
+      <Text>Compliments</Text>
     </View>
   );
 };
 
-export default MentorProfile;
+export default Compliments;

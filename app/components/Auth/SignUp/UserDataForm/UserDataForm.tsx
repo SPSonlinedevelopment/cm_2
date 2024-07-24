@@ -131,8 +131,7 @@ const UserDataForm = () => {
   return (
     <View className="flex flex-col  items-center py-4 w-full">
       <Text className="text-white m-5 text-base font-semibold ">
-        An email has been sent to you to veryify your email, please check and
-        follow the link :)
+        Please fill in your details to get started
       </Text>
 
       <Names

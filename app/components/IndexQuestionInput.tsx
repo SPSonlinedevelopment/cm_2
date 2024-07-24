@@ -8,6 +8,8 @@ import CustomKeyboardView from "./CustomKeyboardView";
 import { AuthContextProvider, useAuth } from "../context/authContext";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useChat } from "../context/chatContext";
+import { Try } from "expo-router/build/views/Try";
 
 interface IndexQuestionInputProps {
   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,9 +20,11 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
 }) => {
   const inputRef = useRef<TextInput>(null);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const { setNewTextQuestion } = useChat();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [text, setText] = useState(false);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -28,13 +32,32 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
     }
   });
 
-  const handleSendQuestion = () => {
+  const handleTextChange = (value: any) => {
+    setText(value);
+  };
+
+  const handleSendQuestion = async () => {
+    let newquestionObj = {
+      menteeid: user?.uid,
+      menteeName: user.firstName,
+      message: text,
+      questionSubject: "science",
+      Timestamp: new Date(),
+    };
+
     setIsLoading(true);
 
-    console.log("is Authenticated", isAuthenticated);
+    try {
+      const result = await setNewTextQuestion(newquestionObj);
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+
+    // console.log("is Authenticated", isAuthenticated);
 
     if (isAuthenticated) {
-      router.push("profile");
+      router.push("chats");
     } else {
       router.push("sign-in");
     }
@@ -50,6 +73,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
           }}
           icon={<Entypo name="cross" size={34} color="black" />}
         ></IconButton>
+        <Text>{text}</Text>
 
         <TextInput
           ref={inputRef}
@@ -59,6 +83,9 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
           className={`w-full text-center height-[500px]  text-xl `}
           cursorColor="orange"
           selectionColor="orange"
+          onChangeText={(value) => {
+            handleTextChange(value);
+          }}
         />
         <IconButton
           isLoading={isLoading}
