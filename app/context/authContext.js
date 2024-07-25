@@ -22,11 +22,13 @@ import { Try } from "expo-router/build/views/Try";
 import { Link } from "expo-router";
 import { router } from "expo-router";
 import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
+import Statistics from "../components/Profile/MenteeProfile/MenteeStatistics";
 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(undefined);
 
   useEffect(() => {
@@ -52,7 +54,6 @@ export const AuthContextProvider = ({ children }) => {
 
     return user;
   };
-
 
   const verifyEmail = async () => {
     const auth = getAuth();
@@ -97,7 +98,7 @@ export const AuthContextProvider = ({ children }) => {
       .then((doc) => {
         if (doc.exists()) {
           console.log("Document data:", doc.data());
-          setUser(doc.data());
+          setUserDetails(doc.data());
         } else {
           console.log("Document data not exists:");
         }
@@ -133,13 +134,25 @@ export const AuthContextProvider = ({ children }) => {
 
     try {
       if (mode === "mentee") {
-        await setDoc(doc(db, "mentees", uid), commonData).then(
-          getData("mentees")
-        );
+        await setDoc(doc(db, "mentees", uid), {
+          ...commonData,
+          menteeStatistics: {
+            time: 0,
+            ninjaLevel: 0,
+            XP: 0,
+            compliments: 0,
+          },
+        }).then(getData("mentees"));
       } else if (mode === "mentor") {
         const mentorData = {
           ...commonData,
           subjectSelection,
+          mentorStatistics: {
+            time: 0,
+            stars: 0,
+            compliments: 0,
+            questions: 0,
+          },
         };
         await setDoc(doc(db, "mentors", uid), mentorData).then(
           getData("mentors")
@@ -235,6 +248,8 @@ export const AuthContextProvider = ({ children }) => {
         getUserDataFromFirebase,
         verifyEmail,
         getUpdatedAuthObj,
+        setUserDetails,
+        userDetails,
       }}
     >
       {children}

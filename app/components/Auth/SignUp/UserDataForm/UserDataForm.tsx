@@ -43,7 +43,7 @@ interface ErrorProperty {
 }
 
 const UserDataForm = () => {
-  const { addUserDetailsOnSignup, user, setUser } = useAuth();
+  const { addUserDetailsOnSignup } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [hasErrors, setHasErrors] = useState(true);
 

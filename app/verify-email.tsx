@@ -36,7 +36,7 @@ const VerifyEmail = () => {
                 handlePress={() => {
                   handlepress();
                 }}
-                title="I have verified my email"
+                title="I'm verified! Continue on boarding"
               />
             </View>
 

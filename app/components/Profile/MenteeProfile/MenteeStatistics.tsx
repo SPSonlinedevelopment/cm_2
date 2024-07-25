@@ -5,6 +5,7 @@ import { styled } from "nativewind";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import ProgressBar from "../ProgressBar";
+import { useAuth } from "@/app/context/authContext";
 
 const StyledView = styled(View);
 const StyledText = styled(Text);
@@ -26,7 +27,11 @@ export const Card: React.FC<CardProps> = ({ icon, text }) => {
   );
 };
 
-const Statistics = () => {
+const MenteeStatistics = () => {
+  const { userDetails } = useAuth();
+
+  const stats = userDetails?.menteeStatistics;
+
   return (
     <View className=" mt-5 w-[93%] ">
       <View className="flex flex-row">
@@ -36,21 +41,21 @@ const Statistics = () => {
 
       <View className="flex flex-row justify-between">
         <Card
-          text="Total Mins"
+          text={` ${stats?.time} mins`}
           icon={<AntDesign name="clockcircle" size={24} color="orange" />}
         />
         <Card
-          text="Ninja Level"
+          text={` ${stats?.ninjaLevel} ninja level`}
           icon={<FontAwesome5 name="level-up-alt" size={24} color="orange" />}
         />
       </View>
       <View className="flex flex-row justify-between">
         <Card
-          text="XP"
+          text={` ${stats?.XP} XP`}
           icon={<AntDesign name="star" size={24} color="orange" />}
         />
         <Card
-          text="Compliments"
+          text={` ${stats?.compliments} Compliments`}
           icon={<AntDesign name="heart" size={24} color="orange" />}
         />
       </View>
@@ -60,4 +65,4 @@ const Statistics = () => {
   );
 };
 
-export default Statistics;
+export default MenteeStatistics;

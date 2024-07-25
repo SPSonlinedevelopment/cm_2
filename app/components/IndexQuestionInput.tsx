@@ -10,6 +10,7 @@ import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useChat } from "../context/chatContext";
 import { Try } from "expo-router/build/views/Try";
+import SubjectSelection from "./SubjectSelection";
 
 interface IndexQuestionInputProps {
   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,46 +21,76 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
 }) => {
   const inputRef = useRef<TextInput>(null);
 
-  const { isAuthenticated, user } = useAuth();
+  const {
+    isAuthenticated,
+    userDetails,
+    user,
+    setUserDetails,
+    getUserDataFromFirebase,
+  } = useAuth();
   const { setNewTextQuestion } = useChat();
-
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState("");
+
+  const getdataFn = async () => {
+    const getdata = await getUserDataFromFirebase(user?.uid);
+
+    if (getdata.success) {
+      setUserDetails(getdata.data);
+    }
+
+    return getdata.success;
+  };
 
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  });
+  }, []);
 
   const handleTextChange = (value: any) => {
     setText(value);
   };
 
   const handleSendQuestion = async () => {
-    let newquestionObj = {
-      menteeid: user?.uid,
-      menteeName: user.firstName,
-      message: text,
-      questionSubject: "science",
-      Timestamp: new Date(),
-    };
-
     setIsLoading(true);
 
     try {
-      const result = await setNewTextQuestion(newquestionObj);
-      console.log(result);
+      const resultData = await getdataFn();
+
+      console.log("resultData", resultData);
+
+      let newquestionObj;
+
+      if (resultData.success) {
+        newquestionObj = {
+          menteeid: userDetails?.uid,
+          menteeName: userDetails?.firstName,
+          message: text,
+          questionSubject: selectedSubject,
+          Timestamp: new Date(),
+        };
+      }
+
+      console.log("newquestionObj", newquestionObj);
+
+      if (newquestionObj) {
+        const result = await setNewTextQuestion(newquestionObj);
+        console.log(result);
+
+        if (isAuthenticated) {
+          router.push("chats");
+        }
+      } else {
+        console.error("Failed to get data from getdataFn.");
+      }
     } catch (error) {
       console.error(error);
-    }
 
-    // console.log("is Authenticated", isAuthenticated);
-
-    if (isAuthenticated) {
-      router.push("chats");
-    } else {
-      router.push("sign-in");
+      if (!isAuthenticated) {
+        router.push("sign-in");
+      }
     }
   };
 
@@ -73,19 +104,23 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
           }}
           icon={<Entypo name="cross" size={34} color="black" />}
         ></IconButton>
-        <Text>{text}</Text>
 
         <TextInput
           ref={inputRef}
           multiline={true}
           maxLength={1000}
           placeholder="Type your question"
-          className={`w-full text-center height-[500px]  text-xl `}
+          placeholderTextColor="orange"
+          className={`w-full text-center height-[500px]  text-xl text-purple  mt-10`}
           cursorColor="orange"
           selectionColor="orange"
           onChangeText={(value) => {
             handleTextChange(value);
           }}
+        />
+        <SubjectSelection
+          setSelectedSubject={setSelectedSubject}
+          selectedSubject={selectedSubject}
         />
         <IconButton
           isLoading={isLoading}

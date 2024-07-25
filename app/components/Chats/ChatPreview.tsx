@@ -4,6 +4,7 @@ import MentorChatList from "./MentorChatList";
 import CustomKeyboardView from "../CustomKeyboardView";
 import { SafeAreaView } from "react-native-safe-area-context";
 import GradientNavigation from "../Profile/MenteeProfile/GradientNaviation/GradientNavigation";
+import { useAuth } from "@/app/context/authContext";
 
 const ChatPreview = () => {
   const data: any = [

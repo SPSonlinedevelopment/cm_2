@@ -3,13 +3,13 @@ import React from "react";
 import { Card } from "../MenteeProfile/MenteeStatistics";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-
-const answers = 12;
-const stars = 3;
-const time = 14;
-const compliments = 6;
+import { useAuth } from "@/app/context/authContext";
 
 const MentorStatistics = () => {
+  const { userDetails } = useAuth();
+
+  const stats = userDetails?.menteeStatistics;
+
   return (
     <View className=" mt-5 w-[93%] ">
       <View className="flex flex-row">
@@ -19,22 +19,22 @@ const MentorStatistics = () => {
 
       <View className="flex flex-row justify-between">
         <Card
-          text={` ${time} Total Mins`}
+          text={` ${stats?.time} Total Mins`}
           icon={<AntDesign name="clockcircle" size={24} color="orange" />}
         />
         <Card
-          text={` ${answers} Questions`}
+          text={` ${stats?.questions} Questions`}
           icon={<AntDesign name="clockcircle" size={24} color="orange" />}
         />
       </View>
 
       <View className="flex flex-row justify-between">
         <Card
-          text={` ${stars} stars`}
+          text={` ${stats?.stars} stars`}
           icon={<AntDesign name="star" size={24} color="orange" />}
         />
         <Card
-          text={` ${compliments} Compliments`}
+          text={` ${stats?.compliments} Compliments`}
           icon={<AntDesign name="heart" size={24} color="orange" />}
         />
       </View>

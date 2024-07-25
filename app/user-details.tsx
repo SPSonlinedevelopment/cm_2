@@ -13,8 +13,6 @@ import UserDataForm from "./components/Auth/SignUp/UserDataForm/UserDataForm";
 import { useAuth } from "./context/authContext";
 
 const UserDetails = () => {
-  const { user } = useAuth();
-
   return (
     <CustomKeyboardView>
       <SafeAreaView className="flex-1 w-full flex flex-col bg-purple border  items-center justify-start">
