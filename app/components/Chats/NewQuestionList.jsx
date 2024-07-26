@@ -2,7 +2,11 @@ import { View, Text, FlatList } from "react-native";
 import React from "react";
 import ChatItem from "./ChatItem";
 
-const MentorChatList = ({ data }) => {
+// interface NewQuestionListProps {
+//   data: any;
+// }
+
+const NewQuestionList = ({ data }) => {
   return (
     <FlatList
       style={{ width: "95%" }}
@@ -12,7 +16,7 @@ const MentorChatList = ({ data }) => {
       showsVerticalScrollIndicator={false}
       renderItem={({ item, index }) => (
         <ChatItem
-          newQuestion={false}
+          newQuestion={true}
           item={item}
           index={index}
           noBorder={data.length !== index + 1}
@@ -22,4 +26,4 @@ const MentorChatList = ({ data }) => {
   );
 };
 
-export default MentorChatList;
+export default NewQuestionList;

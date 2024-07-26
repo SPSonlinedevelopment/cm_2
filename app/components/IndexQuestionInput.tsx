@@ -38,9 +38,10 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
 
     if (getdata.success) {
       setUserDetails(getdata.data);
+      console.log("res data", getdata.data);
     }
 
-    return getdata.success;
+    return getdata;
   };
 
   useEffect(() => {
@@ -65,12 +66,13 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
 
       if (resultData.success) {
         newquestionObj = {
-          menteeid: userDetails?.uid,
-          menteeName: userDetails?.firstName,
+          menteeid: resultData?.data?.uid,
+          menteeName: resultData.data?.firstName,
           message: text,
           questionSubject: selectedSubject,
           Timestamp: new Date(),
         };
+        console.log("newquestionObj", newquestionObj);
       }
 
       console.log("newquestionObj", newquestionObj);

@@ -1,14 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { styled } from "nativewind";
+
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import ProgressBar from "../ProgressBar";
 import { useAuth } from "@/app/context/authContext";
-
-const StyledView = styled(View);
-const StyledText = styled(Text);
 
 interface CardProps {
   icon?: React.ReactNode;
@@ -20,9 +17,9 @@ export const Card: React.FC<CardProps> = ({ icon, text }) => {
     <View className="  w-[170px] h-[50px] mt-2 rounded-2xl flex flex-row  items-center justify-start  bg-white shadow-md  ">
       <View className="p-2">{icon}</View>
 
-      <StyledView className="flex flex-col ">
+      <View className="flex flex-col ">
         <Text>{text}</Text>
-      </StyledView>
+      </View>
     </View>
   );
 };

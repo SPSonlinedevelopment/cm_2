@@ -4,23 +4,11 @@ import { useAuth } from "@/app/context/authContext";
 import CustomButton from "../Buttons/CustomButton";
 
 const CheckEmailVerification = () => {
-  const { getUpdatedAuthObj, verifyEmail } = useAuth();
-  const [isEmailVerified, setIsEmailVerified] = useState(null);
+  const { getUpdatedAuthObj, verifyEmail, user } = useAuth();
+  const [isEmailVerified, setIsEmailVerified] = useState(user.emailVerified);
   const [isLoading, setIsLoading] = useState(false);
 
   const [buttonTitle, setButtonTitle] = useState("Resend Verification Email");
-
-  const getAuthObj = async () => {
-    try {
-      const userObj = await getUpdatedAuthObj();
-      setIsEmailVerified(userObj.emailVerified);
-    } catch (error) {
-      Alert.alert("Error getting user data");
-      console.log(error);
-    }
-  };
-
-  getAuthObj();
 
   const resendVerifyEmail = async () => {
     setIsLoading(true);

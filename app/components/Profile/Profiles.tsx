@@ -15,7 +15,8 @@ import Loading from "../Loading";
 import MentorStatistics from "./MentorProfile/MentorStatistics";
 
 const Profiles = () => {
-  const { userDetails, getUpdatedAuthObj } = useAuth();
+  const { userDetails, getUpdatedAuthObj, user } = useAuth();
+  console.log("🚀 ~ Profiles ~ userDetails:", userDetails);
 
   const menteeMode = (
     <CustomKeyboardView>

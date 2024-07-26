@@ -15,6 +15,7 @@ import {
   setDoc,
   query,
   collection,
+  onSnapshot,
   where,
 } from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig";
@@ -23,15 +24,20 @@ import { Link } from "expo-router";
 import { router } from "expo-router";
 import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
 import { useAuth } from "./authContext";
+import { generateRandomId } from "../../utils/common";
 
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
   const { user } = useAuth();
 
+  const [questions, setQuestions] = useState(undefined);
+
   const setNewTextQuestion = async (questionObj) => {
+    const randomId = generateRandomId();
     try {
-      await setDoc(doc(db, "new_question", user?.uid), questionObj);
+      await setDoc(doc(db, "new_question", randomId), questionObj);
+
       return { success: true };
     } catch (error) {
       console.log("error", error);
@@ -39,8 +45,27 @@ export const ChatContextProvider = ({ children }) => {
     }
   };
 
+  const getWaitingQuestions = () => {
+    const questionsRef = collection(db, "new_question"); // Get a reference to the collection
+
+    // Attach a listener to the collection
+    const unsubscribe = onSnapshot(questionsRef, (querySnapshot) => {
+      const questionsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id, // Include the document ID
+        ...doc.data(), // Spread the document data
+      }));
+
+      setQuestions(questionsData); // Update your state with the fetched data
+    });
+
+    // Return a function to unsubscribe from the listener when needed
+    return unsubscribe;
+  };
+
   return (
-    <ChatContext.Provider value={{ setNewTextQuestion }}>
+    <ChatContext.Provider
+      value={{ setNewTextQuestion, getWaitingQuestions, questions }}
+    >
       {children}
     </ChatContext.Provider>
   );

@@ -6,8 +6,9 @@ import { AntDesign } from "@expo/vector-icons";
 
 const SearchChats = () => {
   return (
-    <View className=" w-full h-[40px] px-2 flex flex-row justify-center items-center">
+    <View className=" w-full h-[40px] px-0 flex flex-row justify-center items-center">
       <TextInput
+        placeholderTextColor={"red"}
         placeholder="Search chats"
         className="w-[81%] pl-4 m-1 h-full border-none rounded-full bg-neutral-100 flex items-start  justify-center shadow "
       >

@@ -170,8 +170,12 @@ export const AuthContextProvider = ({ children }) => {
     try {
       console.log("signing in ...");
       const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log("result", result);
-      console.log("signed in ...");
+
+      console.log("Success");
+      setUser((prev) => result.user);
+      if (result) {
+        await getUserDataFromFirebase(result?.user.uid);
+      }
 
       return { success: true };
     } catch (error) {
@@ -194,6 +198,8 @@ export const AuthContextProvider = ({ children }) => {
         const userData = userSnapshot.docs[0].data();
 
         console.log("mentorData", userData);
+        setUserDetails((prev) => userData);
+
         return { success: true, data: userData }; // Return the data
       }
 
@@ -208,6 +214,7 @@ export const AuthContextProvider = ({ children }) => {
         const userData = menteeSnapshot.docs[0].data();
 
         console.log("menteeData", userData);
+        setUserDetails((prev) => userData);
         return { success: true, data: userData };
       } else {
         console.log("no DATA");

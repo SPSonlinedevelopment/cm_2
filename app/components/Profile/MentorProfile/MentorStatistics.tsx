@@ -8,7 +8,7 @@ import { useAuth } from "@/app/context/authContext";
 const MentorStatistics = () => {
   const { userDetails } = useAuth();
 
-  const stats = userDetails?.menteeStatistics;
+  const stats = userDetails?.mentorStatistics;
 
   return (
     <View className=" mt-5 w-[93%] ">
