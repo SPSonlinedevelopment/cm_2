@@ -16,7 +16,6 @@ import MentorStatistics from "./MentorProfile/MentorStatistics";
 
 const Profiles = () => {
   const { userDetails, getUpdatedAuthObj, user } = useAuth();
-  console.log("🚀 ~ Profiles ~ userDetails:", userDetails);
 
   const menteeMode = (
     <CustomKeyboardView>
@@ -65,7 +64,9 @@ const Profiles = () => {
 
   return (
     <View className="h-full w-full">
-      {userDetails?.mode === "mentee" && <GradientNavigation />}
+      {/* {userDetails?.mode === "mentee" && <GradientNavigation />} */}
+
+      <GradientNavigation />
       {userDetails?.mode === "mentee" ? menteeMode : mentorMode}
     </View>
   );

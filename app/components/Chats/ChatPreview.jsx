@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MentorChatList from "./MentorChatList";
 import CustomKeyboardView from "../CustomKeyboardView";
 
@@ -10,13 +10,31 @@ import { useChat } from "@/app/context/chatContext";
 import NewQuestionList from "./NewQuestionList";
 import { SearchBar } from "react-native-screens";
 import SearchChats from "./SearchChats";
+import {
+  setDoc,
+  Timestamp,
+  doc,
+  FieldValue,
+  updateDoc,
+  addDoc,
+  collection,
+  orderBy,
+  onSnapshot,
+  query,
+  where,
+  arrayUnion,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
+import { db } from "@/firebaseConfig";
 
 const ChatPreview = () => {
   const { getWaitingQuestions, questions } = useChat();
-  console.log("🚀 ~ ChatPreview ~ questions:", questions);
+  const [roomDetails, setroomDetails] = useState([]);
+  // console.log("🚀 ~ ChatPreview ~ questions:", questions);
 
   const { userDetails } = useAuth();
-  console.log("🚀 ~ ChatPreview ~ userDetails:", userDetails);
+  // console.log("🚀 ~ ChatPreview ~ userDetails:", userDetails);
 
   useEffect(() => {
     const unsubscribe = getWaitingQuestions(); // Start listening for changes
@@ -25,7 +43,36 @@ const ChatPreview = () => {
     return () => unsubscribe();
   }, []);
 
-  const data: any = [
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        if (userDetails?.uid) {
+          const q = query(
+            collection(db, "rooms"),
+            where("mentorId", "==", userDetails?.uid)
+          );
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            const roomData = querySnapshot.docs.map((doc) => {
+              return doc.data();
+            });
+            setroomDetails((prev) => roomData);
+          } else {
+            console.log("No rooms found for this mentor");
+          }
+        } else {
+          console.log("User details not available");
+        }
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+      }
+    };
+
+    fetchRooms();
+  }, [userDetails]);
+
+  const data = [
     {
       chatName: "Chemistry Equations",
       date: "23/04/1988",
@@ -83,7 +130,9 @@ const ChatPreview = () => {
         <View className="h-[20px] w-full"></View>
         {userDetails?.mode === "mentor" && <NewQuestionList data={questions} />}
 
-        <MentorChatList data={chatlistData} />
+        {/* <Text>{JSON.stringify(roomDetails)}</Text> */}
+
+        <MentorChatList data={roomDetails} />
       </SafeAreaView>
     </CustomKeyboardView>
   );

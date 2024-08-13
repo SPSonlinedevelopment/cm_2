@@ -10,11 +10,17 @@ const MentorStatistics = () => {
 
   const stats = userDetails?.mentorStatistics;
 
+  console.log("statts", stats);
+
   return (
     <View className=" mt-5 w-[93%] ">
       <View className="flex flex-row">
         <Entypo name="trophy" size={24} color="black" />
-        <Text className="text-lg font-bold "> Statistics</Text>
+        <Text className="text-lg font-bold ">
+          {" "}
+          Statistics
+       
+        </Text>
       </View>
 
       <View className="flex flex-row justify-between">

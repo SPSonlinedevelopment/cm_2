@@ -5,11 +5,17 @@ import { router } from "expo-router";
 
 const ChatItem = ({ item, index, noBorder, newQuestion }) => {
   const openChatRoom = () => {
-    router.push("chat-room");
+    router.push({ pathname: "/chat-room", params: item });
+
+    // const item = useLocalSearchParams(); // secnd user
   };
+
+  console.log("item", item);
 
   return (
     <TouchableOpacity
+      delayLongPress={100}
+      delayPressIn={100}
       onPress={openChatRoom}
       className={`flex-row h-[90px]  flex  justify-between items-center   py-1   `}
     >
@@ -19,7 +25,7 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
       
       `}
       >
-        <Avatar avatarName={item.avatarName} />
+        {/* <Avatar avatarName={item.avatarName} /> */}
 
         <View
           className={`h-full w-[280px] flex flex-col justify-between  
@@ -45,7 +51,7 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
                 style={{ fontSize: 15 }}
                 className="font-semibold text-neutral-500"
               >
-                {item?.chatName}
+                {/* {item?.chatName} */}
               </Text>
             )}
 
@@ -62,7 +68,7 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
             </Text>
           ) : (
             <Text className="text-neutral-500 text-xs ">
-              {item?.parterName}
+              {/* {item?.parterName} */}
             </Text>
           )}
 
@@ -71,6 +77,8 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
           ) : (
             <Text className="text-neutral-500 text-xs ">{item?.duration}</Text>
           )}
+
+          <Text> {JSON.stringify(item)}</Text>
         </View>
       </View>
     </TouchableOpacity>

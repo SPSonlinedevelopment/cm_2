@@ -62,6 +62,8 @@ export const ChatContextProvider = ({ children }) => {
     return unsubscribe;
   };
 
+  
+
   return (
     <ChatContext.Provider
       value={{ setNewTextQuestion, getWaitingQuestions, questions }}

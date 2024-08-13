@@ -13,7 +13,7 @@ const SignInForm = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialFormState);
   const [alertMessage, setAlertMessage] = useState("");
-  const { user, signIn, getUserDataFromFirebase, setUser } = useAuth();
+  const { user, signIn, } = useAuth();
 
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);

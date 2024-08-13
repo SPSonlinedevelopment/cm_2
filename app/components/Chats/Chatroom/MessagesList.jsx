@@ -3,21 +3,19 @@ import React from "react";
 import MessageItem from "./MessageItem";
 
 const MessagesList = ({ messages, currentUser, scrollViewRef }) => {
+  // console.log("🚀 ~ MessagesList ~ messages:", messages);
+
   return (
     <ScrollView
-      ref={scrollViewRef}
+      // ref={scrollViewRef}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingTop: 10 }}
     >
-      {messages.map((message, index) => {
-        return (
-          <MessageItem
-            currentUser={currentUser}
-            message={message}
-            key={index}
-          />
-        );
-      })}
+      {messages &&
+        Array.isArray(messages) &&
+        messages.map((message, index) => {
+          return <MessageItem message={message} key={index} />;
+        })}
     </ScrollView>
   );
 };

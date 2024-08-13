@@ -6,8 +6,11 @@ import {
   ChatNavBtn,
   ProfileNavBtn,
 } from "../../../HomeNavButtons/HomeNavButtons";
+import { useAuth } from "@/app/context/authContext";
 
 const GradientNavigation = () => {
+  const { userDetails, getUpdatedAuthObj, user } = useAuth();
+
   return (
     <View className="absolute h-[20vh] w-[100%] z-20 bottom-0  flex flex-col justify-end   ">
       <LinearGradient
@@ -17,7 +20,9 @@ const GradientNavigation = () => {
       />
       <View className="flex flex-row w-full justify-between items-end mb-4">
         <ChatNavBtn />
-        <ActivateCameraBtn />
+
+        {userDetails?.mode === "mentee" && <ActivateCameraBtn />}
+
         <ProfileNavBtn />
       </View>
     </View>

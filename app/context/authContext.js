@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -16,8 +16,9 @@ import {
   query,
   collection,
   where,
+  onSnapshot,
 } from "firebase/firestore";
-import { auth, db } from "../../firebaseConfig";
+import { auth, db, menteesRef } from "../../firebaseConfig";
 import { Try } from "expo-router/build/views/Try";
 import { Link } from "expo-router";
 import { router } from "expo-router";
@@ -33,9 +34,9 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     // on auth state change
-
     const unsub = onAuthStateChanged(auth, (user) => {
       console.log("authState changed");
+
       if (user) {
         setIsAuthenticated(true);
         setUser(user);
@@ -77,7 +78,7 @@ export const AuthContextProvider = ({ children }) => {
         password
       );
 
-      setUser((prev) => response);
+      // setUser((prev) => response);
 
       return {
         success: true,
@@ -130,6 +131,7 @@ export const AuthContextProvider = ({ children }) => {
       uid,
       email,
       year,
+      linkedChatrooms: [{}],
     };
 
     try {
