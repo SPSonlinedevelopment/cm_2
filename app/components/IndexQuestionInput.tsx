@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useChat } from "../context/chatContext";
 import { Try } from "expo-router/build/views/Try";
 import SubjectSelection from "./SubjectSelection";
+import { generateRandomId } from "@/utils/common";
 
 interface IndexQuestionInputProps {
   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,6 +46,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
   };
 
   useEffect(() => {
+    getdataFn();
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -57,44 +59,33 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
   const handleSendQuestion = async () => {
     setIsLoading(true);
 
+    const newquestionObj = {
+      menteeId: userDetails?.uid || "",
+      menteeName: userDetails?.firstName || "",
+      initialMessage: text || "",
+      questionSubject: selectedSubject || "",
+      Timestamp: new Date(),
+      questionId: generateRandomId(),
+    };
+
     try {
-      const resultData = await getdataFn();
-
-      console.log("resultData", resultData);
-
-      let newquestionObj;
-
-      if (resultData.success) {
-        newquestionObj = {
-          menteeid: resultData?.data?.uid,
-          menteeName: resultData.data?.firstName,
-          message: text,
-          questionSubject: selectedSubject,
-          Timestamp: new Date(),
-        };
-        console.log("newquestionObj", newquestionObj);
-      }
-
-      console.log("newquestionObj", newquestionObj);
-
-      if (newquestionObj) {
-        const result = await setNewTextQuestion(newquestionObj);
-        console.log(result);
-
-        if (isAuthenticated) {
-          router.push("chats");
-        }
-      } else {
-        console.error("Failed to get data from getdataFn.");
-      }
+      const result = await setNewTextQuestion(newquestionObj);
+      console.log(result);
     } catch (error) {
-      console.error(error);
+      console.log(error);
+    }
 
-      if (!isAuthenticated) {
-        router.push("sign-in");
-      }
+    if (isAuthenticated) {
+      router.push("chats");
     }
   };
+  // catch (error) {
+  //   console.error(error);
+
+  //   // if (!isAuthenticated) {
+  //   //   router.push("sign-in");
+  //   // }
+  // }
 
   return (
     <CustomKeyboardView>

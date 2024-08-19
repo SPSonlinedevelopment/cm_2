@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import Profiles from "./components/Profile/Profiles";
 import Loading from "./components/Loading";
 import { View, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   getDocs,
@@ -14,12 +15,12 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 
-const profile = () => {
+const Profile = () => {
   const { user, userDetails, setUserDetails, isAuthenticated } = useAuth();
 
+  const navigation = useNavigation();
   if (!isAuthenticated) {
-    router.push("sign-in");
- 
+    navigation.navigate("sign-in");
     return;
   }
 
@@ -72,6 +73,8 @@ const profile = () => {
     });
   }, [user?.uid]); // Only re-run the effect when the uid changes
 
+  console.log("userDetails", userDetails);
+
   if (!userDetails) {
     return (
       <View className="w-full h-full flex justify-center items-center">
@@ -84,4 +87,4 @@ const profile = () => {
   return <Profiles />;
 };
 
-export default profile;
+export default Profile;

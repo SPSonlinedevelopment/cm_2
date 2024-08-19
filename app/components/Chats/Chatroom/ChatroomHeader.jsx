@@ -8,19 +8,39 @@ import {
 } from "react-native-responsive-screen";
 import Avatar from "../../Profile/Avatar";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "@/app/context/authContext";
 
-const ChatroomHeader = ({ user, router }) => {
+const ChatroomHeader = ({ item }) => {
+  const { userDetails } = useAuth();
+  const navigation = useNavigation();
   return (
     <View className=" h-[135px] flex flex-row items-end justify-between gap-4 bg-white pb-2 shadow ">
-      <TouchableOpacity className="m-2" onPress={() => router?.back()}>
+      <TouchableOpacity className="m-2" onPress={() => navigation.goBack()}>
         <Entypo name="chevron-left" size={hp(4)} color="black" />
       </TouchableOpacity>
-
       <View className="flex flex-row items-center ">
         <Avatar />
         <Text style={{ fontSize: hp(2) }} className=" text-base p-2 text-black">
-          {/* {user.item.menteeName} */}
+          {userDetails?.mode === "mentee" ? (
+            <Text
+              style={{ fontSize: hp(2) }}
+              className=" text-base p-2 text-black"
+            >
+              mentor: {item?.item.mentorName}
+            </Text>
+          ) : (
+            <Text
+              style={{ fontSize: hp(2) }}
+              className=" text-base p-2 text-black"
+            >
+              mentee: {item?.item.menteeName}
+            </Text>
+          )}
         </Text>
+        <View>
+          <Text>{item?.item.roomId}</Text>
+        </View>
       </View>
 
       <TouchableOpacity className="m-2" onPress={() => {}}>

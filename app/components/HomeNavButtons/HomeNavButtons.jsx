@@ -6,14 +6,17 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
+import { useNavigation } from "@react-navigation/native";
+
 export const ChatNavBtn = () => {
+  const navigation = useNavigation();
   return (
     <IconButton
       title="Chat"
       icon={<Entypo name="chat" size={24} color="white" />}
       handlePress={() => {
         console.log("chat btn clicked");
-        router.push("chats");
+        navigation.navigate("chats");
       }}
       containerStyles="h-[60] w-[60] bg-transparent m-3 "
     />
@@ -33,12 +36,13 @@ export const AddMediaBtn = () => {
 };
 
 export const ProfileNavBtn = () => {
+  const navigation = useNavigation();
   return (
     <IconButton
       title="Profile"
       icon={<Entypo name="user" size={24} color="white" />}
       handlePress={() => {
-        router.push("profile");
+        navigation.navigate("profile");
       }}
       containerStyles="h-[60] w-[60] bg-transparent m-3 "
     />
@@ -46,13 +50,14 @@ export const ProfileNavBtn = () => {
 };
 
 export const ActivateCameraBtn = () => {
+  const navigation = useNavigation();
   return (
     <IconButton
       title="Camera"
       icon={<AntDesign name="camera" size={35} color="white" />}
       handlePress={() => {
         console.log("user btn clicked");
-        router.push("/");
+        navigation.navigate("index");
       }}
       containerStyles="h-[60] w-[60] bg-transparent m-3 "
     />

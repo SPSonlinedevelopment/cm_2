@@ -12,7 +12,7 @@ const VerifyEmail = () => {
   const { user } = useAuth();
 
   const handlepress = async () => {
-    router.push("user-details");
+    // router.push("user-details");
   };
 
   return (

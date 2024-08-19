@@ -52,6 +52,8 @@ const ChatRoom = () => {
   const { isNewQuestion, item } = route?.params;
 
   const [TextInputFocused, setTextInputFocused] = useState(false);
+  const [isNewQ, setIsNewQ] = useState(isNewQuestion);
+
   const [newRoomCreated, setNewRoomCreated] = useState(false);
   const [inputFieldEmpty, setInputFieldEmpty] = useState(true);
   const [messages, setMessages] = useState([]);
@@ -69,45 +71,45 @@ const ChatRoom = () => {
 
   console.log("Item22", item);
 
+  let initialMessage = [];
+
+  if (userDetails?.mode === "mentee") {
+    initialMessage = [
+      {
+        text: item?.initialMessage || "",
+        senderId: item?.menteeid,
+        senderName: item?.menteeName,
+        createdAt: Timestamp.fromDate(new Date()),
+      },
+      {
+        text: `Hey ${item.menteeName} 👋. Thanks for your message!`,
+        senderName: "Collet owl",
+        createdAt: Timestamp.fromDate(new Date()),
+      },
+      {
+        text: "I'm connecting you with a mentor. Meanwhile, can you tell me more about your problem? ",
+        senderName: "Collet owl",
+        createdAt: Timestamp.fromDate(new Date()),
+      },
+      {
+        text: "Remember to use good English and be polite!",
+        senderName: "Collet owl",
+        createdAt: Timestamp.fromDate(new Date()),
+      },
+    ];
+  } else if (userDetails?.mode === "mentor") {
+    initialMessage = [
+      {
+        text: `You are now connected with a mentee, they're name is ${item?.menteeName} `,
+        senderName: "Collet owl",
+        createdAt: Timestamp.fromDate(new Date()),
+      },
+    ];
+  }
+
   useEffect(() => {
     if (isNewQuestion) {
       createRoomIfNotExists();
-    }
-
-    let initialMessage = [];
-
-    if (userDetails?.mode === "mentee") {
-      initialMessage = [
-        {
-          text: item?.initialMessage || "",
-          senderId: item?.menteeid,
-          senderName: item?.menteeName,
-          createdAt: Timestamp.fromDate(new Date()),
-        },
-        {
-          text: `Hey ${item.menteeName} 👋. Thanks for your message!`,
-          senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
-        },
-        {
-          text: "I'm connecting you with a mentor. Meanwhile, can you tell me more about your problem? ",
-          senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
-        },
-        {
-          text: "Remember to use good English and be polite!",
-          senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
-        },
-      ];
-    } else if (userDetails?.mode === "mentor") {
-      initialMessage = [
-        {
-          text: `You are now connected with a mentee, they're name is ${item?.menteeName} `,
-          senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
-        },
-      ];
     }
 
     // get all current messages from firebase
@@ -130,6 +132,8 @@ const ChatRoom = () => {
       unsub();
     };
   }, []);
+
+  console.log("allMessages", messages);
 
   const createRoomIfNotExists = async () => {
     const roomId = getRoomId();
@@ -167,14 +171,12 @@ const ChatRoom = () => {
   const updateScrollView = () => {
     setTimeout(() => {
       scrollViewRef?.current?.scrollToEnd({ animated: true });
-    }, 200);
+    }, 100);
   };
-
-  updateScrollView();
 
   useEffect(() => {
     updateScrollView();
-  }, [messages, TextInputFocused]);
+  }, [messages]);
 
   const handleSendMessage = async () => {
     let message = textRef.current.trim();
@@ -221,9 +223,12 @@ const ChatRoom = () => {
       contentContainerStyle={{ flex: 1 }}
     >
       <ChatroomHeader item={{ item }} />
+      <Text> {JSON.stringify(isNewQ)}</Text>
+
       {messages && (
         <MessagesList scrollViewRef={scrollViewRef} messages={messages} />
       )}
+
       <View
         style={{}}
         className={`${
@@ -268,3 +273,18 @@ const ChatRoom = () => {
 };
 
 export default ChatRoom;
+
+/* <KeyboardAvoidingView
+  behavior={ios ? "padding" : "height"}
+  style={{
+    flex: 1,
+  }}
+  {...kavConfig}
+  contentContainerStyle={{ flex: 1 }}
+  >
+  <View className="w-full  h-full flex-col justify-between bg-purple-50 "></View>
+  </KeyboardAvoidingView> */
+
+{
+  /* <MessagesList scrollViewRef={scrollViewRef} messages={messages} />; */
+}

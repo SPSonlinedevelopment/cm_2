@@ -13,6 +13,16 @@
     "expo-env.d.ts",
     "app/components/FormField/FormField.test.js",
     "app/components/Buttons/CustomButton.test.js",
-    "app/context/authContext.test.js"
-, "app/user-details.tsx", "app/components/Chats/MentorChatList.jsx", "app/components/Chats/ChatItem.jsx", "app/components/Chats/NewQuestionList.jsx", "app/components/Chats/Chatroom/MessagesList.jsx", "app/chat-room.jsx", "app/profile.jsx", "app/components/Chats/ChatPreview.jsx"  ]
+    "app/context/authContext.test.js",
+    "app/user-details.tsx",
+    "app/components/Chats/MentorChatList.jsx",
+    "app/components/Chats/ChatItem.jsx",
+    "app/components/Chats/NewQuestionList.jsx",
+    "app/components/Chats/Chatroom/MessagesList.jsx",
+    "app/chat-room.jsx",
+    "app/profile.jsx",
+    "app/components/Chats/ChatPreview.jsx",
+    "app/components/HomeNavButtons/HomeNavButtons.jsx",
+    "app/index.jsx"
+, "app/components/Buttons/IconButton.tsx"  ]
 }

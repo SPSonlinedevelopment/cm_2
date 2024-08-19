@@ -29,14 +29,16 @@ import { generateRandomId } from "../../utils/common";
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
-  const { user } = useAuth();
+  const [questions, setQuestions] = useState([]);
 
-  const [questions, setQuestions] = useState(undefined);
+  const [allChats, setAllChats] = useState([]);
 
   const setNewTextQuestion = async (questionObj) => {
-    const randomId = generateRandomId();
     try {
-      await setDoc(doc(db, "new_question", randomId), questionObj);
+      await setDoc(
+        doc(db, "new_question", questionObj.questionId),
+        questionObj
+      );
 
       return { success: true };
     } catch (error) {
@@ -51,22 +53,25 @@ export const ChatContextProvider = ({ children }) => {
     // Attach a listener to the collection
     const unsubscribe = onSnapshot(questionsRef, (querySnapshot) => {
       const questionsData = querySnapshot.docs.map((doc) => ({
-        id: doc.id, // Include the document ID
-        ...doc.data(), // Spread the document data
+        id: doc.id,
+        ...doc.data(),
       }));
 
-      setQuestions(questionsData); // Update your state with the fetched data
+      setQuestions(questionsData);
     });
 
-    // Return a function to unsubscribe from the listener when needed
     return unsubscribe;
   };
 
-  
-
   return (
     <ChatContext.Provider
-      value={{ setNewTextQuestion, getWaitingQuestions, questions }}
+      value={{
+        setNewTextQuestion,
+        getWaitingQuestions,
+        questions,
+        setAllChats,
+        allChats,
+      }}
     >
       {children}
     </ChatContext.Provider>

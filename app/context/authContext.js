@@ -19,9 +19,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { auth, db, menteesRef } from "../../firebaseConfig";
-import { Try } from "expo-router/build/views/Try";
-import { Link } from "expo-router";
-import { router } from "expo-router";
+
 import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
 import Statistics from "../components/Profile/MenteeProfile/MenteeStatistics";
 
@@ -49,6 +47,56 @@ export const AuthContextProvider = ({ children }) => {
     return unsub;
   }, []);
 
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+    const mentorRef = collection(db, "mentors");
+    const mentorQuery = query(mentorRef, where("uid", "==", user?.uid));
+
+    getDocs(mentorQuery).then((mentorDoc) => {
+      if (!mentorDoc.empty) {
+        // Mentor found, set up listener for mentor data
+        const unsubscribe = onSnapshot(mentorQuery, (querySnapshot) => {
+          if (querySnapshot.empty) {
+            setUserDetails(null);
+            return;
+          }
+          const mentorDoc = querySnapshot.docs[0];
+          setUserDetails(mentorDoc.data());
+        });
+
+        return () => unsubscribe(); // Unsubscribe when component unmounts
+      } else {
+        // Mentor not found, check if the UID exists in the 'mentees' collection
+        const menteeRef = collection(db, "mentees");
+        const menteeQuery = query(menteeRef, where("uid", "==", user?.uid));
+
+        getDocs(menteeQuery).then((menteeDoc) => {
+          if (!menteeDoc.empty) {
+            // Mentee found, set up listener for mentee data
+            const unsubscribe = onSnapshot(menteeQuery, (querySnapshot) => {
+              if (querySnapshot.empty) {
+                setUserDetails(null);
+                return;
+              }
+              const menteeDoc = querySnapshot.docs[0];
+
+              setUserDetails(menteeDoc.data());
+            });
+
+            return () => unsubscribe(); // Unsubscribe when component unmounts
+          } else {
+            // Neither mentor nor mentee found, set userData to null
+            setUserDetails(null);
+          }
+        });
+      }
+    });
+  }, [user?.uid]); // Only re-run the effect when the uid changes
+
+
+  
   const getUpdatedAuthObj = async () => {
     const auth = getAuth();
     const user = auth.currentUser;

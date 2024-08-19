@@ -1,59 +1,79 @@
 import React, { useEffect } from "react";
 
-import { Stack, SplashScreen } from "expo-router";
-
+// import { SplashScreen } from "expo-router";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthContextProvider } from "./context/authContext";
 import { ChatContextProvider } from "./context/chatContext";
+import index from "./index";
+import SignIn from "./sign-in";
+import SignUp from "./sign-up";
+import UserDetails from "./user-details";
+import ForgotPassword from "./forgot-password";
+import Profile from "./profile";
+import VerifyEmail from "./verify-email";
+import Chats from "./chats";
+import ChatRoom from "./chat-room";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
+
+const Stack = createNativeStackNavigator();
 
 export default function AuthLayout() {
   return (
     <AuthContextProvider>
       <ChatContextProvider>
         <GestureHandlerRootView>
-          <Stack>
+          {/* <NavigationContainer independent={false}> */}
+          <Stack.Navigator>
             <Stack.Screen
+              options={{ headerShown: false }}
               name="index"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
-
+              component={index}
+            />
             <Stack.Screen
+              options={{ headerShown: false }}
               name="sign-in"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              component={SignIn}
+            />
             <Stack.Screen
+              options={{ headerShown: false }}
               name="sign-up"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              component={SignUp}
+            />
             <Stack.Screen
+              options={{ headerShown: false }}
               name="user-details"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              component={UserDetails}
+            />
             <Stack.Screen
+              options={{ headerShown: false }}
               name="forgot-password"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
-
+              component={ForgotPassword}
+            />
             <Stack.Screen
+              options={{ headerShown: false }}
               name="profile"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
-
+              component={Profile}
+            />
             <Stack.Screen
+              options={{ headerShown: false }}
               name="verify-email"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              component={VerifyEmail}
+            />
             <Stack.Screen
+              options={{ headerShown: false }}
               name="chats"
-              options={{ headerShown: false }}
-            ></Stack.Screen>
+              component={Chats}
+            />
             <Stack.Screen
-              name="chat-room"
               options={{ headerShown: false }}
-            ></Stack.Screen>
-          </Stack>
+              name="chat-room"
+              component={ChatRoom}
+            />
+          </Stack.Navigator>
+          {/* </NavigationContainer> */}
         </GestureHandlerRootView>
       </ChatContextProvider>
     </AuthContextProvider>

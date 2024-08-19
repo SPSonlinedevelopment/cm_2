@@ -2,21 +2,19 @@ import { View, Text, FlatList, ScrollView } from "react-native";
 import React from "react";
 import MessageItem from "./MessageItem";
 
-const MessagesList = ({ messages, currentUser, scrollViewRef }) => {
-  // console.log("🚀 ~ MessagesList ~ messages:", messages);
-
+const MessagesList = ({ messages, scrollViewRef }) => {
   return (
-    <ScrollView
-      // ref={scrollViewRef}
+    <FlatList
+      data={messages}
+      style={{ width: "95%" }}
+      ref={scrollViewRef}
+      keyExtractor={(item) => Math.random()}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingTop: 10 }}
-    >
-      {messages &&
-        Array.isArray(messages) &&
-        messages.map((message, index) => {
-          return <MessageItem message={message} key={index} />;
-        })}
-    </ScrollView>
+      // contentContainerStyle={{ paddingTop: -40 }}
+      renderItem={({ item, index }) => (
+        <MessageItem message={item} key={index} />
+      )}
+    ></FlatList>
   );
 };
 

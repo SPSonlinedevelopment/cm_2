@@ -2,139 +2,79 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import MentorChatList from "./MentorChatList";
 import CustomKeyboardView from "../CustomKeyboardView";
-
 import GradientNavigation from "../Profile/MenteeProfile/GradientNaviation/GradientNavigation";
 import { useAuth } from "@/app/context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useChat } from "@/app/context/chatContext";
 import NewQuestionList from "./NewQuestionList";
-import { SearchBar } from "react-native-screens";
 import SearchChats from "./SearchChats";
-import {
-  setDoc,
-  Timestamp,
-  doc,
-  FieldValue,
-  updateDoc,
-  addDoc,
-  collection,
-  orderBy,
-  onSnapshot,
-  query,
-  where,
-  arrayUnion,
-  getDoc,
-  getDocs,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ChatPreview = () => {
-  const { getWaitingQuestions, questions } = useChat();
-  const [roomDetails, setroomDetails] = useState([]);
-  // console.log("🚀 ~ ChatPreview ~ questions:", questions);
+  const { getWaitingQuestions, questions, setAllChats } = useChat();
 
-  const { userDetails } = useAuth();
-  // console.log("🚀 ~ ChatPreview ~ userDetails:", userDetails);
+  const { userDetails, user } = useAuth();
 
   useEffect(() => {
-    const unsubscribe = getWaitingQuestions(); // Start listening for changes
-
-    // Clean up the listener when the component unmounts
+    const unsubscribe = getWaitingQuestions();
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        if (userDetails?.uid) {
-          const q = query(
-            collection(db, "rooms"),
-            where("mentorId", "==", userDetails?.uid)
-          );
-          const querySnapshot = await getDocs(q);
+  let modeId;
 
-          if (!querySnapshot.empty) {
-            const roomData = querySnapshot.docs.map((doc) => {
-              return doc.data();
-            });
-            setroomDetails((prev) => roomData);
-          } else {
-            console.log("No rooms found for this mentor");
-          }
-        } else {
-          console.log("User details not available");
-        }
-      } catch (error) {
-        console.error("Error fetching rooms:", error);
-      }
-    };
-
-    fetchRooms();
-  }, [userDetails]);
-
-  const data = [
-    {
-      chatName: "Chemistry Equations",
-      date: "23/04/1988",
-      duration: "12mins",
-      parterName: "John",
-      //   avatarName: "Colin",
-    },
-    {
-      chatName: "Maths Equations",
-      date: "33/01/1988",
-      duration: "22mins",
-      parterName: "John",
-      avatarName: "Janet",
-    },
-    {
-      chatName: "Physiocs Equations",
-      date: "33/01/1988",
-      duration: "22mins",
-      parterName: "Fred",
-      avatarName: "Stuart",
-    },
-    {
-      chatName: "Physiocs Equations",
-      date: "33/01/1988",
-      duration: "22mins",
-      parterName: "Fred",
-      avatarName: "Ben",
-    },
-  ];
-
-  let chatlistData;
-
-  if (!data.length) {
-    chatlistData = [
-      {
-        chatName: "Welcome",
-        date: "23/04/1988",
-        duration: "12mins",
-        parterName: "Collet Owl",
-      },
-    ];
+  if (userDetails?.mode === "mentee") {
+    modeId = "menteeId";
   } else {
-    chatlistData = data;
+    modeId = "mentorId";
   }
 
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      query(collection(db, "rooms"), where(modeId, "==", userDetails?.uid)),
+      (querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const roomData = querySnapshot.docs.map((doc) => {
+            return doc.data();
+          });
+          setAllChats((prev) => roomData);
+        } else {
+          console.log("No rooms found for this mentor/mentee");
+        }
+      },
+      (error) => {
+        console.error("Error listening for rooms:", error);
+      }
+    );
+
+    // Cleanup the listener when the component unmounts
+    return () => unsubscribe();
+  }, [userDetails]);
+
   return (
-    <CustomKeyboardView>
+    <View className="h-full">
       <GradientNavigation />
-      <SafeAreaView className="flex-1 h-full w-full flex flex-col  items-center justify-start">
-        <View className=" flex flex-col justify-start items-start w-full p-3">
+      <SafeAreaView className=" w-full flex-col  items-center justify-start">
+        <View className=" shadow-md  flex flex-col justify-start items-start w-full ">
           <Text className="text-xl font-bold">Chats</Text>
+          <Text> {userDetails?.uid}</Text>
+          <Text> {user?.uid}</Text>
         </View>
 
-        <SearchChats />
-        <View className="h-[20px] w-full"></View>
-        {userDetails?.mode === "mentor" && <NewQuestionList data={questions} />}
+        <ScrollView
+          contentContainerStyle={{ display: "flex", alignItems: "center" }}
+          className="w-full h-full  flex "
+        >
+          <SearchChats />
+          {userDetails?.mode === "mentor" && (
+            <NewQuestionList data={questions} />
+          )}
 
-        {/* <Text>{JSON.stringify(roomDetails)}</Text> */}
-
-        <MentorChatList data={roomDetails} />
+          <MentorChatList />
+        </ScrollView>
       </SafeAreaView>
-    </CustomKeyboardView>
+    </View>
   );
 };
 

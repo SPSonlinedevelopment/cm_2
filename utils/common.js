@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
@@ -26,4 +28,21 @@ export const convertTimestampToTime = (timestamp) => {
   const time = date.toLocaleTimeString(); // Get the time part from the date object
 
   return time;
+};
+
+export const convertFirebaseTimestampToDate = (firebaseTimestamp) => {
+  if(!firebaseTimestamp) {
+    return null; 
+  }
+  const date = firebaseTimestamp.toDate(); // Convert Firebase Timestamp to JavaScript Date object
+
+  // Extracting the date, month, and year
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Month is zero-based, so add 1
+  const year = date.getFullYear();
+
+  // Format the date in a simple format
+  const formattedDate = `${day}/${month}/${year}`;
+
+  return formattedDate;
 };
