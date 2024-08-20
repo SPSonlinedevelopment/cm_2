@@ -79,29 +79,37 @@ const ChatRoom = () => {
     if (userDetails?.mode === "mentee") {
       initialMessage = [
         {
+          senderId: item?.menteeid,
+          senderName: item?.menteeName,
+          text: null,
+          imageUrl: item?.initialImageUrl || null,
+        },
+        {
           text: item?.initialMessage || "",
           senderId: item?.menteeid,
           senderName: item?.menteeName,
-          createdAt: Timestamp.fromDate(new Date()),
         },
         {
           text: `Hey ${item.menteeName} 👋. Thanks for your message!`,
           senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
         },
         {
           text: "I'm connecting you with a mentor. Meanwhile, can you tell me more about your problem? ",
           senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
         },
         {
           text: "Remember to use good English and be polite!",
           senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
         },
       ];
     } else if (userDetails?.mode === "mentor") {
       initialMessage = [
+        {
+          senderId: item?.menteeid,
+          senderName: item?.menteeName,
+          text: null,
+          imageUrl: item?.initialImageUrl || null,
+        },
         {
           text: `You are now connected with a mentee, they're name is ${item?.menteeName} `,
           senderName: "Collet owl",
@@ -137,6 +145,7 @@ const ChatRoom = () => {
     if (!newRoomCreated) {
       try {
         await setDoc(doc(db, "rooms", roomId), {
+          initialImageUrl: item?.imageUrl,
           mentorId: userDetails?.uid,
           mentorName: userDetails?.firstName,
           menteeId: item?.menteeId,

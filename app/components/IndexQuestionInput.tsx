@@ -60,6 +60,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
     setIsLoading(true);
 
     const newquestionObj = {
+      imageUrl: "",
       menteeId: userDetails?.uid || "",
       menteeName: userDetails?.firstName || "",
       initialMessage: text || "",

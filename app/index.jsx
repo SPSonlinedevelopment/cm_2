@@ -22,14 +22,29 @@ import Chats from "./chats";
 import { ChatContextProvider } from "./context/chatContext";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "./context/authContext";
+import { useChat } from "./context/chatContext";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { storage } from "@/firebaseConfig";
+import { generateRandomId } from "@/utils/common";
 
 const RootLayout = () => {
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isSavingtoStorage, setIsSavingtoStorage] = useState(false);
+
   // const [mediaLibPermissions, setMediaLibPermissions] =
   //   MediaLibrary.requestPermissionsAsync();
   // const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
+
+  const { user, userDetails } = useAuth();
+  const { setNewTextQuestion } = useChat();
 
   const [image, setImage] = useState(null);
 
@@ -38,7 +53,7 @@ const RootLayout = () => {
   const handleKeyboardButtonPressed = () => {
     setDisplayQuestionInput(true);
   };
-
+  const navigation = useNavigation();
   useEffect(() => {});
 
   if (!permission) {
@@ -83,7 +98,109 @@ const RootLayout = () => {
     }
   };
 
+  const handleSend = async () => {
+    try {
+      setIsSavingtoStorage(true);
+      const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
+
+      if (!image) {
+        throw new Error("Image is missing");
+      }
+
+      const response = await fetch(image);
+      const blob = await response.blob();
+
+      console.log(blob);
+
+      // const newFile = new File([blob], `test1.jpeg`, {
+      //   type: "image/jpeg",
+      // });
+      await uploadBytesResumable(storageRef, blob);
+
+      console.log("File uploaded successfully!");
+
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log("File download URL:", downloadURL);
+      handleSendQuestion(downloadURL);
+      setIsSavingtoStorage(false);
+      setImage(null);
+
+      navigation.navigate("chats");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setIsSavingtoStorage(false);
+    }
+  };
+
+  const handleSendQuestion = async (url) => {
+    try {
+      console.log("🚀 ~ handleSendQuestion ~ url:", url);
+
+      const newquestionObj = {
+        imageUrl: url,
+        menteeId: userDetails?.uid || "",
+        menteeName: userDetails?.firstName || "",
+        initialMessage: "",
+        questionSubject: "",
+        Timestamp: new Date(),
+        questionId: generateRandomId(),
+      };
+
+      const result = await setNewTextQuestion(newquestionObj);
+      console.log(result);
+    } catch (error) {
+      console.error("Error setting new text question:", error);
+    }
+  };
+
+  // const handleSend = async () => {
+  //   setIsSavingtoStorage(true);
+  //   const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
+
+  //   try {
+  //     // 1. Convert the image URI to a Blob
+  //     const response = await fetch(image);
+  //     const blob = await response.blob();
+
+  //     console.log(blob);
+  //     const uploadTask = uploadBytes(storageRef, blob);
+  //     await uploadTask;
+  //     console.log("File uploaded successfully!");
+  //     const downloadURL = await getDownloadURL(storageRef);
+  //     // handleSendQuestion(downloadURL);
+  //     console.log("File download URL:", downloadURL);
+  //     setIsSavingtoStorage(false);
+  //     setImage(null);
+  //   } catch (error) {
+  //     console.error("Error uploading file:", error);
+  //   }
+
+  //   navigation.navigate("chats");
+  // };
+
+  // const handleSendQuestion = async (url) => {
+  //   console.log("🚀 ~ handleSendQuestion ~ url:", url);
+
+  //   const newquestionObj = {
+  //     imageUrl: url,
+  //     menteeId: userDetails?.uid || "",
+  //     menteeName: userDetails?.firstName || "",
+  //     initialMessage: "",
+  //     questionSubject: "",
+  //     Timestamp: new Date(),
+  //     questionId: generateRandomId(),
+  //   };
+
+  //   try {
+  //     const result = await setNewTextQuestion(newquestionObj);
+  //     console.log(result);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   let display;
+
   if (!image) {
     display = (
       <AuthContextProvider>
@@ -123,6 +240,17 @@ const RootLayout = () => {
                       takePicture();
                     }}
                   />
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {uploadProgress > 0 && (
+                      <Text>Upload Progress: {uploadProgress.toFixed(0)}%</Text>
+                    )}
+                  </View>
 
                   <IconButton
                     icon={<Entypo name="keyboard" size={24} color="black" />}
@@ -167,12 +295,15 @@ const RootLayout = () => {
             title="retake"
           ></IconButton>
           <IconButton
+            isLoading={isSavingtoStorage}
             containerStyles="h-[60px] w-[100px] bg-orange "
             icon={<FontAwesome name="send" size={24} color="white" />}
             handlePress={() => {
               // saveImage();
 
-              console.log("pressed");
+              handleSend();
+
+              console.log("pressed send buttonn");
             }}
             title="Send"
           ></IconButton>
