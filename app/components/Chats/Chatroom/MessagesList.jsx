@@ -1,6 +1,7 @@
 import { View, Text, FlatList, ScrollView } from "react-native";
 import React from "react";
 import MessageItem from "./MessageItem";
+import { Image } from "expo-image";
 
 const MessagesList = ({ messages, scrollViewRef }) => {
   return (
@@ -8,9 +9,8 @@ const MessagesList = ({ messages, scrollViewRef }) => {
       data={messages}
       style={{ width: "95%" }}
       ref={scrollViewRef}
-      keyExtractor={(item) => Math.random()}
+      keyExtractor={(item) => item.messageId}
       showsVerticalScrollIndicator={false}
-      // contentContainerStyle={{ paddingTop: -40 }}
       renderItem={({ item, index }) => (
         <MessageItem message={item} key={index} />
       )}

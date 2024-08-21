@@ -32,6 +32,9 @@ import {
 import { storage } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
 
+
+import ImagePicker from "react-native-image-picker";
+
 const RootLayout = () => {
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
