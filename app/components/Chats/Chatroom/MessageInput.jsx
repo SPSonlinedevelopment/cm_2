@@ -10,13 +10,22 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 import { Image } from "expo-image";
+import { pickImage } from "@/utils/imagePicker";
 
 const MessageInput = React.memo(({ item }) => {
   const { userDetails } = useAuth();
   const [TextInputFocused, setTextInputFocused] = useState(false);
   const [inputFieldEmpty, setInputFieldEmpty] = useState(true);
+  const [image, setImage] = useState(false);
+
   const textRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -24,6 +33,55 @@ const MessageInput = React.memo(({ item }) => {
     if (inputFieldEmpty) {
       setInputFieldEmpty(false);
       console.log("text added");
+    }
+  };
+
+
+  // this function is used in index and needs to extracted to as isolated reusable function as too large
+  const handleSend = async () => {
+    try {
+      setIsSavingtoStorage(true);
+      const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
+
+      if (!image) {
+        throw new Error("Image is missing");
+      }
+
+      const response = await fetch(image);
+      const blob = await response.blob();
+      await uploadBytesResumable(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log("File download URL:", downloadURL);
+
+      handleSendQuestion(downloadURL);
+      setIsSavingtoStorage(false);
+      setImage(null);
+      setOpenDisplayImageModal(false);
+      navigation.navigate("chats");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setIsSavingtoStorage(false);
+    }
+  };
+// this function is used in index and needs to extracted to as isolated reusable function as too large
+  const handleSendQuestion = async (url) => {
+    try {
+      console.log("🚀 ~ handleSendQuestion ~ url:", url);
+
+      const newquestionObj = {
+        imageUrl: url,
+        menteeId: userDetails?.uid || "",
+        menteeName: userDetails?.firstName || "",
+        initialMessage: "",
+        questionSubject: "",
+        Timestamp: new Date(),
+        questionId: generateRandomId(),
+      };
+
+      const result = await setNewTextQuestion(newquestionObj);
+      console.log(result);
+    } catch (error) {
+      console.error("Error setting new text question:", error);
     }
   };
 
@@ -63,7 +121,10 @@ const MessageInput = React.memo(({ item }) => {
       }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center `}
     >
       <View className="flex-row justify-around  items-center  w-full  p-2   ">
-        <TouchableOpacity className="bh-neutral-200    flex items-center justify-center rounded-full  pr-[10px]">
+        <TouchableOpacity
+          onPress={() => pickImage(setImage)}
+          className="bh-neutral-200    flex items-center justify-center rounded-full  pr-[10px]"
+        >
           <Ionicons name="add-outline" size={hp(3.5)} color="black" />
         </TouchableOpacity>
         <TextInput

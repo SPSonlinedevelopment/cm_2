@@ -5,6 +5,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { pickImage } from "../../../utils/imagePicker";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -23,12 +24,14 @@ export const ChatNavBtn = () => {
   );
 };
 
-export const AddMediaBtn = () => {
+export const AddMediaBtn = ({ setImage }) => {
   return (
     <IconButton
+      title="Images"
       icon={<MaterialIcons name="perm-media" size={24} color="white" />}
       handlePress={() => {
         console.log("open media btn clicked");
+        pickImage({ setImage });
       }}
       containerStyles="h-[60] w-[60] bg-transparent m-3"
     />
@@ -64,7 +67,7 @@ export const ActivateCameraBtn = () => {
   );
 };
 
-const HomeNavButtons = () => {
+const HomeNavButtons = ({ setImage }) => {
   return (
     <View>
       <View className="flex-row w-full justify-center items-center  ">
@@ -72,7 +75,7 @@ const HomeNavButtons = () => {
       </View>
       <View className="flex-row w-full justify-between pb-3  ">
         <ChatNavBtn />
-        <AddMediaBtn />
+        <AddMediaBtn setImage={setImage} />
         <ProfileNavBtn />
       </View>
     </View>

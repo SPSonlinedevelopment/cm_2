@@ -7,7 +7,7 @@ import IconButton from "../../Buttons/IconButton";
 
 const FullScreenImage = ({ url, onClose }) => {
   return (
-    <Modal visible transparent animationType="slide">
+    <Modal visible animationType="slide">
       <View className="relative">
         <IconButton
           containerStyles="h-[50px] w-[50px] bg-white absolute z-20 left-4 top-10 "
