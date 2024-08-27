@@ -16,7 +16,10 @@ const ChatroomHeader = ({ item }) => {
   const navigation = useNavigation();
   return (
     <View className=" h-[135px] flex flex-row items-end justify-between gap-4 bg-white pb-2 shadow ">
-      <TouchableOpacity className="m-2" onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        className="m-2"
+        onPress={() => navigation.navigate("chats", { key: Math.random() })}
+      >
         <Entypo name="chevron-left" size={hp(4)} color="black" />
       </TouchableOpacity>
       <View className="flex flex-row items-center ">

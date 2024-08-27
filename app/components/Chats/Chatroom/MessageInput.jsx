@@ -19,6 +19,7 @@ import {
 
 import { Image } from "expo-image";
 import { pickImage } from "@/utils/imagePicker";
+import { storeObjectAsyncStorage } from "../../../../utils/common";
 
 const MessageInput = React.memo(({ item }) => {
   const { userDetails } = useAuth();
@@ -35,7 +36,6 @@ const MessageInput = React.memo(({ item }) => {
       console.log("text added");
     }
   };
-
 
   // this function is used in index and needs to extracted to as isolated reusable function as too large
   const handleSend = async () => {
@@ -63,7 +63,7 @@ const MessageInput = React.memo(({ item }) => {
       setIsSavingtoStorage(false);
     }
   };
-// this function is used in index and needs to extracted to as isolated reusable function as too large
+  // this function is used in index and needs to extracted to as isolated reusable function as too large
   const handleSendQuestion = async (url) => {
     try {
       console.log("🚀 ~ handleSendQuestion ~ url:", url);
@@ -79,6 +79,7 @@ const MessageInput = React.memo(({ item }) => {
       };
 
       const result = await setNewTextQuestion(newquestionObj);
+
       console.log(result);
     } catch (error) {
       console.error("Error setting new text question:", error);

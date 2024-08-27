@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
@@ -31,8 +32,8 @@ export const convertTimestampToTime = (timestamp) => {
 };
 
 export const convertFirebaseTimestampToDate = (firebaseTimestamp) => {
-  if(!firebaseTimestamp) {
-    return null; 
+  if (!firebaseTimestamp) {
+    return null;
   }
   const date = firebaseTimestamp.toDate(); // Convert Firebase Timestamp to JavaScript Date object
 
@@ -45,4 +46,26 @@ export const convertFirebaseTimestampToDate = (firebaseTimestamp) => {
   const formattedDate = `${day}/${month}/${year}`;
 
   return formattedDate;
+};
+
+export const storeObjectAsyncStorage = async (key, value) => {
+
+
+  try {
+    await AsyncStorage.setItem(key, value);
+  } catch (error) {
+    console.error("Error storing object:", error);
+  }
+};
+
+export const getObjectAsyncStorage = async (key) => {
+
+  try {
+    const jsonValue = await AsyncStorage.getItem(key);
+
+    return jsonValue ? jsonValue : "No messages";
+  } catch (error) {
+    console.error("Error retrieving object:", error);
+    return null;
+  }
 };

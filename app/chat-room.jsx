@@ -1,56 +1,29 @@
-import {
-  View,
-  Text,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-  Keyboard,
-  Alert,
-} from "react-native";
-import React, { useEffect, useState, useRef, Children } from "react";
+import { KeyboardAvoidingView, Platform } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
 import { useRoute } from "@react-navigation/native";
-import CustomKeyboardView from "./components/CustomKeyboardView";
-import { StatusBar } from "expo-status-bar";
 import ChatroomHeader from "./components/Chats/Chatroom/ChatroomHeader";
-
-import { Feather } from "@expo/vector-icons";
-import Ionicons from "@expo/vector-icons/Ionicons";
-
-
 import {
-  setDoc,
   Timestamp,
   doc,
-  FieldValue,
-  updateDoc,
-  addDoc,
-  deleteDoc,
   collection,
   orderBy,
   onSnapshot,
   query,
-  where,
-  arrayUnion,
-  getDoc,
-  getDocs,
 } from "firebase/firestore";
-import { getRoomId } from "@/utils/common";
 import { db } from "@/firebaseConfig";
-
-import { SafeAreaView } from "react-native-safe-area-context";
 import MessagesList from "./components/Chats/Chatroom/MessagesList";
-
 import { useAuth } from "./context/authContext";
 import MessageInput from "./components/Chats/Chatroom/MessageInput";
+import { storeObjectAsyncStorage } from "../utils/common";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
   const route = useRoute();
-  const { isNewQuestion, item } = route?.params;
-  const [newRoomCreated, setNewRoomCreated] = useState(false);
+  const { item } = route?.params;
+
   const [messages, setMessages] = useState([]);
   const { userDetails } = useAuth();
+
   const inChat = true;
   if (inChat) {
     kavConfig = { keyboardVerticalOffset: 0 };
@@ -61,13 +34,7 @@ const ChatRoom = () => {
   // const inputRef = useRef(null);
   const scrollViewRef = useRef(null);
 
-  console.log("Item22", item);
-
   useEffect(() => {
-    if (isNewQuestion) {
-      createRoomIfNotExists();
-    }
-
     let initialMessage = [];
 
     if (userDetails?.mode === "mentee") {
@@ -124,7 +91,6 @@ const ChatRoom = () => {
 
       setMessages((prev) => {
         const newState = [...initialMessage, ...allMessages];
-
         return newState;
       });
     });
@@ -134,39 +100,12 @@ const ChatRoom = () => {
     };
   }, []);
 
-  const createRoomIfNotExists = async () => {
-    const roomId = getRoomId();
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    console.log("🚀 ~ ChatRoom ~ lastMessage:", lastMessage);
 
-    if (!newRoomCreated) {
-      try {
-        await setDoc(doc(db, "rooms", roomId), {
-          initialImageUrl: item?.imageUrl,
-          mentorId: userDetails?.uid,
-          mentorName: userDetails?.firstName,
-          menteeId: item?.menteeId,
-          menteeName: item?.menteeName,
-          questionSubject: item?.questionSubject,
-          safeguardingConcern: false,
-          sessionName: "",
-          roomId,
-          initialMessage: item?.initialMessage,
-          createdAt: Timestamp.fromDate(new Date()),
-        });
-
-        setNewRoomCreated(true);
-      } catch (error) {
-        console.log("Error creating room:", error);
-      }
-    }
-
-    try {
-      const docRef = doc(db, "new_question", item?.id); // Replace 'new_question' with your collection name
-      await deleteDoc(docRef);
-      console.log("Document deleted successfully!");
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+    storeObjectAsyncStorage(item?.roomId, lastMessage ? lastMessage?.text : "");
+  }, [messages]);
 
   const updateScrollView = () => {
     setTimeout(() => {
@@ -190,7 +129,7 @@ const ChatRoom = () => {
       contentContainerStyle={{ flex: 1 }}
     >
       <ChatroomHeader item={{ item }} />
-     
+
       {messages && (
         <MessagesList scrollViewRef={scrollViewRef} messages={messages} />
       )}
