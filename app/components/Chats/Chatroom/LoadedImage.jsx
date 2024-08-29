@@ -26,7 +26,8 @@ const FullScreenImage = ({ url, onClose }) => {
   );
 };
 
-const LoadedImage = React.memo(({ url }) => {
+const LoadedImage = React.memo(({ url, thisUsersMessage, caption }) => {
+  console.log("🚀 ~ LoadedImage ~ thisUsersMessage:", thisUsersMessage);
   const [loadingImage, setLoadingImage] = useState(true);
   const [isFullScreen, setFullScreen] = useState(false);
 
@@ -38,15 +39,50 @@ const LoadedImage = React.memo(({ url }) => {
     setFullScreen(false);
   };
 
-  let imageDetails = "flex items-start mb-1 ml-3 rounded-xl justify-center";
-
   return (
-    <View
-      className={`h-[200px] w-[200px] bg-white ${imageDetails} shadow relative`}
-    >
+    <View className="border">
       {isFullScreen && <FullScreenImage url={url} onClose={closeFullScreen} />}
-      <View className="h-full w-full rounded-xl absolute flex items-center justify-center">
-        {!loadingImage && (
+      <View className="h-full w-full rounded-xl relative flex items-center justify-center">
+        <View
+          className={`p-[1px] rounded-xl shadow flex flex-col absolute border ${
+            thisUsersMessage ? "bg-orange-200 " : "bg-white"
+          }`}
+        >
+          <TouchableOpacity
+            // delayLongPress={100}
+            // delayPressIn={100}
+            onPress={() => openFullScreen()}
+          >
+            <Image
+              cachePolicy={"memory-disk"}
+              className={`h-[200px] w-[200px]  rounded-xl`}
+              style={{
+                aspectRatio: 1,
+                resizeMode: "cover",
+              }}
+              source={{
+                uri: url,
+              }}
+              contentFit="cover"
+              transition={100}
+              effect="flip-from-top"
+            />
+          </TouchableOpacity>
+          {caption && (
+            <View className=" m-2 w-full">
+              <Text>{caption}</Text>
+            </View>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+});
+
+export default LoadedImage;
+
+{
+  /* {!loadingImage && (
           <View className="h-full w-full rounded-xl absolute flex items-center justify-center">
             <View className="rounded-full h-full w-full items-center justify-center">
               <ActivityIndicator
@@ -60,26 +96,5 @@ const LoadedImage = React.memo(({ url }) => {
               />
             </View>
           </View>
-        )}
-        <TouchableOpacity onPress={() => openFullScreen()}>
-          <Image
-            cachePolicy={"memory-disk"}
-            className="h-full w-full rounded-xl"
-            style={{
-              aspectRatio: 1,
-              resizeMode: "cover",
-            }}
-            source={{
-              uri: url,
-            }}
-            contentFit="cover"
-            transition={100}
-            effect="flip-from-top"
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-});
-
-export default LoadedImage;
+        )} */
+}

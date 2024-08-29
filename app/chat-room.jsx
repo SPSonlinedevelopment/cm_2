@@ -20,9 +20,10 @@ const ChatRoom = () => {
   const ios = Platform.OS == "ios";
   const route = useRoute();
   const { item } = route?.params;
-
   const [messages, setMessages] = useState([]);
+
   const { userDetails } = useAuth();
+  const scrollViewRef = useRef(null);
 
   const inChat = true;
   if (inChat) {
@@ -30,13 +31,8 @@ const ChatRoom = () => {
     scrollViewConfig = { contentContainerStyle: { flex: 1 } };
   }
 
-  // const textRef = useRef(null);
-  // const inputRef = useRef(null);
-  const scrollViewRef = useRef(null);
-
   useEffect(() => {
     let initialMessage = [];
-
     if (userDetails?.mode === "mentee") {
       initialMessage = [
         {
@@ -102,21 +98,11 @@ const ChatRoom = () => {
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
-    console.log("🚀 ~ ChatRoom ~ lastMessage:", lastMessage);
-
     storeObjectAsyncStorage(item?.roomId, lastMessage ? lastMessage?.text : "");
-  }, [messages]);
 
-  const updateScrollView = () => {
     setTimeout(() => {
       scrollViewRef?.current?.scrollToEnd({ animated: true });
     }, 200);
-  };
-
-  updateScrollView();
-
-  useEffect(() => {
-    updateScrollView();
   }, [messages]);
 
   return (

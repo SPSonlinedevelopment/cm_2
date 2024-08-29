@@ -1,8 +1,5 @@
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, TouchableOpacity, TextInput } from "react-native";
 import React, { useState, useRef } from "react";
-import { setDoc, Timestamp, doc, addDoc, collection } from "firebase/firestore";
-import { getRoomId } from "@/utils/common";
-import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -10,22 +7,20 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
-
-import { Image } from "expo-image";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import sendImageQuestionObjToFirebaseNewQuestion from "../SendData/SendImages/sendImageQuestionObjToFirebaseNewQuestion";
+import { handleSendTextMessageToChatroom } from "../SendData/SendTexts/handleSendTextMessageToChatroom";
 import { pickImage } from "@/utils/imagePicker";
-import { storeObjectAsyncStorage } from "../../../../utils/common";
+import createBlob from "../SendData/SendImages/createBlob";
+import ImageMessageCaption from "../SendData/SendImages/ImageMessageCaption";
 
 const MessageInput = React.memo(({ item }) => {
   const { userDetails } = useAuth();
   const [TextInputFocused, setTextInputFocused] = useState(false);
-  const [inputFieldEmpty, setInputFieldEmpty] = useState(true);
-  const [image, setImage] = useState(false);
+  const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
+  const [image, setImage] = useState({});
+  const [displayImageCaptionModal, setDisplayImageCaptionModal] =
+    useState(false);
 
   const textRef = useRef(null);
   const inputRef = useRef(null);
@@ -33,84 +28,30 @@ const MessageInput = React.memo(({ item }) => {
   const handleChangeText = () => {
     if (inputFieldEmpty) {
       setInputFieldEmpty(false);
-      console.log("text added");
     }
   };
 
-  // this function is used in index and needs to extracted to as isolated reusable function as too large
-  const handleSend = async () => {
+  const handlePickImage = async () => {
     try {
-      setIsSavingtoStorage(true);
-      const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
-
-      if (!image) {
-        throw new Error("Image is missing");
-      }
-
-      const response = await fetch(image);
-      const blob = await response.blob();
-      await uploadBytesResumable(storageRef, blob);
-      const downloadURL = await getDownloadURL(storageRef);
-      console.log("File download URL:", downloadURL);
-
-      handleSendQuestion(downloadURL);
-      setIsSavingtoStorage(false);
-      setImage(null);
-      setOpenDisplayImageModal(false);
-      navigation.navigate("chats");
+      const imagePicked = await pickImage();
+      setImage(imagePicked.assets[0].uri);
+      setDisplayImageCaptionModal(true);
     } catch (error) {
-      console.error("Error uploading file:", error);
-      setIsSavingtoStorage(false);
-    }
-  };
-  // this function is used in index and needs to extracted to as isolated reusable function as too large
-  const handleSendQuestion = async (url) => {
-    try {
-      console.log("🚀 ~ handleSendQuestion ~ url:", url);
-
-      const newquestionObj = {
-        imageUrl: url,
-        menteeId: userDetails?.uid || "",
-        menteeName: userDetails?.firstName || "",
-        initialMessage: "",
-        questionSubject: "",
-        Timestamp: new Date(),
-        questionId: generateRandomId(),
-      };
-
-      const result = await setNewTextQuestion(newquestionObj);
-
-      console.log(result);
-    } catch (error) {
-      console.error("Error setting new text question:", error);
+      console.log(error);
     }
   };
 
+  // handle sending a message
   const handleSendMessage = async () => {
-    let message = textRef.current.trim();
-
-    if (!message) return;
-
-    {
-      try {
-        const docRef = doc(db, "rooms", item?.roomId);
-
-        const messagesRef = collection(docRef, "messages");
-        textRef.current = "";
-
-        if (inputRef) inputRef?.current?.clear();
-
-        const newDoc = await addDoc(messagesRef, {
-          userId: userDetails?.uid,
-          userName: userDetails?.firstName,
-          text: message,
-          createdAt: Timestamp.fromDate(new Date()),
-        });
-
-        console.log("new message id ", newDoc.id);
-      } catch (error) {
-        Alert.alert("Message", error.message);
-      }
+    try {
+      await handleSendTextMessageToChatroom(
+        item,
+        textRef,
+        inputRef,
+        userDetails
+      );
+    } catch (error) {
+      console.log("🚀 ~ handleSendMessage ~ error:", error);
     }
   };
 
@@ -121,9 +62,16 @@ const MessageInput = React.memo(({ item }) => {
         TextInputFocused ? "pb-[0px]" : "pb-[20px]"
       }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center `}
     >
+      {displayImageCaptionModal && (
+        <ImageMessageCaption
+          item={item}
+          image={image}
+          setDisplayImageCaptionModal={setDisplayImageCaptionModal}
+        />
+      )}
       <View className="flex-row justify-around  items-center  w-full  p-2   ">
         <TouchableOpacity
-          onPress={() => pickImage(setImage)}
+          onPress={() => handlePickImage()}
           className="bh-neutral-200    flex items-center justify-center rounded-full  pr-[10px]"
         >
           <Ionicons name="add-outline" size={hp(3.5)} color="black" />

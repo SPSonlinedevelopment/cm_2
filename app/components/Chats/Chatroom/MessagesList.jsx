@@ -7,7 +7,7 @@ const MessagesList = ({ messages, scrollViewRef }) => {
   return (
     <FlatList
       data={messages}
-      style={{ width: "95%" }}
+      style={{ width: "100%" }}
       ref={scrollViewRef}
       keyExtractor={(item) => item.messageId}
       showsVerticalScrollIndicator={false}
