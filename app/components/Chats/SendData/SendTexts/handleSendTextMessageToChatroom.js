@@ -1,5 +1,6 @@
 import { Timestamp, doc, addDoc, collection } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
+import { generateRandomId } from "@/utils/common";
 
 // handle sending a message
 export const handleSendTextMessageToChatroom = async (
@@ -10,7 +11,6 @@ export const handleSendTextMessageToChatroom = async (
 ) => {
   let message = textRef.current.trim();
 
-  console.log("🚀 ~ handleSendTextMessage ~ message:", message);
   if (!message) return;
   {
     try {
@@ -24,6 +24,7 @@ export const handleSendTextMessageToChatroom = async (
         userName: userDetails?.firstName,
         text: message,
         createdAt: Timestamp.fromDate(new Date()),
+        messageId: generateRandomId(),
       });
       textRef.current = "";
       console.log("new message id ", newDoc.id);

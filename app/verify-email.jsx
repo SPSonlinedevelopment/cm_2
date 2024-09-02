@@ -8,11 +8,15 @@ import { router } from "expo-router";
 import { useAuth } from "./context/authContext";
 import CustomButton from "./components/Buttons/CustomButton";
 
+import { useNavigation } from "@react-navigation/native";
+
 const VerifyEmail = () => {
   const { user } = useAuth();
 
+  const navigation = useNavigation();
+
   const handlepress = async () => {
-    // router.push("user-details");
+    navigation.navigate("user-details");
   };
 
   return (

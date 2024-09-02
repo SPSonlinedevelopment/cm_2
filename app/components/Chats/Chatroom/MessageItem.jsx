@@ -1,5 +1,5 @@
 import { View, Text, ActivityIndicator } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Image } from "expo-image";
 
@@ -9,24 +9,23 @@ import {
 } from "react-native-responsive-screen";
 import LoadedImage from "./LoadedImage";
 
-const MessageItem = React.memo(({ message }) => {
-  console.log("🚀 ~ MessageItem ~ message:", message);
-  const { userDetails } = useAuth();
+const MessageItem = React.memo(({ message, userId }) => {
+  let result;
 
-  if (message?.userId === userDetails?.uid) {
+  if (message?.userId === userId) {
     // my message
 
     if (message.imageUrl) {
-      return (
+      result = (
         <LoadedImage
-          caption={message.text}
-          thisUsersMessage={message?.userId === userDetails?.uid}
+          caption={message.text || ""}
+          thisUsersMessage={message?.userId === userId}
           url={message.imageUrl}
         />
       );
     } else
-      return (
-        <View className="flex-row justify-end mb-1 mr-3">
+      result = (
+        <View className="flex-row justify-end mb-1 mr-2 ">
           <View className="" style={{ width: wp(80) }}>
             <View className="flex self-end  relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl  bg-orange-200  shadow">
               <Text style={{ fontSize: hp(1.9) }}>{message?.text} </Text>
@@ -39,16 +38,16 @@ const MessageItem = React.memo(({ message }) => {
     // Their message
 
     if (message.imageUrl) {
-      return (
+      result = (
         <LoadedImage
-          caption={message.text}
-          thisUsersMessage={message?.userId === userDetails?.uid}
+          caption={message.text || ""}
+          thisUsersMessage={message?.userId === userId}
           url={message.imageUrl}
         />
       );
     } else {
-      return (
-        <View style={{ width: wp(80) }} className="ml-3 mb-1">
+      result = (
+        <View style={{ width: wp(80) }} className="ml-2 mb-1">
           <View
             className={`flex self-start relative p-3  rounded-tl-xl rounded-tr-xl  rounded-bl-xl rounded-br-xl shadow  ${
               message?.senderName === "Collet owl" ? "bg-purple " : "bg-white"
@@ -70,6 +69,7 @@ const MessageItem = React.memo(({ message }) => {
       );
     }
   }
+  return result;
 });
 
 export default MessageItem;

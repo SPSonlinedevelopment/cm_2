@@ -17,7 +17,12 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.stpauls.cm2"
     },
     "web": {
       "bundler": "metro",
@@ -41,6 +46,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "8ed6815d-7257-4759-89ee-6f01f30d8861"
+      }
     }
   }
 }

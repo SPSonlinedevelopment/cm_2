@@ -26,6 +26,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (!user) {
+      navigation.navigate("sign-in");
       return;
     }
 

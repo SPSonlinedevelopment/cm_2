@@ -11,11 +11,17 @@ import SearchChats from "./SearchChats";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 const ChatPreview = () => {
   const { getWaitingQuestions, questions, setAllChats } = useChat();
 
   const { userDetails, user } = useAuth();
+  const navigation = useNavigation();
+  if (!user || !userDetails) {
+    navigation.navigate("sign-in");
+    return;
+  }
 
   useEffect(() => {
     const unsubscribe = getWaitingQuestions();

@@ -1,4 +1,5 @@
-import { KeyboardAvoidingView, Platform } from "react-native";
+import { KeyboardAvoidingView, Platform, View, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState, useRef } from "react";
 import { useRoute } from "@react-navigation/native";
 import ChatroomHeader from "./components/Chats/Chatroom/ChatroomHeader";
@@ -14,7 +15,7 @@ import { db } from "@/firebaseConfig";
 import MessagesList from "./components/Chats/Chatroom/MessagesList";
 import { useAuth } from "./context/authContext";
 import MessageInput from "./components/Chats/Chatroom/MessageInput";
-import { storeObjectAsyncStorage } from "../utils/common";
+import { generateRandomId, storeObjectAsyncStorage } from "../utils/common";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
@@ -40,23 +41,28 @@ const ChatRoom = () => {
           senderName: item?.menteeName,
           text: null,
           imageUrl: item?.initialImageUrl || null,
+          messageId: "TestMessageId1",
         },
         {
           text: item?.initialMessage || "",
           senderId: item?.menteeid,
           senderName: item?.menteeName,
+          messageId: "TestMessageId2",
         },
         {
           text: `Hey ${item.menteeName} 👋. Thanks for your message!`,
           senderName: "Collet owl",
+          messageId: "TestMessageId3",
         },
         {
           text: "I'm connecting you with a mentor. Meanwhile, can you tell me more about your problem? ",
           senderName: "Collet owl",
+          messageId: "TestMessageId4",
         },
         {
           text: "Remember to use good English and be polite!",
           senderName: "Collet owl",
+          messageId: "TestMessageId5",
         },
       ];
     } else if (userDetails?.mode === "mentor") {
@@ -66,11 +72,13 @@ const ChatRoom = () => {
           senderName: item?.menteeName,
           text: null,
           imageUrl: item?.initialImageUrl || null,
+          messageId: "TestMessageId6",
         },
         {
           text: `You are now connected with a mentee, they're name is ${item?.menteeName} `,
           senderName: "Collet owl",
           createdAt: Timestamp.fromDate(new Date()),
+          messageId: "TestMessageId7",
         },
       ];
     }
@@ -81,12 +89,15 @@ const ChatRoom = () => {
     const q = query(messagesRef, orderBy("createdAt", "asc"));
 
     let unsub = onSnapshot(q, (snapshot) => {
+      console.log("snapshot chage");
       let allMessages = snapshot.docs.map((doc) => {
         return doc.data();
       });
 
       setMessages((prev) => {
         const newState = [...initialMessage, ...allMessages];
+        console.log("new messages");
+
         return newState;
       });
     });
@@ -99,29 +110,57 @@ const ChatRoom = () => {
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     storeObjectAsyncStorage(item?.roomId, lastMessage ? lastMessage?.text : "");
+  }, [messages]);
 
+  const scrollToEnd = () => {
     setTimeout(() => {
       scrollViewRef?.current?.scrollToEnd({ animated: true });
-    }, 200);
-  }, [messages]);
+    }, 0);
+  };
 
   return (
     <KeyboardAvoidingView
       behavior={ios ? "padding" : "height"}
-      style={{
-        flex: 1,
-      }}
+      style={styles.container}
       {...kavConfig}
-      contentContainerStyle={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
     >
       <ChatroomHeader item={{ item }} />
-
       {messages && (
-        <MessagesList scrollViewRef={scrollViewRef} messages={messages} />
+        <MessagesList
+          userId={userDetails.uid}
+          scrollViewRef={scrollViewRef}
+          messages={messages}
+        />
       )}
-      <MessageInput item={item} />
+      <MessageInput scrollToEnd={scrollToEnd} item={item} />
     </KeyboardAvoidingView>
   );
 };
 
 export default ChatRoom;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: "space-around",
+  },
+  header: {
+    fontSize: 36,
+    marginBottom: 48,
+  },
+  textInput: {
+    height: 40,
+    borderColor: "#000000",
+    borderBottomWidth: 1,
+    marginBottom: 36,
+  },
+  btnContainer: {
+    backgroundColor: "white",
+    marginTop: 12,
+  },
+});

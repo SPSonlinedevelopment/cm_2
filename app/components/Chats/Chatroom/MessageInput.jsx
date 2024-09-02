@@ -1,5 +1,5 @@
-import { View, TouchableOpacity, TextInput } from "react-native";
-import React, { useState, useRef } from "react";
+import { View, TouchableOpacity, TextInput, Text } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -14,7 +14,7 @@ import { pickImage } from "@/utils/imagePicker";
 import createBlob from "../SendData/SendImages/createBlob";
 import ImageMessageCaption from "../SendData/SendImages/ImageMessageCaption";
 
-const MessageInput = React.memo(({ item }) => {
+const MessageInput = React.memo(({ item, scrollToEnd }) => {
   const { userDetails } = useAuth();
   const [TextInputFocused, setTextInputFocused] = useState(false);
   const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
@@ -26,9 +26,9 @@ const MessageInput = React.memo(({ item }) => {
   const inputRef = useRef(null);
 
   const handleChangeText = () => {
-    if (inputFieldEmpty) {
-      setInputFieldEmpty(false);
-    }
+    // if (inputFieldEmpty) {
+    //   // setInputFieldEmpty(false);
+    // }
   };
 
   const handlePickImage = async () => {
@@ -50,6 +50,8 @@ const MessageInput = React.memo(({ item }) => {
         inputRef,
         userDetails
       );
+
+      scrollToEnd();
     } catch (error) {
       console.log("🚀 ~ handleSendMessage ~ error:", error);
     }
@@ -78,8 +80,8 @@ const MessageInput = React.memo(({ item }) => {
         </TouchableOpacity>
         <TextInput
           ref={inputRef}
-          onFocus={() => setTextInputFocused(true)}
-          onBlur={() => setTextInputFocused(false)}
+          onFocus={() => setTextInputFocused(!TextInputFocused)}
+          onBlur={() => setTextInputFocused(!TextInputFocused)}
           onChangeText={(value) => {
             (textRef.current = value), handleChangeText();
           }}
@@ -95,6 +97,7 @@ const MessageInput = React.memo(({ item }) => {
           numberOfLines={10}
           placeholder="type message ..."
         />
+
         {!inputFieldEmpty && (
           <TouchableOpacity
             onPress={handleSendMessage}
