@@ -52,10 +52,10 @@ const LoadedImage = React.memo(({ url, thisUsersMessage, caption }) => {
             thisUsersMessage ? "bg-orange-200  mr-2  " : "bg-white  ml-2 "
           }`}
         >
-          <View
-          // delayLongPress={100}
-          // delayPressIn={100}
-          // onPress={() => openFullScreen()}
+          <TouchableOpacity
+            // delayLongPress={100}
+            // delayPressIn={100}
+            onPress={() => openFullScreen()}
           >
             <Image
               cachePolicy={"memory-disk"}
@@ -72,7 +72,7 @@ const LoadedImage = React.memo(({ url, thisUsersMessage, caption }) => {
               transition={100}
               effect="flip-from-top"
             />
-          </View>
+          </TouchableOpacity>
           {caption && (
             <View className=" p-1 w-full">
               <Text className="text-base"> {caption}</Text>

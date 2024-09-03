@@ -1,4 +1,10 @@
-import { KeyboardAvoidingView, Platform, View, StyleSheet } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useState, useRef } from "react";
 import { useRoute } from "@react-navigation/native";
@@ -16,12 +22,17 @@ import MessagesList from "./components/Chats/Chatroom/MessagesList";
 import { useAuth } from "./context/authContext";
 import MessageInput from "./components/Chats/Chatroom/MessageInput";
 import { generateRandomId, storeObjectAsyncStorage } from "../utils/common";
+import ShowReplyBar from "./components/Chats/Chatroom/ShowReplyBar";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
   const route = useRoute();
   const { item } = route?.params;
   const [messages, setMessages] = useState([]);
+
+  const [displayShowReplyBar, setDisplayShowReplyBar] = useState(false);
+  const [replyMessage, setReplyMessage] = useState("");
+  const [replyRecipientName, setReplyRecipientName] = useState("");
 
   const { userDetails } = useAuth();
   const scrollViewRef = useRef(null);
@@ -110,6 +121,7 @@ const ChatRoom = () => {
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     storeObjectAsyncStorage(item?.roomId, lastMessage ? lastMessage?.text : "");
+    scrollToEnd();
   }, [messages]);
 
   const scrollToEnd = () => {
@@ -128,12 +140,30 @@ const ChatRoom = () => {
       <ChatroomHeader item={{ item }} />
       {messages && (
         <MessagesList
+          setReplyRecipientName={setReplyRecipientName}
+          setReplyMessage={setReplyMessage}
+          setDisplayShowReplyBar={setDisplayShowReplyBar}
+          // setShowReply={setShowReply}
           userId={userDetails.uid}
           scrollViewRef={scrollViewRef}
           messages={messages}
         />
       )}
-      <MessageInput scrollToEnd={scrollToEnd} item={item} />
+      {displayShowReplyBar && (
+        <ShowReplyBar
+          replyRecipientName={replyRecipientName}
+          replyMessage={replyMessage}
+          setDisplayShowReplyBar={setDisplayShowReplyBar}
+          displayShowReplyBar={displayShowReplyBar}
+        />
+      )}
+
+      <MessageInput
+        setDisplayShowReplyBar={setDisplayShowReplyBar}
+        isReply={displayShowReplyBar}
+        scrollToEnd={scrollToEnd}
+        item={item}
+      />
     </KeyboardAvoidingView>
   );
 };

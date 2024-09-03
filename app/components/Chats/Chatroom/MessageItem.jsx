@@ -1,75 +1,101 @@
-import { View, Text, ActivityIndicator } from "react-native";
-import React, { useState, useEffect } from "react";
+import { View, Text, ActivityIndicator, Vibration } from "react-native";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Image } from "expo-image";
+import Entypo from "@expo/vector-icons/Entypo";
+import * as Haptics from "expo-haptics";
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import LoadedImage from "./LoadedImage";
+import { ScrollView } from "react-native-gesture-handler";
+import ShowReplyBar from "./ShowReplyBar";
+import MessageText from "./MessageText";
+import ReplyMessage from "./ReplyMessage";
 
-const MessageItem = React.memo(({ message, userId }) => {
-  let result;
+const MessageItem = React.memo(
+  ({
+    message,
+    userId,
+    setDisplayShowReplyBar,
+    setReplyMessage,
+    setReplyRecipientName,
+  }) => {
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [hapticFeedback, setHapticFeeback] = useState(false);
+    const [ShowReply, setShowReply] = useState(false);
 
-  if (message?.userId === userId) {
-    // my message
+    const handleMessageReplyScroll = (event) => {
+      setScrollPosition(event.nativeEvent.contentOffset.x);
+    };
+
+    useLayoutEffect(() => {
+      if (scrollPosition < -50) {
+        setShowReply(true);
+        setReplyMessage(message?.text);
+        setDisplayShowReplyBar(true);
+
+        console.log("message", message);
+        setReplyRecipientName(message.userName);
+      } else {
+        setShowReply(false);
+      }
+      setTimeout(() => {
+        setHapticFeeback(false);
+      }, 20);
+    }, [scrollPosition]);
+
+    let result;
+
+    const thisUsersMessage = message?.userId === userId;
+
+    if (message.isReply) {
+      return (
+        <ReplyMessage message={message} thisUsersMessage={thisUsersMessage} />
+      );
+    }
 
     if (message.imageUrl) {
       result = (
         <LoadedImage
           caption={message.text || ""}
-          thisUsersMessage={message?.userId === userId}
-          url={message.imageUrl}
-        />
-      );
-    } else
-      result = (
-        <View className="flex-row justify-end mb-1 mr-2 ">
-          <View className="" style={{ width: wp(80) }}>
-            <View className="flex self-end  relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl  bg-orange-200  shadow">
-              <Text style={{ fontSize: hp(1.9) }}>{message?.text} </Text>
-              <View className="h-3 w-2   absolute bottom-0 rotate-[-30deg] right-[-2px] rounded-bl-xl   bg-orange-200  " />
-            </View>
-          </View>
-        </View>
-      );
-  } else {
-    // Their message
-
-    if (message.imageUrl) {
-      result = (
-        <LoadedImage
-          caption={message.text || ""}
-          thisUsersMessage={message?.userId === userId}
+          thisUsersMessage={thisUsersMessage}
           url={message.imageUrl}
         />
       );
     } else {
       result = (
-        <View style={{ width: wp(80) }} className="ml-2 mb-1">
-          <View
-            className={`flex self-start relative p-3  rounded-tl-xl rounded-tr-xl  rounded-bl-xl rounded-br-xl shadow  ${
-              message?.senderName === "Collet owl" ? "bg-purple " : "bg-white"
-            } `}
-          >
-            <Text
-              className={`${
-                message?.senderName === "Collet owl" ? "text-white " : ""
-              }`}
-              style={{ fontSize: hp(1.9) }}
-            >
-              {message?.text}
-            </Text>
-            {message?.senderName !== "Collet owl" && (
-              <View className="h-3 w-2 absolute bottom-0 rotate-[30deg] left-[-2px] rounded-br-xl bg-white"></View>
-            )}
-          </View>
-        </View>
+        <MessageText thisUsersMessage={thisUsersMessage} text={message.text} />
       );
     }
+
+    return (
+      <ScrollView
+        scrollEventThrottle={16}
+        onMomentumScrollBegin={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavyeavy);
+        }}
+        onScroll={(event) => {
+          handleMessageReplyScroll(event);
+        }}
+        contentContainerStyle={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+        horizontal={true}
+      >
+        {ShowReply && (
+          <View className="flex flex-row items-center justify-center bg-neutral-300 rounded-full h-[40px] w-[40px] ">
+            <Entypo name="reply" size={24} color="white" />
+          </View>
+        )}
+        {result}
+      </ScrollView>
+    );
   }
-  return result;
-});
+);
 
 export default MessageItem;

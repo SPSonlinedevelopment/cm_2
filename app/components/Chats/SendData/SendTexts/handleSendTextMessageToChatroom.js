@@ -7,7 +7,8 @@ export const handleSendTextMessageToChatroom = async (
   item,
   textRef,
   inputRef,
-  userDetails
+  userDetails,
+  isReply
 ) => {
   let message = textRef.current.trim();
 
@@ -19,15 +20,32 @@ export const handleSendTextMessageToChatroom = async (
 
       if (inputRef) inputRef?.current?.clear();
 
-      const newDoc = await addDoc(messagesRef, {
-        userId: userDetails?.uid,
-        userName: userDetails?.firstName,
-        text: message,
-        createdAt: Timestamp.fromDate(new Date()),
-        messageId: generateRandomId(),
-      });
+      if (isReply) {
+        const newDoc = await addDoc(messagesRef, {
+          userId: userDetails?.uid,
+          userName: userDetails?.firstName,
+          text: message,
+          createdAt: Timestamp.fromDate(new Date()),
+          messageId: generateRandomId(),
+          isReply: true,
+          reply: {
+            originalIsImage: false,
+            originalImgUrl: "asdjas",
+            originalMessage: "djaksa",
+          },
+        });
+      } else {
+        const newDoc = await addDoc(messagesRef, {
+          userId: userDetails?.uid,
+          userName: userDetails?.firstName,
+          text: message,
+          createdAt: Timestamp.fromDate(new Date()),
+          messageId: generateRandomId(),
+          isReply: isReply,
+        });
+      }
+
       textRef.current = "";
-      console.log("new message id ", newDoc.id);
     } catch (error) {
       console.log("🚀 ~ error:", error);
     }

@@ -3,7 +3,16 @@ import React from "react";
 import MessageItem from "./MessageItem";
 import { Image } from "expo-image";
 
-const MessagesList = ({ messages, scrollViewRef, userId }) => {
+const MessagesList = ({
+  messages,
+  scrollViewRef,
+  userId,
+  setDisplayShowReplyBar,
+  setReplyMessage,
+  setReplyRecipientName,
+  // setShowReply,
+  // ShowReply,
+}) => {
   console.log("🚀 ~ MessagesList ~ messages:", messages);
 
   return (
@@ -11,6 +20,11 @@ const MessagesList = ({ messages, scrollViewRef, userId }) => {
       {messages.map((message) => {
         return (
           <MessageItem
+            setReplyRecipientName={setReplyRecipientName}
+            setReplyMessage={setReplyMessage}
+            // ShowReply={ShowReply}
+            // setShowReply={setShowReply}
+            setDisplayShowReplyBar={setDisplayShowReplyBar}
             message={message}
             key={message.messageId}
             userId={userId}
