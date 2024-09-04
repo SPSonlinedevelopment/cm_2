@@ -10,6 +10,7 @@ import Avatar from "../../Profile/Avatar";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "@/app/context/authContext";
+import IsTypingIndictator from "./IsTypingIndicator";
 
 const ChatroomHeader = ({ item }) => {
   const { userDetails } = useAuth();
@@ -17,14 +18,15 @@ const ChatroomHeader = ({ item }) => {
   return (
     <View className=" h-[135px] flex flex-row items-end justify-between gap-4 bg-white pb-2 shadow ">
       <TouchableOpacity
-        className="m-2"
+        className="ml-2"
         onPress={() => navigation.navigate("chats", { key: Math.random() })}
       >
         <Entypo name="chevron-left" size={hp(4)} color="black" />
       </TouchableOpacity>
       <View className="flex flex-row items-center ">
         <Avatar />
-        <Text style={{ fontSize: hp(2) }} className=" text-base p-2 text-black">
+
+        <View className="flex flex-col items-center  ">
           {userDetails?.mode === "mentee" ? (
             <Text
               style={{ fontSize: hp(2) }}
@@ -40,7 +42,11 @@ const ChatroomHeader = ({ item }) => {
               mentee: {item?.item.menteeName}
             </Text>
           )}
-        </Text>
+          <View>
+            <IsTypingIndictator roomId={item.roomId} isTyping={isTyping} />
+          </View>
+        </View>
+
         <View>
           <Text>{item?.item.roomId}</Text>
         </View>

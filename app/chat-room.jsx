@@ -23,6 +23,9 @@ import { useAuth } from "./context/authContext";
 import MessageInput from "./components/Chats/Chatroom/MessageInput";
 import { generateRandomId, storeObjectAsyncStorage } from "../utils/common";
 import ShowReplyBar from "./components/Chats/Chatroom/ShowReplyBar";
+import MentorConversationSuggestions from "./components/Chats/Chatroom/ConversationSuggestions/MentorConversationSuggestions";
+import IconButton from "./components/Buttons/IconButton";
+import * as Haptics from "expo-haptics";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
@@ -122,6 +125,8 @@ const ChatRoom = () => {
     const lastMessage = messages[messages.length - 1];
     storeObjectAsyncStorage(item?.roomId, lastMessage ? lastMessage?.text : "");
     scrollToEnd();
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [messages]);
 
   const scrollToEnd = () => {
@@ -137,7 +142,8 @@ const ChatRoom = () => {
       {...kavConfig}
       contentContainerStyle={{ flexGrow: 1 }}
     >
-      <ChatroomHeader item={{ item }} />
+      <ChatroomHeader  item={{ item }} />
+
       {messages && (
         <MessagesList
           setReplyRecipientName={setReplyRecipientName}
@@ -149,6 +155,12 @@ const ChatRoom = () => {
           messages={messages}
         />
       )}
+      <MentorConversationSuggestions
+        isReply={false}
+        userDetails={userDetails}
+        item={item}
+      />
+
       {displayShowReplyBar && (
         <ShowReplyBar
           replyRecipientName={replyRecipientName}
@@ -160,6 +172,7 @@ const ChatRoom = () => {
 
       <MessageInput
         setDisplayShowReplyBar={setDisplayShowReplyBar}
+        replyMessage={replyMessage}
         isReply={displayShowReplyBar}
         scrollToEnd={scrollToEnd}
         item={item}
@@ -173,6 +186,7 @@ export default ChatRoom;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: "relative",
   },
   inner: {
     padding: 24,

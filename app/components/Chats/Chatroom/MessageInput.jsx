@@ -15,7 +15,7 @@ import createBlob from "../SendData/SendImages/createBlob";
 import ImageMessageCaption from "../SendData/SendImages/ImageMessageCaption";
 
 const MessageInput = React.memo(
-  ({ item, scrollToEnd, isReply, setDisplayShowReplyBar }) => {
+  ({ item, scrollToEnd, isReply, setDisplayShowReplyBar, replyMessage }) => {
     const { userDetails } = useAuth();
     const [TextInputFocused, setTextInputFocused] = useState(false);
     const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
@@ -51,7 +51,8 @@ const MessageInput = React.memo(
           textRef,
           inputRef,
           userDetails,
-          isReply
+          isReply,
+          replyMessage
         );
 
         scrollToEnd();

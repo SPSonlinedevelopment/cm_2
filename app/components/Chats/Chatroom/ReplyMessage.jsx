@@ -28,7 +28,7 @@ const ReplyMessage = ({ message, thisUsersMessage }) => {
                 : "bg-neutral-100 self-start  "
             }   `}
           >
-            <View className="w-[200px] flex flex-row items-center  ">
+            <View className="w-[100px] flex flex-row items-center  ">
               <View className="flex flex-row items-center justify-center bg-neutral-300 rounded-full h-[40px] w-[40px]  m-1.5">
                 <Entypo name="reply" size={24} color="white" />
               </View>

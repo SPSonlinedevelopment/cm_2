@@ -2,6 +2,7 @@ import { View, Text, FlatList, ScrollView } from "react-native";
 import React from "react";
 import MessageItem from "./MessageItem";
 import { Image } from "expo-image";
+import IconButton from "../../Buttons/IconButton";
 
 const MessagesList = ({
   messages,
@@ -31,6 +32,7 @@ const MessagesList = ({
           ></MessageItem>
         );
       })}
+  
     </ScrollView>
   );
 };

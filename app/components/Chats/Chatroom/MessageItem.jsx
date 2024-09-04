@@ -36,7 +36,6 @@ const MessageItem = React.memo(
         setShowReply(true);
         setReplyMessage(message?.text);
         setDisplayShowReplyBar(true);
-
         console.log("message", message);
         setReplyRecipientName(message.userName);
       } else {
@@ -75,7 +74,7 @@ const MessageItem = React.memo(
       <ScrollView
         scrollEventThrottle={16}
         onMomentumScrollBegin={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavyeavy);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         }}
         onScroll={(event) => {
           handleMessageReplyScroll(event);
