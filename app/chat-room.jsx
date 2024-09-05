@@ -26,6 +26,8 @@ import ShowReplyBar from "./components/Chats/Chatroom/ShowReplyBar";
 import MentorConversationSuggestions from "./components/Chats/Chatroom/ConversationSuggestions/MentorConversationSuggestions";
 import IconButton from "./components/Buttons/IconButton";
 import * as Haptics from "expo-haptics";
+import IsTypingIndicator from "./components/Chats/Chatroom/IsTypingIndicator";
+import ConfirmEndOfSessionModal from "./components/Chats/EndOfSession/ConfirmEndOfSessionModal";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
@@ -36,6 +38,8 @@ const ChatRoom = () => {
   const [displayShowReplyBar, setDisplayShowReplyBar] = useState(false);
   const [replyMessage, setReplyMessage] = useState("");
   const [replyRecipientName, setReplyRecipientName] = useState("");
+  const [displayConfirmEndOfSessionModal, setDisplyConfirmEndOfSessionModal] =
+    useState(false);
 
   const { userDetails } = useAuth();
   const scrollViewRef = useRef(null);
@@ -142,7 +146,15 @@ const ChatRoom = () => {
       {...kavConfig}
       contentContainerStyle={{ flexGrow: 1 }}
     >
-      <ChatroomHeader  item={{ item }} />
+      <ChatroomHeader
+        setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
+        item={{ item }}
+      />
+      {displayConfirmEndOfSessionModal && (
+        <ConfirmEndOfSessionModal
+          setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
+        />
+      )}
 
       {messages && (
         <MessagesList
@@ -160,6 +172,8 @@ const ChatRoom = () => {
         userDetails={userDetails}
         item={item}
       />
+
+      <IsTypingIndicator scrollToEnd={scrollToEnd} item={item} />
 
       {displayShowReplyBar && (
         <ShowReplyBar

@@ -1,5 +1,5 @@
-import { View, Text, FlatList } from "react-native";
-import React from "react";
+import { View, Text, FlatList, Animated } from "react-native";
+import React, { useRef, useEffect } from "react";
 import ChatItem from "./ChatItem";
 import { useChat } from "@/app/context/chatContext";
 

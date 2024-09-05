@@ -14,7 +14,7 @@ const MessageText = ({ text, thisUsersMessage }) => {
     >
       <View style={{ width: wp(80) }}>
         <View
-          className={`flex relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow  ${
+          className={`flex relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow-sm  ${
             thisUsersMessage
               ? "bg-orange-200 self-end  mr-3  "
               : "bg-white self-start  ml-3"

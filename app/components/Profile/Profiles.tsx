@@ -11,7 +11,7 @@ import CustomKeyboardView from "../CustomKeyboardView";
 import GradientNavigation from "./MenteeProfile/GradientNaviation/GradientNavigation";
 import Others from "./Others/Others";
 import { useAuth } from "@/app/context/authContext";
-import Loading from "../Loading";
+import Loading from "../Loading/LoadingSpinner";
 import MentorStatistics from "./MentorProfile/MentorStatistics";
 
 const Profiles = () => {

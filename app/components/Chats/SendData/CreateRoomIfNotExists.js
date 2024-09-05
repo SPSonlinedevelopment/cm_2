@@ -18,10 +18,8 @@ export default CreateRoomIfNotExists = async (item, userDetails) => {
       safeguardingConcern: false,
       sessionName: "",
       roomId,
-      typing: {
-        menteeIsTyping: false,
-        mentorIsTyping: false,
-      },
+      menteeIsTyping: false,
+      mentorIsTyping: false,
       initialMessage: item?.initialMessage,
       createdAt: Timestamp.fromDate(new Date()),
     };

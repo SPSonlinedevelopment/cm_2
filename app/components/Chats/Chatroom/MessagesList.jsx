@@ -32,7 +32,6 @@ const MessagesList = ({
           ></MessageItem>
         );
       })}
-  
     </ScrollView>
   );
 };

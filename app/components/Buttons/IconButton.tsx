@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import Loading from "../Loading";
+import Loading from "../Loading/LoadingSpinner";
 
 interface IconButtonProps {
   icon?: React.ReactNode;

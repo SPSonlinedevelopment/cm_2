@@ -2,28 +2,7 @@ import { View, Text, Modal, Animated } from "react-native";
 import React, { useRef, useEffect } from "react";
 import IconButton from "../../Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
-
-const FadeInView = ({ children }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
-
-  return (
-    <Animated.View // Special animatable View
-      style={{
-        opacity: fadeAnim,
-      }}
-    >
-      {children}
-    </Animated.View>
-  );
-};
+import FadeInView from "../../Effects/FadeInView";
 
 const ShowReplyBar = ({
   setDisplayShowReplyBar,
@@ -31,15 +10,6 @@ const ShowReplyBar = ({
   displayShowReplyBar,
   replyRecipientName,
 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 10000,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
 
   return (
     <FadeInView>

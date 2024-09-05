@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Entypo from "@expo/vector-icons/Entypo";
 import IconButton from "../../Buttons/IconButton";
 import CMlogo from "../../../../assets/images/CMlogo.png";
-import Loading from "../../Loading";
+import Loading from "../../Loading/LoadingSpinner";
 
 const FullScreenImage = ({ url, onClose }) => {
   return (

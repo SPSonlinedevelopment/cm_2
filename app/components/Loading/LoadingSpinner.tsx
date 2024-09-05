@@ -9,7 +9,7 @@ const Loading: React.FC<LoadingProps> = ({ size }) => {
   return (
     <View style={{ height: size, aspectRatio: 1 }}>
       <AnimatedLottieView
-        source={require("../../assets/loadingAnimation.json")}
+        source={require("../../../assets/loadingAnimation.json")}
         style={{ flex: 1 }}
         autoPlay
         loop

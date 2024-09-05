@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "./context/authContext";
 import { router } from "expo-router";
 import Profiles from "./components/Profile/Profiles";
-import Loading from "./components/Loading";
+import Loading from "./components/Loading/LoadingSpinner";
 import { View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
