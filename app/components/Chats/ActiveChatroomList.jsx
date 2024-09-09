@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from "react";
 import ChatItem from "./ChatItem";
 import { useChat } from "@/app/context/chatContext";
 
-const MentorChatList = () => {
+const ActiveChatroomList = () => {
   const { allChats } = useChat();
 
   return (
@@ -25,4 +25,4 @@ const MentorChatList = () => {
   );
 };
 
-export default MentorChatList;
+export default ActiveChatroomList;

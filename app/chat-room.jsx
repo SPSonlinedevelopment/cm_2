@@ -28,6 +28,8 @@ import IconButton from "./components/Buttons/IconButton";
 import * as Haptics from "expo-haptics";
 import IsTypingIndicator from "./components/Chats/Chatroom/IsTypingIndicator";
 import ConfirmEndOfSessionModal from "./components/Chats/EndOfSession/ConfirmEndOfSessionModal";
+import { updateDoc } from "firebase/firestore";
+import ReviewMentor from "./components/Chats/EndOfSession/ReviewMentor/ReviewMentorContainer";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
@@ -40,6 +42,7 @@ const ChatRoom = () => {
   const [replyRecipientName, setReplyRecipientName] = useState("");
   const [displayConfirmEndOfSessionModal, setDisplyConfirmEndOfSessionModal] =
     useState(false);
+  const [displayMentorFeedback, setDisplayMentorFeedback] = useState(false);
 
   const { userDetails } = useAuth();
   const scrollViewRef = useRef(null);
@@ -49,6 +52,10 @@ const ChatRoom = () => {
     kavConfig = { keyboardVerticalOffset: 0 };
     scrollViewConfig = { contentContainerStyle: { flex: 1 } };
   }
+
+  const docRef = doc(db, "rooms", item?.roomId);
+  const messagesRef = collection(docRef, "messages");
+  const q = query(messagesRef, orderBy("createdAt", "asc"));
 
   useEffect(() => {
     let initialMessage = [];
@@ -102,10 +109,6 @@ const ChatRoom = () => {
     }
 
     // get all current messages from firebase
-    const docRef = doc(db, "rooms", item?.roomId);
-    const messagesRef = collection(docRef, "messages");
-    const q = query(messagesRef, orderBy("createdAt", "asc"));
-
     let unsub = onSnapshot(q, (snapshot) => {
       console.log("snapshot chage");
       let allMessages = snapshot.docs.map((doc) => {
@@ -125,10 +128,20 @@ const ChatRoom = () => {
     };
   }, []);
 
+  const resetUnreadMessageNumber = async () => {
+    // await updateDoc(docRef, {
+    //   unreadMessagesNumber: 0,
+    // });
+  };
+
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     storeObjectAsyncStorage(item?.roomId, lastMessage ? lastMessage?.text : "");
     scrollToEnd();
+
+    setTimeout(() => {
+      resetUnreadMessageNumber();
+    }, 300);
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [messages]);
@@ -152,8 +165,13 @@ const ChatRoom = () => {
       />
       {displayConfirmEndOfSessionModal && (
         <ConfirmEndOfSessionModal
+          setDisplayMentorFeedback={setDisplayMentorFeedback}
           setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
         />
+      )}
+
+      {displayMentorFeedback && (
+        <ReviewMentor setDisplayMentorFeedback={setDisplayMentorFeedback} />
       )}
 
       {messages && (

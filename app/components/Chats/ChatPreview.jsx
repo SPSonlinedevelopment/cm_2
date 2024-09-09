@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import MentorChatList from "./MentorChatList";
+import MentorChatList from "./ActiveChatroomList";
 import CustomKeyboardView from "../CustomKeyboardView";
 import GradientNavigation from "../Profile/MenteeProfile/GradientNaviation/GradientNavigation";
 import { useAuth } from "@/app/context/authContext";
@@ -17,6 +17,7 @@ const ChatPreview = () => {
   const { getWaitingQuestions, questions, setAllChats } = useChat();
 
   const { userDetails, user } = useAuth();
+
   const navigation = useNavigation();
   if (!user || !userDetails) {
     navigation.navigate("sign-in");
@@ -44,6 +45,8 @@ const ChatPreview = () => {
           const roomData = querySnapshot.docs.map((doc) => {
             return doc.data();
           });
+          console.log("🚀 ~ roomData ~ roomData:", roomData);
+
           setAllChats((prev) => roomData);
         } else {
           console.log("No rooms found for this mentor/mentee");

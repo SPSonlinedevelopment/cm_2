@@ -9,10 +9,14 @@ import { useAuth } from "@/app/context/authContext";
 import CreateRoomIfNotExists from "./SendData/CreateRoomIfNotExists";
 import { getObjectAsyncStorage } from "../../../utils/common";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { roomRef } from "@/firebaseConfig";
+import { collection, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
 const ChatItem = ({ item, index, noBorder, newQuestion }) => {
   const { userDetails } = useAuth();
   const [lastMessage, setLastMessage] = useState("");
+  const [unReadMessages, setUnreadMessages] = useState(1);
 
   const navigation = useNavigation();
 
@@ -38,6 +42,20 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
     }
   };
 
+  //   const roomRefDoc = doc(roomRef, item?.roomId);
+
+  //   useEffect(() => {
+  // let unsub
+
+  // unsub = onSnapshot(roomRefDoc, (docSnapshot) => {
+  //   const roomData = docSnapshot.data()
+
+  //   const unreadMessages = roomData.
+  //   if()
+  // })
+
+  //   }, []);
+
   useEffect(() => {
     const getDataFromAsyncStore = async () => {
       try {
@@ -59,7 +77,7 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
       className={`flex-row h-[90px]  flex  justify-between items-center   py-1   `}
     >
       <View
-        className={`flex-row items-center justify-between  h-full w-full rounded-lg px-2 py-2  
+        className={`flex-row items-center justify-between   h-full w-full rounded-lg  px-2 py-2  
       ${newQuestion ? "bg-purple-300" : ""}
       
       `}
@@ -67,7 +85,7 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
         <Avatar avatarName={item.avatarName} />
 
         <View
-          className={`h-full w-[280px] flex flex-col justify-bertween  ${
+          className={`h-full w-[250px] flex flex-col justify-bertween ${
             noBorder && !newQuestion
               ? "border-t-0 border-l-0 border-r-0 border-b-2 border-neutral-200"
               : ""
@@ -132,6 +150,10 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
           ) : (
             <Text className="text-neutral-500 text-xs ">{dateOfSession}</Text>
           )}
+        </View>
+
+        <View className="h-5 w-5  rounded-full flex justify-center items-center bg-orange-400 shadow ">
+          <Text className="text-xs text-white ">1</Text>
         </View>
       </View>
     </TouchableOpacity>

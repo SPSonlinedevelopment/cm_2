@@ -12,6 +12,7 @@ import { useChat } from "../context/chatContext";
 import { Try } from "expo-router/build/views/Try";
 import SubjectSelection from "./SubjectSelection";
 import { generateRandomId } from "@/utils/common";
+import ExitButton from "./Buttons/ExitButton";
 
 interface IndexQuestionInputProps {
   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -91,13 +92,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
   return (
     <CustomKeyboardView>
       <SafeAreaView className=" w-full h-full flex flex-col bg-grey-200 border  items-center justify-around">
-        <IconButton
-          containerStyles="h-[50px] w-[50px] bg-white absolute left-4 top-10 "
-          handlePress={() => {
-            toggleDisplayInput(false);
-          }}
-          icon={<Entypo name="cross" size={34} color="black" />}
-        ></IconButton>
+        <ExitButton handlePress={toggleDisplayInput} />
 
         <TextInput
           ref={inputRef}

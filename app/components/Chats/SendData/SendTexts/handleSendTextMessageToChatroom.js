@@ -1,4 +1,10 @@
-import { Timestamp, doc, addDoc, collection } from "firebase/firestore";
+import {
+  Timestamp,
+  doc,
+  addDoc,
+  collection,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
 import * as Haptics from "expo-haptics";
@@ -47,7 +53,20 @@ export const handleSendTextMessageToChatroom = async (
           isReply: isReply,
         });
       }
-    
+// this is incorrect as the value in item is based on first render
+      if (
+        userDetails &&
+        (userDetails.mode === "mentor" || userDetails.mode === "mentee")
+      ) {
+        const fieldToUpdate =
+          userDetails.mode === "mentor"
+            ? "menteeUnreadMessageNumber"
+            : "mentorUnreadMessageNumber";
+
+        await updateDoc(docRef, {
+          [fieldToUpdate]: item[fieldToUpdate] + 1,
+        });
+      }
       textRef.current = "";
     } catch (error) {
       console.log("🚀 ~ error:", error);
@@ -77,8 +96,6 @@ export const handleSendSuggestedMessageToChatroom = async (
       messageId: generateRandomId(),
       isReply: false,
     });
-
-   
   } catch (error) {
     console.log(error);
   }

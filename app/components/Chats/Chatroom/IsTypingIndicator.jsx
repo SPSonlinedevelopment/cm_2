@@ -51,6 +51,8 @@ const IsTypingIndicator = ({ item, scrollToEnd }) => {
 
     // Unsubscribe when the component unmounts
     return () => {
+      setIsTyping(false);
+
       if (unSubMentor) {
         unSubMentor();
       }

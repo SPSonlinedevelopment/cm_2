@@ -26,7 +26,7 @@ const IconButton: React.FC<IconButtonProps> = ({
       onPress={() => {
         handlePress();
       }}
-      className={` bg-orange-500  rounded-full my-4 justify-center items-center  ${containerStyles} ${
+      className={` bg-orange-500  rounded-full my-4 justify-center items-center  z-50 ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       } `}
       testID="custom_button"

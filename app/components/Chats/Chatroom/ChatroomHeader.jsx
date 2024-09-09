@@ -60,23 +60,18 @@ const ChatroomHeader = ({ item, setDisplyConfirmEndOfSessionModal }) => {
           </View>
         </View>
 
-        <IconButton
-          containerStyles="p-2 bg-white"
-          // title="exit"
-          className="ml-2"
-          handlePress={() => {
+        <TouchableOpacity
+          className="m-2"
+          onPress={() => {
             setDisplyConfirmEndOfSessionModal(true);
           }}
-          icon={<Ionicons name="exit-outline" size={24} color="black" />}
-        ></IconButton>
-        {/* 
-        <TouchableOpacity className="m-2" onPress={() => {}}>
+        >
           <MaterialCommunityIcons
             name="export-variant"
             size={24}
             color="black"
           />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

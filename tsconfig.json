@@ -15,7 +15,7 @@
     "app/components/Buttons/CustomButton.test.js",
     "app/context/authContext.test.js",
     "app/user-details.tsx",
-    "app/components/Chats/MentorChatList.jsx",
+    "app/components/Chats/ActiveChatroomList.jsx",
     "app/components/Chats/ChatItem.jsx",
     "app/components/Chats/NewQuestionList.jsx",
     "app/components/Chats/Chatroom/MessagesList.jsx",
@@ -23,6 +23,9 @@
     "app/profile.jsx",
     "app/components/Chats/ChatPreview.jsx",
     "app/components/HomeNavButtons/HomeNavButtons.jsx",
-    "app/index.jsx"
-, "app/components/Buttons/IconButton.tsx", "app/verify-email.jsx", "app/components/Chats/Chatroom/ConversationSuggestions/MentorConversationSuggestions.jsx"  ]
+    "app/index.jsx",
+    "app/components/Buttons/IconButton.tsx",
+    "app/verify-email.jsx",
+    "app/components/Chats/Chatroom/ConversationSuggestions/MentorConversationSuggestions.jsx"
+  ]
 }
