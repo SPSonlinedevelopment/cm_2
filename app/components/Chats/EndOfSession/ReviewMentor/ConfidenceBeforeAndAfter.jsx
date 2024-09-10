@@ -1,11 +1,16 @@
 import { View, Text } from "react-native";
-
 import React, { useState } from "react";
 import StarRating from "react-native-star-rating-widget";
 
-const Confidence = () => {
+const Confidence = ({ setFeedbackForm }) => {
   [confidenceBeforeRating, setConfidenceBeforeRating] = useState(0);
   [confidenceAfterRating, setConfidenceAfterRating] = useState(0);
+
+  const handleConfidenceChange = (val, key) => {
+    setFeedbackForm((prev) => {
+      return { ...prev, [key]: val };
+    });
+  };
 
   return (
     <View className=" flex items-center">
@@ -21,7 +26,10 @@ const Confidence = () => {
         color="orange"
         starSize={50}
         rating={confidenceBeforeRating}
-        onChange={setConfidenceBeforeRating}
+        onChange={(val) => {
+          setConfidenceBeforeRating(val);
+          handleConfidenceChange(val, "confidenceRatingBefore");
+        }}
       />
       <Text>After your lesson</Text>
       <StarRating
@@ -31,7 +39,10 @@ const Confidence = () => {
         color="orange"
         starSize={50}
         rating={confidenceAfterRating}
-        onChange={setConfidenceAfterRating}
+        onChange={(val) => {
+          setConfidenceAfterRating(val);
+          handleConfidenceChange(val, "confidenceRatingAfter");
+        }}
       />
     </View>
   );

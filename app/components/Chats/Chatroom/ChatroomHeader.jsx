@@ -22,16 +22,14 @@ const ChatroomHeader = ({ item, setDisplyConfirmEndOfSessionModal }) => {
   return (
     <SafeAreaView className="bg-white h-[130px]">
       <View className=" flex flex-row items-center justify-around gap-4 e  shadow ">
-        {userDetails.mode === "mentor" && (
-          <TouchableOpacity
-            className="ml-2"
-            onPress={() => {
-              navigation.navigate("chats", { key: Math.random() });
-            }}
-          >
-            <Entypo name="chevron-left" size={hp(4)} color="black" />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          className="ml-2"
+          onPress={() => {
+            navigation.navigate("chats", { key: Math.random() });
+          }}
+        >
+          <Entypo name="chevron-left" size={hp(4)} color="black" />
+        </TouchableOpacity>
 
         <View className="flex flex-row items-center ">
           <Avatar />
@@ -60,18 +58,20 @@ const ChatroomHeader = ({ item, setDisplyConfirmEndOfSessionModal }) => {
           </View>
         </View>
 
-        <TouchableOpacity
-          className="m-2"
-          onPress={() => {
-            setDisplyConfirmEndOfSessionModal(true);
-          }}
-        >
-          <MaterialCommunityIcons
-            name="export-variant"
-            size={24}
-            color="black"
-          />
-        </TouchableOpacity>
+        {!item.sessionCompleted && (
+          <TouchableOpacity
+            className="m-2"
+            onPress={() => {
+              setDisplyConfirmEndOfSessionModal(true);
+            }}
+          >
+            <MaterialCommunityIcons
+              name="export-variant"
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );

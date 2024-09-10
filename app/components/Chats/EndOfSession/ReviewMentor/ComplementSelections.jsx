@@ -24,24 +24,40 @@ export const compliments = [
   },
 ];
 
-const ComplementSelectionsButton = ({ comp, setFeedbackForm }) => {
+const ComplementSelectionsButton = ({
+  comp,
+  setFeedbackForm,
+  feedbackForm,
+}) => {
   const [selected, setSelected] = useState(false);
-  // to do remove item from state when unselected
-  const handleSelection = () => {
+
+  const handleSelection = (selection) => {
+    const complimentSelected =
+      feedbackForm.mentorCompliments.includes(selection);
+
     setFeedbackForm((prev) => {
-      return {
-        ...prev,
-        mentorCompliments: [...prev.mentorCompliments, comp.title],
-      };
+      if (complimentSelected) {
+        return {
+          ...prev,
+          mentorCompliments: prev.mentorCompliments.filter(
+            (prevSelections) => prevSelections !== selection
+          ),
+        };
+      } else {
+        return {
+          ...prev,
+          mentorCompliments: [...prev.mentorCompliments, selection],
+        };
+      }
     });
   };
 
   return (
     <TouchableOpacity
-      onPress={() => {
+      onPress={(selection) => {
         setSelected(!selected);
 
-        handleSelection();
+        handleSelection(comp.title);
       }}
       className={`shadow p-5 m-5 rounded-full ${
         selected ? "bg-purple" : "bg-neutral-50"

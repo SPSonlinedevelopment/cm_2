@@ -151,6 +151,7 @@ const ChatRoom = () => {
           roomId,
           initialMessage: item?.initialMessage,
           createdAt: Timestamp.fromDate(new Date()),
+          sessionCompleted: false,
         });
 
         setNewRoomCreated(true);

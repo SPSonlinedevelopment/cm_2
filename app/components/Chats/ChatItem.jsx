@@ -74,11 +74,11 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
       delayLongPress={100}
       delayPressIn={100}
       onPress={openChatRoom}
-      className={`flex-row h-[90px]  flex  justify-between items-center   py-1   `}
+      className={`flex-row h-[90px]  flex  justify-between items-center  bg-orange-200  my-1 rounded-xl   `}
     >
       <View
         className={`flex-row items-center justify-between   h-full w-full rounded-lg  px-2 py-2  
-      ${newQuestion ? "bg-purple-300" : ""}
+      ${newQuestion ? "bg-purple" : ""}
       
       `}
       >
@@ -95,22 +95,21 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
         >
           <View className="flex-row justify-between ">
             {newQuestion ? (
-              <>
+              <View>
+                <Text className="text-white font-bold text-lg">
+                  New Question
+                </Text>
                 <Text
                   style={{ fontSize: 15 }}
-                  className={`font-bold text-black-700  ${
-                    newQuestion
-                      ? "font-extrabold text-black-100"
-                      : " text-black-100 font-extrabold"
-                  }`}
+                  className={` text-white font-extrabold `}
                 >
                   {item?.menteeName}
                 </Text>
-              </>
+              </View>
             ) : (
               <View
                 style={{ fontSize: 12 }}
-                className="font-semibold text-neutral-500"
+                className="font-semibold text-black-200"
               >
                 {userDetails?.mode === "mentor" ? (
                   <Text

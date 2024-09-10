@@ -1,5 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
+import SuccessAnimation from "../../../Effects/SuccessAnimation";
 
 const XPEarned = () => {
   return (
@@ -11,8 +12,7 @@ const XPEarned = () => {
       <Text className="text-xl font-bold">
         You just earned <Text className="text-xl text-orange">3</Text> Xp
       </Text>
-
-      <Text className="text-lg my-10">🤩</Text>
+      <SuccessAnimation size={150} />
     </View>
   );
 };

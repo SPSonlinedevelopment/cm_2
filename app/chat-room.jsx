@@ -30,11 +30,14 @@ import IsTypingIndicator from "./components/Chats/Chatroom/IsTypingIndicator";
 import ConfirmEndOfSessionModal from "./components/Chats/EndOfSession/ConfirmEndOfSessionModal";
 import { updateDoc } from "firebase/firestore";
 import ReviewMentor from "./components/Chats/EndOfSession/ReviewMentor/ReviewMentorContainer";
+import CelebrationAnimation from "./components/Effects/CelebrationAnimation";
+import SessionSummary from "./components/Chats/EndOfSession/ReviewMentor/SessionSummary";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
   const route = useRoute();
   const { item } = route?.params;
+  console.log("🚀 ~ ChatRoom ~ item:", item);
   const [messages, setMessages] = useState([]);
 
   const [displayShowReplyBar, setDisplayShowReplyBar] = useState(false);
@@ -171,11 +174,16 @@ const ChatRoom = () => {
       )}
 
       {displayMentorFeedback && (
-        <ReviewMentor setDisplayMentorFeedback={setDisplayMentorFeedback} />
+        <ReviewMentor
+          roomId={item?.roomId}
+          setDisplayMentorFeedback={setDisplayMentorFeedback}
+        />
       )}
 
       {messages && (
         <MessagesList
+          item={item}
+          userDetails={userDetails}
           setReplyRecipientName={setReplyRecipientName}
           setReplyMessage={setReplyMessage}
           setDisplayShowReplyBar={setDisplayShowReplyBar}
@@ -185,15 +193,18 @@ const ChatRoom = () => {
           messages={messages}
         />
       )}
-      <MentorConversationSuggestions
-        isReply={false}
-        userDetails={userDetails}
-        item={item}
-      />
+
+      {!item.sessionCompleted && (
+        <MentorConversationSuggestions
+          isReply={false}
+          userDetails={userDetails}
+          item={item}
+        />
+      )}
 
       <IsTypingIndicator scrollToEnd={scrollToEnd} item={item} />
 
-      {displayShowReplyBar && (
+      {displayShowReplyBar && !item.sessionCompleted && (
         <ShowReplyBar
           replyRecipientName={replyRecipientName}
           replyMessage={replyMessage}
@@ -202,13 +213,15 @@ const ChatRoom = () => {
         />
       )}
 
-      <MessageInput
-        setDisplayShowReplyBar={setDisplayShowReplyBar}
-        replyMessage={replyMessage}
-        isReply={displayShowReplyBar}
-        scrollToEnd={scrollToEnd}
-        item={item}
-      />
+      {!item.sessionCompleted && (
+        <MessageInput
+          setDisplayShowReplyBar={setDisplayShowReplyBar}
+          replyMessage={replyMessage}
+          isReply={displayShowReplyBar}
+          scrollToEnd={scrollToEnd}
+          item={item}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 };

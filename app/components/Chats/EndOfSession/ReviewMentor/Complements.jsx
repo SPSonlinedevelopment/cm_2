@@ -4,7 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { compliments } from "./ComplementSelections";
 import ComplementSelectionsButton from "./ComplementSelections";
 
-const Complements = ({ setFeedbackForm }) => {
+const Complements = ({ feedbackForm, setFeedbackForm }) => {
   return (
     <View className=" flex  items-center border-b-4 border-gray-200">
       <Text className="text-base font-medium my-2">
@@ -19,6 +19,7 @@ const Complements = ({ setFeedbackForm }) => {
           return (
             <View className="flex items-center justify-around ">
               <ComplementSelectionsButton
+                feedbackForm={feedbackForm}
                 setFeedbackForm={setFeedbackForm}
                 comp={comp}
               />

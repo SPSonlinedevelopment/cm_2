@@ -3,14 +3,17 @@ import React from "react";
 import MessageItem from "./MessageItem";
 import { Image } from "expo-image";
 import IconButton from "../../Buttons/IconButton";
+import SessionSummary from "../EndOfSession/ReviewMentor/SessionSummary";
 
 const MessagesList = ({
+  item,
   messages,
   scrollViewRef,
   userId,
   setDisplayShowReplyBar,
   setReplyMessage,
   setReplyRecipientName,
+  userDetails,
   // setShowReply,
   // ShowReply,
 }) => {
@@ -32,6 +35,9 @@ const MessagesList = ({
           ></MessageItem>
         );
       })}
+      {item.sessionCompleted && (
+        <SessionSummary userDetails={userDetails} item={item} />
+      )}
     </ScrollView>
   );
 };

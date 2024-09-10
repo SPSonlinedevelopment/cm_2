@@ -20,9 +20,9 @@ export default CreateRoomIfNotExists = async (item, userDetails) => {
       roomId,
       menteeIsTyping: false,
       mentorIsTyping: false,
+      sessionCompleted: false,
       initialMessage: item?.initialMessage,
-      menteeUnreadMessageNumber: 0,
-      mentorUnreadMessageNumber: 0,
+
       createdAt: Timestamp.fromDate(new Date()),
     };
 
