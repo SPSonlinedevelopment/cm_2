@@ -7,29 +7,33 @@ const SessionSummary = ({ item, userDetails }) => {
     <View className=" w-full  mt-2   items-center">
       <View className=" w-[95%] py-3    justify-center items-center   flex flex-row rounded-2xl shadow bg-white">
         {userDetails.mode === "mentor" ? (
-          <View>
+          <View className="ml-5">
+            <Text className="text-base font-medium ">
+              Session ended with{" "}
+              <Text className=" text-base font-bold">{item.menteeName}</Text>
+            </Text>
             {item.mentorReview?.writtenFeedback && (
-              <Text className="text-sm font-medium">
+              <Text className="text-base font-medium">
                 {item.menteeName} said : " {item.mentorReview.writtenFeedback}"
               </Text>
             )}
 
             {item.mentorReview?.confidenceRatingBefore && (
-              <Text className="text-sm font-medium">
-                {item.menteeName}'s confidence before:{" "}
+              <Text className="text-base font-medium">
+                {item.menteeName}'s confidence before: adhjs{" "}
                 {item.mentorReview.confidenceRatingBefore}
               </Text>
             )}
 
             {item.mentorReview?.confidenceRatingAfter && (
-              <Text className="text-sm font-medium">
+              <Text className="text-base font-medium">
                 {item.menteeName}'s confidence after:{" "}
                 {item.mentorReview.confidenceRatingAfter}
               </Text>
             )}
 
             {item.mentorReview?.mentorRating && (
-              <Text className="text-sm font-medium">
+              <Text className="text-base font-medium">
                 Your rating: {item.mentorReview.mentorRating}
               </Text>
             )}

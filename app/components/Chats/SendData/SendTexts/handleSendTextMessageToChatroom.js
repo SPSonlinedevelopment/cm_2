@@ -34,7 +34,7 @@ export const handleSendTextMessageToChatroom = async (
           userId: userDetails?.uid,
           userName: userDetails?.firstName,
           text: message,
-          createdAt: Timestamp.fromDate(new Date()),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           messageId: generateRandomId(),
           isReply: true,
           reply: {
@@ -53,20 +53,20 @@ export const handleSendTextMessageToChatroom = async (
           isReply: isReply,
         });
       }
-// this is incorrect as the value in item is based on first render
-      if (
-        userDetails &&
-        (userDetails.mode === "mentor" || userDetails.mode === "mentee")
-      ) {
-        const fieldToUpdate =
-          userDetails.mode === "mentor"
-            ? "menteeUnreadMessageNumber"
-            : "mentorUnreadMessageNumber";
+      // this is incorrect as the value in item is based on first render
+      // if (
+      //   userDetails &&
+      //   (userDetails.mode === "mentor" || userDetails.mode === "mentee")
+      // ) {
+      //   const fieldToUpdate =
+      //     userDetails.mode === "mentor"
+      //       ? "menteeUnreadMessageNumber"
+      //       : "mentorUnreadMessageNumber";
 
-        await updateDoc(docRef, {
-          [fieldToUpdate]: item[fieldToUpdate] + 1,
-        });
-      }
+      //   await updateDoc(docRef, {
+      //     [fieldToUpdate]: item[fieldToUpdate] + 1,
+      //   });
+      // }
       textRef.current = "";
     } catch (error) {
       console.log("🚀 ~ error:", error);

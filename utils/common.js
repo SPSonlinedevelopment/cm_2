@@ -48,9 +48,60 @@ export const convertFirebaseTimestampToDate = (firebaseTimestamp) => {
   return formattedDate;
 };
 
+export const convertFirebaseTimestampToTime = (firebaseTimestamp) => {
+  const date = firebaseTimestamp.toDate(); // Convert Firebase timestamp to JavaScript Date object
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  let period = hours >= 12 ? "PM" : "AM";
+
+  // Convert hours to 12-hour clock format
+  hours = hours % 12 || 12;
+
+  return { hours, minutes, period };
+};
+
+export const calculateDuration = (startTimestamp, endTimestamp) => {
+  console.log("🚀 ~ calculateDuration ~ endTimestamp:", endTimestamp);
+  if (
+    !(startTimestamp instanceof Timestamp) ||
+    !(endTimestamp instanceof Timestamp)
+  ) {
+    throw new Error("Both arguments must be Firebase Timestamp objects.");
+  }
+
+  const startDate = startTimestamp.toDate();
+  const endDate = endTimestamp.toDate();
+
+  // Calculate the difference in milliseconds
+  const durationInMillis = endDate.getTime() - startDate.getTime();
+
+  // Convert milliseconds to seconds, minutes, hours, etc.
+  const seconds = Math.floor(durationInMillis / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  // Format the duration string
+  let durationString = "";
+  if (days > 0) {
+    durationString += `${days} day${days > 1 ? "s" : ""} `;
+  }
+  if (hours % 24 > 0) {
+    durationString += `${hours % 24} hour${hours % 24 > 1 ? "s" : ""} `;
+  }
+  if (minutes % 60 > 0) {
+    durationString += `${minutes % 60} minute${minutes % 60 > 1 ? "s" : ""} `;
+  }
+  if (seconds % 60 > 0) {
+    durationString += `${seconds % 60} second${seconds % 60 > 1 ? "s" : ""} `;
+  }
+
+  return durationString.trim();
+};
+
+
+
 export const storeObjectAsyncStorage = async (key, value) => {
-
-
   try {
     await AsyncStorage.setItem(key, value);
   } catch (error) {
@@ -59,7 +110,6 @@ export const storeObjectAsyncStorage = async (key, value) => {
 };
 
 export const getObjectAsyncStorage = async (key) => {
-
   try {
     const jsonValue = await AsyncStorage.getItem(key);
 

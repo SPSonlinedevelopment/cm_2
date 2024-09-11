@@ -5,7 +5,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-const MessageText = ({ text, thisUsersMessage }) => {
+const MessageText = ({ text, thisUsersMessage, time }) => {
   return (
     <View
       className={`flex-row  mb-1 mt-1  w-full  flex ${
@@ -21,6 +21,15 @@ const MessageText = ({ text, thisUsersMessage }) => {
           }   `}
         >
           <Text style={{ fontSize: hp(1.9) }}>{text} </Text>
+
+          {time && (
+            <View className="flex items-end mt-1">
+              <Text className="text-xs ">
+                {time.hours}:{time.minutes} {time.period}
+              </Text>
+            </View>
+          )}
+
           <View
             className={`h-3 w-2   absolute    ${
               thisUsersMessage

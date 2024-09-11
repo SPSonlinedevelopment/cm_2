@@ -13,7 +13,14 @@ import { roomRef } from "@/firebaseConfig";
 import { collection, onSnapshot } from "firebase/firestore";
 import { doc, updateDoc } from "firebase/firestore";
 
-const ChatItem = ({ item, index, noBorder, newQuestion }) => {
+const ChatItem = ({
+  item,
+  index,
+  noBorder,
+  newQuestion,
+  completedSession,
+  activeSession,
+}) => {
   const { userDetails } = useAuth();
   const [lastMessage, setLastMessage] = useState("");
   const [unReadMessages, setUnreadMessages] = useState(1);
@@ -74,11 +81,11 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
       delayLongPress={100}
       delayPressIn={100}
       onPress={openChatRoom}
-      className={`flex-row h-[90px]  flex  justify-between items-center  bg-orange-200  my-1 rounded-xl   `}
+      className={`flex-row h-[90px]  flex  justify-between items-center    my-1 rounded-xl   `}
     >
       <View
         className={`flex-row items-center justify-between   h-full w-full rounded-lg  px-2 py-2  
-      ${newQuestion ? "bg-purple" : ""}
+      ${newQuestion ? "bg-purple-200" : activeSession ? "bg-orange-200" : ""}
       
       `}
       >
@@ -151,9 +158,7 @@ const ChatItem = ({ item, index, noBorder, newQuestion }) => {
           )}
         </View>
 
-        <View className="h-5 w-5  rounded-full flex justify-center items-center bg-orange-400 shadow ">
-          <Text className="text-xs text-white ">1</Text>
-        </View>
+        <View className="h-5 w-5  rounded-full flex justify-center items-center bg-orange-400 shadow "></View>
       </View>
     </TouchableOpacity>
   );

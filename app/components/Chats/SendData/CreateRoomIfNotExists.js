@@ -2,6 +2,7 @@ import { setDoc, Timestamp, doc, deleteDoc } from "firebase/firestore";
 import { getRoomId } from "@/utils/common";
 import { db } from "@/firebaseConfig";
 import { useAuth } from "../../../context/authContext";
+import { serverTimestamp } from "firebase/firestore";
 
 export default CreateRoomIfNotExists = async (item, userDetails) => {
   try {
@@ -22,8 +23,7 @@ export default CreateRoomIfNotExists = async (item, userDetails) => {
       mentorIsTyping: false,
       sessionCompleted: false,
       initialMessage: item?.initialMessage,
-
-      createdAt: Timestamp.fromDate(new Date()),
+      createdAt: serverTimestamp(),
     };
 
     await setDoc(doc(db, "rooms", roomId), roomData);

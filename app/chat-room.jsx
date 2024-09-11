@@ -103,7 +103,7 @@ const ChatRoom = () => {
           messageId: "TestMessageId6",
         },
         {
-          text: `You are now connected with a mentee, they're name is ${item?.menteeName} `,
+          text: `You are now connected with a mentee, their name is ${item?.menteeName} `,
           senderName: "Collet owl",
           createdAt: Timestamp.fromDate(new Date()),
           messageId: "TestMessageId7",
@@ -175,6 +175,7 @@ const ChatRoom = () => {
 
       {displayMentorFeedback && (
         <ReviewMentor
+          createdAt={item?.createdAt}
           roomId={item?.roomId}
           setDisplayMentorFeedback={setDisplayMentorFeedback}
         />

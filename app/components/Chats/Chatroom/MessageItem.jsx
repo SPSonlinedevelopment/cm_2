@@ -4,6 +4,7 @@ import { useAuth } from "@/app/context/authContext";
 import { Image } from "expo-image";
 import Entypo from "@expo/vector-icons/Entypo";
 import * as Haptics from "expo-haptics";
+import { convertFirebaseTimestampToTime } from "@/utils/common";
 
 import {
   widthPercentageToDP as wp,
@@ -23,6 +24,7 @@ const MessageItem = React.memo(
     setReplyMessage,
     setReplyRecipientName,
   }) => {
+    console.log("🚀 ~ message:", message);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [hapticFeedback, setHapticFeeback] = useState(false);
     const [ShowReply, setShowReply] = useState(false);
@@ -50,6 +52,14 @@ const MessageItem = React.memo(
 
     const thisUsersMessage = message?.userId === userId;
 
+    console.log("message?.createdAt", message?.createdAt);
+
+    let time;
+    if (message?.createdAt) {
+      time = convertFirebaseTimestampToTime(message?.createdAt);
+      console.log("🚀 ~ time:", time);
+    }
+
     if (message.isReply) {
       return (
         <ReplyMessage message={message} thisUsersMessage={thisUsersMessage} />
@@ -59,6 +69,7 @@ const MessageItem = React.memo(
     if (message.imageUrl) {
       result = (
         <LoadedImage
+          time={time}
           caption={message.text || ""}
           thisUsersMessage={thisUsersMessage}
           url={message.imageUrl}
@@ -66,7 +77,11 @@ const MessageItem = React.memo(
       );
     } else {
       result = (
-        <MessageText thisUsersMessage={thisUsersMessage} text={message.text} />
+        <MessageText
+          time={time}
+          thisUsersMessage={thisUsersMessage}
+          text={message.text}
+        />
       );
     }
 

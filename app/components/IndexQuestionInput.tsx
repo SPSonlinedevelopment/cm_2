@@ -9,10 +9,11 @@ import { AuthContextProvider, useAuth } from "../context/authContext";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useChat } from "../context/chatContext";
-import { Try } from "expo-router/build/views/Try";
+
 import SubjectSelection from "./SubjectSelection";
 import { generateRandomId } from "@/utils/common";
 import ExitButton from "./Buttons/ExitButton";
+import { serverTimestamp } from "firebase/firestore";
 
 interface IndexQuestionInputProps {
   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,7 +33,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
   } = useAuth();
   const { setNewTextQuestion } = useChat();
   const [isLoading, setIsLoading] = useState(false);
-  const [text, setText] = useState(false);
+  const [text, setText] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
 
   const getdataFn = async () => {
@@ -66,7 +67,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
       menteeName: userDetails?.firstName || "",
       initialMessage: text || "",
       questionSubject: selectedSubject || "",
-      Timestamp: new Date(),
+      Timestamp: serverTimestamp(),
       questionId: generateRandomId(),
     };
 
@@ -80,6 +81,9 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
     if (isAuthenticated) {
       router.push("chats");
     }
+    setIsLoading(false);
+
+    setText("");
   };
   // catch (error) {
   //   console.error(error);
@@ -92,9 +96,10 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
   return (
     <CustomKeyboardView>
       <SafeAreaView className=" w-full h-full flex flex-col bg-grey-200 border  items-center justify-around">
-        <ExitButton handlePress={toggleDisplayInput} />
+        <ExitButton toggleDisplay={toggleDisplayInput} />
 
         <TextInput
+          value={text}
           ref={inputRef}
           multiline={true}
           maxLength={1000}

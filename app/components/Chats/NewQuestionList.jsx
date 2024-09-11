@@ -1,12 +1,20 @@
 import { View, Text, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import ChatItem from "./ChatItem";
+import { useChat } from "@/app/context/chatContext";
 
-const NewQuestionList = ({ data }) => {
+const NewQuestionList = () => {
+  const { getWaitingQuestions, questions } = useChat();
+
+  useEffect(() => {
+    const unsubscribe = getWaitingQuestions();
+    return () => unsubscribe();
+  }, []);
+
   return (
     <FlatList
       style={{ width: "95%" }}
-      data={data}
+      data={questions}
       keyExtractor={(item) => Math.random()}
       showsVerticalScrollIndicator={false}
       renderItem={({ item, index }) => (
@@ -14,7 +22,7 @@ const NewQuestionList = ({ data }) => {
           newQuestion={true}
           item={item}
           index={index}
-          noBorder={data.length !== index + 1}
+          noBorder={questions.length !== index + 1}
         />
       )}
     />

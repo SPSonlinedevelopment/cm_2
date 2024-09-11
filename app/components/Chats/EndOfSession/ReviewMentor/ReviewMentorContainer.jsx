@@ -9,18 +9,26 @@ import IconButton from "@/app/components/Buttons/IconButton";
 import ExitButton from "../../../Buttons/ExitButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { db } from "@/firebaseConfig";
+
 import {
   collection,
   doc,
   updateDoc,
   setDoc,
   getDoc,
+  getDocs,
   deleteDoc,
 } from "firebase/firestore";
 import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation";
 import { Timestamp } from "firebase/firestore";
+import { calculateDuration } from "@/utils/common";
+import { serverTimestamp } from "firebase/firestore";
 
-const ReviewMentorContainer = ({ setDisplayMentorFeedback, roomId }) => {
+const ReviewMentorContainer = ({
+  setDisplayMentorFeedback,
+  roomId,
+  createdAt,
+}) => {
   const [feedbackForm, setFeedbackForm] = useState({
     mentorRating: undefined,
     mentorCompliments: [],
@@ -35,18 +43,27 @@ const ReviewMentorContainer = ({ setDisplayMentorFeedback, roomId }) => {
       await updateDoc(roomRef, {
         mentorReview: feedbackForm,
         sessionCompleted: true,
-        sessionCompletedAt: Timestamp.fromDate(new Date()),
+        sessionCompletedAt: Timestamp.now(),
       });
-      console.log(`Fields added to room ${roomId}`);
 
       // Get the room document from the 'rooms' collection
+      const roomData = (await getDoc(roomRef)).data();
 
-      const roomDoc = await getDoc(roomRef);
-      const roomData = roomDoc.data();
+      const messagesRef = collection(roomRef, "messages");
+      const messagesSnapshot = await getDocs(messagesRef);
 
       await setDoc(doc(db, "completed_sessions", roomId), {
-        ...roomData, // Copy all existing data
+        ...roomData,
       });
+
+      messagesSnapshot.forEach(async (messageDoc) => {
+        const messageData = messageDoc.data();
+        await setDoc(
+          doc(db, "completed_sessions", roomId, "messages", messageDoc.id),
+          messageData
+        );
+      });
+
       await deleteDoc(roomRef);
     } catch (error) {
       console.error(`Error adding fields to room ${roomId}:`, error);
@@ -58,7 +75,7 @@ const ReviewMentorContainer = ({ setDisplayMentorFeedback, roomId }) => {
   return (
     <SafeAreaView>
       <Modal animationType="fade">
-        <ExitButton setDisplayMentorFeedback={setDisplayMentorFeedback} />
+        <ExitButton toggleDisplay={setDisplayMentorFeedback} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
