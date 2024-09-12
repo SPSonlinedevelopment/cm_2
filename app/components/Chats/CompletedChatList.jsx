@@ -13,12 +13,8 @@ import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 
 const CompletedChatList = () => {
-  const { setAllChats, allChats } = useChat();
   const { userDetails } = useAuth();
-
   const [completedChats, setCompletedChats] = useState([]);
-  console.log("🚀 ~ CompletedChatList ~ completedChats:", completedChats);
-
   const modeId = userDetails?.mode === "mentee" ? "menteeId" : "mentorId";
 
   useEffect(() => {
@@ -32,7 +28,6 @@ const CompletedChatList = () => {
           const sessionData = querySnapshot.docs.map((doc) => {
             return doc.data();
           });
-          console.log("🚀 ~ sessionData ~ sessionData:", sessionData);
 
           setCompletedChats((prev) => sessionData);
         } else {

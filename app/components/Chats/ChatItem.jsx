@@ -45,6 +45,7 @@ const ChatItem = ({
     } else {
       navigation.navigate("chat-room", {
         item: item,
+        completedSession: completedSession,
       });
     }
   };
@@ -81,36 +82,50 @@ const ChatItem = ({
       delayLongPress={100}
       delayPressIn={100}
       onPress={openChatRoom}
-      className={`flex-row h-[90px]  flex  justify-between items-center    my-1 rounded-xl   `}
+      className={`flex-row h-[80px] flex   justify-between items-center    my-0.5 rounded-xl${
+        noBorder && !newQuestion
+          ? "border-t-0 border-l-0 border-r-0 border-b-2 border-neutral-200"
+          : ""
+      }  `}
     >
       <View
         className={`flex-row items-center justify-between   h-full w-full rounded-lg  px-2 py-2  
-      ${newQuestion ? "bg-purple-200" : activeSession ? "bg-orange-200" : ""}
+      ${newQuestion ? "bg-purple-600" : activeSession ? "bg-orange-200" : ""}
       
       `}
       >
         <Avatar avatarName={item.avatarName} />
 
         <View
-          className={`h-full w-[250px] flex flex-col justify-bertween ${
-            noBorder && !newQuestion
-              ? "border-t-0 border-l-0 border-r-0 border-b-2 border-neutral-200"
-              : ""
-          }
+          className={`h-full w-[80%] mx-4 flex flex-col justify-between 
           }
         `}
         >
           <View className="flex-row justify-between ">
             {newQuestion ? (
               <View>
-                <Text className="text-white font-bold text-lg">
+                <Text
+                  className="text-white font-bold text-lg
+"
+                >
                   New Question
                 </Text>
                 <Text
                   style={{ fontSize: 15 }}
-                  className={` text-white font-extrabold `}
+                  className={` text-white font-bold `}
                 >
-                  {item?.menteeName}
+                  {item?.menteeName} -{" "}
+                  {item?.questionSubject && (
+                    <Text
+                      className={`text-neutral-500 text-xs ${
+                        newQuestion
+                          ? "font-bold text-white"
+                          : " text-black font-bold"
+                      } `}
+                    >
+                      {item?.questionSubject}
+                    </Text>
+                  )}
                 </Text>
               </View>
             ) : (
@@ -123,7 +138,18 @@ const ChatItem = ({
                     style={{ fontSize: 12 }}
                     className="font-extrabold text-black-700"
                   >
-                    {item?.menteeName}
+                    {item?.menteeName} -{" "}
+                    {item?.questionSubject && (
+                      <Text
+                        className={`text-neutral-500 text-xs ${
+                          newQuestion
+                            ? "font-bold text-white"
+                            : " text-black font-bold"
+                        } `}
+                      >
+                        {item?.questionSubject}
+                      </Text>
+                    )}
                   </Text>
                 ) : (
                   <Text
@@ -142,14 +168,6 @@ const ChatItem = ({
               <Text className="  text-neutral-500 text-xs">{lastMessage}</Text>
             </View>
           )}
-
-          <Text
-            className={`text-neutral-500 text-xs ${
-              newQuestion ? "font-extrabold text-black-100" : "font-semibold"
-            } `}
-          >
-            {item?.questionSubject}
-          </Text>
 
           {newQuestion ? (
             <Text className="text-neutral-500 text-xs ">{item?.message}</Text>

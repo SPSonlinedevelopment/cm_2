@@ -24,7 +24,6 @@ const MessageItem = React.memo(
     setReplyMessage,
     setReplyRecipientName,
   }) => {
-    console.log("🚀 ~ message:", message);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [hapticFeedback, setHapticFeeback] = useState(false);
     const [ShowReply, setShowReply] = useState(false);
@@ -38,7 +37,6 @@ const MessageItem = React.memo(
         setShowReply(true);
         setReplyMessage(message?.text);
         setDisplayShowReplyBar(true);
-        console.log("message", message);
         setReplyRecipientName(message.userName);
       } else {
         setShowReply(false);
@@ -52,12 +50,9 @@ const MessageItem = React.memo(
 
     const thisUsersMessage = message?.userId === userId;
 
-    console.log("message?.createdAt", message?.createdAt);
-
     let time;
     if (message?.createdAt) {
       time = convertFirebaseTimestampToTime(message?.createdAt);
-      console.log("🚀 ~ time:", time);
     }
 
     if (message.isReply) {

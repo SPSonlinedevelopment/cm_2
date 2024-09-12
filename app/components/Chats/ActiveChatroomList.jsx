@@ -15,16 +15,16 @@ const ActiveChatroomList = () => {
   useEffect(() => {
     const unsubscribe = onSnapshot(
       query(collection(db, "rooms"), where(modeId, "==", userDetails?.uid)),
+
       (querySnapshot) => {
         if (!querySnapshot.empty) {
           const roomData = querySnapshot.docs.map((doc) => {
             return doc.data();
           });
-          console.log("🚀 ~ roomData ~ roomData:", roomData);
-          console.log("subscribed");
 
           setAllChats((prev) => roomData);
         } else {
+          setAllChats([]);
           console.log("No rooms found for this mentor/mentee");
         }
       },

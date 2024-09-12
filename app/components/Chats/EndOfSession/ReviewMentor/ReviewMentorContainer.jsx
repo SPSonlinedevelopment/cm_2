@@ -42,8 +42,6 @@ const ReviewMentorContainer = ({
     try {
       await updateDoc(roomRef, {
         mentorReview: feedbackForm,
-        sessionCompleted: true,
-        sessionCompletedAt: Timestamp.now(),
       });
 
       // Get the room document from the 'rooms' collection
@@ -84,7 +82,7 @@ const ReviewMentorContainer = ({
           }}
           className="mt-20 "
         >
-          <CelebrationAnimation size={400} />
+          <CelebrationAnimation loop={false} size={400} />
           <XPEarned />
           <RateLesson setFeedbackForm={setFeedbackForm} />
           <Complements

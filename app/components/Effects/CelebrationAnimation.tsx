@@ -4,8 +4,9 @@ import AnimatedLottieView from "lottie-react-native";
 
 interface CelebrationProps {
   size: number;
+  loop: boolean;
 }
-const CelebrationAnimation: React.FC<CelebrationProps> = ({ size }) => {
+const CelebrationAnimation: React.FC<CelebrationProps> = ({ size, loop }) => {
   return (
     <View
       style={{
@@ -22,7 +23,7 @@ const CelebrationAnimation: React.FC<CelebrationProps> = ({ size }) => {
         source={require("../../../assets/celebrationAnimation.json")}
         style={{ flex: 1 }}
         autoPlay
-        loop={false}
+        loop={loop}
       ></AnimatedLottieView>
     </View>
   );

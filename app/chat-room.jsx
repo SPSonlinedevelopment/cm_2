@@ -5,47 +5,32 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import React, { useEffect, useState, useRef } from "react";
 import { useRoute } from "@react-navigation/native";
 import ChatroomHeader from "./components/Chats/Chatroom/ChatroomHeader";
-import {
-  Timestamp,
-  doc,
-  collection,
-  orderBy,
-  onSnapshot,
-  query,
-} from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import MessagesList from "./components/Chats/Chatroom/MessagesList";
 import { useAuth } from "./context/authContext";
 import MessageInput from "./components/Chats/Chatroom/MessageInput";
-import { generateRandomId, storeObjectAsyncStorage } from "../utils/common";
 import ShowReplyBar from "./components/Chats/Chatroom/ShowReplyBar";
 import MentorConversationSuggestions from "./components/Chats/Chatroom/ConversationSuggestions/MentorConversationSuggestions";
-import IconButton from "./components/Buttons/IconButton";
-import * as Haptics from "expo-haptics";
 import IsTypingIndicator from "./components/Chats/Chatroom/IsTypingIndicator";
 import ConfirmEndOfSessionModal from "./components/Chats/EndOfSession/ConfirmEndOfSessionModal";
-import { updateDoc } from "firebase/firestore";
 import ReviewMentor from "./components/Chats/EndOfSession/ReviewMentor/ReviewMentorContainer";
-import CelebrationAnimation from "./components/Effects/CelebrationAnimation";
-import SessionSummary from "./components/Chats/EndOfSession/ReviewMentor/SessionSummary";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
   const route = useRoute();
-  const { item } = route?.params;
-  console.log("🚀 ~ ChatRoom ~ item:", item);
-  const [messages, setMessages] = useState([]);
-
+  const { item, completedSession } = route?.params;
   const [displayShowReplyBar, setDisplayShowReplyBar] = useState(false);
   const [replyMessage, setReplyMessage] = useState("");
   const [replyRecipientName, setReplyRecipientName] = useState("");
   const [displayConfirmEndOfSessionModal, setDisplyConfirmEndOfSessionModal] =
     useState(false);
   const [displayMentorFeedback, setDisplayMentorFeedback] = useState(false);
+  const [chatRoomData, setChatRoomData] = useState();
 
   const { userDetails } = useAuth();
   const scrollViewRef = useRef(null);
@@ -56,98 +41,22 @@ const ChatRoom = () => {
     scrollViewConfig = { contentContainerStyle: { flex: 1 } };
   }
 
-  const docRef = doc(db, "rooms", item?.roomId);
-  const messagesRef = collection(docRef, "messages");
-  const q = query(messagesRef, orderBy("createdAt", "asc"));
+  const docRef = doc(
+    db,
+    !completedSession ? "rooms" : "completed_sessions",
+    item?.roomId
+  );
 
   useEffect(() => {
-    let initialMessage = [];
-    if (userDetails?.mode === "mentee") {
-      initialMessage = [
-        {
-          senderId: item?.menteeid,
-          senderName: item?.menteeName,
-          text: null,
-          imageUrl: item?.initialImageUrl || null,
-          messageId: "TestMessageId1",
-        },
-        {
-          text: item?.initialMessage || "",
-          senderId: item?.menteeid,
-          senderName: item?.menteeName,
-          messageId: "TestMessageId2",
-        },
-        {
-          text: `Hey ${item.menteeName} 👋. Thanks for your message!`,
-          senderName: "Collet owl",
-          messageId: "TestMessageId3",
-        },
-        {
-          text: "I'm connecting you with a mentor. Meanwhile, can you tell me more about your problem? ",
-          senderName: "Collet owl",
-          messageId: "TestMessageId4",
-        },
-        {
-          text: "Remember to use good English and be polite!",
-          senderName: "Collet owl",
-          messageId: "TestMessageId5",
-        },
-      ];
-    } else if (userDetails?.mode === "mentor") {
-      initialMessage = [
-        {
-          senderId: item?.menteeid,
-          senderName: item?.menteeName,
-          text: null,
-          imageUrl: item?.initialImageUrl || null,
-          messageId: "TestMessageId6",
-        },
-        {
-          text: `You are now connected with a mentee, their name is ${item?.menteeName} `,
-          senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
-          messageId: "TestMessageId7",
-        },
-      ];
-    }
+    const unsub = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const updatedData = docSnap.data();
 
-    // get all current messages from firebase
-    let unsub = onSnapshot(q, (snapshot) => {
-      console.log("snapshot chage");
-      let allMessages = snapshot.docs.map((doc) => {
-        return doc.data();
-      });
-
-      setMessages((prev) => {
-        const newState = [...initialMessage, ...allMessages];
-        console.log("new messages");
-
-        return newState;
-      });
+        setChatRoomData(updatedData);
+      }
     });
-
-    return () => {
-      unsub();
-    };
+    return () => unsub();
   }, []);
-
-  const resetUnreadMessageNumber = async () => {
-    // await updateDoc(docRef, {
-    //   unreadMessagesNumber: 0,
-    // });
-  };
-
-  useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
-    storeObjectAsyncStorage(item?.roomId, lastMessage ? lastMessage?.text : "");
-    scrollToEnd();
-
-    setTimeout(() => {
-      resetUnreadMessageNumber();
-    }, 300);
-
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  }, [messages]);
 
   const scrollToEnd = () => {
     setTimeout(() => {
@@ -164,10 +73,11 @@ const ChatRoom = () => {
     >
       <ChatroomHeader
         setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
-        item={{ item }}
+        chatRoomData={chatRoomData}
       />
       {displayConfirmEndOfSessionModal && (
         <ConfirmEndOfSessionModal
+          roomId={chatRoomData?.roomId}
           setDisplayMentorFeedback={setDisplayMentorFeedback}
           setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
         />
@@ -175,37 +85,28 @@ const ChatRoom = () => {
 
       {displayMentorFeedback && (
         <ReviewMentor
-          createdAt={item?.createdAt}
-          roomId={item?.roomId}
+          createdAt={chatRoomData?.createdAt}
+          roomId={chatRoomData?.roomId}
           setDisplayMentorFeedback={setDisplayMentorFeedback}
         />
       )}
 
-      {messages && (
+      {chatRoomData && (
         <MessagesList
-          item={item}
+          scrollToEnd={scrollToEnd}
+          roomId={chatRoomData?.roomId}
+          chatRoomData={chatRoomData}
           userDetails={userDetails}
           setReplyRecipientName={setReplyRecipientName}
           setReplyMessage={setReplyMessage}
           setDisplayShowReplyBar={setDisplayShowReplyBar}
           // setShowReply={setShowReply}
-          userId={userDetails.uid}
+          userId={userDetails?.uid}
           scrollViewRef={scrollViewRef}
-          messages={messages}
         />
       )}
 
-      {!item.sessionCompleted && (
-        <MentorConversationSuggestions
-          isReply={false}
-          userDetails={userDetails}
-          item={item}
-        />
-      )}
-
-      <IsTypingIndicator scrollToEnd={scrollToEnd} item={item} />
-
-      {displayShowReplyBar && !item.sessionCompleted && (
+      {displayShowReplyBar && !chatRoomData?.sessionCompleted && (
         <ShowReplyBar
           replyRecipientName={replyRecipientName}
           replyMessage={replyMessage}
@@ -214,14 +115,22 @@ const ChatRoom = () => {
         />
       )}
 
-      {!item.sessionCompleted && (
-        <MessageInput
-          setDisplayShowReplyBar={setDisplayShowReplyBar}
-          replyMessage={replyMessage}
-          isReply={displayShowReplyBar}
-          scrollToEnd={scrollToEnd}
-          item={item}
-        />
+      {chatRoomData && !chatRoomData?.sessionCompleted && (
+        <>
+          <IsTypingIndicator scrollToEnd={scrollToEnd} item={chatRoomData} />
+          <MentorConversationSuggestions
+            isReply={false}
+            userDetails={userDetails}
+            item={chatRoomData}
+          />
+          <MessageInput
+            setDisplayShowReplyBar={setDisplayShowReplyBar}
+            replyMessage={replyMessage}
+            isReply={displayShowReplyBar}
+            scrollToEnd={scrollToEnd}
+            item={chatRoomData}
+          />
+        </>
       )}
     </KeyboardAvoidingView>
   );

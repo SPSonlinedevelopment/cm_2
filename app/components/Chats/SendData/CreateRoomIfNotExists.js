@@ -24,6 +24,7 @@ export default CreateRoomIfNotExists = async (item, userDetails) => {
       sessionCompleted: false,
       initialMessage: item?.initialMessage,
       createdAt: serverTimestamp(),
+   
     };
 
     await setDoc(doc(db, "rooms", roomId), roomData);

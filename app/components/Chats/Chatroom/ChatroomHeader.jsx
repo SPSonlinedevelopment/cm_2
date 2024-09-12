@@ -15,7 +15,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import IconButton from "../../Buttons/IconButton";
 
-const ChatroomHeader = ({ item, setDisplyConfirmEndOfSessionModal }) => {
+const ChatroomHeader = ({
+  chatRoomData,
+  setDisplyConfirmEndOfSessionModal,
+}) => {
   const { userDetails } = useAuth();
   const navigation = useNavigation();
 
@@ -40,36 +43,40 @@ const ChatroomHeader = ({ item, setDisplyConfirmEndOfSessionModal }) => {
                   style={{ fontSize: hp(2) }}
                   className=" text-base p-2 text-black"
                 >
-                  mentor: {item?.item.mentorName}
+                  mentor: {chatRoomData?.mentorName}
                 </Text>
               ) : (
                 <Text
                   style={{ fontSize: hp(2) }}
                   className=" text-base p-2 text-black"
                 >
-                  mentee: {item?.item.menteeName}
+                  mentee: {chatRoomData?.menteeName}
                 </Text>
               )}
             </View>
 
             <View>
-              <Text>{item?.item.roomId}</Text>
+              <Text>{chatRoomData?.roomId}</Text>
             </View>
           </View>
         </View>
 
-        {!item.sessionCompleted && (
+        <TouchableOpacity className="m-2" onPress={() => {}}>
+          <MaterialCommunityIcons
+            name="export-variant"
+            size={24}
+            color="black"
+          />
+        </TouchableOpacity>
+
+        {!chatRoomData?.sessionCompleted && userDetails.mode === "mentor" && (
           <TouchableOpacity
             className="m-2"
             onPress={() => {
               setDisplyConfirmEndOfSessionModal(true);
             }}
           >
-            <MaterialCommunityIcons
-              name="export-variant"
-              size={24}
-              color="black"
-            />
+            <Entypo name="cross" size={34} color="black" />
           </TouchableOpacity>
         )}
       </View>

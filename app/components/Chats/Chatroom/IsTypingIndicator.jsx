@@ -13,6 +13,7 @@ import {
 } from "react-native-responsive-screen";
 
 const IsTypingIndicator = ({ item, scrollToEnd }) => {
+  console.log("🚀 ~ IsTypingIndicator ~ item:", item);
   const [isTyping, setIsTyping] = useState(false);
   // const [mentorIsTyping, setMentorIsTyping] = useState(false);
   const { userDetails } = useAuth();
@@ -22,9 +23,8 @@ const IsTypingIndicator = ({ item, scrollToEnd }) => {
 
   useEffect(() => {
     console.log("snapshot load");
-    let unSubMentor; // Declare unSubMentor outside the useEffect callback
 
-    unSubMentor = onSnapshot(roomRef, (docSnapshot) => {
+    const unSubMentor = onSnapshot(roomRef, (docSnapshot) => {
       const roomData = docSnapshot.data();
 
       if (roomData) {

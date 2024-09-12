@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import SuccessAnimation from "@/app/components/Effects/SuccessAnimation";
 
-const SessionSummary = ({ item, userDetails }) => {
+const SessionSummary = ({ userDetails, chatRoomData }) => {
   return (
     <View className=" w-full  mt-2   items-center">
       <View className=" w-[95%] py-3    justify-center items-center   flex flex-row rounded-2xl shadow bg-white">
@@ -10,37 +10,45 @@ const SessionSummary = ({ item, userDetails }) => {
           <View className="ml-5">
             <Text className="text-base font-medium ">
               Session ended with{" "}
-              <Text className=" text-base font-bold">{item.menteeName}</Text>
+              <Text className=" text-base font-bold">
+                {chatRoomData.menteeName}
+              </Text>
             </Text>
-            {item.mentorReview?.writtenFeedback && (
+            {chatRoomData.mentorReview?.writtenFeedback && (
               <Text className="text-base font-medium">
-                {item.menteeName} said : " {item.mentorReview.writtenFeedback}"
+                {chatRoomData.menteeName} said : "{" "}
+                {chatRoomData.mentorReview.writtenFeedback}"
               </Text>
             )}
 
-            {item.mentorReview?.confidenceRatingBefore && (
+            {chatRoomData.mentorReview?.confidenceRatingBefore && (
               <Text className="text-base font-medium">
-                {item.menteeName}'s confidence before: adhjs{" "}
-                {item.mentorReview.confidenceRatingBefore}
+                {chatRoomData.menteeName}'s confidence before: adhjs{" "}
+                {chatRoomData.mentorReview.confidenceRatingBefore}
               </Text>
             )}
 
-            {item.mentorReview?.confidenceRatingAfter && (
+            {chatRoomData.mentorReview?.confidenceRatingAfter && (
               <Text className="text-base font-medium">
-                {item.menteeName}'s confidence after:{" "}
-                {item.mentorReview.confidenceRatingAfter}
+                {chatRoomData.menteeName}'s confidence after:{" "}
+                {chatRoomData.mentorReview.confidenceRatingAfter}
               </Text>
             )}
 
-            {item.mentorReview?.mentorRating && (
+            {chatRoomData.mentorReview?.mentorRating && (
               <Text className="text-base font-medium">
-                Your rating: {item.mentorReview.mentorRating}
+                Your rating: {chatRoomData.mentorReview.mentorRating}
               </Text>
             )}
           </View>
         ) : (
-          <View className=" py-3 justify-center items-center   flex flex-row rounded-2xl ">
-            <Text>SessionSummary mentee</Text>
+          <View className=" py-3 justify-center items-center  w-[50%]  flex flex-row rounded-2xl ">
+            <Text className="text-base font-medium ">
+              Session ended with{" "}
+              <Text className=" text-base font-bold">
+                {chatRoomData.mentorName}
+              </Text>
+            </Text>
           </View>
         )}
 

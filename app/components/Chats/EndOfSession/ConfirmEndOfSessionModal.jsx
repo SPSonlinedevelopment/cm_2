@@ -1,11 +1,30 @@
-import { View, Text, Modal, Button } from "react-native";
+import { View, Text, Modal, Button, Alert } from "react-native";
 import React from "react";
 import IconButton from "../../Buttons/IconButton";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
+import { Timestamp } from "firebase/firestore";
 
 const ConfirmEndOfSessionModal = ({
   setDisplyConfirmEndOfSessionModal,
   setDisplayMentorFeedback,
+  roomId,
 }) => {
+  const handleConfirmEndSession = async () => {
+    const roomRef = doc(db, "rooms", roomId);
+
+    try {
+      await updateDoc(roomRef, {
+        sessionCompleted: true,
+        sessionCompletedAt: Timestamp.now(),
+      });
+
+      console.log("updated Update completed at for room");
+    } catch (error) {
+      console.log("error updating room completed status", error);
+    }
+  };
+
   return (
     <Modal className="bg-black-100 " animationType="fade">
       <View className="flex-1  justify-center items-center">
@@ -18,6 +37,7 @@ const ConfirmEndOfSessionModal = ({
             title="Confirm"
             handlePress={() => {
               setDisplyConfirmEndOfSessionModal(false);
+              handleConfirmEndSession();
               setDisplayMentorFeedback(true);
             }}
           />
