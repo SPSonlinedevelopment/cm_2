@@ -95,8 +95,6 @@ export const AuthContextProvider = ({ children }) => {
     });
   }, [user?.uid]); // Only re-run the effect when the uid changes
 
-
-  
   const getUpdatedAuthObj = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -199,8 +197,13 @@ export const AuthContextProvider = ({ children }) => {
           subjectSelection,
           mentorStatistics: {
             time: 0,
-            stars: 0,
-            compliments: 0,
+            stars: [],
+            compliments: {
+              fast: 0,
+              friendly: 0,
+              clear: 0,
+              helpful: 0,
+            },
             questions: 0,
           },
         };

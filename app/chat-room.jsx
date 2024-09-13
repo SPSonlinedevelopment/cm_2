@@ -85,6 +85,7 @@ const ChatRoom = () => {
 
       {displayMentorFeedback && (
         <ReviewMentor
+          mentorId={chatRoomData?.mentorId}
           createdAt={chatRoomData?.createdAt}
           roomId={chatRoomData?.roomId}
           setDisplayMentorFeedback={setDisplayMentorFeedback}

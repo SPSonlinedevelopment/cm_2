@@ -99,8 +99,6 @@ export const calculateDuration = (startTimestamp, endTimestamp) => {
   return durationString.trim();
 };
 
-
-
 export const storeObjectAsyncStorage = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value);
@@ -118,4 +116,18 @@ export const getObjectAsyncStorage = async (key) => {
     console.error("Error retrieving object:", error);
     return null;
   }
+};
+
+export const convertRecurringDecimalToNumber = (decimal) => {
+  // Extract the non-recurring part and the recurring part
+  const nonRecurringPart = Math.floor(decimal);
+  const recurringPart = decimal - nonRecurringPart;
+
+  // Calculate the exact value of the recurring decimal
+  const exactValue = nonRecurringPart + recurringPart / 9;
+
+  // Round the exact value to 1 decimal place
+  const roundedValue = Number(exactValue.toFixed(1));
+
+  return roundedValue;
 };

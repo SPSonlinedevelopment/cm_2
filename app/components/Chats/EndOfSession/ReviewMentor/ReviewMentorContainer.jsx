@@ -23,11 +23,13 @@ import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation"
 import { Timestamp } from "firebase/firestore";
 import { calculateDuration } from "@/utils/common";
 import { serverTimestamp } from "firebase/firestore";
+import MentorStatistics from "@/app/components/Profile/MentorProfile/MentorStatistics";
 
 const ReviewMentorContainer = ({
   setDisplayMentorFeedback,
   roomId,
   createdAt,
+  mentorId,
 }) => {
   const [feedbackForm, setFeedbackForm] = useState({
     mentorRating: undefined,
@@ -46,7 +48,6 @@ const ReviewMentorContainer = ({
 
       // Get the room document from the 'rooms' collection
       const roomData = (await getDoc(roomRef)).data();
-
       const messagesRef = collection(roomRef, "messages");
       const messagesSnapshot = await getDocs(messagesRef);
 
@@ -66,8 +67,61 @@ const ReviewMentorContainer = ({
     } catch (error) {
       console.error(`Error adding fields to room ${roomId}:`, error);
     }
+  };
 
-    setDisplayMentorFeedback(false);
+  const updateMentorStats = async () => {
+    const mentorRef = doc(db, "mentors", mentorId);
+
+    try {
+      const mentorDoc = await getDoc(mentorRef);
+      if (!mentorDoc.exists()) {
+        throw new Error("Mentor document not found.");
+      }
+      const mentorData = mentorDoc.data();
+
+      const updatedStars = [
+        ...mentorData.mentorStatistics.stars,
+        feedbackForm.mentorRating,
+      ];
+      console.log("🚀 ~ updateMentorStats ~ updatedStars:", updatedStars);
+
+      const feedbackCounts = {
+        clear: 0,
+        fast: 0,
+        friendly: 0,
+        helpful: 0,
+      };
+
+      console.log(
+        "feedbackForm?.mentorCompliments",
+        feedbackForm?.mentorCompliments
+      );
+      feedbackForm?.mentorCompliments.forEach((stat) => {
+        if (stat === "Clear") feedbackCounts.clear++;
+        if (stat === "Fast") feedbackCounts.fast++;
+        if (stat === "Friendly") feedbackCounts.friendly++;
+        if (stat === "Helpful") feedbackCounts.helpful++;
+      });
+
+      console.log("feedbackCounts", feedbackCounts);
+
+      await updateDoc(mentorRef, {
+        "mentorStatistics.stars": updatedStars,
+        "mentorStatistics.questions": mentorData.mentorStatistics.questions + 1,
+        "mentorStatistics.compliments.clear":
+          mentorData.mentorStatistics.compliments.clear + feedbackCounts.clear,
+        "mentorStatistics.compliments.fast":
+          mentorData.mentorStatistics.compliments.fast + feedbackCounts.fast,
+        "mentorStatistics.compliments.friendly":
+          mentorData.mentorStatistics.compliments.friendly +
+          feedbackCounts.friendly,
+        "mentorStatistics.compliments.helpful":
+          mentorData.mentorStatistics.compliments.helpful +
+          feedbackCounts.helpful,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -99,6 +153,8 @@ const ReviewMentorContainer = ({
               containerStyles="w-[85%] h-[40px] flex items-center"
               handlePress={() => {
                 addMentorReviewToRoom();
+                updateMentorStats();
+                setDisplayMentorFeedback(false);
               }}
               title="Submit Feedback"
             />
