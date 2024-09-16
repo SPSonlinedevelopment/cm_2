@@ -22,9 +22,10 @@ export default CreateRoomIfNotExists = async (item, userDetails) => {
       menteeIsTyping: false,
       mentorIsTyping: false,
       sessionCompleted: false,
+      reviewForMentorCompleted: false,
+      reviewForMenteeCompleted: false,
       initialMessage: item?.initialMessage,
       createdAt: serverTimestamp(),
-   
     };
 
     await setDoc(doc(db, "rooms", roomId), roomData);

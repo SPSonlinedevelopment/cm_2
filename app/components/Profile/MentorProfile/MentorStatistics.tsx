@@ -5,7 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/authContext";
 import { convertRecurringDecimalToNumber } from "../../../../utils/common";
-import { compliments } from "../../Chats/EndOfSession/ReviewMentor/ComplementSelections";
+import { compliments } from "../../Chats/EndOfSession/ReviewForMentor/ComplementSelections";
 
 const MentorStatistics = () => {
   const { userDetails } = useAuth();

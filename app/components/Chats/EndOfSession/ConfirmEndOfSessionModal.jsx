@@ -7,23 +7,10 @@ import { Timestamp } from "firebase/firestore";
 
 const ConfirmEndOfSessionModal = ({
   setDisplyConfirmEndOfSessionModal,
-  setDisplayMentorFeedback,
+  setdisplayFeedback,
   roomId,
 }) => {
-  const handleConfirmEndSession = async () => {
-    const roomRef = doc(db, "rooms", roomId);
 
-    try {
-      await updateDoc(roomRef, {
-        sessionCompleted: true,
-        sessionCompletedAt: Timestamp.now(),
-      });
-
-      console.log("updated Update completed at for room");
-    } catch (error) {
-      console.log("error updating room completed status", error);
-    }
-  };
 
   return (
     <Modal className="bg-black-100 " animationType="fade">
@@ -37,8 +24,8 @@ const ConfirmEndOfSessionModal = ({
             title="Confirm"
             handlePress={() => {
               setDisplyConfirmEndOfSessionModal(false);
-              handleConfirmEndSession();
-              setDisplayMentorFeedback(true);
+      
+              setdisplayFeedback(true);
             }}
           />
           <IconButton

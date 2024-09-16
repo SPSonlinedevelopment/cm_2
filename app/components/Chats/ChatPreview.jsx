@@ -9,6 +9,7 @@ import SearchChats from "./SearchChats";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import CompletedChatList from "./CompletedChatList";
+import FadeInView from "../Effects/FadeInView";
 
 const ChatPreview = () => {
   const { userDetails, user } = useAuth();
@@ -34,10 +35,9 @@ const ChatPreview = () => {
           className="w-full h-full  flex "
         >
           <SearchChats />
+
           {userDetails?.mode === "mentor" && <NewQuestionList />}
-
           <ActiveChatroomList />
-
           <CompletedChatList />
         </ScrollView>
       </SafeAreaView>

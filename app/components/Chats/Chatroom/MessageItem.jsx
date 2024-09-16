@@ -15,6 +15,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import ShowReplyBar from "./ShowReplyBar";
 import MessageText from "./MessageText";
 import ReplyMessage from "./ReplyMessage";
+import FadeInView from "../../Effects/FadeInView";
 
 const MessageItem = React.memo(
   ({
@@ -101,7 +102,7 @@ const MessageItem = React.memo(
             <Entypo name="reply" size={24} color="white" />
           </View>
         )}
-        {result}
+        <FadeInView>{result}</FadeInView>
       </ScrollView>
     );
   }

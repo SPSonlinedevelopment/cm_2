@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import MessageItem from "./MessageItem";
 import { Image } from "expo-image";
 import IconButton from "../../Buttons/IconButton";
-import SessionSummary from "../EndOfSession/ReviewMentor/SessionSummary";
+import SessionSummary from "../EndOfSession/ReviewForMentor/SessionSummary";
 import {
   generateRandomId,
   storeObjectAsyncStorage,
@@ -156,4 +156,3 @@ const MessagesList = ({
 };
 
 export default MessagesList;
-

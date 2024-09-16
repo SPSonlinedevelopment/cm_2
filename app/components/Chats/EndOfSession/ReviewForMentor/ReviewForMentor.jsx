@@ -24,12 +24,15 @@ import { Timestamp } from "firebase/firestore";
 import { calculateDuration } from "@/utils/common";
 import { serverTimestamp } from "firebase/firestore";
 import MentorStatistics from "@/app/components/Profile/MentorProfile/MentorStatistics";
+import { calculateTimeDifference } from "@/utils/common";
 
 const ReviewMentorContainer = ({
-  setDisplayMentorFeedback,
+  setDisplayFeedback,
   roomId,
-  createdAt,
   mentorId,
+  menteeId,
+  sessionCompletedAt,
+  createdAt,
 }) => {
   const [feedbackForm, setFeedbackForm] = useState({
     mentorRating: undefined,
@@ -39,11 +42,15 @@ const ReviewMentorContainer = ({
     confidenceRatingAfter: undefined,
   });
 
+  const duration = calculateTimeDifference(createdAt, sessionCompletedAt);
+
   const addMentorReviewToRoom = async () => {
     const roomRef = doc(db, "rooms", roomId);
     try {
       await updateDoc(roomRef, {
         mentorReview: feedbackForm,
+        reviewForMentorCompleted: true,
+        duration: duration,
       });
 
       // Get the room document from the 'rooms' collection
@@ -83,7 +90,6 @@ const ReviewMentorContainer = ({
         ...mentorData.mentorStatistics.stars,
         feedbackForm.mentorRating,
       ];
-      console.log("🚀 ~ updateMentorStats ~ updatedStars:", updatedStars);
 
       const feedbackCounts = {
         clear: 0,
@@ -92,18 +98,12 @@ const ReviewMentorContainer = ({
         helpful: 0,
       };
 
-      console.log(
-        "feedbackForm?.mentorCompliments",
-        feedbackForm?.mentorCompliments
-      );
       feedbackForm?.mentorCompliments.forEach((stat) => {
         if (stat === "Clear") feedbackCounts.clear++;
         if (stat === "Fast") feedbackCounts.fast++;
         if (stat === "Friendly") feedbackCounts.friendly++;
         if (stat === "Helpful") feedbackCounts.helpful++;
       });
-
-      console.log("feedbackCounts", feedbackCounts);
 
       await updateDoc(mentorRef, {
         "mentorStatistics.stars": updatedStars,
@@ -118,16 +118,43 @@ const ReviewMentorContainer = ({
         "mentorStatistics.compliments.helpful":
           mentorData.mentorStatistics.compliments.helpful +
           feedbackCounts.helpful,
+        "mentorStatistics.time": mentorData.mentorStatistics.time + duration,
       });
     } catch (error) {
       console.log(error);
     }
   };
 
+  const updateMenteeStats = async () => {
+    const menteeRef = doc(db, "mentees", menteeId);
+    const menteeDoc = await getDoc(menteeRef);
+
+    if (!menteeDoc.exists()) {
+      throw new Error("Mentor document not found.");
+    }
+
+    const menteeData = menteeDoc.data();
+
+    // this isnt updating
+    console.log("duration", duration);
+    console.log(" menteeData.questions", menteeData.questions);
+    console.log("enteeData.time ", menteeData.time);
+
+    try {
+      await updateDoc(menteeRef, {
+        "menteeStatistics.time": menteeData.time + duration,
+        "menteeStatistics.questions": menteeData.questions + 1,
+      });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
   return (
     <SafeAreaView>
       <Modal animationType="fade">
-        <ExitButton toggleDisplay={setDisplayMentorFeedback} />
+        <ExitButton toggleDisplay={setDisplayFeedback} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -154,7 +181,8 @@ const ReviewMentorContainer = ({
               handlePress={() => {
                 addMentorReviewToRoom();
                 updateMentorStats();
-                setDisplayMentorFeedback(false);
+                updateMenteeStats();
+                setDisplayFeedback(false);
               }}
               title="Submit Feedback"
             />

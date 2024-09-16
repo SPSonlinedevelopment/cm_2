@@ -131,3 +131,20 @@ export const convertRecurringDecimalToNumber = (decimal) => {
 
   return roundedValue;
 };
+
+export const calculateTimeDifference = (createdAt, sessionCompletedAt) => {
+  // Convert timestamps to milliseconds
+  const createdAtMillis =
+    createdAt.seconds * 1000 + createdAt.nanoseconds / 1000000;
+  const sessionCompletedAtMillis =
+    sessionCompletedAt.seconds * 1000 +
+    sessionCompletedAt.nanoseconds / 1000000;
+
+  // Calculate the difference in milliseconds
+  const timeDifferenceMillis = sessionCompletedAtMillis - createdAtMillis;
+
+  // Convert milliseconds to seconds
+  const timeDifferenceMins = timeDifferenceMillis / 1000 / 60;
+
+  return timeDifferenceMins;
+};

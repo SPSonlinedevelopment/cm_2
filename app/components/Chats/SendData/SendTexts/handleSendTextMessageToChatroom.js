@@ -34,7 +34,7 @@ export const handleSendTextMessageToChatroom = async (
           userId: userDetails?.uid,
           userName: userDetails?.firstName,
           text: message,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAt: Timestamp.fromDate(new Date()),
           messageId: generateRandomId(),
           isReply: true,
           reply: {

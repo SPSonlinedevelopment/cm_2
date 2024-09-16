@@ -18,7 +18,8 @@ import ShowReplyBar from "./components/Chats/Chatroom/ShowReplyBar";
 import MentorConversationSuggestions from "./components/Chats/Chatroom/ConversationSuggestions/MentorConversationSuggestions";
 import IsTypingIndicator from "./components/Chats/Chatroom/IsTypingIndicator";
 import ConfirmEndOfSessionModal from "./components/Chats/EndOfSession/ConfirmEndOfSessionModal";
-import ReviewMentor from "./components/Chats/EndOfSession/ReviewMentor/ReviewMentorContainer";
+import ReviewMentor from "./components/Chats/EndOfSession/ReviewForMentor/ReviewForMentor";
+import ReviewMentee from "./components/Chats/EndOfSession/ReviewForMentee";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
@@ -29,7 +30,8 @@ const ChatRoom = () => {
   const [replyRecipientName, setReplyRecipientName] = useState("");
   const [displayConfirmEndOfSessionModal, setDisplyConfirmEndOfSessionModal] =
     useState(false);
-  const [displayMentorFeedback, setDisplayMentorFeedback] = useState(false);
+  const [displayFeedback, setDisplayFeedback] = useState(false);
+  const [displayMenteeFeedback, setDisplayMenteeFeedback] = useState(false);
   const [chatRoomData, setChatRoomData] = useState();
 
   const { userDetails } = useAuth();
@@ -78,19 +80,36 @@ const ChatRoom = () => {
       {displayConfirmEndOfSessionModal && (
         <ConfirmEndOfSessionModal
           roomId={chatRoomData?.roomId}
-          setDisplayMentorFeedback={setDisplayMentorFeedback}
+          setdisplayFeedback={setDisplayFeedback}
           setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
         />
       )}
 
-      {displayMentorFeedback && (
-        <ReviewMentor
-          mentorId={chatRoomData?.mentorId}
-          createdAt={chatRoomData?.createdAt}
-          roomId={chatRoomData?.roomId}
-          setDisplayMentorFeedback={setDisplayMentorFeedback}
-        />
-      )}
+      {/* 
+ mentor reviews and names sessions and updates firebase to sessionCompleted true  */}
+
+      {displayFeedback &&
+        userDetails?.mode === "mentor" &&
+        !chatRoomData.reviewForMenteeCompleted && (
+          <ReviewMentee
+            roomId={chatRoomData?.roomId}
+            setDisplayFeedback={setDisplayFeedback}
+          ></ReviewMentee>
+        )}
+
+      {/* // displayed when  sessionCompleted true  and ! mentorReviewCompleted */}
+      {userDetails?.mode === "mentee" &&
+        chatRoomData?.sessionCompleted &&
+        !chatRoomData?.reviewForMentorCompleted && (
+          <ReviewMentor
+            menteeId={chatRoomData?.menteeId}
+            mentorId={chatRoomData?.mentorId}
+            createdAt={chatRoomData?.createdAt}
+            sessionCompletedAt={chatRoomData?.sessionCompletedAt}
+            roomId={chatRoomData?.roomId}
+            setDisplayFeedback={setDisplayFeedback}
+          />
+        )}
 
       {chatRoomData && (
         <MessagesList

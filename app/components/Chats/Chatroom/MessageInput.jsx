@@ -68,6 +68,7 @@ const MessageInput = React.memo(
           TextInputFocused ? "pb-[0px]" : "pb-[20px]"
         }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center `}
       >
+        {/* <Text>{JSON.stringify(replyMessage)}</Text> */}
         {displayImageCaptionModal && (
           <ImageMessageCaption
             item={item}
@@ -75,6 +76,7 @@ const MessageInput = React.memo(
             setDisplayImageCaptionModal={setDisplayImageCaptionModal}
           />
         )}
+
         <View className="flex-row justify-around  items-center  w-full  p-2   ">
           <TouchableOpacity
             onPress={() => handlePickImage()}

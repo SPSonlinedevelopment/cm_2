@@ -95,6 +95,7 @@ const ChatItem = ({
       `}
       >
         <Avatar avatarName={item.avatarName} />
+        <Text>{item.roomId}</Text>
 
         <View
           className={`h-full w-[80%] mx-4 flex flex-col justify-between 

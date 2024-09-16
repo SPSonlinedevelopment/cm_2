@@ -1,10 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
 import SuccessAnimation from "@/app/components/Effects/SuccessAnimation";
+import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation";
 
 const SessionSummary = ({ userDetails, chatRoomData }) => {
   return (
-    <View className=" w-full  mt-2   items-center">
+    <View className=" w-full  mt-2  mb-10  items-center">
+      <CelebrationAnimation loop="false" size={200}></CelebrationAnimation>
       <View className=" w-[95%] py-3    justify-center items-center   flex flex-row rounded-2xl shadow bg-white">
         {userDetails.mode === "mentor" ? (
           <View className="ml-5">
@@ -52,7 +54,7 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
           </View>
         )}
 
-        <SuccessAnimation size={150} />
+        <SuccessAnimation size={100} />
       </View>
     </View>
   );
