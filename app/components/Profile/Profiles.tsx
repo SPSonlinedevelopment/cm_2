@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "./Header";
 import BorderUnderline from "./BorderUnderline";
 import Leaderboard from "./MenteeProfile/Leaderboard/Leaderboard";
-import Compliments from "./Compliments/Compliments";
+
 import Achievements from "./Achievements/Achievements";
 import MenteeStatistics from "./MenteeProfile/MenteeStatistics";
 import CustomKeyboardView from "../CustomKeyboardView";
@@ -13,6 +13,8 @@ import Others from "./Others/Others";
 import { useAuth } from "@/app/context/authContext";
 import Loading from "../Loading/LoadingSpinner";
 import MentorStatistics from "./MentorProfile/MentorStatistics";
+import ComplementsProfile from "./MentorProfile/ComplementsProfile";
+import MentorComments from "../.././components/Profile/MentorProfile/MentorComments";
 
 const Profiles = () => {
   const { userDetails, getUpdatedAuthObj, user } = useAuth();
@@ -27,7 +29,7 @@ const Profiles = () => {
           <BorderUnderline />
           <Leaderboard />
           <BorderUnderline />
-          <Compliments />
+          <ComplementsProfile />
           <BorderUnderline />
           <Achievements />
           <BorderUnderline />
@@ -49,7 +51,8 @@ const Profiles = () => {
           <BorderUnderline />
           <MentorStatistics />
           <BorderUnderline />
-          <Compliments />
+          <ComplementsProfile />
+          <MentorComments />
           <BorderUnderline />
           <Achievements />
           <Others />

@@ -102,11 +102,7 @@ const ChatRoom = () => {
         chatRoomData?.sessionCompleted &&
         !chatRoomData?.reviewForMentorCompleted && (
           <ReviewMentor
-            menteeId={chatRoomData?.menteeId}
-            mentorId={chatRoomData?.mentorId}
-            createdAt={chatRoomData?.createdAt}
-            sessionCompletedAt={chatRoomData?.sessionCompletedAt}
-            roomId={chatRoomData?.roomId}
+            chatRoomData={chatRoomData}
             setDisplayFeedback={setDisplayFeedback}
           />
         )}

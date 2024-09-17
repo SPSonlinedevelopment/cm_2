@@ -3,7 +3,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity, Text } from "react-native";
 import { useState } from "react";
 
-export const compliments = [
+export const menteeComplements = [
   {
     title: "Clear",
     icon: <FontAwesome name="pencil" size={34} color="orange" />,

@@ -178,6 +178,7 @@ export const AuthContextProvider = ({ children }) => {
       email,
       year,
       linkedChatrooms: [{}],
+      writtenFeedback: [{}],
     };
 
     try {

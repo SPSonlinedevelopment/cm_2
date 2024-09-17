@@ -1,4 +1,4 @@
-import { View, Modal, ScrollView } from "react-native";
+import { View, Modal, ScrollView, Button } from "react-native";
 import React, { useState } from "react";
 import XPEarned from "./XPEarned";
 import RateLesson from "./RateLesson";
@@ -9,7 +9,6 @@ import IconButton from "@/app/components/Buttons/IconButton";
 import ExitButton from "../../../Buttons/ExitButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { db } from "@/firebaseConfig";
-
 import {
   collection,
   doc,
@@ -18,21 +17,21 @@ import {
   getDoc,
   getDocs,
   deleteDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation";
-import { Timestamp } from "firebase/firestore";
-import { calculateDuration } from "@/utils/common";
-import { serverTimestamp } from "firebase/firestore";
-import MentorStatistics from "@/app/components/Profile/MentorProfile/MentorStatistics";
 import { calculateTimeDifference } from "@/utils/common";
 
 const ReviewMentorContainer = ({
   setDisplayFeedback,
-  roomId,
-  mentorId,
-  menteeId,
-  sessionCompletedAt,
-  createdAt,
+  chatRoomData: {
+    roomId,
+    mentorId,
+    menteeId,
+    sessionCompletedAt,
+    createdAt,
+    menteeName,
+  },
 }) => {
   const [feedbackForm, setFeedbackForm] = useState({
     mentorRating: undefined,
@@ -69,8 +68,9 @@ const ReviewMentorContainer = ({
           messageData
         );
       });
-
+      console.log("added data to Completedroom");
       await deleteDoc(roomRef);
+      console.log("deleted room");
     } catch (error) {
       console.error(`Error adding fields to room ${roomId}:`, error);
     }
@@ -119,7 +119,15 @@ const ReviewMentorContainer = ({
           mentorData.mentorStatistics.compliments.helpful +
           feedbackCounts.helpful,
         "mentorStatistics.time": mentorData.mentorStatistics.time + duration,
+        writtenFeedback: arrayUnion({
+          menteeId,
+          menteeName,
+          writtenFeedback: feedbackForm.writtenFeedback,
+          completedSessionId: roomId,
+        }),
       });
+
+      console.log("update mentor stats");
     } catch (error) {
       console.log(error);
     }
@@ -135,16 +143,18 @@ const ReviewMentorContainer = ({
 
     const menteeData = menteeDoc.data();
 
-    // this isnt updating
-    console.log("duration", duration);
-    console.log(" menteeData.questions", menteeData.questions);
-    console.log("enteeData.time ", menteeData.time);
+    const updatedQuestions = menteeData.menteeStatistics.questions + 1;
+    const updatedTime = menteeData.menteeStatistics.time + duration;
+    const updatedXp = menteeData.menteeStatistics.XP + 3;
 
     try {
       await updateDoc(menteeRef, {
-        "menteeStatistics.time": menteeData.time + duration,
-        "menteeStatistics.questions": menteeData.questions + 1,
+        "menteeStatistics.time": updatedTime,
+        "menteeStatistics.questions": updatedQuestions,
+        "menteeStatistics.XP": updatedXp,
       });
+
+      console.log("updated mentee stats");
     } catch (error) {
       console.log(error);
       throw error;
@@ -179,6 +189,7 @@ const ReviewMentorContainer = ({
             <IconButton
               containerStyles="w-[85%] h-[40px] flex items-center"
               handlePress={() => {
+                console.log("TEST123");
                 addMentorReviewToRoom();
                 updateMentorStats();
                 updateMenteeStats();

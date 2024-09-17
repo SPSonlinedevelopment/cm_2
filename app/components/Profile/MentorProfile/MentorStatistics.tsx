@@ -4,8 +4,6 @@ import { Card } from "../MenteeProfile/MenteeStatistics";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/authContext";
-import { convertRecurringDecimalToNumber } from "../../../../utils/common";
-import { compliments } from "../../Chats/EndOfSession/ReviewForMentor/ComplementSelections";
 
 const MentorStatistics = () => {
   const { userDetails } = useAuth();
@@ -32,7 +30,7 @@ const MentorStatistics = () => {
 
       <View className="flex flex-row justify-between">
         <Card
-          text={` ${stats?.time} Total Mins`}
+          text={` ${Math.ceil(stats?.time)} Total Mins`}
           icon={<AntDesign name="clockcircle" size={24} color="orange" />}
         />
         <Card

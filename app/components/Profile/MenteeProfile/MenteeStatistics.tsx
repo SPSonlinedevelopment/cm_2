@@ -38,7 +38,7 @@ const MenteeStatistics = () => {
 
       <View className="flex flex-row justify-between">
         <Card
-          text={` ${stats?.time} mins`}
+          text={` ${Math.ceil(stats?.time)} mins`}
           icon={<AntDesign name="clockcircle" size={24} color="orange" />}
         />
         <Card
