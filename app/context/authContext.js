@@ -23,6 +23,8 @@ import { auth, db, menteesRef } from "../../firebaseConfig";
 import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
 import Statistics from "../components/Profile/MenteeProfile/MenteeStatistics";
 
+import { selectRandomAvatar } from "../components/Profile/Avatar";
+
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
@@ -140,7 +142,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const getData = async (mode) => {
-    const docRef = doc(db, mode, uid);
+    const docRef = doc(db, mode, user?.uid);
     getDoc(docRef)
       .then((doc) => {
         if (doc.exists()) {
@@ -177,8 +179,9 @@ export const AuthContextProvider = ({ children }) => {
       uid,
       email,
       year,
-      linkedChatrooms: [{}],
-      writtenFeedback: [{}],
+      linkedChatrooms: [],
+      writtenFeedback: [],
+      avatarName: selectRandomAvatar(),
     };
 
     try {

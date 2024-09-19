@@ -25,6 +25,7 @@ const ChatRoom = () => {
   const ios = Platform.OS == "ios";
   const route = useRoute();
   const { item, completedSession } = route?.params;
+  console.log("🚀 ~ ChatRoom ~ item:", item);
   const [displayShowReplyBar, setDisplayShowReplyBar] = useState(false);
   const [replyMessage, setReplyMessage] = useState("");
   const [replyRecipientName, setReplyRecipientName] = useState("");

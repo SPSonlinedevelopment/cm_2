@@ -17,10 +17,16 @@ import { db } from "@/firebaseConfig";
 
 const Profile = () => {
   const { user, userDetails, setUserDetails, isAuthenticated } = useAuth();
+  console.log("🚀 ~ Profile ~ user:", user);
 
   const navigation = useNavigation();
   if (!isAuthenticated) {
     navigation.navigate("sign-in");
+    return;
+  }
+
+  if (!userDetails) {
+    navigation.navigate("user-details");
     return;
   }
 

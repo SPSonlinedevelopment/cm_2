@@ -15,7 +15,7 @@ const Complements = ({ feedbackForm, setFeedbackForm }) => {
         className="mb-4"
         horizontal
       >
-        {menteeCompliments.map((comp) => {
+        {menteeCompliments?.map((comp) => {
           return (
             <View className="flex items-center justify-around ">
               <ComplementSelectionsButton

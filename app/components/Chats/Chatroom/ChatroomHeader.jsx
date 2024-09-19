@@ -35,7 +35,13 @@ const ChatroomHeader = ({
         </TouchableOpacity>
 
         <View className="flex flex-row items-center ">
-          <Avatar />
+          <Avatar
+            avatarName={
+              userDetails?.mode === "mentee"
+                ? chatRoomData?.mentorAvatar
+                : chatRoomData?.menteeAvatar
+            }
+          />
           <View className=" flex flex-col  items-center">
             <View className="flex flex-col items-center  ">
               {userDetails?.mode === "mentee" ? (

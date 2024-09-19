@@ -37,6 +37,7 @@ const RootLayout = () => {
   const cameraRef = useRef(null);
 
   const { user, userDetails } = useAuth();
+
   const { setNewTextQuestion } = useChat();
 
   const [image, setImage] = useState(null);
@@ -132,6 +133,7 @@ const RootLayout = () => {
         imageUrl: url,
         menteeId: userDetails?.uid || "",
         menteeName: userDetails?.firstName || "",
+        menteeAvatarName: userDetails?.avatarName,
         initialMessage: "",
         questionSubject: "",
         Timestamp: new Date(),

@@ -18,9 +18,11 @@ import {
   getDocs,
   deleteDoc,
   arrayUnion,
+  Timestamp,
 } from "firebase/firestore";
 import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation";
 import { calculateTimeDifference } from "@/utils/common";
+import { selectRandomAvatar } from "@/app/components/Profile/Avatar";
 
 const ReviewMentorContainer = ({
   setDisplayFeedback,
@@ -124,6 +126,8 @@ const ReviewMentorContainer = ({
           menteeName,
           writtenFeedback: feedbackForm.writtenFeedback,
           completedSessionId: roomId,
+          createdAt: Timestamp.fromDate(new Date()),
+          avatarName: selectRandomAvatar(),
         }),
       });
 

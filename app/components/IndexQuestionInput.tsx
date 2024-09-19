@@ -65,6 +65,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
       imageUrl: "",
       menteeId: userDetails?.uid || "",
       menteeName: userDetails?.firstName || "",
+      menteeAvatarName: userDetails?.avatarName,
       initialMessage: text || "",
       questionSubject: selectedSubject || "",
       Timestamp: serverTimestamp(),

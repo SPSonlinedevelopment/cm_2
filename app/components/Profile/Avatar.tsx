@@ -1,6 +1,17 @@
 import React from "react";
 import { View, Text, Image, ImageSourcePropType } from "react-native";
 
+const avatarNameList = ["Colin", "Stuart", "Ben", "Janet"];
+
+function getRandomNumber() {
+  return Math.floor(Math.random() * 4) + 1;
+}
+export const selectRandomAvatar = () => {
+  return avatarNameList[getRandomNumber()];
+};
+
+// Example usage:
+
 type AvatarName = "Colin" | "Stuart" | "Ben" | "Janet";
 
 interface AvatarProps {
