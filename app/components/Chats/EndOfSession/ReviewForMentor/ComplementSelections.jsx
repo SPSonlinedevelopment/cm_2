@@ -57,13 +57,13 @@ const ComplementSelectionsButton = ({
       onPress={(selection) => {
         setSelected(!selected);
 
-        handleSelection(comp.title);
+        handleSelection(comp?.title);
       }}
       className={`shadow p-5 m-5 rounded-full ${
         selected ? "bg-purple" : "bg-neutral-50"
       }`}
     >
-      {comp.icon}
+      {comp?.icon}
     </TouchableOpacity>
   );
 };

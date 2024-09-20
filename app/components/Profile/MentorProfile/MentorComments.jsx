@@ -2,6 +2,7 @@ import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import { useAuth } from "../../../context/authContext";
 import { convertFirebaseTimestampToDate } from "@/utils/common";
+import Avatar from "../Avatar";
 
 const MentorComments = () => {
   const { userDetails } = useAuth();
@@ -13,14 +14,21 @@ const MentorComments = () => {
         <Text className="text-lg font-bold ml-3 "> Comments</Text>
       </View>
 
-      {userDetails.writtenFeedback.length ? (
-        <ScrollView className="p-3" horizontal={true}>
-          {userDetails.writtenFeedback.map((comment) => {
+      {userDetails?.writtenFeedback.length ? (
+        <ScrollView
+          className="p-3"
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+        >
+          {userDetails?.writtenFeedback.map((comment) => {
             return (
-              <View className=" shadow-md bg-white w-[100px] h-full flex items-center justify-between m-1 p-2 rounded-2xl">
-                <Text className="text-xs ">{comment?.menteeName}</Text>
+              <View className=" shadow-md bg-white w-[120px] h-full flex items-center justify-between m-1 p-2 rounded-2xl">
+                <Avatar avatarName={comment?.avatarName} />
+                <Text className="text-xs font-bold ">
+                  {comment?.menteeName}
+                </Text>
 
-                <Text className=""> " {comment?.writtenFeedback}" </Text>
+                <Text className=" text-xs">"{comment?.writtenFeedback}"</Text>
 
                 <Text className="text-xs">
                   {convertFirebaseTimestampToDate(comment?.createdAt)}

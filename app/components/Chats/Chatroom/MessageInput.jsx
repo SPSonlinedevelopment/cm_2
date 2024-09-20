@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, TextInput, Text } from "react-native";
+import { View, TouchableOpacity, TextInput, Text, Alert } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
@@ -13,6 +13,7 @@ import { handleSendTextMessageToChatroom } from "../SendData/SendTexts/handleSen
 import { pickImage } from "@/utils/imagePicker";
 import createBlob from "../SendData/SendImages/createBlob";
 import ImageMessageCaption from "../SendData/SendImages/ImageMessageCaption";
+import { screenProfanities } from "@/utils/common";
 
 const MessageInput = React.memo(
   ({ item, scrollToEnd, isReply, setDisplayShowReplyBar, replyMessage }) => {
@@ -23,7 +24,7 @@ const MessageInput = React.memo(
     const [displayImageCaptionModal, setDisplayImageCaptionModal] =
       useState(false);
 
-    const textRef = useRef(null);
+    const textRef =  (null);
     const inputRef = useRef(null);
 
     const handleChangeText = () => {
@@ -44,20 +45,25 @@ const MessageInput = React.memo(
 
     // handle sending a message
     const handleSendMessage = async () => {
-      setDisplayShowReplyBar(false);
-      try {
-        await handleSendTextMessageToChatroom(
-          item,
-          textRef,
-          inputRef,
-          userDetails,
-          isReply,
-          replyMessage
-        );
+      const hasProfanities = screenProfanities(textRef.current.trim());
+      if (hasProfanities) {
+        return Alert.alert("text shows inappropriate text");
+      } else {
+        setDisplayShowReplyBar(false);
+        try {
+          await handleSendTextMessageToChatroom(
+            item,
+            textRef,
+            inputRef,
+            userDetails,
+            isReply,
+            replyMessage
+          );
 
-        scrollToEnd();
-      } catch (error) {
-        console.log("🚀 ~ handleSendMessage ~ error:", error);
+          scrollToEnd();
+        } catch (error) {
+          console.log("🚀 ~ handleSendMessage ~ error:", error);
+        }
       }
     };
 

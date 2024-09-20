@@ -7,7 +7,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Camera, CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
-import IndexQuestionInput from "./components/IndexQuestionInput";
+import IndexQuestionInput from "./components/Home/IndexQuestionInput";
 import { AuthContext, AuthContextProvider } from "./context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HomeNavButtons from "./components/HomeNavButtons/HomeNavButtons";
@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "./context/authContext";
 import { useChat } from "./context/chatContext";
 import { Image } from "expo-image";
+import DisplayImageModal from "../app/components/Home/DisplayImageModal";
 
 import {
   ref,
@@ -27,22 +28,20 @@ import { storage } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
 
 const RootLayout = () => {
-  const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isSavingtoStorage, setIsSavingtoStorage] = useState(false);
-
   const [openDisplayImageModal, setOpenDisplayImageModal] = useState(false);
 
   const cameraRef = useRef(null);
 
   const { user, userDetails } = useAuth();
-
   const { setNewTextQuestion } = useChat();
-
   const [image, setImage] = useState(null);
   const [imageFromMediaLib, setImageFromMediaLib] = useState(null);
   const [displayQuestionInput, setDisplayQuestionInput] = useState(false);
+
+  const [selectedSubject, setSelectedSubject] = useState("");
 
   const handleKeyboardButtonPressed = () => {
     setDisplayQuestionInput(true);
@@ -55,7 +54,6 @@ const RootLayout = () => {
     return <View />;
   }
 
-  console.log("image, ", image);
   if (!permission.granted) {
     return (
       <View className="h-full bg-purple flex flex-col  items-center justify-between">
@@ -112,12 +110,12 @@ const RootLayout = () => {
       const blob = await response.blob();
       await uploadBytesResumable(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
-      console.log("File download URL:", downloadURL);
 
       handleSendQuestion(downloadURL);
       setIsSavingtoStorage(false);
       setImage(null);
       setOpenDisplayImageModal(false);
+      setSelectedSubject("");
       navigation.navigate("chats");
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -126,16 +124,16 @@ const RootLayout = () => {
   };
   // this function is used  messageInput and needs to extracted to as isolated reusable function as too large
   const handleSendQuestion = async (url) => {
-    try {
-      console.log("🚀 ~ handleSendQuestion ~ url:", url);
 
+    
+    try {
       const newquestionObj = {
         imageUrl: url,
         menteeId: userDetails?.uid || "",
         menteeName: userDetails?.firstName || "",
         menteeAvatarName: userDetails?.avatarName,
         initialMessage: "",
-        questionSubject: "",
+        questionSubject: selectedSubject,
         Timestamp: new Date(),
         questionId: generateRandomId(),
       };
@@ -154,50 +152,15 @@ const RootLayout = () => {
           <IndexQuestionInput toggleDisplayInput={setDisplayQuestionInput} />
         ) : (
           <View className="h-full w-full bg-red relative">
-            <Modal
-              className=""
-              visible={openDisplayImageModal}
-              animationType="slide"
-            >
-              <View className="h-full w-full bg-zinc-600 flex items-center justify-between ">
-                <IconButton
-                  containerStyles="h-[50px] w-[50px] bg-white absolute z-20 left-4 top-10"
-                  handlePress={() => {
-                    onClose();
-                  }}
-                  icon={<Entypo name="cross" size={34} color="black" />}
-                />
-                <View className="h-10 w-10"></View>
-                {image ? (
-                  <Image
-                    className="h-[80%] w-[100%]"
-                    style={{
-                      resizeMode: "contain",
-                    }}
-                    source={{ uri: image }}
-                  />
-                ) : (
-                  <ActivityIndicator
-                    className="z-10 flex"
-                    size="large"
-                    color="purple"
-                  />
-                )}
-
-                <View className="flex flex-row items-center justify-end w-full mr-10">
-                  <IconButton
-                    isLoading={isSavingtoStorage}
-                    containerStyles="h-[60px] w-[100px] bg-orange"
-                    icon={<FontAwesome name="send" size={24} color="white" />}
-                    handlePress={() => {
-                      handleSend();
-                      console.log("pressed send button");
-                    }}
-                    title="Send"
-                  />
-                </View>
-              </View>
-            </Modal>
+            <DisplayImageModal
+              setSelectedSubject={setSelectedSubject}
+              selectedSubject={selectedSubject}
+              onClose={onClose}
+              openDisplayImageModal={openDisplayImageModal}
+              image={image}
+              isSavingtoStorage={isSavingtoStorage}
+              handleSend={handleSend}
+            />
 
             <CameraView
               facing={"back"}

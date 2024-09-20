@@ -101,7 +101,8 @@ const ChatRoom = () => {
       {/* // displayed when  sessionCompleted true  and ! mentorReviewCompleted */}
       {userDetails?.mode === "mentee" &&
         chatRoomData?.sessionCompleted &&
-        !chatRoomData?.reviewForMentorCompleted && (
+        !chatRoomData?.reviewForMentorCompleted &&
+        setDisplayFeedback && (
           <ReviewMentor
             chatRoomData={chatRoomData}
             setDisplayFeedback={setDisplayFeedback}

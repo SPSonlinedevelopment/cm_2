@@ -21,6 +21,7 @@ const ChatItem = ({
   completedSession,
   activeSession,
 }) => {
+  console.log("🚀 ~ item123:", item);
   const { userDetails } = useAuth();
   const [lastMessage, setLastMessage] = useState("");
   const [unReadMessages, setUnreadMessages] = useState(1);
@@ -94,7 +95,18 @@ const ChatItem = ({
       
       `}
       >
-        <Avatar avatarName={item.avatarName} />
+        {newQuestion && userDetails.mode === "mentor" && (
+          <Avatar avatarName={item.menteeAvatarName} />
+        )}
+
+        {!newQuestion && userDetails.mode === "mentee" && (
+          <Avatar avatarName={item.mentorAvatar} />
+        )}
+
+        {!newQuestion && userDetails.mode === "mentor" && (
+          <Avatar avatarName={item.menteeAvatar} />
+        )}
+
         <Text>{item.roomId}</Text>
 
         <View

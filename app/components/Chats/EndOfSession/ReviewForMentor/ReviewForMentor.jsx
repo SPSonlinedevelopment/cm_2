@@ -33,6 +33,7 @@ const ReviewMentorContainer = ({
     sessionCompletedAt,
     createdAt,
     menteeName,
+    menteeAvatar,
   },
 }) => {
   const [feedbackForm, setFeedbackForm] = useState({
@@ -42,7 +43,7 @@ const ReviewMentorContainer = ({
     confidenceRatingBefore: undefined,
     confidenceRatingAfter: undefined,
   });
-
+  console.log("🚀 ~ feedbackForm:", feedbackForm);
   const duration = calculateTimeDifference(createdAt, sessionCompletedAt);
 
   const addMentorReviewToRoom = async () => {
@@ -127,7 +128,7 @@ const ReviewMentorContainer = ({
           writtenFeedback: feedbackForm.writtenFeedback,
           completedSessionId: roomId,
           createdAt: Timestamp.fromDate(new Date()),
-          avatarName: selectRandomAvatar(),
+          avatarName: menteeAvatar,
         }),
       });
 
@@ -168,7 +169,6 @@ const ReviewMentorContainer = ({
   return (
     <SafeAreaView>
       <Modal animationType="fade">
-        <ExitButton toggleDisplay={setDisplayFeedback} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{

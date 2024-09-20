@@ -5,6 +5,7 @@ import { useChat } from "@/app/context/chatContext";
 
 const NewQuestionList = () => {
   const { getWaitingQuestions, questions } = useChat();
+  console.log("🚀 ~ NewQuestionList ~ questions:", questions);
 
   useEffect(() => {
     const unsubscribe = getWaitingQuestions();

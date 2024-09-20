@@ -24,7 +24,7 @@ import { Link } from "expo-router";
 import { router } from "expo-router";
 import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
 import { useAuth } from "./authContext";
-import { generateRandomId } from "../../utils/common";
+import { generateRandomId, screenProfanities } from "../../utils/common";
 
 export const ChatContext = createContext();
 

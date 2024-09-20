@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import { menteeCompliments } from "./ComplementSelections";
+import { menteeComplements } from "./ComplementSelections";
+
 import ComplementSelectionsButton from "./ComplementSelections";
 
 const Complements = ({ feedbackForm, setFeedbackForm }) => {
@@ -13,9 +14,9 @@ const Complements = ({ feedbackForm, setFeedbackForm }) => {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         className="mb-4"
-        horizontal
+        horizontal={true}
       >
-        {menteeCompliments?.map((comp) => {
+        {menteeComplements?.map((comp) => {
           return (
             <View className="flex items-center justify-around ">
               <ComplementSelectionsButton

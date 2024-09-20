@@ -1,18 +1,24 @@
-import { View, Text, TextInput, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  KeyboardAvoidingView,
+  Alert,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import FormField from "./FormField/FormField";
-import IconButton from "./Buttons/IconButton";
+import FormField from "../FormField/FormField";
+import IconButton from "../Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import CustomKeyboardView from "./CustomKeyboardView";
-import { AuthContextProvider, useAuth } from "../context/authContext";
+import CustomKeyboardView from "../CustomKeyboardView";
+import { AuthContextProvider, useAuth } from "../../context/authContext";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useChat } from "../context/chatContext";
+import { useChat } from "../../context/chatContext";
 
 import SubjectSelection from "./SubjectSelection";
-import { generateRandomId } from "@/utils/common";
-import ExitButton from "./Buttons/ExitButton";
+import { generateRandomId, screenProfanities } from "@/utils/common";
+import ExitButton from "../Buttons/ExitButton";
 import { serverTimestamp } from "firebase/firestore";
 
 interface IndexQuestionInputProps {
@@ -61,22 +67,30 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
   const handleSendQuestion = async () => {
     setIsLoading(true);
 
-    const newquestionObj = {
-      imageUrl: "",
-      menteeId: userDetails?.uid || "",
-      menteeName: userDetails?.firstName || "",
-      menteeAvatarName: userDetails?.avatarName,
-      initialMessage: text || "",
-      questionSubject: selectedSubject || "",
-      Timestamp: serverTimestamp(),
-      questionId: generateRandomId(),
-    };
+    const hasProfanities = screenProfanities(text);
+    if (hasProfanities) {
+      setIsLoading(false);
+      return Alert.alert("text shows inappropriate text");
+    } else {
+      const newquestionObj = {
+        imageUrl: "",
+        menteeId: userDetails?.uid || "",
+        menteeName: userDetails?.firstName || "",
+        menteeAvatarName: userDetails?.avatarName,
+        initialMessage: text || "",
+        questionSubject: selectedSubject || "",
+        Timestamp: serverTimestamp(),
+        questionId: generateRandomId(),
+      };
 
-    try {
-      const result = await setNewTextQuestion(newquestionObj);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
+      try {
+        const result = await setNewTextQuestion(newquestionObj);
+        console.log(result);
+
+        setSelectedSubject("");
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     if (isAuthenticated) {
@@ -106,7 +120,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
           maxLength={1000}
           placeholder="Type your question"
           placeholderTextColor="orange"
-          className={`w-full text-center height-[500px]  text-xl text-purple  mt-10`}
+          className={`w-full text-center height-[00px]  text-xl text-purple  mt-10`}
           cursorColor="orange"
           selectionColor="orange"
           onChangeText={(value) => {

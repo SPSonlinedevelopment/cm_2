@@ -16,9 +16,10 @@ type AvatarName = "Colin" | "Stuart" | "Ben" | "Janet";
 
 interface AvatarProps {
   avatarName: AvatarName;
+  size: Number;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ avatarName }) => {
+const Avatar: React.FC<AvatarProps> = ({ avatarName, size }) => {
   let avatarPath = require("../../../assets/images/CMlogo.png");
 
   if (avatarName === "Colin") {
@@ -31,12 +32,10 @@ const Avatar: React.FC<AvatarProps> = ({ avatarName }) => {
     avatarPath = require("../../../assets/images/avatars/Stuart.png");
   }
   return (
-    <View>
-      <Image
-        style={{ borderRadius: 30, width: 60, height: 60 }}
-        source={avatarPath}
-      />
-    </View>
+    <Image
+      style={{ borderRadius: 30, width: 50, height: 50 }}
+      source={avatarPath}
+    />
   );
 };
 
