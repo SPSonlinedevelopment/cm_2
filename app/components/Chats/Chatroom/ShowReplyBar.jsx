@@ -10,7 +10,6 @@ const ShowReplyBar = ({
   displayShowReplyBar,
   replyRecipientName,
 }) => {
-
   return (
     <FadeInView>
       <View className="w-full h-[70px] bg-neutral-200 flex flex-column justify-between shadow p-1 border-l-8  animate-spin border-purple-100">

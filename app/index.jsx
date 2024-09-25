@@ -100,6 +100,7 @@ const RootLayout = () => {
   const handleSend = async () => {
     try {
       setIsSavingtoStorage(true);
+
       const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
 
       if (!image) {
@@ -112,6 +113,7 @@ const RootLayout = () => {
       const downloadURL = await getDownloadURL(storageRef);
 
       handleSendQuestion(downloadURL);
+
       setIsSavingtoStorage(false);
       setImage(null);
       setOpenDisplayImageModal(false);
@@ -124,8 +126,6 @@ const RootLayout = () => {
   };
   // this function is used  messageInput and needs to extracted to as isolated reusable function as too large
   const handleSendQuestion = async (url) => {
-
-    
     try {
       const newquestionObj = {
         imageUrl: url,

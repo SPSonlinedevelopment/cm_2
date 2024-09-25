@@ -20,15 +20,15 @@ import SubjectSelection from "./SubjectSelection";
 import { generateRandomId, screenProfanities } from "@/utils/common";
 import ExitButton from "../Buttons/ExitButton";
 import { serverTimestamp } from "firebase/firestore";
+import CreateRoomIfNotExists from "../Chats/SendData/CreateRoomIfNotExists";
+import { useNavigation } from "@react-navigation/native";
 
-interface IndexQuestionInputProps {
-  toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// interface IndexQuestionInputProps {
+//   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
-const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
-  toggleDisplayInput,
-}) => {
-  const inputRef = useRef<TextInput>(null);
+const IndexQuestionInput = ({ toggleDisplayInput }) => {
+  const inputRef = useRef(null);
 
   const {
     isAuthenticated,
@@ -41,13 +41,14 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
+  const navigation = useNavigation();
 
   const getdataFn = async () => {
     const getdata = await getUserDataFromFirebase(user?.uid);
 
     if (getdata.success) {
       setUserDetails(getdata.data);
-      console.log("res data", getdata.data);
+      // console.log("res data", getdata.data);
     }
 
     return getdata;
@@ -60,10 +61,10 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
     }
   }, []);
 
-  const handleTextChange = (value: any) => {
+  const handleTextChange = (value) => {
     setText(value);
   };
-
+  const questionId = generateRandomId();
   const handleSendQuestion = async () => {
     setIsLoading(true);
 
@@ -72,7 +73,7 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
       setIsLoading(false);
       return Alert.alert("text shows inappropriate text");
     } else {
-      const newquestionObj = {
+      const newQuestionObj = {
         imageUrl: "",
         menteeId: userDetails?.uid || "",
         menteeName: userDetails?.firstName || "",
@@ -80,25 +81,32 @@ const IndexQuestionInput: React.FC<IndexQuestionInputProps> = ({
         initialMessage: text || "",
         questionSubject: selectedSubject || "",
         Timestamp: serverTimestamp(),
-        questionId: generateRandomId(),
+        questionId: questionId,
       };
 
       try {
-        const result = await setNewTextQuestion(newquestionObj);
-        console.log(result);
+        // set new question in firebase
+        const result = await setNewTextQuestion(newQuestionObj);
 
-        setSelectedSubject("");
+        if (result.success) {
+          const createRoom = await CreateRoomIfNotExists(newQuestionObj);
+
+          if (createRoom.success && isAuthenticated) {
+            navigation.navigate("chat-room", {
+              roomId: questionId,
+              completedSession: false,
+            });
+            setSelectedSubject("");
+            setIsLoading(false);
+            setText("");
+          }
+        }
+
+        // at same time create new room for mentee to join and await mentor
       } catch (error) {
         console.log(error);
       }
     }
-
-    if (isAuthenticated) {
-      router.push("chats");
-    }
-    setIsLoading(false);
-
-    setText("");
   };
   // catch (error) {
   //   console.error(error);

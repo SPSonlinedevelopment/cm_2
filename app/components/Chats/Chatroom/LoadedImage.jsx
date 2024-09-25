@@ -6,18 +6,14 @@ import Entypo from "@expo/vector-icons/Entypo";
 import IconButton from "../../Buttons/IconButton";
 import CMlogo from "../../../../assets/images/CMlogo.png";
 import Loading from "../../Loading/LoadingSpinner";
+import ExitButton from "../../Buttons/ExitButton";
 
-const FullScreenImage = ({ url, onClose }) => {
+export const FullScreenImage = ({ url, onClose }) => {
   return (
     <Modal visible animationType="slide">
       <View className="relative">
-        <IconButton
-          containerStyles="h-[50px] w-[50px] bg-white absolute z-20 left-4 top-10 "
-          handlePress={() => {
-            onClose();
-          }}
-          icon={<Entypo name="cross" size={34} color="black" />}
-        ></IconButton>
+        <ExitButton toggleDisplay={onClose} />
+
         <Image
           className="h-full w-full"
           source={{ uri: url }}

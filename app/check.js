@@ -69,8 +69,6 @@ const ChatRoom = () => {
   const inputRef = useRef(null);
   const scrollViewRef = useRef(null);
 
-  console.log("Item22", item);
-
   let initialMessage = [];
 
   if (userDetails?.mode === "mentee") {

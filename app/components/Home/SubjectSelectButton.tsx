@@ -13,7 +13,6 @@ const SubjectSelectButton: React.FC<SubjectSelectionButtonProps> = ({
   selectedSubject,
   setSelectedSubject,
 }) => {
-  console.log("🚀 ~ subject:", selectedSubject);
   return (
     <TouchableOpacity
       onPress={() => setSelectedSubject(subject.subject)}

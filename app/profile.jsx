@@ -17,7 +17,7 @@ import { db } from "@/firebaseConfig";
 
 const Profile = () => {
   const { user, userDetails, setUserDetails, isAuthenticated } = useAuth();
-  console.log("🚀 ~ Profile ~ user:", user);
+  // console.log("🚀 ~ Profile ~ user:", user);
 
   const navigation = useNavigation();
   if (!isAuthenticated) {
@@ -80,7 +80,7 @@ const Profile = () => {
     });
   }, [user?.uid]); // Only re-run the effect when the uid changes
 
-  console.log("userDetails", userDetails);
+  // console.log("userDetails", userDetails);
 
   if (!userDetails) {
     return (

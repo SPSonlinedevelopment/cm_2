@@ -24,7 +24,7 @@ const MessageInput = React.memo(
     const [displayImageCaptionModal, setDisplayImageCaptionModal] =
       useState(false);
 
-    const textRef =  (null);
+    const textRef = useRef(null);
     const inputRef = useRef(null);
 
     const handleChangeText = () => {

@@ -35,7 +35,6 @@ const SubjectSelectionMentor: React.FC<SubjectSelectionProps> = ({
       return newstate;
     });
     const isSelected = formDetails.subjectSelection.includes(subject);
-    console.log(subject, isSelected);
 
     if (isSelected) {
       const updatedSubs = formDetails.subjectSelection.filter(

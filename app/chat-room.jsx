@@ -20,12 +20,13 @@ import IsTypingIndicator from "./components/Chats/Chatroom/IsTypingIndicator";
 import ConfirmEndOfSessionModal from "./components/Chats/EndOfSession/ConfirmEndOfSessionModal";
 import ReviewMentor from "./components/Chats/EndOfSession/ReviewForMentor/ReviewForMentor";
 import ReviewMentee from "./components/Chats/EndOfSession/ReviewForMentee";
+import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotExists";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
   const route = useRoute();
-  const { item, completedSession } = route?.params;
-  console.log("🚀 ~ ChatRoom ~ item:", item);
+  const { roomId, completedSession } = route?.params;
+
   const [displayShowReplyBar, setDisplayShowReplyBar] = useState(false);
   const [replyMessage, setReplyMessage] = useState("");
   const [replyRecipientName, setReplyRecipientName] = useState("");
@@ -47,7 +48,7 @@ const ChatRoom = () => {
   const docRef = doc(
     db,
     !completedSession ? "rooms" : "completed_sessions",
-    item?.roomId
+    roomId
   );
 
   useEffect(() => {
@@ -98,7 +99,6 @@ const ChatRoom = () => {
           ></ReviewMentee>
         )}
 
-      {/* // displayed when  sessionCompleted true  and ! mentorReviewCompleted */}
       {userDetails?.mode === "mentee" &&
         chatRoomData?.sessionCompleted &&
         !chatRoomData?.reviewForMentorCompleted &&

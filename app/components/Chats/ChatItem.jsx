@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
 import React, { useEffect, useState } from "react";
 import Avatar from "../Profile/Avatar";
 
@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { roomRef } from "@/firebaseConfig";
 import { collection, onSnapshot } from "firebase/firestore";
 import { doc, updateDoc } from "firebase/firestore";
+import ChatPreviewModal from "../Chats/ChatPreviewModal";
 
 const ChatItem = ({
   item,
@@ -21,37 +22,29 @@ const ChatItem = ({
   completedSession,
   activeSession,
 }) => {
-  console.log("🚀 ~ item123:", item);
+  console.log("🚀 ~ item1234:", item);
+  console.log("🚀 ~ newQuestion:", newQuestion);
+  // console.log("🚀 ~ item123:", item);
   const { userDetails } = useAuth();
   const [lastMessage, setLastMessage] = useState("");
   const [unReadMessages, setUnreadMessages] = useState(1);
+
+  const [displayPreview, setDisplayPreview] = useState(false);
 
   const navigation = useNavigation();
 
   const openChatRoom = async () => {
     if (newQuestion) {
-      try {
-        const result = await CreateRoomIfNotExists(item, userDetails);
-        console.log("create room result", result.message);
-        if (result.success) {
-          setNewRoomCreated(true);
-          navigation.navigate("chat-room", {
-            item: item,
-          });
-        }
-      } catch (error) {
-        console.error("Error creating room:", error);
-        // Handle error if needed
-      }
+      setDisplayPreview(true);
     } else {
       navigation.navigate("chat-room", {
-        item: item,
-        completedSession: completedSession,
+        roomId: item?.id,
+        completedSession: false,
       });
     }
   };
 
-  //   const roomRefDoc = doc(roomRef, item?.roomId);
+  // const roomRefDoc = doc(roomRef, item?.roomId);
 
   //   useEffect(() => {
   // let unsub
@@ -82,13 +75,20 @@ const ChatItem = ({
     <TouchableOpacity
       delayLongPress={100}
       delayPressIn={100}
-      onPress={openChatRoom}
+      onPress={() => openChatRoom()}
       className={`flex-row h-[80px] flex   justify-between items-center    my-0.5 rounded-xl${
         noBorder && !newQuestion
           ? "border-t-0 border-l-0 border-r-0 border-b-2 border-neutral-200"
           : ""
       }  `}
     >
+      <ChatPreviewModal
+        roomId={item?.id}
+        message={item}
+        displayPreview={displayPreview}
+        setDisplayPreview={setDisplayPreview}
+      />
+
       <View
         className={`flex-row items-center justify-between   h-full w-full rounded-lg  px-2 py-2  
       ${newQuestion ? "bg-purple-600" : activeSession ? "bg-orange-200" : ""}

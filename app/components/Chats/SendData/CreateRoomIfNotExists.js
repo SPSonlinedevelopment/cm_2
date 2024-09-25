@@ -4,20 +4,23 @@ import { db } from "@/firebaseConfig";
 import { useAuth } from "../../../context/authContext";
 import { serverTimestamp } from "firebase/firestore";
 
-export default CreateRoomIfNotExists = async (item, userDetails) => {
+export default CreateRoomIfNotExists = async (newquestionObj) => {
+  console.log("🚀 ~ CreateRoomIfNotExists= ~ newquestionObj:", newquestionObj);
   try {
-    const roomId = getRoomId();
+    const roomId = newquestionObj.questionId;
 
     // Create room document
     const roomData = {
-      initialImageUrl: item?.imageUrl,
-      mentorId: userDetails?.uid,
-      mentorName: userDetails?.firstName,
-      mentorAvatar: userDetails?.avatarName,
-      menteeId: item?.menteeId,
-      menteeName: item?.menteeName,
-      menteeAvatar: item?.menteeAvatarName,
-      questionSubject: item?.questionSubject,
+      initialImageUrl: newquestionObj?.imageUrl,
+      connectedMentor: false,
+      // mentorId: userDetails?.uid,
+      // mentorName: userDetails?.firstName,
+      // mentorAvatar: userDetails?.avatarName,
+      menteeId: newquestionObj?.menteeId,
+      menteeName: newquestionObj?.menteeName,
+      menteeAvatar: newquestionObj?.menteeAvatarName,
+      questionSubject: newquestionObj?.questionSubject,
+      initialMessage: newquestionObj?.initialMessage,
       safeguardingConcern: false,
       sessionName: "",
       roomId,
@@ -26,15 +29,14 @@ export default CreateRoomIfNotExists = async (item, userDetails) => {
       sessionCompleted: false,
       reviewForMentorCompleted: false,
       reviewForMenteeCompleted: false,
-      initialMessage: item?.initialMessage,
       createdAt: serverTimestamp(),
     };
 
     await setDoc(doc(db, "rooms", roomId), roomData);
 
     // Delete question from the new question list
-    const questionDocRef = doc(db, "new_question", item?.id);
-    await deleteDoc(questionDocRef);
+    const questionDocRef = doc(db, "new_question", roomId);
+    // await deleteDoc(questionDocRef);
 
     return { success: true, message: "New Room created and question deleted" };
   } catch (error) {
