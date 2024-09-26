@@ -37,8 +37,8 @@ const ChatPreview = () => {
           <SearchChats />
 
           {userDetails?.mode === "mentor" && <NewQuestionList />}
-          <ActiveChatroomList />
-          <CompletedChatList />
+          {/* <ActiveChatroomList />
+          <CompletedChatList /> */}
         </ScrollView>
       </SafeAreaView>
     </View>

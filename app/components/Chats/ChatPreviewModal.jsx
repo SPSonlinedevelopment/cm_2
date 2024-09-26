@@ -21,7 +21,6 @@ const ChatPreviewModal = ({
   message,
   roomId,
 }) => {
-  console.log("🚀 ~ ChatPreviewModal ~ roomId123:", roomId);
   const { userDetails } = useAuth();
   const navigation = useNavigation();
   const [displayFullScreenImage, setDisplayFullScreenImage] = useState(false);

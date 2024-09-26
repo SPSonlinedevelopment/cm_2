@@ -19,6 +19,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import * as Haptics from "expo-haptics";
+import UserDetails from "@/app/user-details";
 
 const MessagesList = ({
   chatRoomData,
@@ -33,20 +34,43 @@ const MessagesList = ({
 }) => {
   const [messages, setMessages] = useState([]);
 
+  console.log("mode", userDetails);
+
+  const mode = userDetails?.mode;
+
+  let connectedMessage = [];
+
+  if (chatRoomData.connectedMentor) {
+    connectedMessage = [
+      {
+        messageType: "connected",
+        senderName: "Collet owl",
+        text: `You are now connected with your ${
+          mode === "mentee" ? "mentor" : "mentee"
+        } , their name is ${
+          mode === "mentee"
+            ? chatRoomData?.mentorName
+            : chatRoomData?.menteeName
+        }`,
+
+        createdAt: Timestamp.fromDate(new Date()),
+        messageId: "TestMessageId7",
+        senderAvatar: `${
+          mode === "mentee"
+            ? chatRoomData?.mentorAvatar
+            : chatRoomData?.menteeAvatar
+        }`,
+      },
+    ];
+  }
+
   useEffect(() => {
     let initialMessage = [];
-    if (userDetails?.mode === "mentee") {
+    if (mode === "mentee") {
       initialMessage = [
         {
-          senderId: chatRoomData?.menteeid,
-          senderName: chatRoomData?.menteeName,
-          text: null,
-          imageUrl: chatRoomData?.initialImageUrl || null,
-          messageId: "TestMessageId1",
-        },
-        {
           text: chatRoomData?.initialMessage || "",
-          senderId: chatRoomData?.menteeid,
+          userId: chatRoomData?.menteeId,
           senderName: chatRoomData?.menteeName,
           messageId: "TestMessageId2",
         },
@@ -65,22 +89,23 @@ const MessagesList = ({
           senderName: "Collet owl",
           messageId: "TestMessageId5",
         },
+        ...connectedMessage,
       ];
-    } else if (userDetails?.mode === "mentor") {
+    } else {
       initialMessage = [
         {
-          senderId: chatRoomData?.menteeid,
-          senderName: chatRoomData?.menteeName,
-          text: null,
-          imageUrl: chatRoomData?.initialImageUrl || null,
-          messageId: "TestMessageId6",
-        },
-        {
-          text: `You are now connected with a mentee, their name is ${chatRoomData?.menteeName} `,
+          text: `${chatRoomData.mentorName} please remember to use good English and be polite to your mentee!`,
           senderName: "Collet owl",
-          createdAt: Timestamp.fromDate(new Date()),
-          messageId: "TestMessageId7",
+          messageId: "TestMessageId5",
         },
+
+        {
+          text: chatRoomData?.initialMessage || "",
+          userId: chatRoomData?.menteeId,
+          senderName: chatRoomData?.menteeName,
+          messageId: "TestMessageId2",
+        },
+        ...connectedMessage,
       ];
     }
 
@@ -103,6 +128,15 @@ const MessagesList = ({
       unsub();
     };
   }, []);
+
+  useEffect(() => {
+    if (chatRoomData?.connectedMentor) {
+      setMessages((prev) => {
+        const newState = [...prev, ...connectedMessage];
+        return newState;
+      });
+    }
+  }, [chatRoomData?.connectedMentor]);
 
   // const resetUnreadMessageNumber = async () => {
   //   // await updateDoc(docRef, {
@@ -130,6 +164,7 @@ const MessagesList = ({
       {messages?.map((message, index) => {
         return (
           <MessageItem
+            mentorId={chatRoomData.mentorId}
             setReplyRecipientName={setReplyRecipientName}
             setReplyMessage={setReplyMessage}
             // ShowReply={ShowReply}
@@ -142,7 +177,7 @@ const MessagesList = ({
         );
       })}
 
-      {userDetails.mode === "mentee" && chatRoomData.sessionCompleted && (
+      {mode === "mentee" && chatRoomData.sessionCompleted && (
         <View className="w-full absolute  ">
           <CelebrationAnimation loop={false} size={500} />
         </View>

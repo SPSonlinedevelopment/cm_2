@@ -22,6 +22,7 @@ import ExitButton from "../Buttons/ExitButton";
 import { serverTimestamp } from "firebase/firestore";
 import CreateRoomIfNotExists from "../Chats/SendData/CreateRoomIfNotExists";
 import { useNavigation } from "@react-navigation/native";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 // interface IndexQuestionInputProps {
 //   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,11 +38,14 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
     setUserDetails,
     getUserDataFromFirebase,
   } = useAuth();
+
   const { setNewTextQuestion } = useChat();
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const navigation = useNavigation();
+
+  const [displaySubjectSelection, setDisplaySubjectSelection] = useState(false);
 
   const getdataFn = async () => {
     const getdata = await getUserDataFromFirebase(user?.uid);
@@ -64,7 +68,8 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
   const handleTextChange = (value) => {
     setText(value);
   };
-  const questionId = generateRandomId();
+  const roomId = generateRandomId();
+
   const handleSendQuestion = async () => {
     setIsLoading(true);
 
@@ -81,21 +86,22 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
         initialMessage: text || "",
         questionSubject: selectedSubject || "",
         Timestamp: serverTimestamp(),
-        questionId: questionId,
+        roomId: roomId,
       };
 
       try {
+        console.log("room: ", roomId);
         // set new question in firebase
         const result = await setNewTextQuestion(newQuestionObj);
 
         if (result.success) {
           const createRoom = await CreateRoomIfNotExists(newQuestionObj);
-
           if (createRoom.success && isAuthenticated) {
             navigation.navigate("chat-room", {
-              roomId: questionId,
+              roomId: roomId,
               completedSession: false,
             });
+            setDisplaySubjectSelection(false);
             setSelectedSubject("");
             setIsLoading(false);
             setText("");
@@ -128,26 +134,31 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
           maxLength={1000}
           placeholder="Type your question"
           placeholderTextColor="orange"
-          className={`w-full text-center height-[00px]  text-xl text-purple  mt-10`}
+          className={`w-full text-center h-[90%]  text-xl text-purple  mt-10`}
           cursorColor="orange"
           selectionColor="orange"
           onChangeText={(value) => {
             handleTextChange(value);
           }}
         />
+
         <SubjectSelection
+          handleSendQuestion={handleSendQuestion}
+          setDisplaySubjectSelection={setDisplaySubjectSelection}
+          displaySubjectSelection={displaySubjectSelection}
           setSelectedSubject={setSelectedSubject}
           selectedSubject={selectedSubject}
         />
+
         <IconButton
           isLoading={isLoading}
           handlePress={() => {
-            handleSendQuestion();
+            setDisplaySubjectSelection(true);
           }}
-          textStyles="ml-2"
-          title="Send"
-          containerStyles="flex flex-row  px-4 h-[50px] absolute bottom-2 right-2"
-          icon={<FontAwesome name="send" size={24} color="white" />}
+          textStyles=""
+          title="Next"
+          containerStyles="flex flex-row-reverse  items-center  px-4 h-[50px] absolute bottom-2 right-2"
+          icon={<MaterialIcons name="navigate-next" size={24} color="white" />}
         />
       </SafeAreaView>
     </CustomKeyboardView>

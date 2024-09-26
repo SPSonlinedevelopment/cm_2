@@ -4,26 +4,24 @@ import { db } from "@/firebaseConfig";
 import { useAuth } from "../../../context/authContext";
 import { serverTimestamp } from "firebase/firestore";
 
-export default CreateRoomIfNotExists = async (newquestionObj) => {
-  console.log("🚀 ~ CreateRoomIfNotExists= ~ newquestionObj:", newquestionObj);
+export default CreateRoomIfNotExists = async (newQuestionObj) => {
+  console.log("🚀 ~ CreateRoomIfNotExists= ~ newQuestionObj:", newQuestionObj);
   try {
-    const roomId = newquestionObj.questionId;
-
     // Create room document
     const roomData = {
-      initialImageUrl: newquestionObj?.imageUrl,
+      initialImageUrl: newQuestionObj?.imageUrl,
       connectedMentor: false,
       // mentorId: userDetails?.uid,
       // mentorName: userDetails?.firstName,
       // mentorAvatar: userDetails?.avatarName,
-      menteeId: newquestionObj?.menteeId,
-      menteeName: newquestionObj?.menteeName,
-      menteeAvatar: newquestionObj?.menteeAvatarName,
-      questionSubject: newquestionObj?.questionSubject,
-      initialMessage: newquestionObj?.initialMessage,
+      menteeId: newQuestionObj?.menteeId,
+      menteeName: newQuestionObj?.menteeName,
+      menteeAvatar: newQuestionObj?.menteeAvatarName,
+      questionSubject: newQuestionObj?.questionSubject,
+      initialMessage: newQuestionObj?.initialMessage,
       safeguardingConcern: false,
       sessionName: "",
-      roomId,
+      roomId: newQuestionObj?.roomId,
       menteeIsTyping: false,
       mentorIsTyping: false,
       sessionCompleted: false,
@@ -32,11 +30,11 @@ export default CreateRoomIfNotExists = async (newquestionObj) => {
       createdAt: serverTimestamp(),
     };
 
-    await setDoc(doc(db, "rooms", roomId), roomData);
+    await setDoc(doc(db, "rooms", newQuestionObj?.roomId), roomData);
 
     // Delete question from the new question list
-    const questionDocRef = doc(db, "new_question", roomId);
-    // await deleteDoc(questionDocRef);
+    const questionDocRef = doc(db, "new_question", newQuestionObj?.roomId);
+    await deleteDoc(questionDocRef);
 
     return { success: true, message: "New Room created and question deleted" };
   } catch (error) {

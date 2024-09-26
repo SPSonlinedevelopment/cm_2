@@ -33,13 +33,13 @@ export const ChatContextProvider = ({ children }) => {
 
   const [allChats, setAllChats] = useState([]);
 
-  const setNewTextQuestion = async (questionObj) => {
+  const setNewTextQuestion = async (newQuestionObj) => {
     try {
       await setDoc(
-        doc(db, "new_question", questionObj.questionId),
-        questionObj
+        doc(db, "new_questions", newQuestionObj.roomId),
+        newQuestionObj
       );
-
+      console.log("sucessfully created new Question");
       return { success: true };
     } catch (error) {
       console.log("error", error);
@@ -48,12 +48,11 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const getWaitingQuestions = () => {
-    const questionsRef = collection(db, "new_question"); // Get a reference to the collection
+    const questionsRef = collection(db, "new_questions"); // Get a reference to the collection
 
     // Attach a listener to the collection
     const unsubscribe = onSnapshot(questionsRef, (querySnapshot) => {
       const questionsData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
         ...doc.data(),
       }));
 

@@ -135,7 +135,7 @@ const RootLayout = () => {
         initialMessage: "",
         questionSubject: selectedSubject,
         Timestamp: new Date(),
-        questionId: generateRandomId(),
+        roomId: generateRandomId(),
       };
 
       const result = await setNewTextQuestion(newquestionObj);

@@ -16,6 +16,7 @@ import ShowReplyBar from "./ShowReplyBar";
 import MessageText from "./MessageText";
 import ReplyMessage from "./ReplyMessage";
 import FadeInView from "../../Effects/FadeInView";
+import ConnectedMessage from "./ConnectedMessage";
 
 const MessageItem = React.memo(
   ({
@@ -24,7 +25,9 @@ const MessageItem = React.memo(
     setDisplayShowReplyBar,
     setReplyMessage,
     setReplyRecipientName,
+    mentorId,
   }) => {
+    console.log("🚀 ~ message:", message);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [hapticFeedback, setHapticFeeback] = useState(false);
     const [ShowReply, setShowReply] = useState(false);
@@ -69,6 +72,14 @@ const MessageItem = React.memo(
           caption={message.text || ""}
           thisUsersMessage={thisUsersMessage}
           url={message.imageUrl}
+        />
+      );
+    } else if (message.messageType === "connected") {
+      return (
+        <ConnectedMessage
+          mentorId={mentorId}
+          thisUsersMessage={thisUsersMessage}
+          message={message}
         />
       );
     } else {

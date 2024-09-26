@@ -15,7 +15,7 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({ icon, text }) => {
   return (
     <View className="  w-[170px] h-[50px] mt-2 rounded-2xl flex flex-row  items-center justify-start  bg-white shadow-md  ">
-      <View className="p-2">{icon}</View>
+      <View className="p-3">{icon}</View>
 
       <View className="flex flex-col ">
         <Text>{text}</Text>

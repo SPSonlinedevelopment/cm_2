@@ -38,7 +38,7 @@ const ChatItem = ({
       setDisplayPreview(true);
     } else {
       navigation.navigate("chat-room", {
-        roomId: item?.id,
+        roomId: item?.roomId,
         completedSession: false,
       });
     }
@@ -83,7 +83,7 @@ const ChatItem = ({
       }  `}
     >
       <ChatPreviewModal
-        roomId={item?.id}
+        roomId={item?.roomId}
         message={item}
         displayPreview={displayPreview}
         setDisplayPreview={setDisplayPreview}

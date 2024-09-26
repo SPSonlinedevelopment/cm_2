@@ -37,7 +37,7 @@ const IconButton: React.FC<IconButtonProps> = ({
         <View testID="icon_button_test">{icon}</View>
       )}
       {title && !isLoading && (
-        <Text className={`text-white ${textStyles} mt-2`}>{title}</Text>
+        <Text className={`text-white ${textStyles} `}>{title}</Text>
       )}
     </TouchableOpacity>
   );
