@@ -22,15 +22,10 @@ const ChatItem = ({
   completedSession,
   activeSession,
 }) => {
-  console.log("🚀 ~ item1234:", item);
-  console.log("🚀 ~ newQuestion:", newQuestion);
-  // console.log("🚀 ~ item123:", item);
+  console.log("🚀 ~ item2222:", item);
   const { userDetails } = useAuth();
   const [lastMessage, setLastMessage] = useState("");
-  const [unReadMessages, setUnreadMessages] = useState(1);
-
   const [displayPreview, setDisplayPreview] = useState(false);
-
   const navigation = useNavigation();
 
   const openChatRoom = async () => {
@@ -39,24 +34,10 @@ const ChatItem = ({
     } else {
       navigation.navigate("chat-room", {
         roomId: item?.roomId,
-        completedSession: false,
+        completedSession: completedSession,
       });
     }
   };
-
-  // const roomRefDoc = doc(roomRef, item?.roomId);
-
-  //   useEffect(() => {
-  // let unsub
-
-  // unsub = onSnapshot(roomRefDoc, (docSnapshot) => {
-  //   const roomData = docSnapshot.data()
-
-  //   const unreadMessages = roomData.
-  //   if()
-  // })
-
-  //   }, []);
 
   useEffect(() => {
     const getDataFromAsyncStore = async () => {
@@ -76,7 +57,7 @@ const ChatItem = ({
       delayLongPress={100}
       delayPressIn={100}
       onPress={() => openChatRoom()}
-      className={`flex-row h-[80px] flex   justify-between items-center    my-0.5 rounded-xl${
+      className={`flex-row h-[76px] flex   justify-between items-center    my-0.5 rounded-xl${
         noBorder && !newQuestion
           ? "border-t-0 border-l-0 border-r-0 border-b-2 border-neutral-200"
           : ""
@@ -107,7 +88,7 @@ const ChatItem = ({
           <Avatar avatarName={item.menteeAvatar} />
         )}
 
-        <Text>{item.roomId}</Text>
+        {/* <Text>{item.roomId}</Text> */}
 
         <View
           className={`h-full w-[80%] mx-4 flex flex-col justify-between 
@@ -115,81 +96,60 @@ const ChatItem = ({
         `}
         >
           <View className="flex-row justify-between ">
-            {newQuestion ? (
-              <View>
+            <View className="font-semibold  w-full flex flex-row justify-between items-center text-base text-black-200">
+              {userDetails?.mode === "mentor" ? (
                 <Text
-                  className="text-white font-bold text-lg
-"
+                  className={`font-extrabold text-base ${
+                    newQuestion ? "text-white" : "text-black-200"
+                  } `}
                 >
-                  New Question
+                  {item?.menteeName}
                 </Text>
+              ) : (
+                <Text className="font-extrabold text-base text-black-200">
+                  {item?.mentorName}
+                </Text>
+              )}
+
+              {item?.questionSubject && (
                 <Text
-                  style={{ fontSize: 15 }}
-                  className={` text-white font-bold `}
+                  className={`text-neutral-300  text-sm ${
+                    newQuestion
+                      ? "font-bold text-white"
+                      : " text-black font-semibold"
+                  } `}
                 >
-                  {item?.menteeName} -{" "}
-                  {item?.questionSubject && (
-                    <Text
-                      className={`text-neutral-500 text-xs ${
-                        newQuestion
-                          ? "font-bold text-white"
-                          : " text-black font-bold"
-                      } `}
-                    >
-                      {item?.questionSubject}
-                    </Text>
-                  )}
+                  {item?.questionSubject}
                 </Text>
-              </View>
-            ) : (
-              <View
-                style={{ fontSize: 12 }}
-                className="font-semibold text-black-200"
-              >
-                {userDetails?.mode === "mentor" ? (
-                  <Text
-                    style={{ fontSize: 12 }}
-                    className="font-extrabold text-black-700"
-                  >
-                    {item?.menteeName} -{" "}
-                    {item?.questionSubject && (
-                      <Text
-                        className={`text-neutral-500 text-xs ${
-                          newQuestion
-                            ? "font-bold text-white"
-                            : " text-black font-bold"
-                        } `}
-                      >
-                        {item?.questionSubject}
-                      </Text>
-                    )}
-                  </Text>
-                ) : (
-                  <Text
-                    style={{ fontSize: 12 }}
-                    className="font-semibold text-neutral-500"
-                  >
-                    {item?.mentorName}
-                  </Text>
-                )}
-              </View>
-            )}
+              )}
+              {dateOfSession && (
+                <Text className=" text-sm text-neutral-500">
+                  {dateOfSession}
+                </Text>
+              )}
+
+              {newQuestion && (
+                <Text className="text-white font-bold">New Question</Text>
+              )}
+            </View>
           </View>
 
-          {lastMessage && (
-            <View className="mt-1 max-h-8">
-              <Text className="  text-neutral-500 text-xs">{lastMessage}</Text>
+          {lastMessage && !newQuestion && (
+            <View className=" w-full ">
+              <Text className="  truncate text-neutral-500 text-sm whitespace-nowrap">
+                {lastMessage}
+              </Text>
             </View>
           )}
 
-          {newQuestion ? (
-            <Text className="text-neutral-500 text-xs ">{item?.message}</Text>
-          ) : (
-            <Text className="text-neutral-500 text-xs ">{dateOfSession}</Text>
+          {newQuestion && (
+            <View>
+              <Text className=" text-sm  text-white  text-ellipsis">
+                {item?.initialMessage}
+              </Text>
+            </View>
           )}
         </View>
-
-        <View className="h-5 w-5  rounded-full flex justify-center items-center bg-orange-400 shadow "></View>
       </View>
     </TouchableOpacity>
   );

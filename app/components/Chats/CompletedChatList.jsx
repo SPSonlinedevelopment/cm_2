@@ -12,9 +12,9 @@ import {
 import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 
-const CompletedChatList = () => {
+const CompletedChatList = ({ completedChats, setCompletedChats }) => {
   const { userDetails } = useAuth();
-  const [completedChats, setCompletedChats] = useState([]);
+
   const modeId = userDetails?.mode === "mentee" ? "menteeId" : "mentorId";
 
   useEffect(() => {

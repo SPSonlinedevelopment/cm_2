@@ -10,7 +10,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { ref } from "firebase/storage";
 import { roomRef } from "@/firebaseConfig";
 import { db } from "../../../firebaseConfig";
-import { doc, collection, updateDoc } from "firebase/firestore";
+import { doc, collection, updateDoc, deleteDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 import { useAuth } from "@/app/context/authContext";
@@ -32,7 +32,17 @@ const ChatPreviewModal = ({
   const openChatRoom = async () => {
     const roomCollectionRef = collection(db, "rooms");
     const roomRef = doc(roomCollectionRef, roomId);
+
+    const newQuestionCollectionRef = collection(db, "new_questions");
+
+    const newQuestionDocRef = doc(newQuestionCollectionRef, roomId);
+
     try {
+      // delete the new question so cannot be reselected
+      await deleteDoc(newQuestionDocRef);
+
+      // / need to handle instances where doc already deleted eg chat room already opened
+
       await updateDoc(roomRef, {
         mentorName: userDetails?.firstName,
         mentorId: userDetails?.uid,

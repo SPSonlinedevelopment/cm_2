@@ -45,47 +45,24 @@ const ChatRoom = () => {
     scrollViewConfig = { contentContainerStyle: { flex: 1 } };
   }
 
-  // const docRef = doc(
-  //   db,
-  //   !completedSession ? "rooms" : "completed_sessions",
-  //   roomId
-  // );
-
   let docRef;
   if (roomId) {
-    docRef = doc(db, "rooms", roomId);
-
-    console.log("roomid", roomId);
+    docRef = doc(
+      db,
+      !completedSession ? "rooms" : "completed_sessions",
+      roomId
+    );
   }
 
-  // useEffect(() => {
-  //   const unsub = onSnapshot(docRef, (docSnap) => {
-  //     if (docSnap.exists()) {
-  //       const updatedData = docSnap.data();
-  //       // setChatRoomData(updatedData);
-  //     }
-  //   });
-  //   return () => unsub();
-  // }, []);
-
   useEffect(() => {
-    let unsub; // Declare unsub outside the conditional block
-
-    if (roomId) {
-      const docRef = doc(db, "rooms", roomId);
-      unsub = onSnapshot(docRef, (docSnap) => {
-        if (docSnap.exists()) {
-          const updatedData = docSnap.data();
-          setChatRoomData(updatedData);
-        }
-      });
-    }
-    return () => {
-      if (unsub) {
-        // Only call unsub if it's defined
-        unsub();
+    const unsub = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const updatedData = docSnap.data();
+        setChatRoomData(updatedData);
       }
-    };
+    });
+
+    return () => unsub();
   }, [roomId]);
 
   const scrollToEnd = () => {

@@ -92,26 +92,26 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
       try {
         console.log("room: ", roomId);
         // set new question in firebase
+
+        navigation.navigate("chat-room", {
+          roomId: roomId,
+          completedSession: false,
+        });
         const result = await setNewTextQuestion(newQuestionObj);
 
         if (result.success) {
-          const createRoom = await CreateRoomIfNotExists(newQuestionObj);
-          if (createRoom.success && isAuthenticated) {
-            navigation.navigate("chat-room", {
-              roomId: roomId,
-              completedSession: false,
-            });
-            setDisplaySubjectSelection(false);
-            setSelectedSubject("");
-            setIsLoading(false);
-            setText("");
-          }
+          await CreateRoomIfNotExists(newQuestionObj);
         }
 
         // at same time create new room for mentee to join and await mentor
       } catch (error) {
         console.log(error);
       }
+
+      setDisplaySubjectSelection(false);
+      setSelectedSubject("");
+      setIsLoading(false);
+      setText("");
     }
   };
   // catch (error) {

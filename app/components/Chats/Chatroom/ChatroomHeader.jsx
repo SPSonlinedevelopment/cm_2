@@ -13,6 +13,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FindingMentor from "../../Effects/FindingMentor";
 import LoadingDots from "../../Loading/LoadingDots";
 import Loading from "../../Loading/LoadingSpinner";
+import * as Haptics from "expo-haptics";
+import { doc, collection, deleteDoc } from "firebase/firestore";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const ChatroomHeader = ({
   chatRoomData,
@@ -23,26 +26,59 @@ const ChatroomHeader = ({
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView className="bg-white h-[130px]">
-      <View className="flex flex-row items-center justify-around gap-4 shadow">
-        <View className="flex flex-row items-center">
+    <SafeAreaView className="bg-white h-[130px] w-full ">
+      <View className="flex  shadow ">
+        <View className="flex flex-row items-center justify-between">
           {!chatRoomData?.connectedMentor ? (
-            <View className=" flex flex-row items-center w-full justify-center">
+            <View className=" flex flex-row items-center w-full justify-between">
+              <TouchableOpacity
+                className="m-2"
+                onPress={() => {
+                  setDisplyConfirmEndOfSessionModal(true);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                }}
+              >
+                <Entypo name="cross" size={34} color="black" />
+              </TouchableOpacity>
               <Text className="text-base font-semibold">
                 Looking for a mentor ...
               </Text>
               <Loading size={80} />
             </View>
           ) : (
-            <View className="flex flex-row items-center">
-              <TouchableOpacity
-                className="ml-2"
-                onPress={() => {
-                  navigation.navigate("chats", { key: Math.random() });
-                }}
-              >
-                <Entypo name="chevron-left" size={hp(4)} color="black" />
-              </TouchableOpacity>
+            <View className="flex flex-row items-center justify-between w-full p-2 ">
+              {userDetails.mode === "mentor" && (
+                <TouchableOpacity
+                  className="m-2"
+                  onPress={() => {
+                    navigation.navigate("chats", { key: Math.random() });
+                  }}
+                >
+                  <Ionicons name="chevron-back" size={24} color="black" />
+                </TouchableOpacity>
+              )}
+              {chatRoomData?.sessionCompleted &&
+                userDetails?.mode === "mentee" && (
+                  <TouchableOpacity
+                    className="m-2"
+                    onPress={() => {
+                      navigation.navigate("chats", { key: Math.random() });
+                    }}
+                  >
+                    <Ionicons name="chevron-back" size={24} color="black" />
+                  </TouchableOpacity>
+                )}
+
+              {!chatRoomData.connectedMentor && (
+                <TouchableOpacity
+                  className="m-2"
+                  onPress={() => {
+                    navigation.navigate("chats", { key: Math.random() });
+                  }}
+                >
+                  <Ionicons name="chevron-back" size={24} color="black" />
+                </TouchableOpacity>
+              )}
               <Avatar
                 avatarName={
                   userDetails?.mode === "mentee"
