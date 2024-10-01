@@ -45,6 +45,7 @@ export const AuthContextProvider = ({ children }) => {
         setUser(null);
       }
     });
+
     // when component unmounts clears hook
     return unsub;
   }, []);

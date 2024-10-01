@@ -13,7 +13,6 @@ const ReviewForMentee = ({ setDisplayFeedback, roomId }) => {
     sessionName: "",
   });
 
-  console.log("🚀 ~ menteeFeedbackForm:", menteeFeedbackForm);
   // what are feeback field for mentor to mentee
 
   const handleConfirmEndSession = async () => {

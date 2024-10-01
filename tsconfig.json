@@ -27,5 +27,5 @@
     "app/components/Buttons/IconButton.tsx",
     "app/verify-email.jsx",
     "app/components/Chats/Chatroom/ConversationSuggestions/MentorConversationSuggestions.jsx"
-, "app/components/Profile/MentorProfile/ComplementsProfile.jsx", "app/components/Home/IndexQuestionInput.jsx"  ]
+, "app/components/Profile/MentorProfile/ComplementsProfile.jsx", "app/components/Home/IndexQuestionInput.jsx", "app/components/Chats/SearchChats.jsx", "app/components/Profile/MentorProfile/MentorStatistics.jsx"  ]
 }

@@ -19,7 +19,7 @@ import { useChat } from "../../context/chatContext";
 import SubjectSelection from "./SubjectSelection";
 import { generateRandomId, screenProfanities } from "@/utils/common";
 import ExitButton from "../Buttons/ExitButton";
-import { serverTimestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import CreateRoomIfNotExists from "../Chats/SendData/CreateRoomIfNotExists";
 import { useNavigation } from "@react-navigation/native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -85,7 +85,7 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
         menteeAvatarName: userDetails?.avatarName,
         initialMessage: text || "",
         questionSubject: selectedSubject || "",
-        Timestamp: serverTimestamp(),
+        createdAt: Timestamp.fromDate(new Date()),
         roomId: roomId,
       };
 

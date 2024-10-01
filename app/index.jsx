@@ -17,6 +17,7 @@ import { useAuth } from "./context/authContext";
 import { useChat } from "./context/chatContext";
 import { Image } from "expo-image";
 import DisplayImageModal from "../app/components/Home/DisplayImageModal";
+import { Timestamp } from "firebase/firestore";
 
 import {
   ref,
@@ -36,18 +37,31 @@ const RootLayout = () => {
   const cameraRef = useRef(null);
 
   const { user, userDetails } = useAuth();
+
   const { setNewTextQuestion } = useChat();
   const [image, setImage] = useState(null);
   const [imageFromMediaLib, setImageFromMediaLib] = useState(null);
   const [displayQuestionInput, setDisplayQuestionInput] = useState(false);
 
   const [selectedSubject, setSelectedSubject] = useState("");
+  const { getCompletedChats, getChatrooms } = useChat();
 
   const handleKeyboardButtonPressed = () => {
     setDisplayQuestionInput(true);
   };
   const navigation = useNavigation();
-  useEffect(() => {});
+
+  useEffect(() => {
+    if (userDetails) {
+      const unsubscribeChatrooms = getChatrooms();
+      const unsubscribeCompletedChats = getCompletedChats();
+
+      return () => {
+        unsubscribeChatrooms();
+        unsubscribeCompletedChats();
+      };
+    }
+  }, [userDetails]);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -134,7 +148,7 @@ const RootLayout = () => {
         menteeAvatarName: userDetails?.avatarName,
         initialMessage: "",
         questionSubject: selectedSubject,
-        Timestamp: new Date(),
+        createdAt: Timestamp.fromDate(new Date()),
         roomId: generateRandomId(),
       };
 

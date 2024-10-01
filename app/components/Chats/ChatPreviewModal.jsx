@@ -7,12 +7,9 @@ import MessageText from "./Chatroom/MessageText";
 import { FullScreenImage } from "../Chats/Chatroom/LoadedImage";
 import IconButton from "../Buttons/IconButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { ref } from "firebase/storage";
-import { roomRef } from "@/firebaseConfig";
 import { db } from "../../../firebaseConfig";
 import { doc, collection, updateDoc, deleteDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
-
 import { useAuth } from "@/app/context/authContext";
 
 const ChatPreviewModal = ({
@@ -41,7 +38,7 @@ const ChatPreviewModal = ({
       // delete the new question so cannot be reselected
       await deleteDoc(newQuestionDocRef);
 
-      // / need to handle instances where doc already deleted eg chat room already opened
+      // / need to handle instances where doc already deleted eg chat room rea
 
       await updateDoc(roomRef, {
         mentorName: userDetails?.firstName,

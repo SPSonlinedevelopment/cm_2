@@ -8,21 +8,17 @@ import { convertFirebaseTimestampToDate } from "@/utils/common";
 import { useAuth } from "@/app/context/authContext";
 import CreateRoomIfNotExists from "./SendData/CreateRoomIfNotExists";
 import { getObjectAsyncStorage } from "../../../utils/common";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { roomRef } from "@/firebaseConfig";
-import { collection, onSnapshot } from "firebase/firestore";
-import { doc, updateDoc } from "firebase/firestore";
+import DateToDayConverter from "./DateToDayConverter";
+
 import ChatPreviewModal from "../Chats/ChatPreviewModal";
 
 const ChatItem = ({
   item,
-  index,
   noBorder,
   newQuestion,
   completedSession,
   activeSession,
 }) => {
-  console.log("🚀 ~ item2222:", item);
   const { userDetails } = useAuth();
   const [lastMessage, setLastMessage] = useState("");
   const [displayPreview, setDisplayPreview] = useState(false);
@@ -51,7 +47,6 @@ const ChatItem = ({
     getDataFromAsyncStore();
   }, []);
 
-  const dateOfSession = convertFirebaseTimestampToDate(item?.createdAt);
   return (
     <TouchableOpacity
       delayLongPress={100}
@@ -113,24 +108,25 @@ const ChatItem = ({
 
               {item?.questionSubject && (
                 <Text
-                  className={`text-neutral-300  text-sm ${
-                    newQuestion
-                      ? "font-bold text-white"
-                      : " text-black font-semibold"
+                  className={`text-neutral-300  text-xs ${
+                    newQuestion ? "font-bold text-white" : "text-neutral-500"
                   } `}
                 >
-                  {item?.questionSubject}
-                </Text>
-              )}
-              {dateOfSession && (
-                <Text className=" text-sm text-neutral-500">
-                  {dateOfSession}
+                  {item?.questionSubject} {" "}
+                  {item.sessionName && (
+                    <Text className=" text-xs ">{item.sessionName}</Text>
+                  )}
                 </Text>
               )}
 
               {newQuestion && (
                 <Text className="text-white font-bold">New Question</Text>
               )}
+
+              <DateToDayConverter
+                newQuestion={newQuestion}
+                timestamp={item.createdAt}
+              />
             </View>
           </View>
 

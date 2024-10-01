@@ -27,7 +27,7 @@ export default CreateRoomIfNotExists = async (newQuestionObj) => {
       sessionCompleted: false,
       reviewForMentorCompleted: false,
       reviewForMenteeCompleted: false,
-      createdAt: serverTimestamp(),
+      createdAt: Timestamp.fromDate(new Date()),
     };
 
     await setDoc(doc(db, "rooms", newQuestionObj?.roomId), roomData);

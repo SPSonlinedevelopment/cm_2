@@ -16,10 +16,9 @@ type AvatarName = "Colin" | "Stuart" | "Ben" | "Janet";
 
 interface AvatarProps {
   avatarName: AvatarName;
-  size: Number;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ avatarName, size }) => {
+const Avatar: React.FC<AvatarProps> = ({ avatarName }) => {
   let avatarPath = require("../../../assets/images/CMlogo.png");
 
   if (avatarName === "Colin") {

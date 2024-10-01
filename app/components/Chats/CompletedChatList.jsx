@@ -1,73 +1,39 @@
-import { View, Text, FlatList, Animated } from "react-native";
-import React, { useState, useEffect } from "react";
+import { View, Text, FlatList } from "react-native";
+import React from "react";
 import ChatItem from "./ChatItem";
 import { useChat } from "@/app/context/chatContext";
-import {
-  collection,
-  onSnapshot,
-  query,
-  QuerySnapshot,
-  where,
-} from "firebase/firestore";
-import { db } from "@/firebaseConfig";
-import { useAuth } from "@/app/context/authContext";
 
-const CompletedChatList = ({ completedChats, setCompletedChats }) => {
-  const { userDetails } = useAuth();
+const CompletedChatList = () => {
+  const { completedChats } = useChat();
 
-  const modeId = userDetails?.mode === "mentee" ? "menteeId" : "mentorId";
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      query(
-        collection(db, "completed_sessions"),
-        where(modeId, "==", userDetails?.uid)
-      ),
-      (querySnapshot) => {
-        if (!querySnapshot.empty) {
-          const sessionData = querySnapshot.docs.map((doc) => {
-            return doc.data();
-          });
-
-          setCompletedChats((prev) => sessionData);
-        } else {
-          console.log("No completed sessions found for this mentor/mentee");
-        }
-      },
-      (error) => {
-        console.error("Error listening for rooms:", error);
-      }
-    );
-
-    // Cleanup the listener when the component unmounts
-    return () => unsubscribe();
-  }, [userDetails]);
-
-  if (!completedChats.length) {
+  if (!completedChats?.length) {
     return (
       <View className="mt-[300px] ">
-        <Text className="text-purple text-lg"> No Chatrooms yet! </Text>
+        <Text className="text-purple text-lg"> No completed chats! </Text>
       </View>
     );
-  } else
-    return (
-      <FlatList
-        style={{ width: "95%" }}
-        data={completedChats}
-        keyExtractor={(item) => Math.random()}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item, index }) => (
-          <ChatItem
-            newQuestion={false}
-            activeSession={false}
-            completedSession={true}
-            item={item}
-            index={index}
-            noBorder={completedChats.length !== index + 1}
-          />
-        )}
-      />
-    );
+  } else return <List completedChats={completedChats}></List>;
 };
 
 export default CompletedChatList;
+
+const List = React.memo(({ completedChats }) => {
+  return (
+    <FlatList
+      style={{ width: "95%" }}
+      data={completedChats}
+      keyExtractor={(item) => item.roomId}
+      showsVerticalScrollIndicator={false}
+      renderItem={({ item, index }) => (
+        <ChatItem
+          newQuestion={false}
+          activeSession={false}
+          completedSession={true}
+          item={item}
+          index={index}
+          noBorder={completedChats.length !== index + 1}
+        />
+      )}
+    />
+  );
+});

@@ -4,7 +4,7 @@ import { useAuth } from "@/app/context/authContext";
 import { Image } from "expo-image";
 import Entypo from "@expo/vector-icons/Entypo";
 import * as Haptics from "expo-haptics";
-import { convertFirebaseTimestampToTime } from "@/utils/common";
+import { convertFirebaseTimestampToDate } from "@/utils/common";
 
 import {
   widthPercentageToDP as wp,
@@ -56,7 +56,7 @@ const MessageItem = React.memo(
 
     let time;
     if (message?.createdAt) {
-      time = convertFirebaseTimestampToTime(message?.createdAt);
+      time = convertFirebaseTimestampToDate(message?.createdAt);
     }
 
     if (message.isReply) {

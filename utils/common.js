@@ -47,11 +47,21 @@ export const convertFirebaseTimestampToDate = (firebaseTimestamp) => {
   const day = date.getDate();
   const month = date.getMonth() + 1; // Month is zero-based, so add 1
   const year = date.getFullYear();
+  const currentDate = new Date();
+
+  const currentDay = currentDate.getDate();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  const formatTodaysDate = `${currentDay}/${month}/${currentYear}`;
 
   // Format the date in a simple format
-  const formattedDate = `${day}/${month}/${year}`;
+  const formattedDateTimestamp = `${day}/${currentMonth}/${year}`;
 
-  return formattedDate;
+  if (formattedDateTimestamp === formatTodaysDate) {
+    const time = convertTimestampToTime(firebaseTimestamp).substring(0, 5);
+    return time;
+  } else return formattedDateTimestamp;
 };
 
 export const convertFirebaseTimestampToTime = (firebaseTimestamp) => {
@@ -107,7 +117,7 @@ export const calculateDuration = (startTimestamp, endTimestamp) => {
 
 export const storeObjectAsyncStorage = async (key, value) => {
   try {
-    await AsyncStorage.setItem(key, value);
+    await AsyncStorage.setItem(JSON.stringify(key), JSON.stringify(value));
   } catch (error) {
     console.error("Error storing object:", error);
   }
@@ -115,12 +125,21 @@ export const storeObjectAsyncStorage = async (key, value) => {
 
 export const getObjectAsyncStorage = async (key) => {
   try {
-    const jsonValue = await AsyncStorage.getItem(key);
+    const jsonValue = await AsyncStorage.getItem(JSON.stringify(key));
 
-    return jsonValue ? jsonValue : "No messages";
+    return jsonValue ? JSON.parse(jsonValue) : "No messages";
   } catch (error) {
     console.error("Error retrieving object:", error);
     return null;
+  }
+};
+
+export const deleteAsyncStorage = async () => {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    await AsyncStorage.multiRemove(keys);
+  } catch (error) {
+    console.error("Error deleting all data from AsyncStorage:", error);
   }
 };
 

@@ -9,17 +9,25 @@ const MentorStatistics = () => {
   const { userDetails } = useAuth();
 
   const stats = userDetails?.mentorStatistics;
+  console.log("🚀 ~ MentorStatistics ~ stats:", stats);
 
   let starsCount = 0;
   let starsAvg = 0;
 
   if (stats?.stars?.length) {
-    starsCount = stats.stars.reduce(
-      (acc: number, star: number) => acc + star,
-      0
-    );
+    starsCount = stats.stars.reduce((acc, star) => acc + star, 0);
     starsAvg = Math.floor(starsCount / stats.stars.length);
   }
+
+  let count = 0;
+  const complimentsCount = Object.values(stats.compliments).reduce(
+    (accumulator, item) => {
+      return accumulator + item;
+    },
+    count
+  );
+
+  console.log(complimentsCount); // Outputs the total count of compliments
 
   return (
     <View className=" mt-5 w-[93%] ">
@@ -45,7 +53,7 @@ const MentorStatistics = () => {
           icon={<AntDesign name="star" size={24} color="orange" />}
         />
         <Card
-          text={` ${stats?.compliments} Compliments`}
+          text={` ${complimentsCount} Compliments`}
           icon={<AntDesign name="heart" size={24} color="orange" />}
         />
       </View>

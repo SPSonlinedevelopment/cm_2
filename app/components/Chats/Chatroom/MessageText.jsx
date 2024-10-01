@@ -25,7 +25,8 @@ const MessageText = ({ text, thisUsersMessage, time }) => {
           {time && (
             <View className="flex items-end mt-1">
               <Text className="text-xs ">
-                {time.hours}:{time.minutes} {time.period}
+                {/* {time.hours}:{time.minutes} {time.period} */}
+                {time}
               </Text>
             </View>
           )}

@@ -32,7 +32,7 @@ const ComplementsProfile = () => {
               <View className="shadow p-5 m-2 rounded-full h-[90px] w-[100px] bg-white flex items-center">
                 {comp.icon}
                 <Text className="text-xs m-1">{comp.title}</Text>
-                <View className="bg-orange rounded-full p-1 h-6 w-5 shadow-xl flex items-center absolute bottom-[-10px]">
+                <View className="bg-orange-400 rounded-full p-1 h-6 w-10 shadow-xl flex items-center absolute bottom-[-10px]">
                   <Text className="text-white font-bold ">
                     {compVal[0].value}
                   </Text>

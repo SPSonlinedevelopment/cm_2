@@ -19,58 +19,36 @@ import MentorComments from "../.././components/Profile/MentorProfile/MentorComme
 const Profiles = () => {
   const { userDetails, getUpdatedAuthObj, user } = useAuth();
 
-  const menteeMode = (
-    <CustomKeyboardView>
-      <SafeAreaView className="h=full w-full  bg-white flex flex-col ">
-        <View className="h=full w-full flex flex-col items-center">
-          <Header />
-          <BorderUnderline />
-          <MenteeStatistics />
-          <BorderUnderline />
-          <Leaderboard />
-          <BorderUnderline />
-          <ComplementsProfile />
-          <BorderUnderline />
-          <Achievements />
-          <BorderUnderline />
-          <Others />
-          <Image
-            className="   rounded-full h-[150px] w-[150px] mb-4"
-            source={require("../../../assets/images/CMlogo.png")}
-          />
-        </View>
-      </SafeAreaView>
-    </CustomKeyboardView>
-  );
+  const mode = userDetails.mode;
 
-  const mentorMode = (
-    <CustomKeyboardView>
-      <SafeAreaView className="h=full w-full  bg-white flex flex-col ">
-        <View className="h=full w-full flex flex-col items-center">
-          <Header />
-          <BorderUnderline />
-          <MentorStatistics />
-          <BorderUnderline />
-          <ComplementsProfile />
-          <MentorComments />
-          <BorderUnderline />
-          <Achievements />
-          <Others />
-          <Image
-            className="   rounded-full h-[150px] w-[150px] mb-4"
-            source={require("../../../assets/images/CMlogo.png")}
-          />
-        </View>
-      </SafeAreaView>
-    </CustomKeyboardView>
-  );
 
+  
   return (
     <View className="h-full w-full">
-      {/* {userDetails?.mode === "mentee" && <GradientNavigation />} */}
-
       <GradientNavigation />
-      {userDetails?.mode === "mentee" ? menteeMode : mentorMode}
+      <CustomKeyboardView>
+        <SafeAreaView className="h=full w-full  bg-white flex flex-col ">
+          <View className="h=full w-full flex flex-col items-center">
+            <Header />
+            <BorderUnderline />
+
+            {mode === "mentor" ? <MentorStatistics /> : <MenteeStatistics />}
+
+            <BorderUnderline />
+            <ComplementsProfile />
+
+            {mode === "mentor" ? <MentorComments /> : <></>}
+
+            <BorderUnderline />
+            <Achievements />
+            <Others />
+            <Image
+              className="   rounded-full h-[150px] w-[150px] mb-4"
+              source={require("../../../assets/images/CMlogo.png")}
+            />
+          </View>
+        </SafeAreaView>
+      </CustomKeyboardView>
     </View>
   );
 };

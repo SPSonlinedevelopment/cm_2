@@ -16,6 +16,7 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
                 {chatRoomData.menteeName}
               </Text>
             </Text>
+
             {chatRoomData.mentorReview?.writtenFeedback && (
               <Text className="text-base font-medium">
                 {chatRoomData.menteeName} said : "{" "}

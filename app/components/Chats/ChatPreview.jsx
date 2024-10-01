@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text, FlatList } from "react-native";
+import React, { useState } from "react";
 import ActiveChatroomList from "./ActiveChatroomList";
 import GradientNavigation from "../Profile/MenteeProfile/GradientNaviation/GradientNavigation";
 import { useAuth } from "@/app/context/authContext";
@@ -9,19 +9,40 @@ import SearchChats from "./SearchChats";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import CompletedChatList from "./CompletedChatList";
-import FadeInView from "../Effects/FadeInView";
-import ChatsSearchModal from "./ChatsSearchModal";
+
+import ChatItem from "./ChatItem";
+import { useChat } from "@/app/context/chatContext";
 
 const ChatPreview = () => {
   const { userDetails, user } = useAuth();
-  const [completedChats, setCompletedChats] = useState([]);
-  const [displaySearchModal, setDisplaySearchModal] = useState(false);
+
+  const [searchInput, setSearchInput] = useState("");
+  const { completedChats, allChats } = useChat();
+
+  let searchArr;
+
+  if (completedChats && allChats) {
+    searchArr = [...completedChats, ...allChats];
+  }
 
   const navigation = useNavigation();
   if (!user || !userDetails) {
     navigation.navigate("sign-in");
     return;
   }
+
+  // Assuming searchArr is an array of elements with the defined type
+  let filteredSearch = searchArr?.filter((item) => {
+    const lowercaseSearch = searchInput.toLowerCase();
+
+    return (
+      item?.questionSubject?.toLowerCase().includes(lowercaseSearch) ||
+      item?.initialMessage?.toLowerCase().includes(lowercaseSearch) ||
+      item?.mentorName?.toLowerCase().includes(lowercaseSearch) ||
+      item?.menteeName?.toLowerCase().includes(lowercaseSearch) ||
+      item?.sessionName?.toLowerCase().includes(lowercaseSearch)
+    );
+  });
 
   return (
     <View className="h-full">
@@ -32,33 +53,45 @@ const ChatPreview = () => {
           {/* <Text> {userDetails?.uid}</Text>
           <Text> {user?.uid}</Text> */}
         </View>
-
+        <SearchChats
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+          searchArr={searchArr}
+        />
         <ScrollView
           contentContainerStyle={{ display: "flex", alignItems: "center" }}
-          className="w-full h-full  flex "
+          className="w-full h-full flex"
         >
-          <SearchChats
-            displaySearchModal={displaySearchModal}
-            setDisplaySearchModal={setDisplaySearchModal}
-            completedChats={completedChats}
-          />
-          <ChatsSearchModal
-            displaySearchModal={displaySearchModal}
-          ></ChatsSearchModal>
+          {userDetails?.mode === "mentor" && <NewQuestionList />}
 
-          {!displaySearchModal && userDetails?.mode === "mentor" && (
-            <NewQuestionList />
-          )}
-
-          {!displaySearchModal && (
+          {!searchInput ? (
             <>
               <ActiveChatroomList />
-
-              <CompletedChatList
-                setCompletedChats={setCompletedChats}
-                completedChats={completedChats}
-              />
+              <CompletedChatList />
             </>
+          ) : filteredSearch.length > 0 ? (
+            <View>
+              <FlatList
+                style={{ width: "95%" }}
+                data={filteredSearch}
+                keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item, index }) => (
+                  <ChatItem
+                    newQuestion={false}
+                    activeSession={false}
+                    completedSession={true}
+                    item={item}
+                    index={index}
+                    noBorder={filteredSearch.length !== index + 1}
+                  />
+                )}
+              />
+            </View>
+          ) : (
+            <View className="items-center justify-center">
+              <Text className="mt-7 text-base font-bold">No results found</Text>
+            </View>
           )}
         </ScrollView>
       </SafeAreaView>
