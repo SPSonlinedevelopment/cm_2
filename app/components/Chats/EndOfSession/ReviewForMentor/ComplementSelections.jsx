@@ -6,21 +6,92 @@ import { useState } from "react";
 export const menteeComplements = [
   {
     title: "Clear",
-    icon: <FontAwesome name="pencil" size={34} color="orange" />,
+    iconName: "pencil",
   },
   {
     title: "Friendly",
-    icon: <FontAwesome name="heart" size={34} color="orange" />,
+    iconName: "pencil",
   },
   {
     title: "Fast",
-    icon: <MaterialCommunityIcons name="bike-fast" size={34} color="orange" />,
+    iconName: "pencil",
   },
   {
     title: "Helpful",
-    icon: (
-      <MaterialCommunityIcons name="boxing-glove" size={34} color="orange" />
-    ),
+    iconName: "pencil",
+  },
+];
+
+export const mentorComplements = [
+  {
+    title: "Algebra Whizz",
+    iconName: "pencil",
+    description: "Mastered the intricacies of algebra",
+  },
+  {
+    title: "High Achiever",
+    iconName: "pencil",
+    description: "Went beyond the status quo",
+  },
+  {
+    title: "Math Wizard",
+    iconName: "pencil",
+    description: "Showed a real talent for maths",
+  },
+  {
+    title: "Math Genius",
+    iconName: "pencil",
+    description: "Seriously impressive number-crunching",
+  },
+  {
+    title: "Fast Thinker",
+    iconName: "pencil",
+    description: "Zoomed through the solution",
+  },
+  {
+    title: "Beast Mode",
+    iconName: "pencil",
+    description: "Blazed through with ease",
+  },
+  {
+    title: "Human Calculator",
+    iconName: "pencil",
+    description: "When you're this smart who needs a calculator",
+  },
+  {
+    title: "Number God",
+    iconName: "pencil",
+    description: "Completely owned that maths question",
+  },
+  {
+    title: "Physics Phenom",
+    iconName: "pencil",
+    description: "A true master of physics",
+  },
+  {
+    title: "Chemistry Connoisseur",
+    iconName: "pencil",
+    description: "Can chemically ignite with their learning",
+  },
+  {
+    title: "Biology Buff",
+    iconName: "pencil",
+    description: "Knows the ins and outs of biology",
+  },
+  {
+    title: "Science Savant",
+    iconName: "pencil",
+    description: "Has a deep understanding of all things science",
+  },
+  {
+    title: "Literature Luminary",
+    iconName: "pencil",
+    description: "A master of words",
+  },
+  {
+    title: "History Hero",
+    iconName: "pencil",
+    description: "Brings history to life with their knowledge",
   },
 ];
 

@@ -193,7 +193,22 @@ export const AuthContextProvider = ({ children }) => {
             time: 0,
             ninjaLevel: 0,
             XP: 0,
-            compliments: 0,
+            compliments: {
+              "Algebra Whizz": 0,
+              "High Achiever": 0,
+              "Math Wizard": 0,
+              "Math Genius": 0,
+              "Fast Thinker": 0,
+              "Beast Mode": 0,
+              "Human Calculator": 0,
+              "Number God": 0,
+              "Physics Phenom": 0,
+              "Chemistry Connoisseur": 0,
+              "Biology Buff": 0,
+              "Science Savant": 0,
+              "Literature Luminary": 0,
+              "History Hero": 0,
+            },
           },
         }).then(getData("mentees"));
       } else if (mode === "mentor") {

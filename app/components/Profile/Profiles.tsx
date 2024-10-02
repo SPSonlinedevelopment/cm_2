@@ -13,7 +13,7 @@ import Others from "./Others/Others";
 import { useAuth } from "@/app/context/authContext";
 import Loading from "../Loading/LoadingSpinner";
 import MentorStatistics from "./MentorProfile/MentorStatistics";
-import ComplementsProfile from "./MentorProfile/ComplementsProfile";
+import ComplementsProfile from "./ComplementsProfile";
 import MentorComments from "../.././components/Profile/MentorProfile/MentorComments";
 
 const Profiles = () => {
@@ -21,8 +21,6 @@ const Profiles = () => {
 
   const mode = userDetails.mode;
 
-
-  
   return (
     <View className="h-full w-full">
       <GradientNavigation />
