@@ -1,27 +1,18 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 import Avatar from "../../Profile/Avatar";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "@/app/context/authContext";
-import IsTypingIndictator from "./IsTypingIndicator";
 import { SafeAreaView } from "react-native-safe-area-context";
-import FindingMentor from "../../Effects/FindingMentor";
-import LoadingDots from "../../Loading/LoadingDots";
 import Loading from "../../Loading/LoadingSpinner";
 import * as Haptics from "expo-haptics";
-import { doc, collection, deleteDoc } from "firebase/firestore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const ChatroomHeader = ({
   chatRoomData,
   setDisplyConfirmEndOfSessionModal,
 }) => {
-  console.log("🚀 ~ chatRoomData123:", chatRoomData);
   const { userDetails } = useAuth();
   const navigation = useNavigation();
 
@@ -88,17 +79,11 @@ const ChatroomHeader = ({
               />
               <View className="flex flex-col items-center">
                 {userDetails?.mode === "mentee" ? (
-                  <Text
-                    style={{ fontSize: hp(2) }}
-                    className="text-base p-2 text-black"
-                  >
+                  <Text className="text-lg p-2 text-black">
                     mentor: {chatRoomData?.mentorName}
                   </Text>
                 ) : (
-                  <Text
-                    style={{ fontSize: hp(2) }}
-                    className="text-base p-2 text-black"
-                  >
+                  <Text className="text-lg p-2 text-black">
                     mentee: {chatRoomData?.menteeName}
                   </Text>
                 )}

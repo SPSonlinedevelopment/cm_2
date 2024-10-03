@@ -6,14 +6,15 @@ import { useAuth } from "@/app/context/authContext";
 import { db } from "@/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { Card } from "../../Profile/MenteeProfile/MenteeStatistics";
-import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+
+import IconGeneral from "../../IconGeneral";
+import Crown from "../../../../assets/icons/Crown.png";
+import Ambition from "../../../../assets/icons/Ambition.png";
+import Love from "../../../../assets/icons/Love.png";
+import Clock from "../../../../assets/icons/Clock.png";
 
 const ConnectedMessage = ({ message, mentorId }) => {
   const { userDetails } = useAuth();
-  console.log("🚀 ~ ConnectedMessage ~ userDetails:", userDetails);
-
-  console.log("🚀 ~ ConnectedMessage ~ messagementiriD:", mentorId);
 
   const [mentorData, setMentorData] = useState();
   console.log("🚀 ~ ConnectedMessage ~ mentorData:", mentorData);
@@ -27,7 +28,9 @@ const ConnectedMessage = ({ message, mentorId }) => {
       if (docSnapshot.exists()) {
         // Document data
         const data = docSnapshot.data();
+
         setMentorData(data.mentorStatistics);
+        console.log("🚀 ~ getMentorDoc ~ data:", data);
       } else {
         // Document does not exist
         console.log("No such document!");
@@ -42,16 +45,22 @@ const ConnectedMessage = ({ message, mentorId }) => {
   }
   let starsCount = 0;
   let starsAvg = 0;
+  let complimentsCount;
   if (mentorData) {
     if (mentorData?.stars?.length) {
       starsCount = mentorData.stars.reduce((acc, star) => acc + star, 0);
       starsAvg = Math.floor(starsCount / mentorData.stars.length);
     }
+    complimentsCount = Object.values(mentorData?.compliments).reduce(
+      (accumulator, item) => {
+        return accumulator + item;
+      }
+    );
   }
 
   return (
     <View className="full flex items-center m-2">
-      <View className=" w-[100%] flex items-center  bg-purple shadow rounded-xl p-3">
+      <View className=" w-[100%] flex items-center  bg-purple shadow rounded-xl p-2">
         <Avatar avatarName={message.senderAvatar}></Avatar>
         <Text className="text-white">
           You are now connected to {userDetails?.firstName}
@@ -62,22 +71,22 @@ const ConnectedMessage = ({ message, mentorId }) => {
             <View className="flex w-full flex-row justify-between">
               <Card
                 text={` ${Math.ceil(mentorData?.time)} Total Mins`}
-                icon={<AntDesign name="clockcircle" size={24} color="orange" />}
+                icon={<IconGeneral size="35" source={Clock} />}
               />
               <Card
                 text={` ${mentorData?.questions} Questions`}
-                icon={<AntDesign name="clockcircle" size={24} color="orange" />}
+                icon={<IconGeneral size="35" source={Crown} />}
               />
             </View>
 
             <View className="flex flex-row justify-between">
               <Card
                 text={` ${starsAvg} stars`}
-                icon={<AntDesign name="star" size={24} color="orange" />}
+                icon={<IconGeneral size="35" source={Ambition} />}
               />
               <Card
-                text={` ${mentorData?.compliments} Compliments`}
-                icon={<AntDesign name="heart" size={24} color="orange" />}
+                text={` ${complimentsCount} Compliments`}
+                icon={<IconGeneral size="35" source={Love} />}
               />
             </View>
           </View>

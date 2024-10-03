@@ -22,7 +22,7 @@ const ForgotPassword = () => {
 
   if (!resetEmailSent) {
     showPasswordInput = (
-      <View>
+      <View className="flex flex-col items-center">
         <FormField
           setAlertMessage={setAlertMessage}
           type="email"

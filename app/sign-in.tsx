@@ -1,20 +1,9 @@
 import { View, Text, Image } from "react-native";
 import React, { useState } from "react";
 import { Link } from "expo-router";
-import CustomButton from "./components/Buttons/CustomButton";
-import FormField from "./components/FormField/FormField";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Feather, Octicons } from "@expo/vector-icons";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-
 import CustomKeyboardView from "./components/CustomKeyboardView";
 import SignInForm from "./components/Auth/SignIn/SignInForm";
-import { StatusBar } from "expo-status-bar";
 
 const SignIn = () => {
   return (

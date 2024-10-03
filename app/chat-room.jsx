@@ -34,7 +34,7 @@ const ChatRoom = () => {
     useState(false);
   const [displayFeedback, setDisplayFeedback] = useState(false);
   const [displayMenteeFeedback, setDisplayMenteeFeedback] = useState(false);
-  const [chatRoomData, setChatRoomData] = useState();
+  const [chatRoomData, setChatRoomData] = useState({});
 
   const { userDetails } = useAuth();
   const scrollViewRef = useRef(null);
@@ -90,9 +90,6 @@ const ChatRoom = () => {
         />
       )}
 
-      {/* 
- mentor reviews and names sessions and updates firebase to sessionCompleted true  */}
-
       {displayFeedback &&
         userDetails?.mode === "mentor" &&
         !chatRoomData.reviewForMenteeCompleted && (
@@ -138,7 +135,7 @@ const ChatRoom = () => {
 
       {chatRoomData && !chatRoomData?.sessionCompleted && (
         <>
-          <IsTypingIndicator scrollToEnd={scrollToEnd} item={chatRoomData} />
+          {/* <IsTypingIndicator scrollToEnd={scrollToEnd} item={chatRoomData} /> */}
           <MentorConversationSuggestions
             isReply={false}
             userDetails={userDetails}

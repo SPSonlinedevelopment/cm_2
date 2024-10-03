@@ -1,9 +1,5 @@
 import { View, Text } from "react-native";
 import React from "react";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 import Entypo from "@expo/vector-icons/Entypo";
 
 const ReplyMessage = ({ message, thisUsersMessage }) => {
@@ -41,7 +37,7 @@ const ReplyMessage = ({ message, thisUsersMessage }) => {
         </View>
 
         <View className="p-2">
-          <Text style={{ fontSize: hp(1.9) }}>{message.text}</Text>
+          <Text className="text-base">{message.text}</Text>
         </View>
 
         <View

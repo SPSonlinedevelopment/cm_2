@@ -4,12 +4,17 @@ import { Card } from "../MenteeProfile/MenteeStatistics";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/authContext";
+import StatsIcon from "../MenteeProfile/StatsIcon";
+import IconGeneral from "../../IconGeneral";
+import Crown from "../../../../assets/icons/Crown.png";
+import Ambition from "../../../../assets/icons/Ambition.png";
+import Love from "../../../../assets/icons/Love.png";
+import Clock from "../../../../assets/icons/Clock.png";
 
 const MentorStatistics = () => {
   const { userDetails } = useAuth();
 
   const stats = userDetails?.mentorStatistics;
-  console.log("🚀 ~ MentorStatistics ~ stats:", stats);
 
   let starsCount = 0;
   let starsAvg = 0;
@@ -31,30 +36,27 @@ const MentorStatistics = () => {
 
   return (
     <View className=" mt-5 w-[93%] ">
-      <View className="flex flex-row">
-        <Entypo name="trophy" size={24} color="black" />
-        <Text className="text-lg font-bold "> Statistics</Text>
-      </View>
+      <StatsIcon />
 
       <View className="flex flex-row justify-between">
         <Card
           text={` ${Math.ceil(stats?.time)} Total Mins`}
-          icon={<AntDesign name="clockcircle" size={24} color="orange" />}
+          icon={<IconGeneral size="35" source={Clock} />}
         />
         <Card
           text={` ${stats?.questions} Questions`}
-          icon={<AntDesign name="clockcircle" size={24} color="orange" />}
+          icon={<IconGeneral size="35" source={Crown} />}
         />
       </View>
 
       <View className="flex flex-row justify-between">
         <Card
           text={` ${starsAvg} stars`}
-          icon={<AntDesign name="star" size={24} color="orange" />}
+          icon={<IconGeneral size="35" source={Ambition} />}
         />
         <Card
           text={` ${complimentsCount} Compliments`}
-          icon={<AntDesign name="heart" size={24} color="orange" />}
+          icon={<IconGeneral size="35" source={Love} />}
         />
       </View>
     </View>

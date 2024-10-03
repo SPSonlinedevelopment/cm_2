@@ -16,12 +16,12 @@ const SubjectSelectButton: React.FC<SubjectSelectionButtonProps> = ({
   return (
     <TouchableOpacity
       onPress={() => setSelectedSubject(subject.subject)}
-      className={`h-[60px]   w-[130px]  shadow flex flex-row justify-around  ${
+      className={`h-[60px]   w-[40%]  shadow flex flex-row justify-around  ${
         selectedSubject === subject.subject ? "bg-purple" : " bg-white"
       } items-center m-1 rounded-full`}
     >
       <Text
-        className={`    ${
+        className={`  text-base   ${
           selectedSubject === subject.subject ? "text-white" : ""
         }`}
       >

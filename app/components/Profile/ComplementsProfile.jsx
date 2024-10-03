@@ -9,6 +9,7 @@ import { useAuth } from "@/app/context/authContext";
 import { ScrollView } from "react-native-gesture-handler";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import DisplayAllComplimentsModal from "./DisplayAllComplimentsModal";
+import IconGeneral from "../IconGeneral";
 
 const ComplementsProfile = () => {
   const { userDetails } = useAuth();
@@ -50,24 +51,25 @@ const ComplementsProfile = () => {
                 ? "h-[100px] w-[100px]"
                 : "h-[80px] w-[80px]"
             }  ${
-              compVal[0].value > 0 ? "opacity-0 " : " bg-gray-700 opacity-50"
+              compVal[0]?.value > 0 ? "opacity-0 " : " bg-gray-700 opacity-50"
             } rounded-full absolute z-40`}
           />
-          <Icon
-            color={compVal[0].value > 0 ? "#FFA500" : "grey"}
+          {/* <Icon
+            color={compVal[0]?.value > 0 ? "#FFA500" : "grey"}
             name={comp.iconName}
-          />
+          /> */}
+          <Icon source={comp?.icon} />
 
-          {compVal[0].value > 0 && (
-            <View className="bg-[#FFA500] rounded-full p-1 h-6 w-10 shadow-xl flex items-center absolute bottom-[-10px]">
+          {compVal[0]?.value > 0 && (
+            <View className="bg-[#FFA500] rounded-full p-1 h-6 w-10 shadow-xl flex items-center absolute bottom-[-15px]">
               <Text className=" font-bold text-white  ">
-                {compVal[0].value}
+                {compVal[0]?.value}
               </Text>
             </View>
           )}
         </View>
         <Text
-          className={`m-1 ${
+          className={`mt-3 ${
             displayAllComplimentsModal ? "text-base" : "w-[82] text-med "
           } text-center`}
         >
@@ -117,10 +119,10 @@ const ComplementsProfile = () => {
 
 export default ComplementsProfile;
 
-const Icon = ({ color, name }) => {
+const Icon = ({ source }) => {
   return (
     <View>
-      <FontAwesome name={name} size={34} color={color}></FontAwesome>
+      <IconGeneral size="70" source={source} />
     </View>
   );
 };

@@ -10,10 +10,7 @@ import {
 import React, { useState, useRef } from "react";
 import IconButton from "@/app/components/Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+
 import { Feather } from "@expo/vector-icons";
 import { handleSendImageMessageToChatroom } from "./handleSendImageMessageToChatroom";
 import { sendImageToFirebaseStorageGetDownloadUrl } from "./sendImageToFirebaseStorageGetDownloadUrl";
@@ -94,13 +91,11 @@ const ImageMessageCaption = ({ setDisplayImageCaptionModal, image, item }) => {
                 }}
                 placeholderTextColor="white"
                 style={{
-                  fontSize: hp(2),
-
                   display: "flex",
                   padding: 4,
                   borderRadius: "20%",
                 }}
-                className="flex-1 m-1 mr-3 bg-black-200 border placeholder-white border-white text-white  p-2 items-center justify-center"
+                className="flex-1 m-1 mr-3 bg-black-200 border placeholder-white border-white text-white  text-base p-2 items-center justify-center"
                 multiline={true}
                 numberOfLines={10}
                 placeholder="Add a caption ..."
@@ -110,9 +105,9 @@ const ImageMessageCaption = ({ setDisplayImageCaptionModal, image, item }) => {
                   onPress={() => {
                     handleSend();
                   }}
-                  className="bh-neutral-200  h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
+                  className="bh-neutral-200  text-base h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
                 >
-                  <Feather name="send" color="white" size={hp(2.7)} />
+                  <Feather name="send" color="white" />
                 </TouchableOpacity>
               )}
             </View>

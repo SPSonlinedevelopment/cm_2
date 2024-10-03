@@ -33,38 +33,38 @@ const MentorConversationSuggestions = ({ userDetails, isReply, item }) => {
   if (!showSuggestions) {
     return (
       <IconButton
-        containerStyles="bg-white w-[40px] w-[40px] p-2  left-[350px]  mr-8  absolute  bottom-[120px] "
-        icon={<Feather name="message-square" size={24} color="whiite" />}
+        containerStyles="bg-white w-[40px] w-[40px] p-2  absolute bottom-[145px] right-[10px]  "
+        icon={<Feather name="message-square" size={24} />}
         handlePress={() => {
           console.log("sjdhj");
           setShowSuggestions(!showSuggestions);
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }}
-      ></IconButton>
+      />
     );
   } else
     return (
-      <View className="absolute bottom-[70px]">
-        <ScrollView horizontal={true}>
+      <View className="absolute bottom-[90px]">
+        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
           {userDetails.mode === "mentor"
             ? mentorConvoSuggestions.map((suggestion) => (
                 <TouchableOpacity
                   onPress={() => handleClickSuggestion(suggestion)}
                   key={suggestion.id}
-                  className="flex h-[100px] w-[200px] m-2 relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow bg-neutral-100 self-start"
+                  className="flex h-[100px] w-[200px] m-2 relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow bg-white self-start"
                 >
                   <Text className="text-sm text-purple-900 m-1">
                     {suggestion.description}
                   </Text>
                   <Text className="m-1">{suggestion.text}</Text>
-                  <View className="h-3 w-2 absolute bg-orange-200 bottom-0 rotate-[-30deg] right-[-2px] rounded-bl-xl" />
+                  <View className="h-3 w-2 absolute bg-white bottom-0 rotate-[-30deg] right-[-2px] rounded-bl-xl" />
                 </TouchableOpacity>
               ))
             : menteeConvoSuggestions.map((suggestion) => (
                 <TouchableOpacity
                   onPress={() => handleClickSuggestion(suggestion)}
                   key={suggestion.id}
-                  className="flex h-[100px] w-[200px] m-2 relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow bg-neutral-100 self-start"
+                  className="flex h-[100px] w-[200px] m-2 relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow bg-white self-start"
                 >
                   <Text className="text-sm text-purple-900 m-1">
                     {suggestion.description}

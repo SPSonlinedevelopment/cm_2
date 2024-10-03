@@ -3,17 +3,12 @@ import React, { Children, useEffect, useRef, useState } from "react";
 import { Link, router } from "expo-router";
 import CustomButton from "../../Buttons/CustomButton";
 import FormField from "../../FormField/FormField";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Feather, Octicons } from "@expo/vector-icons";
+
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 
 import { validateInputs } from "../validateInputs/validateInputs";
-import { auth } from "../../../../firebaseConfig";
+
 import { useAuth } from "../../../context/authContext";
 
 const initialState = {

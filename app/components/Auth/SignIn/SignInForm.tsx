@@ -13,7 +13,7 @@ const SignInForm = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialFormState);
   const [alertMessage, setAlertMessage] = useState("");
-  const { user, signIn, } = useAuth();
+  const { user, signIn } = useAuth();
 
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);
@@ -69,20 +69,15 @@ const SignInForm = () => {
         seterror={setErrors}
         editable={loading}
       ></FormField>
-      <View>
-        <View className="  border-white  flex flex-row justify-end w-[80%]">
-          <Link
-            href={"forgot-password"}
-            className=" text-orange-400  mt-2 text-sm  "
-          >
-            Forgot password?{" "}
-          </Link>
-        </View>
+
+      <View className=" flex flex-row justify-center w-[80%]">
+        <Link
+          href={"forgot-password"}
+          className=" text-orange-400  mt-2 text-sm  "
+        >
+          Forgot password?{" "}
+        </Link>
       </View>
-
-      <Text>{user?.uid}</Text>
-
-      <Text>{user?.firstName}</Text>
 
       {alertMessage && (
         <Text className="text-white font-pextrabold  mt-2 text-center w-[80%]">

@@ -28,7 +28,7 @@ const VerifyEmail = () => {
             source={require("../assets/images/CMlogo.png")}
           />
 
-          <View>
+          <View className="flex flex-col  justify-between  items-center  w-full">
             <Text className="text-white text-2xl mt-3 text-center">
               Verify your email
             </Text>

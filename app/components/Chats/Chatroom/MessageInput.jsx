@@ -1,17 +1,10 @@
-import { View, TouchableOpacity, TextInput, Text, Alert } from "react-native";
-import React, { useState, useRef, useEffect } from "react";
+import { View, TouchableOpacity, TextInput, Alert } from "react-native";
+import React, { useState, useRef } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import sendImageQuestionObjToFirebaseNewQuestion from "../SendData/SendImages/sendImageQuestionObjToFirebaseNewQuestion";
 import { handleSendTextMessageToChatroom } from "../SendData/SendTexts/handleSendTextMessageToChatroom";
 import { pickImage } from "@/utils/imagePicker";
-import createBlob from "../SendData/SendImages/createBlob";
 import ImageMessageCaption from "../SendData/SendImages/ImageMessageCaption";
 import { screenProfanities } from "@/utils/common";
 
@@ -88,7 +81,7 @@ const MessageInput = React.memo(
             onPress={() => handlePickImage()}
             className="bh-neutral-200    flex items-center justify-center rounded-full  pr-[10px]"
           >
-            <Ionicons name="add-outline" size={hp(3.5)} color="black" />
+            <Ionicons name="add-outline" size={20} color="black" />
           </TouchableOpacity>
           <TextInput
             ref={inputRef}
@@ -98,13 +91,12 @@ const MessageInput = React.memo(
               (textRef.current = value), handleChangeText();
             }}
             style={{
-              fontSize: hp(2),
               backgroundColor: "white",
               display: "flex",
               padding: 4,
               borderRadius: "20%",
             }}
-            className="flex-1 m-1 mr-3  p-2 items-center justify-center"
+            className="flex-1 m-1 mr-3 text-base  p-2 items-center justify-center"
             multiline={true}
             numberOfLines={10}
             placeholder="type message ..."
@@ -115,7 +107,7 @@ const MessageInput = React.memo(
               onPress={handleSendMessage}
               className="bh-neutral-200  h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
             >
-              <Feather name="send" color="white" size={hp(2.7)} />
+              <Feather name="send" color="white" size={20} />
             </TouchableOpacity>
           )}
         </View>

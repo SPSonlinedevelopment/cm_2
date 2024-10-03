@@ -7,10 +7,6 @@ import { doc, updateDoc } from "firebase/firestore";
 import LoadingDots from "../../Loading/LoadingDots";
 import UserDetails from "@/app/user-details";
 import FadeInView from "../../Effects/FadeInView";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 
 const IsTypingIndicator = ({ item, scrollToEnd }) => {
   console.log("🚀 ~ IsTypingIndicator ~ item:", item);

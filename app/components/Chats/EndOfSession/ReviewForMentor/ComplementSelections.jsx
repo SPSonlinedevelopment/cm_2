@@ -2,95 +2,131 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity, Text } from "react-native";
 import { useState } from "react";
+import Brain from "../../../../../assets/icons/Achievements/Brain.png";
+import Certificate from "../../../../../assets/icons/Achievements/Certificate.png";
+import Concentration from "../../../../../assets/icons/Achievements/Concentration.png";
+import lightbulb from "../../../../../assets/icons/Achievements/light-bulb.png";
+import magicwand from "../../../../../assets/icons/Achievements/magic-wand.png";
+import medal from "../../../../../assets/icons/Achievements/medal.png";
+import performance from "../../../../../assets/icons/Achievements/Performance.png";
+import positivity from "../../../../../assets/icons/Achievements/Positivity.png";
+import Rocket from "../../../../../assets/icons/Achievements/Rocket.png";
+import Clover from "../../../../../assets/icons/Achievements/Luck (Clover).png";
+import Influence from "../../../../../assets/icons/Achievements/Influence.png";
+import Calculator from "../../../../../assets/icons/Achievements/calculator.png";
+import Learning from "../../../../../assets/icons/Achievements/Learning.png";
+import Calendar from "../../../../../assets/icons/Achievements/Calendar.png";
+import Commitment from "../../../../../assets/icons/Commitment.png";
+import Superhero from "../../../../../assets/icons/Achievements/Superhero.png";
+import Speedometer from "../../../../../assets/icons/Achievements/Speedometer.png";
+import Fist from "../../../../../assets/icons/Achievements/Fist.png";
+import ProblemSolving from "../../../../../assets/icons/Achievements/Problem Solving.png";
+import Love from "../../../../../assets/icons/Love.png";
 
 export const menteeComplements = [
   {
     title: "Clear",
-    iconName: "pencil",
+    icon: Certificate,
   },
   {
     title: "Friendly",
-    iconName: "pencil",
+    icon: Commitment,
   },
   {
     title: "Fast",
-    iconName: "pencil",
+    icon: Speedometer,
   },
   {
     title: "Helpful",
-    iconName: "pencil",
+    icon: Superhero,
+  },
+  {
+    title: "Smart",
+    icon: Brain,
+  },
+  {
+    title: "Kind",
+    icon: Love,
+  },
+  {
+    title: "Solved Problems",
+    icon: ProblemSolving,
+  },
+  {
+    title: "Supportive",
+    icon: Fist,
   },
 ];
 
 export const mentorComplements = [
   {
     title: "Algebra Whizz",
-    iconName: "pencil",
+    icon: Brain,
     description: "Mastered the intricacies of algebra",
   },
   {
     title: "High Achiever",
-    iconName: "pencil",
+    icon: Certificate,
     description: "Went beyond the status quo",
   },
   {
     title: "Math Wizard",
-    iconName: "pencil",
+    icon: Concentration,
     description: "Showed a real talent for maths",
   },
   {
     title: "Math Genius",
-    iconName: "pencil",
+    icon: "pencil",
     description: "Seriously impressive number-crunching",
   },
   {
     title: "Fast Thinker",
-    iconName: "pencil",
+    icon: lightbulb,
     description: "Zoomed through the solution",
   },
   {
     title: "Beast Mode",
-    iconName: "pencil",
+    icon: magicwand,
     description: "Blazed through with ease",
   },
   {
     title: "Human Calculator",
-    iconName: "pencil",
+    icon: Calculator,
     description: "When you're this smart who needs a calculator",
   },
   {
     title: "Number God",
-    iconName: "pencil",
+    icon: performance,
     description: "Completely owned that maths question",
   },
   {
     title: "Physics Phenom",
-    iconName: "pencil",
+    icon: Rocket,
     description: "A true master of physics",
   },
   {
     title: "Chemistry Connoisseur",
-    iconName: "pencil",
+    icon: positivity,
     description: "Can chemically ignite with their learning",
   },
   {
     title: "Biology Buff",
-    iconName: "pencil",
+    icon: Clover,
     description: "Knows the ins and outs of biology",
   },
   {
     title: "Science Savant",
-    iconName: "pencil",
+    icon: Influence,
     description: "Has a deep understanding of all things science",
   },
   {
     title: "Literature Luminary",
-    iconName: "pencil",
+    icon: Learning,
     description: "A master of words",
   },
   {
     title: "History Hero",
-    iconName: "pencil",
+    icon: Calendar,
     description: "Brings history to life with their knowledge",
   },
 ];

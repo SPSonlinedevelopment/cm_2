@@ -1,18 +1,10 @@
-import { View, Text, ActivityIndicator, Vibration } from "react-native";
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { useAuth } from "@/app/context/authContext";
-import { Image } from "expo-image";
+import { View } from "react-native";
+import React, { useState, useLayoutEffect } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import * as Haptics from "expo-haptics";
 import { convertFirebaseTimestampToDate } from "@/utils/common";
-
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 import LoadedImage from "./LoadedImage";
 import { ScrollView } from "react-native-gesture-handler";
-import ShowReplyBar from "./ShowReplyBar";
 import MessageText from "./MessageText";
 import ReplyMessage from "./ReplyMessage";
 import FadeInView from "../../Effects/FadeInView";
@@ -27,7 +19,6 @@ const MessageItem = React.memo(
     setReplyRecipientName,
     mentorId,
   }) => {
-    console.log("🚀 ~ message:", message);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [hapticFeedback, setHapticFeeback] = useState(false);
     const [ShowReply, setShowReply] = useState(false);
