@@ -1,13 +1,10 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useState } from "react";
 import Brain from "../../../../../assets/icons/Achievements/Brain.png";
 import Certificate from "../../../../../assets/icons/Achievements/Certificate.png";
 import Concentration from "../../../../../assets/icons/Achievements/Concentration.png";
 import lightbulb from "../../../../../assets/icons/Achievements/light-bulb.png";
 import magicwand from "../../../../../assets/icons/Achievements/magic-wand.png";
-import medal from "../../../../../assets/icons/Achievements/medal.png";
 import performance from "../../../../../assets/icons/Achievements/Performance.png";
 import positivity from "../../../../../assets/icons/Achievements/Positivity.png";
 import Rocket from "../../../../../assets/icons/Achievements/Rocket.png";
@@ -22,6 +19,7 @@ import Speedometer from "../../../../../assets/icons/Achievements/Speedometer.pn
 import Fist from "../../../../../assets/icons/Achievements/Fist.png";
 import ProblemSolving from "../../../../../assets/icons/Achievements/Problem Solving.png";
 import Love from "../../../../../assets/icons/Love.png";
+import IconGeneral from "@/app/components/IconGeneral";
 
 export const menteeComplements = [
   {
@@ -161,16 +159,16 @@ const ComplementSelectionsButton = ({
 
   return (
     <TouchableOpacity
-      onPress={(selection) => {
+      onPress={() => {
         setSelected(!selected);
 
         handleSelection(comp?.title);
       }}
-      className={`shadow p-5 m-5 rounded-full ${
+      className={`shadow   rounded-full ${
         selected ? "bg-purple" : "bg-neutral-50"
       }`}
     >
-      {comp?.icon}
+      <IconGeneral size="40" source={comp?.icon} />
     </TouchableOpacity>
   );
 };

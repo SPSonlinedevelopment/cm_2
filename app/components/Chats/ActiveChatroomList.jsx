@@ -5,12 +5,20 @@ import { useChat } from "@/app/context/chatContext";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
+import EmptyAnimation from "../Effects/EmptyAnimation";
+import IconGeneral from "../IconGeneral";
+import Thinking from "../../../assets/icons/Thinking.png";
 
 const ActiveChatroomList = () => {
   const { allChats } = useChat();
 
   if (!allChats.length) {
-    return <Text className=" text-lg  font-bold">No Live Chatrooms </Text>;
+    return (
+      <View className=" flex justify-around h-[240px]   items-center">
+        <Text className=" text-lg  font-bold">No Live Chatrooms </Text>
+        <IconGeneral source={Thinking} size={100} />
+      </View>
+    );
   } else
     return (
       <FlatList

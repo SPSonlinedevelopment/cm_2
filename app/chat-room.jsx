@@ -34,7 +34,8 @@ const ChatRoom = () => {
     useState(false);
   const [displayFeedback, setDisplayFeedback] = useState(false);
   const [displayMenteeFeedback, setDisplayMenteeFeedback] = useState(false);
-  const [chatRoomData, setChatRoomData] = useState({});
+  const [chatRoomData, setChatRoomData] = useState();
+  console.log("🚀 ~ ChatRoom ~ chatRoomData:", chatRoomData);
 
   const { userDetails } = useAuth();
   const scrollViewRef = useRef(null);

@@ -7,6 +7,8 @@ import { Timestamp } from "firebase/firestore";
 import { useAuth } from "@/app/context/authContext";
 import { doc, collection, deleteDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import IconGeneral from "../../IconGeneral";
+import Fist from "../../../../assets/icons/Achievements/Fist.png";
 
 const ConfirmEndOfSessionModal = ({
   setDisplyConfirmEndOfSessionModal,
@@ -42,10 +44,12 @@ const ConfirmEndOfSessionModal = ({
       animationType="fade"
     >
       <View className="h-full w-full bg-black-100 opacity-40"></View>
-      <View className=" absolute bottom-0  w-full bg-white  p-3 h-[300px] rounded-xl flex flex-col items-center justify-between">
+      <View className=" absolute bottom-0  w-full bg-white  p-3 h-[340px] rounded-xl flex flex-col items-center justify-between">
         <Text className="text-xl p-3 text-center font-bold">
           Are you sure you want to leave chatroom?
         </Text>
+
+        <IconGeneral source={Fist} size={100} />
         {userDetails.mode === "mentee" && (
           <Text className="text-base  font-bold mt-4">
             Your question request will be deleted
@@ -64,10 +68,7 @@ const ConfirmEndOfSessionModal = ({
 
               if (userDetails.mode === "mentee") {
                 handleExitChatroom();
-
-                
               } else {
-
               }
             }}
           />

@@ -40,29 +40,29 @@ const MessagesList = ({
 
   let connectedMessage = [];
 
-  if (chatRoomData.connectedMentor) {
-    connectedMessage = [
-      {
-        messageType: "connected",
-        senderName: "Collet owl",
-        text: `You are now connected with your ${
-          mode === "mentee" ? "mentor" : "mentee"
-        } , their name is ${
-          mode === "mentee"
-            ? chatRoomData?.mentorName
-            : chatRoomData?.menteeName
-        }`,
+  // if (chatRoomData?.connectedMentor) {
+  //   connectedMessage = [
+  //     {
+  //       messageType: "connected",
+  //       senderName: "Collet owl",
+  //       text: `You are now connected with your ${
+  //         mode === "mentee" ? "mentor" : "mentee"
+  //       } , their name is ${
+  //         mode === "mentee"
+  //           ? chatRoomData?.mentorName
+  //           : chatRoomData?.menteeName
+  //       }`,
 
-        createdAt: Timestamp.fromDate(new Date()),
-        messageId: "TestMessageId7",
-        senderAvatar: `${
-          mode === "mentee"
-            ? chatRoomData?.mentorAvatar
-            : chatRoomData?.menteeAvatar
-        }`,
-      },
-    ];
-  }
+  //       createdAt: Timestamp.fromDate(new Date()),
+  //       messageId: "TestMessageId7",
+  //       senderAvatar: `${
+  //         mode === "mentee"
+  //           ? chatRoomData?.mentorAvatar
+  //           : chatRoomData?.menteeAvatar
+  //       }`,
+  //     },
+  //   ];
+  // }
 
   useEffect(() => {
     let initialMessage = [];
@@ -161,7 +161,7 @@ const MessagesList = ({
 
   return (
     <ScrollView ref={scrollViewRef}>
-      {messages?.map((message, index) => {
+      {messages?.map((message) => {
         return (
           <MessageItem
             mentorId={chatRoomData.mentorId}

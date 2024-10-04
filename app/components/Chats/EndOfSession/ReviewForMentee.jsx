@@ -7,11 +7,19 @@ import CelebrationAnimation from "../../Effects/CelebrationAnimation";
 import IconButton from "../../Buttons/IconButton";
 import { updateDoc, doc, Timestamp } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
+import XPEarned from "./ReviewForMentor/XPEarned";
+import RateLesson from "./ReviewForMentor/RateLesson";
+import Complements from "./ReviewForMentor/Complements";
+import WrittenFeedback from "./ReviewForMentor/WrittenFeedback";
+import Confidence from "./ReviewForMentor/ConfidenceBeforeAndAfter";
+import { useAuth } from "@/app/context/authContext";
 
 const ReviewForMentee = ({ setDisplayFeedback, roomId }) => {
   const [menteeFeedbackForm, setMenteeFeedbackForm] = useState({
     sessionName: "",
   });
+
+  const { userDetails } = useAuth();
 
   // what are feeback field for mentor to mentee
 
@@ -45,25 +53,28 @@ const ReviewForMentee = ({ setDisplayFeedback, roomId }) => {
           }}
           className="mt-20 "
         >
-          <NameSession
-            setMenteeFeedbackForm={setMenteeFeedbackForm}
-            setDisplayFeedback={setDisplayFeedback}
-          ></NameSession>
+          {userDetails?.mode === "mentor" && (
+            <NameSession
+              handleConfirmEndSession={handleConfirmEndSession}
+              setMenteeFeedbackForm={setMenteeFeedbackForm}
+              setDisplayFeedback={setDisplayFeedback}
+            />
+          )}
 
           {/* <XPEarned />
-          <RateLesson setFeedbackForm={setFeedbackForm} />
+          <RateLesson setFeedbackForm={setMenteeFeedbackForm} />
           <Complements
-            feedbackForm={feedbackForm}
-            setFeedbackForm={setFeedbackForm}
+            feedbackForm={menteeFeedbackForm}
+            setFeedbackForm={setMenteeFeedbackForm}
           />
-          <WrittenFeedback setFeedbackForm={setFeedbackForm} />
+          <WrittenFeedback setFeedbackForm={setMenteeFeedbackForm} />
           <Confidence
-            feedbackForm={feedbackForm}
-            setFeedbackForm={setFeedbackForm}
-          /> */}
+            feedbackForm={menteeFeedbackForm}
+            setFeedbackForm={setMenteeFeedbackForm}
+          />
           <View className="w-full flex items-center my-10">
             <IconButton
-              containerStyles="w-[85%] h-[40px] flex items-center"
+              containerStyles="w-[200px] h-[40px] flex items-center"
               handlePress={() => {
                 handleConfirmEndSession();
 
@@ -73,7 +84,7 @@ const ReviewForMentee = ({ setDisplayFeedback, roomId }) => {
               }}
               title="Submit Feedback"
             />
-          </View>
+          </View> */}
         </ScrollView>
       </Modal>
     </SafeAreaView>

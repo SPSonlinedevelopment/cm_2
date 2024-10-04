@@ -5,9 +5,9 @@ import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation"
 
 const SessionSummary = ({ userDetails, chatRoomData }) => {
   return (
-    <View className=" w-full  mt-2  mb-10  items-center">
+    <View className=" w-full  mt-2  mb-10  items-center ">
       <CelebrationAnimation loop="false" size={200}></CelebrationAnimation>
-      <View className=" w-[95%] py-3    justify-center items-center   flex flex-row rounded-2xl shadow bg-white">
+      <View className=" w-[95%] py-3    justify-center items-between    flex flex-row rounded-2xl shadow bg-white">
         {userDetails.mode === "mentor" ? (
           <View className="ml-5">
             <Text className="text-base font-medium ">
@@ -16,6 +16,12 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
                 {chatRoomData.menteeName}
               </Text>
             </Text>
+
+            {!chatRoomData.mentorReview?.writtenFeedback && (
+              <View className="flex  flex-row justify-center pt-4 ">
+                <Text className="text-sm"> Awaiting feedback...</Text>
+              </View>
+            )}
 
             {chatRoomData.mentorReview?.writtenFeedback && (
               <Text className="text-base font-medium">
@@ -26,7 +32,7 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
 
             {chatRoomData.mentorReview?.confidenceRatingBefore && (
               <Text className="text-base font-medium">
-                {chatRoomData.menteeName}'s confidence before: adhjs{" "}
+                {chatRoomData.menteeName}'s confidence before:{" "}
                 {chatRoomData.mentorReview.confidenceRatingBefore}
               </Text>
             )}
@@ -40,7 +46,8 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
 
             {chatRoomData.mentorReview?.mentorRating && (
               <Text className="text-base font-medium">
-                Your rating: {chatRoomData.mentorReview.mentorRating}
+                Your rating for this session:{" "}
+                {chatRoomData.mentorReview.mentorRating}
               </Text>
             )}
           </View>

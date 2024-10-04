@@ -7,6 +7,7 @@ import SubjectSelectButton from "./SubjectSelectButton";
 import IconButton from "../Buttons/IconButton";
 import PropTypes from "prop-types";
 import { FontAwesome } from "@expo/vector-icons";
+import ExitButton from "../Buttons/ExitButton";
 
 interface SubjectSelectionProps {
   setSelectedSubject: React.Dispatch<React.SetStateAction<string>>;
@@ -49,9 +50,10 @@ const SubjectSelection: React.FC<SubjectSelectionProps> = ({
     <Modal
       className="bg-slate-500 opacity-50"
       visible={displaySubjectSelection}
-      animationType="slide"
+      animationType="fade"
       transparent={true}
     >
+      <ExitButton toggleDisplay={setDisplaySubjectSelection} />
       <View className="absolute bottom-0 justify-center  h-[70%] w-full  flex-row flex-wrap bg-white  shadow-xl">
         <View className="w-[80%] flex justify-center items-center p-2 ">
           <Text className="mt-4 text-purple text-xl font-bold items-center justify-center text-center">

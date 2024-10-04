@@ -93,15 +93,16 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
         console.log("room: ", roomId);
         // set new question in firebase
 
-        navigation.navigate("chat-room", {
-          roomId: roomId,
-          completedSession: false,
-        });
         const result = await setNewTextQuestion(newQuestionObj);
 
         if (result.success) {
           await CreateRoomIfNotExists(newQuestionObj);
         }
+
+        navigation.navigate("chat-room", {
+          roomId: roomId,
+          completedSession: false,
+        });
 
         // at same time create new room for mentee to join and await mentor
       } catch (error) {
@@ -125,7 +126,9 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
   return (
     <CustomKeyboardView>
       <SafeAreaView className=" w-full h-full flex flex-col bg-grey-200 border  items-center justify-around">
-        <ExitButton toggleDisplay={toggleDisplayInput} />
+        {!displaySubjectSelection && (
+          <ExitButton toggleDisplay={toggleDisplayInput} />
+        )}
 
         <TextInput
           value={text}
