@@ -1,38 +1,37 @@
-import { Text, View, Button, Modal, ActivityIndicator } from "react-native";
+import { Text, View, Button } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+
 import IconButton from "./components/Buttons/IconButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
-import { Camera, CameraView, useCameraPermissions } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import IndexQuestionInput from "./components/Home/IndexQuestionInput";
-import { AuthContext, AuthContextProvider } from "./context/authContext";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthContextProvider } from "./context/authContext";
+
 import HomeNavButtons from "./components/HomeNavButtons/HomeNavButtons";
 import { ChatContextProvider } from "./context/chatContext";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "./context/authContext";
 import { useChat } from "./context/chatContext";
-import { Image } from "expo-image";
+
 import DisplayImageModal from "../app/components/Home/DisplayImageModal";
 import { Timestamp } from "firebase/firestore";
 
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
+import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotExists";
+import { screenProfanities } from "@/utils/common";
 
 const RootLayout = () => {
   const [permission, requestPermission] = useCameraPermissions();
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isSavingtoStorage, setIsSavingtoStorage] = useState(false);
   const [openDisplayImageModal, setOpenDisplayImageModal] = useState(false);
+  const [displaySubjectSelection, setDisplaySubjectSelection] = useState(false);
+  const [text, setText] = useState("");
+  const [loading, setIsLoading] = useState(false);
 
   const cameraRef = useRef(null);
 
@@ -97,21 +96,80 @@ const RootLayout = () => {
     setImage(null);
   };
 
-  const saveImage = async () => {
-    console.log("function ");
-    if (image) {
+  // const saveImage = async () => {
+  //   console.log("function ");
+  //   if (image) {
+  //     try {
+  //       await MediaLibrary.createAssetAsync(image);
+  //       alert("picture saved");
+  //       setImage(null);
+  //       console.log("picture saved ");
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+
+  const handleSendQuestion = async () => {
+    setIsLoading(true);
+    if (text.length) {
+      const hasProfanities = screenProfanities(text);
+      if (hasProfanities) {
+        setIsLoading(false);
+        return Alert.alert("text shows inappropriate text");
+      }
+    } else {
+      let url;
+      if (image) {
+        url = await handleSaveImageToStorageGetUrl();
+      }
+
+      const roomId = generateRandomId();
+
+      const newQuestionObj = {
+        imageUrl: url || "",
+        menteeId: userDetails?.uid || "",
+        menteeName: userDetails?.firstName || "",
+        menteeAvatarName: userDetails?.avatarName,
+        initialMessage: text || "",
+        questionSubject: selectedSubject || "",
+        createdAt: Timestamp.fromDate(new Date()),
+        roomId: roomId,
+      };
+
       try {
-        await MediaLibrary.createAssetAsync(image);
-        alert("picture saved");
-        setImage(null);
-        console.log("picture saved ");
+        console.log("room: ", roomId);
+        // set new question in firebase
+
+        const result = await setNewTextQuestion(newQuestionObj);
+        console.log("setNewTextQuestion", result);
+
+        if (result.success) {
+          const createRoom = await CreateRoomIfNotExists(newQuestionObj);
+
+          console.log("createRoom", createRoom);
+
+          setImage(null);
+          setOpenDisplayImageModal(false);
+          setSelectedSubject("");
+          setIsLoading(false);
+          setText("");
+        }
+
+        navigation.navigate("chat-room", {
+          roomId: roomId,
+          completedSession: false,
+        });
+
+        // at same time create new room for mentee to join and await mentor
       } catch (error) {
         console.log(error);
       }
     }
   };
+
   // this function is used in messageInput and needs to extracted to as isolated reusable function as too large
-  const handleSend = async () => {
+  const handleSaveImageToStorageGetUrl = async () => {
     try {
       setIsSavingtoStorage(true);
 
@@ -125,37 +183,11 @@ const RootLayout = () => {
       const blob = await response.blob();
       await uploadBytesResumable(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
-
-      handleSendQuestion(downloadURL);
-
-      setIsSavingtoStorage(false);
-      setImage(null);
-      setOpenDisplayImageModal(false);
-      setSelectedSubject("");
-      navigation.navigate("chats");
+      setDisplaySubjectSelection(false);
+      return downloadURL;
     } catch (error) {
       console.error("Error uploading file:", error);
       setIsSavingtoStorage(false);
-    }
-  };
-  // this function is used  messageInput and needs to extracted to as isolated reusable function as too large
-  const handleSendQuestion = async (url) => {
-    try {
-      const newquestionObj = {
-        imageUrl: url,
-        menteeId: userDetails?.uid || "",
-        menteeName: userDetails?.firstName || "",
-        menteeAvatarName: userDetails?.avatarName,
-        initialMessage: "",
-        questionSubject: selectedSubject,
-        createdAt: Timestamp.fromDate(new Date()),
-        roomId: generateRandomId(),
-      };
-
-      const result = await setNewTextQuestion(newquestionObj);
-      console.log(result);
-    } catch (error) {
-      console.error("Error setting new text question:", error);
     }
   };
 
@@ -163,17 +195,26 @@ const RootLayout = () => {
     <AuthContextProvider>
       <ChatContextProvider>
         {displayQuestionInput ? (
-          <IndexQuestionInput toggleDisplayInput={setDisplayQuestionInput} />
+          <IndexQuestionInput
+            loading={loading}
+            handleSendQuestion={handleSendQuestion}
+            text={text}
+            setText={setText}
+            toggleDisplayInput={setDisplayQuestionInput}
+          />
         ) : (
           <View className="h-full w-full bg-red relative">
             <DisplayImageModal
+              loading={loading}
+              setDisplaySubjectSelection={setDisplaySubjectSelection}
+              displaySubjectSelection={displaySubjectSelection}
               setSelectedSubject={setSelectedSubject}
               selectedSubject={selectedSubject}
               onClose={onClose}
               openDisplayImageModal={openDisplayImageModal}
               image={image}
               isSavingtoStorage={isSavingtoStorage}
-              handleSend={handleSend}
+              handleSendQuestion={handleSendQuestion}
             />
 
             <CameraView

@@ -3,7 +3,12 @@ import React from "react";
 
 const IconGeneral = ({ source, size }) => {
   return (
-    <Image className={`h-[${size}px]`} resizeMode="contain" source={source} />
+    <Image
+      style={{ pointerEvents: "none" }}
+      className={`h-[${size}px]`}
+      resizeMode="contain"
+      source={source}
+    />
   );
 };
 

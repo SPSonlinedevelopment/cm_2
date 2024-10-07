@@ -225,7 +225,7 @@ export const AuthContextProvider = ({ children }) => {
               Helpful: 0,
               Smart: 0,
               Kind: 0,
-              "Solved Problems": 0,
+              SolvedProblems: 0,
               Supportive: 0,
             },
             questions: 0,

@@ -18,9 +18,10 @@ const MessageItem = React.memo(
     setReplyMessage,
     setReplyRecipientName,
     mentorId,
+    menteeName,
+    mentorName,
   }) => {
     const [scrollPosition, setScrollPosition] = useState(0);
-    const [hapticFeedback, setHapticFeeback] = useState(false);
     const [ShowReply, setShowReply] = useState(false);
 
     const handleMessageReplyScroll = (event) => {
@@ -36,9 +37,6 @@ const MessageItem = React.memo(
       } else {
         setShowReply(false);
       }
-      setTimeout(() => {
-        setHapticFeeback(false);
-      }, 20);
     }, [scrollPosition]);
 
     let result;
@@ -68,6 +66,8 @@ const MessageItem = React.memo(
     } else if (message.messageType === "connected") {
       return (
         <ConnectedMessage
+          menteeName={menteeName}
+          mentorName={mentorName}
           mentorId={mentorId}
           thisUsersMessage={thisUsersMessage}
           message={message}

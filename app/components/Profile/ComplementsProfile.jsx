@@ -73,7 +73,7 @@ const ComplementsProfile = () => {
             displayAllComplimentsModal ? "text-base" : "w-[82] text-med "
           } text-center`}
         >
-          {comp.title}
+          {comp.title === "SolvedProblems" ? "Solved my Problems" : comp.title}
         </Text>
 
         {comp.description && displayAllComplimentsModal && (

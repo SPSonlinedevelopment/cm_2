@@ -55,6 +55,7 @@ const ReviewForMentee = ({ setDisplayFeedback, roomId }) => {
         >
           {userDetails?.mode === "mentor" && (
             <NameSession
+              menteeFeedbackForm={menteeFeedbackForm}
               handleConfirmEndSession={handleConfirmEndSession}
               setMenteeFeedbackForm={setMenteeFeedbackForm}
               setDisplayFeedback={setDisplayFeedback}

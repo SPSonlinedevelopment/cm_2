@@ -9,6 +9,7 @@ interface IconButtonProps {
   isLoading?: boolean;
   title?: string;
   textStyles?: string;
+  disabled?: boolean;
 }
 const IconButton: React.FC<IconButtonProps> = ({
   containerStyles,
@@ -17,16 +18,19 @@ const IconButton: React.FC<IconButtonProps> = ({
   icon,
   isLoading,
   title,
+  disabled,
 }) => {
   return (
     <TouchableOpacity
       style={{ pointerEvents: "box-only" }}
-      disabled={isLoading}
+      disabled={disabled}
       activeOpacity={0.7}
       onPress={() => {
         handlePress();
       }}
-      className={` bg-orange-500  rounded-full my-4 justify-center items-center    z-50 ${containerStyles} ${
+      className={` ${
+        disabled ? "opacity-50 " : "opacity"
+      } bg-orange-500  rounded-full my-4 justify-center items-center    z-50 ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       } `}
       testID="custom_button"

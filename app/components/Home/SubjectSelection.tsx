@@ -15,6 +15,7 @@ interface SubjectSelectionProps {
   displaySubjectSelection: boolean;
   setDisplaySubjectSelection: React.Dispatch<React.SetStateAction<boolean>>;
   handleSendQuestion: () => Promise<void>;
+  loading: boolean;
 }
 
 const SubjectSelection: React.FC<SubjectSelectionProps> = ({
@@ -23,8 +24,8 @@ const SubjectSelection: React.FC<SubjectSelectionProps> = ({
   setDisplaySubjectSelection,
   displaySubjectSelection,
   handleSendQuestion,
+  loading,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
   const subjects = [
     {
       subject: "Maths",
@@ -54,7 +55,7 @@ const SubjectSelection: React.FC<SubjectSelectionProps> = ({
       transparent={true}
     >
       <ExitButton toggleDisplay={setDisplaySubjectSelection} />
-      <View className="absolute bottom-0 justify-center  h-[70%] w-full  flex-row flex-wrap bg-white  shadow-xl">
+      <View className="absolute bottom-0 justify-center  h-[50%] w-full  flex-row flex-wrap bg-white  shadow-xl">
         <View className="w-[80%] flex justify-center items-center p-2 ">
           <Text className="mt-4 text-purple text-xl font-bold items-center justify-center text-center">
             Which subject do you need help with?
@@ -72,13 +73,14 @@ const SubjectSelection: React.FC<SubjectSelectionProps> = ({
       </View>
 
       <IconButton
-        isLoading={isLoading}
-        handlePress={() => {
-          handleSendQuestion();
+        disabled={selectedSubject.length > 0 ? false : true}
+        isLoading={loading}
+        handlePress={async () => {
+          await handleSendQuestion();
         }}
         textStyles="mr-2"
         title="Submit"
-        containerStyles="flex flex-row-reverse  px-4 h-[50px] absolute bottom-2 right-2"
+        containerStyles="flex flex-row-reverse  px-4 w-[100px] h-[50px] absolute bottom-2 right-2"
         icon={<FontAwesome name="send" size={24} color="white" />}
       />
     </Modal>

@@ -47,7 +47,7 @@ export const menteeComplements = [
     icon: Love,
   },
   {
-    title: "Solved Problems",
+    title: "SolvedProblems",
     icon: ProblemSolving,
   },
   {
@@ -134,6 +134,7 @@ const ComplementSelectionsButton = ({
   setFeedbackForm,
   feedbackForm,
 }) => {
+  console.log("🚀 ~ feedbackForm:", feedbackForm);
   const [selected, setSelected] = useState(false);
 
   const handleSelection = (selection) => {
@@ -164,7 +165,7 @@ const ComplementSelectionsButton = ({
 
         handleSelection(comp?.title);
       }}
-      className={`shadow   rounded-full ${
+      className={`shadow h-[75px] w-[75px] m-2 flex items-center justify-center  rounded-full ${
         selected ? "bg-purple" : "bg-neutral-50"
       }`}
     >

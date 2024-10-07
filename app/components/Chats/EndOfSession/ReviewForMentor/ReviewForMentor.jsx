@@ -95,32 +95,50 @@ const ReviewMentorContainer = ({
       ];
 
       const feedbackCounts = {
-        clear: 0,
-        fast: 0,
-        friendly: 0,
-        helpful: 0,
+        Clear: 0,
+        Fast: 0,
+        Friendly: 0,
+        Helpful: 0,
+        Kind: 0,
+        Smart: 0,
+        SolvedProblems: 0,
+        Supportive: 0,
       };
 
       feedbackForm?.mentorCompliments.forEach((stat) => {
-        if (stat === "Clear") feedbackCounts.clear++;
-        if (stat === "Fast") feedbackCounts.fast++;
-        if (stat === "Friendly") feedbackCounts.friendly++;
-        if (stat === "Helpful") feedbackCounts.helpful++;
+        if (stat === "Clear") feedbackCounts.Clear++;
+        if (stat === "Fast") feedbackCounts.Fast++;
+        if (stat === "Friendly") feedbackCounts.Friendly++;
+        if (stat === "Kind") feedbackCounts.Kind++;
+        if (stat === "Helpful") feedbackCounts.Helpful++;
+        if (stat === "Smart") feedbackCounts.Smart++;
+        if (stat === "SolvedProblems") feedbackCounts.SolvedProblems++;
+        if (stat === "Supportive") feedbackCounts.Supportive++;
       });
 
       await updateDoc(mentorRef, {
         "mentorStatistics.stars": updatedStars,
         "mentorStatistics.questions": mentorData.mentorStatistics.questions + 1,
-        "mentorStatistics.compliments.clear":
-          mentorData.mentorStatistics.compliments.clear + feedbackCounts.clear,
-        "mentorStatistics.compliments.fast":
-          mentorData.mentorStatistics.compliments.fast + feedbackCounts.fast,
-        "mentorStatistics.compliments.friendly":
-          mentorData.mentorStatistics.compliments.friendly +
-          feedbackCounts.friendly,
-        "mentorStatistics.compliments.helpful":
-          mentorData.mentorStatistics.compliments.helpful +
-          feedbackCounts.helpful,
+        "mentorStatistics.compliments.Clear":
+          mentorData.mentorStatistics.compliments.Clear + feedbackCounts.Clear,
+        "mentorStatistics.compliments.Fast":
+          mentorData.mentorStatistics.compliments.Fast + feedbackCounts.Fast,
+        "mentorStatistics.compliments.Friendly":
+          mentorData.mentorStatistics.compliments.Friendly +
+          feedbackCounts.Friendly,
+        "mentorStatistics.compliments.Helpful":
+          mentorData.mentorStatistics.compliments.Helpful +
+          feedbackCounts.Helpful,
+        "mentorStatistics.compliments.Kind":
+          mentorData.mentorStatistics.compliments.Kind + feedbackCounts.Kind,
+        "mentorStatistics.compliments.Smart":
+          mentorData.mentorStatistics.compliments.Smart + feedbackCounts.Smart,
+        "mentorStatistics.compliments.SolvedProblems":
+          mentorData.mentorStatistics.compliments.SolvedProblems +
+          feedbackCounts.SolvedProblems,
+        "mentorStatistics.compliments.Supportive":
+          mentorData.mentorStatistics.compliments.Supportive +
+          feedbackCounts.Supportive,
         "mentorStatistics.time": mentorData.mentorStatistics.time + duration,
         writtenFeedback: arrayUnion({
           menteeId,
@@ -129,6 +147,7 @@ const ReviewMentorContainer = ({
           completedSessionId: roomId,
           createdAt: Timestamp.fromDate(new Date()),
           avatarName: menteeAvatar,
+          stars: feedbackForm.mentorRating,
         }),
       });
 
@@ -166,6 +185,16 @@ const ReviewMentorContainer = ({
     }
   };
 
+  let submitButtonDisabled;
+
+  if (
+    !feedbackForm.mentorRating ||
+    !feedbackForm.confidenceRatingBefore ||
+    !feedbackForm.confidenceRatingAfter
+  ) {
+    submitButtonDisabled = true;
+  } else submitButtonDisabled = false;
+
   return (
     <SafeAreaView>
       <Modal animationType="fade">
@@ -191,9 +220,9 @@ const ReviewMentorContainer = ({
           />
           <View className="w-full flex items-center my-10">
             <IconButton
+              disabled={submitButtonDisabled}
               containerStyles="w-[85%] h-[40px] flex items-center"
               handlePress={() => {
-                console.log("TEST123");
                 addMentorReviewToRoom();
                 updateMentorStats();
                 updateMenteeStats();

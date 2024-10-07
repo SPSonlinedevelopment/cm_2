@@ -28,7 +28,13 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 //   toggleDisplayInput: React.Dispatch<React.SetStateAction<boolean>>;
 // }
 
-const IndexQuestionInput = ({ toggleDisplayInput }) => {
+const IndexQuestionInput = ({
+  toggleDisplayInput,
+  text,
+  setText,
+  handleSendQuestion,
+  loading,
+}) => {
   const inputRef = useRef(null);
 
   const {
@@ -39,27 +45,12 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
     getUserDataFromFirebase,
   } = useAuth();
 
-  const { setNewTextQuestion } = useChat();
-  const [isLoading, setIsLoading] = useState(false);
-  const [text, setText] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const navigation = useNavigation();
 
   const [displaySubjectSelection, setDisplaySubjectSelection] = useState(false);
 
-  const getdataFn = async () => {
-    const getdata = await getUserDataFromFirebase(user?.uid);
-
-    if (getdata.success) {
-      setUserDetails(getdata.data);
-      // console.log("res data", getdata.data);
-    }
-
-    return getdata;
-  };
-
   useEffect(() => {
-    getdataFn();
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -68,60 +59,6 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
   const handleTextChange = (value) => {
     setText(value);
   };
-  const roomId = generateRandomId();
-
-  const handleSendQuestion = async () => {
-    setIsLoading(true);
-
-    const hasProfanities = screenProfanities(text);
-    if (hasProfanities) {
-      setIsLoading(false);
-      return Alert.alert("text shows inappropriate text");
-    } else {
-      const newQuestionObj = {
-        imageUrl: "",
-        menteeId: userDetails?.uid || "",
-        menteeName: userDetails?.firstName || "",
-        menteeAvatarName: userDetails?.avatarName,
-        initialMessage: text || "",
-        questionSubject: selectedSubject || "",
-        createdAt: Timestamp.fromDate(new Date()),
-        roomId: roomId,
-      };
-
-      try {
-        console.log("room: ", roomId);
-        // set new question in firebase
-
-        const result = await setNewTextQuestion(newQuestionObj);
-
-        if (result.success) {
-          await CreateRoomIfNotExists(newQuestionObj);
-        }
-
-        navigation.navigate("chat-room", {
-          roomId: roomId,
-          completedSession: false,
-        });
-
-        // at same time create new room for mentee to join and await mentor
-      } catch (error) {
-        console.log(error);
-      }
-
-      setDisplaySubjectSelection(false);
-      setSelectedSubject("");
-      setIsLoading(false);
-      setText("");
-    }
-  };
-  // catch (error) {
-  //   console.error(error);
-
-  //   // if (!isAuthenticated) {
-  //   //   router.push("sign-in");
-  //   // }
-  // }
 
   return (
     <CustomKeyboardView>
@@ -146,6 +83,7 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
         />
 
         <SubjectSelection
+          loading={loading}
           handleSendQuestion={handleSendQuestion}
           setDisplaySubjectSelection={setDisplaySubjectSelection}
           displaySubjectSelection={displaySubjectSelection}
@@ -154,7 +92,7 @@ const IndexQuestionInput = ({ toggleDisplayInput }) => {
         />
 
         <IconButton
-          isLoading={isLoading}
+          disabled={text.length > 0 ? false : true}
           handlePress={() => {
             setDisplaySubjectSelection(true);
           }}

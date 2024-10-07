@@ -5,16 +5,22 @@ import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import ExitButton from "../Buttons/ExitButton";
 import SubjectSelection from "./SubjectSelection";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const DisplayImageModal = ({
   openDisplayImageModal,
+  setDisplaySubjectSelection,
+  displaySubjectSelection,
   image,
   isSavingtoStorage,
-  handleSend,
+  handleSendQuestion,
   onClose,
   selectedSubject,
   setSelectedSubject,
+  loading,
 }) => {
+  // handleSend();
+  // console.log("pressed send button");
   return (
     <Modal className="" visible={openDisplayImageModal} animationType="slide">
       <View className="h-full w-full bg-zinc-600 flex items-center justify-between ">
@@ -23,10 +29,10 @@ const DisplayImageModal = ({
             onClose();
           }}
         />
-        <View className="h-10 w-10"></View>
+
         {image ? (
           <Image
-            className="h-[50%] w-[70%]"
+            className="h-[100%] w-[100%]"
             style={{
               resizeMode: "contain",
             }}
@@ -42,18 +48,21 @@ const DisplayImageModal = ({
 
         <View className="flex flex-col items-center justify-center w-full">
           <SubjectSelection
+            loading={loading}
+            displaySubjectSelection={displaySubjectSelection}
             selectedSubject={selectedSubject}
             setSelectedSubject={setSelectedSubject}
+            handleSendQuestion={handleSendQuestion}
           />
           <IconButton
-            isLoading={isSavingtoStorage}
-            containerStyles="h-[60px] w-[100px] bg-orange"
-            icon={<FontAwesome name="send" size={24} color="white" />}
+            containerStyles="flex flex-row-reverse  px-4 w-[100px] h-[50px] absolute bottom-2 right-2"
+            icon={
+              <MaterialIcons name="navigate-next" size={24} color="white" />
+            }
             handlePress={() => {
-              handleSend();
-              console.log("pressed send button");
+              setDisplaySubjectSelection(true);
             }}
-            title="Send"
+            title="Next"
           />
         </View>
       </View>

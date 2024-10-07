@@ -40,29 +40,29 @@ const MessagesList = ({
 
   let connectedMessage = [];
 
-  // if (chatRoomData?.connectedMentor) {
-  //   connectedMessage = [
-  //     {
-  //       messageType: "connected",
-  //       senderName: "Collet owl",
-  //       text: `You are now connected with your ${
-  //         mode === "mentee" ? "mentor" : "mentee"
-  //       } , their name is ${
-  //         mode === "mentee"
-  //           ? chatRoomData?.mentorName
-  //           : chatRoomData?.menteeName
-  //       }`,
+  if (chatRoomData?.connectedMentor) {
+    connectedMessage = [
+      {
+        messageType: "connected",
+        senderName: "Collet owl",
+        text: `You are now connected with your ${
+          mode === "mentee" ? "mentor" : "mentee"
+        } , their name is ${
+          mode === "mentee"
+            ? chatRoomData?.mentorName
+            : chatRoomData?.menteeName
+        }`,
 
-  //       createdAt: Timestamp.fromDate(new Date()),
-  //       messageId: "TestMessageId7",
-  //       senderAvatar: `${
-  //         mode === "mentee"
-  //           ? chatRoomData?.mentorAvatar
-  //           : chatRoomData?.menteeAvatar
-  //       }`,
-  //     },
-  //   ];
-  // }
+        createdAt: Timestamp.fromDate(new Date()),
+        messageId: "TestMessageId7",
+        senderAvatar: `${
+          mode === "mentee"
+            ? chatRoomData?.mentorAvatar
+            : chatRoomData?.menteeAvatar
+        }`,
+      },
+    ];
+  }
 
   useEffect(() => {
     let initialMessage = [];
@@ -70,6 +70,7 @@ const MessagesList = ({
       initialMessage = [
         {
           text: chatRoomData?.initialMessage || "",
+          imageUrl: chatRoomData?.initialImageUrl,
           userId: chatRoomData?.menteeId,
           senderName: chatRoomData?.menteeName,
           messageId: "TestMessageId2",
@@ -94,17 +95,18 @@ const MessagesList = ({
     } else {
       initialMessage = [
         {
+          text: chatRoomData?.initialMessage || "",
+          imageUrl: chatRoomData?.initialImageUrl,
+          userId: chatRoomData?.menteeId,
+          senderName: chatRoomData?.menteeName,
+          messageId: "TestMessageId2",
+        },
+        {
           text: `${chatRoomData.mentorName} please remember to use good English and be polite to your mentee!`,
           senderName: "Collet owl",
           messageId: "TestMessageId5",
         },
 
-        {
-          text: chatRoomData?.initialMessage || "",
-          userId: chatRoomData?.menteeId,
-          senderName: chatRoomData?.menteeName,
-          messageId: "TestMessageId2",
-        },
         ...connectedMessage,
       ];
     }
@@ -157,13 +159,15 @@ const MessagesList = ({
     }, 300);
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  }, [messages]);
+  }, [messages, chatRoomData.sessionCompleted]);
 
   return (
     <ScrollView ref={scrollViewRef}>
       {messages?.map((message) => {
         return (
           <MessageItem
+            menteeName={chatRoomData.menteeName}
+            mentorName={chatRoomData.mentorName}
             mentorId={chatRoomData.mentorId}
             setReplyRecipientName={setReplyRecipientName}
             setReplyMessage={setReplyMessage}

@@ -24,7 +24,11 @@ const Complements = ({ feedbackForm, setFeedbackForm }) => {
                 setFeedbackForm={setFeedbackForm}
                 comp={comp}
               />
-              <Text>{comp.title}</Text>
+              {comp.title === "SolvedProblems" ? (
+                <Text>Solved Problems</Text>
+              ) : (
+                <Text>{comp.title}</Text>
+              )}
             </View>
           );
         })}

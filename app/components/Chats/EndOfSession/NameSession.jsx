@@ -8,6 +8,7 @@ const NameSession = ({
   setDisplayFeedback,
   setMenteeFeedbackForm,
   handleConfirmEndSession,
+  menteeFeedbackForm,
 }) => {
   const handleChange = (val) => {
     setMenteeFeedbackForm((prev) => {
@@ -27,6 +28,7 @@ const NameSession = ({
       <IconGeneral source={Reward} size={100} />
 
       <IconButton
+        disabled={menteeFeedbackForm.sessionName.length > 0 ? false : true}
         textStyles="text-base "
         containerStyles=" p-3"
         title="Name Session"

@@ -13,11 +13,9 @@ import Ambition from "../../../../assets/icons/Ambition.png";
 import Love from "../../../../assets/icons/Love.png";
 import Clock from "../../../../assets/icons/Clock.png";
 
-const ConnectedMessage = ({ message, mentorId }) => {
+const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
   const { userDetails } = useAuth();
-
   const [mentorData, setMentorData] = useState();
-  console.log("🚀 ~ ConnectedMessage ~ mentorData:", mentorData);
 
   const getMentorDoc = async () => {
     try {
@@ -30,7 +28,7 @@ const ConnectedMessage = ({ message, mentorId }) => {
         const data = docSnapshot.data();
 
         setMentorData(data.mentorStatistics);
-        console.log("🚀 ~ getMentorDoc ~ data:", data);
+    
       } else {
         // Document does not exist
         console.log("No such document!");
@@ -63,7 +61,8 @@ const ConnectedMessage = ({ message, mentorId }) => {
       <View className=" w-[100%] flex items-center  bg-purple shadow rounded-xl p-2">
         <Avatar avatarName={message.senderAvatar}></Avatar>
         <Text className="text-white">
-          You are now connected to {userDetails?.firstName}
+          You are now connected to{" "}
+          {userDetails.mode === "mentor" ? menteeName : mentorName}
         </Text>
 
         {userDetails?.mode === "mentee" && (

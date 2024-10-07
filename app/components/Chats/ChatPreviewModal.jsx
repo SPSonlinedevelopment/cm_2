@@ -64,7 +64,7 @@ const ChatPreviewModal = ({
       transparent={true}
       backdropOpacity={0.5}
     >
-      {displayFullScreenImage && (
+      {displayFullScreenImage && message?.imageUrl && (
         <FullScreenImage
           url={message?.imageUrl}
           onClose={setDisplayFullScreenImage}
@@ -79,14 +79,17 @@ const ChatPreviewModal = ({
           {/* <Text>{message?.Timestamp}</Text> */}
           <Avatar avatarName={message?.menteeAvatarName}></Avatar>
           <Text className="text-base p-3">
-            <Text className="text-base font-bold"> Subject:</Text>
+            <Text className="text-base font-bold"> Subject: </Text>
             {message?.questionSubject}
           </Text>
-          <MessageText
-            text={message.initialMessage}
-            thisUsersMessage={false}
-            time
-          />
+
+          {message.initialMessage && (
+            <MessageText
+              text={message.initialMessage}
+              thisUsersMessage={false}
+              time
+            />
+          )}
 
           {message?.imageUrl && (
             <TouchableOpacity
@@ -111,6 +114,7 @@ const ChatPreviewModal = ({
               />
             </TouchableOpacity>
           )}
+          <Text className="m-2 text-xs">Click to enlarge</Text>
         </View>
         <View className="w-full flex  flex-row items-center justify-center">
           <IconButton
