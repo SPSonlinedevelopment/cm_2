@@ -1,5 +1,5 @@
-import { View } from "react-native";
-import React, { useState, useLayoutEffect } from "react";
+import { View, TouchableOpacity } from "react-native";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import * as Haptics from "expo-haptics";
 import { convertFirebaseTimestampToDate } from "@/utils/common";
@@ -20,9 +20,13 @@ const MessageItem = React.memo(
     mentorId,
     menteeName,
     mentorName,
+    setSelectedMessage,
+    setDisplayMessageSelectedModal,
   }) => {
     const [scrollPosition, setScrollPosition] = useState(0);
     const [ShowReply, setShowReply] = useState(false);
+
+    const [messageSelected, setMessageSelected] = useState(false);
 
     const handleMessageReplyScroll = (event) => {
       setScrollPosition(event.nativeEvent.contentOffset.x);
@@ -42,6 +46,27 @@ const MessageItem = React.memo(
     let result;
 
     const thisUsersMessage = message?.userId === userId;
+
+    const handleSelectedMessage = (inputRef) => {
+      const ref = inputRef.current; // Rename to avoid re-declaration
+      console.log("🚀 ~ handleSelectedMessage ~ inputRef:", inputRef);
+      setMessageSelected(true);
+      setDisplayMessageSelectedModal(true);
+
+      if (ref) {
+        ref.measureInWindow((x, y, width, height, pageX, pageY) => {
+          setSelectedMessage({
+            message,
+            x: x,
+            y: y,
+            width: width,
+            height: height,
+            pageX: pageX,
+            pageY: pageY,
+          });
+        });
+      }
+    };
 
     let time;
     if (message?.createdAt) {
@@ -76,9 +101,11 @@ const MessageItem = React.memo(
     } else {
       result = (
         <MessageText
+          handleSelectedMessage={handleSelectedMessage}
           time={time}
           thisUsersMessage={thisUsersMessage}
           text={message.text}
+          message={message}
         />
       );
     }

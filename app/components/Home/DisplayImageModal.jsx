@@ -21,6 +21,10 @@ const DisplayImageModal = ({
 }) => {
   // handleSend();
   // console.log("pressed send button");
+
+
+
+  
   return (
     <Modal className="" visible={openDisplayImageModal} animationType="slide">
       <View className="h-full w-full bg-zinc-600 flex items-center justify-between ">

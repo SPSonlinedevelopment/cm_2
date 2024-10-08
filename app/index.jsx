@@ -118,54 +118,50 @@ const RootLayout = () => {
         setIsLoading(false);
         return Alert.alert("text shows inappropriate text");
       }
-    } else {
-      let url;
-      if (image) {
-        url = await handleSaveImageToStorageGetUrl();
-      }
-
-      const roomId = generateRandomId();
-
-      const newQuestionObj = {
-        imageUrl: url || "",
-        menteeId: userDetails?.uid || "",
-        menteeName: userDetails?.firstName || "",
-        menteeAvatarName: userDetails?.avatarName,
-        initialMessage: text || "",
-        questionSubject: selectedSubject || "",
-        createdAt: Timestamp.fromDate(new Date()),
-        roomId: roomId,
-      };
-
-      try {
-        console.log("room: ", roomId);
-        // set new question in firebase
-
-        const result = await setNewTextQuestion(newQuestionObj);
-        console.log("setNewTextQuestion", result);
-
-        if (result.success) {
-          const createRoom = await CreateRoomIfNotExists(newQuestionObj);
-
-          console.log("createRoom", createRoom);
-
-          setImage(null);
-          setOpenDisplayImageModal(false);
-          setSelectedSubject("");
-          setIsLoading(false);
-          setText("");
-        }
-
-        navigation.navigate("chat-room", {
-          roomId: roomId,
-          completedSession: false,
-        });
-
-        // at same time create new room for mentee to join and await mentor
-      } catch (error) {
-        console.log(error);
-      }
     }
+
+    let url;
+    if (image) {
+      url = await handleSaveImageToStorageGetUrl();
+    }
+
+    const roomId = generateRandomId();
+
+    const newQuestionObj = {
+      imageUrl: url || "",
+      menteeId: userDetails?.uid || "",
+      menteeName: userDetails?.firstName || "",
+      menteeAvatarName: userDetails?.avatarName,
+      initialMessage: text || "",
+      questionSubject: selectedSubject || "",
+      createdAt: Timestamp.fromDate(new Date()),
+      roomId: roomId,
+    };
+
+    try {
+      // set new question in firebase
+
+      const result = await setNewTextQuestion(newQuestionObj);
+      console.log("setNewTextQuestion", result);
+
+      if (result.success) {
+        const createRoom = await CreateRoomIfNotExists(newQuestionObj);
+
+        console.log("createRoom", createRoom);
+      }
+
+      navigation.navigate("chat-room", {
+        roomId: roomId,
+        completedSession: false,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    setImage(null);
+    setOpenDisplayImageModal(false);
+    setIsLoading(false);
+    setText("");
   };
 
   // this function is used in messageInput and needs to extracted to as isolated reusable function as too large
@@ -183,7 +179,7 @@ const RootLayout = () => {
       const blob = await response.blob();
       await uploadBytesResumable(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);
-      setDisplaySubjectSelection(false);
+
       return downloadURL;
     } catch (error) {
       console.error("Error uploading file:", error);

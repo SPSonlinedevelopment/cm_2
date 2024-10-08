@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, TextInput, Alert } from "react-native";
+import { View, TouchableOpacity, TextInput, Alert, Text } from "react-native";
 import React, { useState, useRef } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
@@ -7,24 +7,38 @@ import { handleSendTextMessageToChatroom } from "../SendData/SendTexts/handleSen
 import { pickImage } from "@/utils/imagePicker";
 import ImageMessageCaption from "../SendData/SendImages/ImageMessageCaption";
 import { screenProfanities } from "@/utils/common";
+import { ScrollView } from "react-native-gesture-handler";
+
+const SelectEmojiBtn = ({ setDisplayEmojiSelector }) => {
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        setDisplayEmojiSelector((prev) => !prev);
+      }}
+    >
+      <Text>😊</Text>
+    </TouchableOpacity>
+  );
+};
 
 const MessageInput = React.memo(
-  ({ item, scrollToEnd, isReply, setDisplayShowReplyBar, replyMessage }) => {
+  ({
+    item,
+    scrollToEnd,
+    isReply,
+    setDisplayShowReplyBar,
+    replyMessage,
+    setDisplayEmojiSelector,
+    text,
+    setText,
+    inputRef,
+  }) => {
     const { userDetails } = useAuth();
     const [TextInputFocused, setTextInputFocused] = useState(false);
     const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
     const [image, setImage] = useState({});
     const [displayImageCaptionModal, setDisplayImageCaptionModal] =
       useState(false);
-
-    const textRef = useRef(null);
-    const inputRef = useRef(null);
-
-    const handleChangeText = () => {
-      // if (inputFieldEmpty) {
-      //   // setInputFieldEmpty(false);
-      // }
-    };
 
     const handlePickImage = async () => {
       try {
@@ -38,7 +52,7 @@ const MessageInput = React.memo(
 
     // handle sending a message
     const handleSendMessage = async () => {
-      const hasProfanities = screenProfanities(textRef.current.trim());
+      const hasProfanities = screenProfanities(text);
       if (hasProfanities) {
         return Alert.alert("text shows inappropriate text");
       } else {
@@ -46,14 +60,15 @@ const MessageInput = React.memo(
         try {
           await handleSendTextMessageToChatroom(
             item,
-            textRef,
+            text,
             inputRef,
             userDetails,
             isReply,
             replyMessage
           );
-
+          setText("");
           scrollToEnd();
+          setDisplayEmojiSelector(false);
         } catch (error) {
           console.log("🚀 ~ handleSendMessage ~ error:", error);
         }
@@ -65,7 +80,7 @@ const MessageInput = React.memo(
         style={{}}
         className={`${
           TextInputFocused ? "pb-[0px]" : "pb-[20px]"
-        }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center `}
+        }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center  `}
       >
         {/* <Text>{JSON.stringify(replyMessage)}</Text> */}
         {displayImageCaptionModal && (
@@ -76,19 +91,22 @@ const MessageInput = React.memo(
           />
         )}
 
-        <View className="flex-row justify-around  items-center  w-full  p-2   ">
+        <View className="flex-row justify-around  items-center  w-full  p-2    ">
           <TouchableOpacity
             onPress={() => handlePickImage()}
-            className="bh-neutral-200    flex items-center justify-center rounded-full  pr-[10px]"
+            className="bh-neutral-200    flex items-center justify-center rounded-full  pr-[10px] "
           >
             <Ionicons name="add-outline" size={20} color="black" />
           </TouchableOpacity>
+
+          <SelectEmojiBtn setDisplayEmojiSelector={setDisplayEmojiSelector} />
           <TextInput
+            value={text}
             ref={inputRef}
             onFocus={() => setTextInputFocused(!TextInputFocused)}
             onBlur={() => setTextInputFocused(!TextInputFocused)}
             onChangeText={(value) => {
-              (textRef.current = value), handleChangeText();
+              setText(value);
             }}
             style={{
               backgroundColor: "white",

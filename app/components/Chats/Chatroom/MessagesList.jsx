@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import MessageItem from "./MessageItem";
 import { Image } from "expo-image";
@@ -20,6 +20,7 @@ import {
 import { db } from "@/firebaseConfig";
 import * as Haptics from "expo-haptics";
 import UserDetails from "@/app/user-details";
+import MessageSelectedModal from "./MessageSelectedModal";
 
 const MessagesList = ({
   chatRoomData,
@@ -31,6 +32,8 @@ const MessagesList = ({
   setReplyRecipientName,
   userDetails,
   roomId,
+  setSelectedMessage,
+  setDisplayMessageSelectedModal,
 }) => {
   const [messages, setMessages] = useState([]);
 
@@ -166,6 +169,8 @@ const MessagesList = ({
       {messages?.map((message) => {
         return (
           <MessageItem
+            setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+            setSelectedMessage={setSelectedMessage}
             menteeName={chatRoomData.menteeName}
             mentorName={chatRoomData.mentorName}
             mentorId={chatRoomData.mentorId}

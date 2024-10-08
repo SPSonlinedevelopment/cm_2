@@ -13,13 +13,13 @@ import * as Haptics from "expo-haptics";
 
 export const handleSendTextMessageToChatroom = async (
   item,
-  textRef,
+  text,
   inputRef,
   userDetails,
   isReply,
   replyMessage
 ) => {
-  let message = textRef.current.trim();
+  let message = text.trim();
 
   if (!message) return;
   {
@@ -27,7 +27,7 @@ export const handleSendTextMessageToChatroom = async (
       const docRef = doc(db, "rooms", item?.roomId);
       const messagesRef = collection(docRef, "messages");
 
-      if (inputRef) inputRef?.current?.clear();
+      // if (inputRef) inputRef?.current?.clear();
 
       if (isReply) {
         const newDoc = await addDoc(messagesRef, {
@@ -53,21 +53,6 @@ export const handleSendTextMessageToChatroom = async (
           isReply: isReply,
         });
       }
-      // this is incorrect as the value in item is based on first render
-      // if (
-      //   userDetails &&
-      //   (userDetails.mode === "mentor" || userDetails.mode === "mentee")
-      // ) {
-      //   const fieldToUpdate =
-      //     userDetails.mode === "mentor"
-      //       ? "menteeUnreadMessageNumber"
-      //       : "mentorUnreadMessageNumber";
-
-      //   await updateDoc(docRef, {
-      //     [fieldToUpdate]: item[fieldToUpdate] + 1,
-      //   });
-      // }
-      textRef.current = "";
     } catch (error) {
       console.log("🚀 ~ error:", error);
     }
@@ -80,8 +65,6 @@ export const handleSendSuggestedMessageToChatroom = async (
   userDetails
 ) => {
   let message = textRef.current.trim();
-
-  console.log("item", item);
 
   if (!message) return;
   try {
