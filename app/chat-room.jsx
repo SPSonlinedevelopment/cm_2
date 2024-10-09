@@ -22,7 +22,8 @@ import ReviewMentor from "./components/Chats/EndOfSession/ReviewForMentor/Review
 import ReviewMentee from "./components/Chats/EndOfSession/ReviewForMentee";
 import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotExists";
 import EmojiSelector from "./components/Chats/Chatroom/EmojiSelector";
-import MessageSelectedModal from "./components/Chats/Chatroom/MessageSelectedModal";
+import MessageSelectedModal from "./components/Chats/Chatroom/MessageSelected/MessageSelectedModal";
+import ReportMessageModal from "./components/Chats/Chatroom/MessageSelected/ReportMessageModal";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
@@ -145,6 +146,8 @@ const ChatRoom = () => {
           displayShowReplyBar={displayShowReplyBar}
         />
       )}
+
+  
 
       <MessageSelectedModal
         selectedMessage={selectedMessage}

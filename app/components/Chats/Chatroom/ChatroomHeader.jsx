@@ -26,7 +26,7 @@ const ChatroomHeader = ({
                 className="m-2"
                 onPress={() => {
                   setDisplyConfirmEndOfSessionModal(true);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
                 <Entypo name="cross" size={34} color="black" />

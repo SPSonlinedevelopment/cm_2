@@ -46,6 +46,10 @@ const MessageItem = React.memo(
     let result;
 
     const thisUsersMessage = message?.userId === userId;
+    let time;
+    if (message?.createdAt) {
+      time = convertFirebaseTimestampToDate(message?.createdAt);
+    }
 
     const handleSelectedMessage = (inputRef) => {
       const ref = inputRef.current; // Rename to avoid re-declaration
@@ -56,7 +60,9 @@ const MessageItem = React.memo(
       if (ref) {
         ref.measureInWindow((x, y, width, height, pageX, pageY) => {
           setSelectedMessage({
+            thisUsersMessage: thisUsersMessage,
             message,
+            time: time,
             x: x,
             y: y,
             width: width,
@@ -67,11 +73,6 @@ const MessageItem = React.memo(
         });
       }
     };
-
-    let time;
-    if (message?.createdAt) {
-      time = convertFirebaseTimestampToDate(message?.createdAt);
-    }
 
     if (message.isReply) {
       return (

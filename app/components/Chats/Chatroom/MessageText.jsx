@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useRef, useState } from "react";
+import * as Haptics from "expo-haptics";
 
 const MessageText = ({
   text,
@@ -27,14 +28,13 @@ const MessageText = ({
     >
       <TouchableOpacity
         ref={messageRef}
-        delayPressIn={600}
+        delayPressIn={400}
         onLongPress={() => {
           handleSelectedMessage(messageRef);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }}
         onLayout={handleLayout}
-        className={`flex w-[${dimensions.width}] h-[${
-          dimensions.height
-        }]  relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow-sm   ${
+        className={` relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow   ${
           thisUsersMessage
             ? "bg-orange-200 self-end  mr-3  "
             : "bg-white self-start  ml-3"

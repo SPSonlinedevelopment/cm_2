@@ -20,7 +20,7 @@ import {
 import { db } from "@/firebaseConfig";
 import * as Haptics from "expo-haptics";
 import UserDetails from "@/app/user-details";
-import MessageSelectedModal from "./MessageSelectedModal";
+import MessageSelectedModal from "./MessageSelected/MessageSelectedModal";
 
 const MessagesList = ({
   chatRoomData,

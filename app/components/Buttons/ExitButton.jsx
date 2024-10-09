@@ -7,7 +7,7 @@ import { Entypo } from "@expo/vector-icons";
 const ExitButton = ({ toggleDisplay }) => {
   return (
     <IconButton
-      containerStyles="h-[50px] w-[50px] bg-white absolute left-4 top-10  shadow-sm"
+      containerStyles="h-[50px] w-[50px] bg-white opacity-100 absolute left-4 top-10  bg-white shadow-sm"
       handlePress={() => {
         toggleDisplay(false);
         console.log("asjdhask");
