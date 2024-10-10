@@ -8,9 +8,12 @@ import {
   onSnapshot,
   where,
   orderBy,
+  deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { useAuth } from "./authContext";
+import { Alert } from "react-native";
 
 export const ChatContext = createContext();
 
@@ -33,6 +36,42 @@ export const ChatContextProvider = ({ children }) => {
     } catch (error) {
       console.log("error", error);
       return { success: false };
+    }
+  };
+
+  const reportInappropriateMessage = async (messageObj) => {
+    console.log("🚀 ~ reportInappropriateMessage ~ messageObj:", messageObj);
+    try {
+      await setDoc(
+        doc(db, "reported_messages", messageObj.message.messageId),
+        messageObj
+      );
+      Alert.alert("Message reported successfully");
+      return { success: true };
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error reporting message");
+      return { success: false };
+    }
+  };
+
+  const deleteSelectedMessage = (messageObj) => {
+    console.log("  messageObj.roomId,", messageObj.roomId);
+    console.log(" messagesId,", messageObj.message.messageId);
+
+    try {
+      const messageRef = doc(
+        db,
+        "rooms",
+        messageObj.roomId,
+        "messages",
+        messageObj.message.messageId
+      );
+      deleteDoc(messageRef);
+      Alert.alert("Message deleted");
+    } catch (error) {
+      console.log("🚀 ~ deleteSelectedMessage ~ error:", error);
+      Alert.alert("Error deleting messages");
     }
   };
 
@@ -116,6 +155,8 @@ export const ChatContextProvider = ({ children }) => {
         allChats,
         getCompletedChats,
         completedChats,
+        reportInappropriateMessage,
+        deleteSelectedMessage,
       }}
     >
       {children}

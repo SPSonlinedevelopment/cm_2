@@ -8,21 +8,11 @@ const MessageText = ({
   time,
   handleSelectedMessage,
 }) => {
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  console.log("🚀 ~ dimensions:", dimensions);
-
-  const childRef = useRef(null);
   const messageRef = useRef(null);
-
-  const handleLayout = (event) => {
-    const { width, height } = event.nativeEvent.layout;
-
-    setDimensions({ width, height });
-  };
 
   const data = (
     <View
-      className={`flex-row  mb-1 mt-1   w-full z-50  flex ${
+      className={`flex-row  mb-1 mt-1  w-full z-50  flex ${
         thisUsersMessage ? "justify-end" : "justify-start "
       } `}
     >
@@ -33,8 +23,7 @@ const MessageText = ({
           handleSelectedMessage(messageRef);
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }}
-        onLayout={handleLayout}
-        className={` relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow   ${
+        className={` relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl  max-w-[320px] rounded-br-xl shadow   ${
           thisUsersMessage
             ? "bg-orange-200 self-end  mr-3  "
             : "bg-white self-start  ml-3"

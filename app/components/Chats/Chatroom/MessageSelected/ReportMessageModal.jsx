@@ -6,22 +6,31 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Octicons from "@expo/vector-icons/Octicons";
 import IconButton from "@/app/components/Buttons/IconButton";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useChat } from "@/app/context/chatContext";
 
-const ReportMessageModal = () => {
+const ReportMessageModal = ({
+  setDisplayReportMessageModal,
+  displayReportMessageModal,
+  messageObj,
+}) => {
+  console.log("🚀 ~ messageObjReportMessageModal:", messageObj);
+  const { reportInappropriateMessage } = useChat();
+
   return (
     <Modal
       transparent
       className="flex items-center w-full bg-opacity-50 justify-center"
-      // visible={displayPreview}
+      visible={displayReportMessageModal}
       animationType="fade"
     >
       <View className="h-full w-full bg-black opacity-40"></View>
+
       <View className="absolute bottom-0 w-full bg-white p-3 h-[340px] rounded-xl flex flex-col items-center justify-between">
         <Text className="text-xl p-3 text-center font-bold">
           Report Message?
         </Text>
 
-        <MaterialIcons name="dangerous" size={54} color="black" />
+        <Octicons name="report" size={50} color="red" />
         <View className="w-[90%] mt-3">
           <Text className="text-base text-black text-center">
             This message will be forwarded to the Collet Mentoring Team and
@@ -33,8 +42,9 @@ const ReportMessageModal = () => {
             textStyles="font-bold"
             containerStyles="p-2 w-[150px] h-[50px]"
             title="Confirm"
-            handlePress={() => {
-              // Handle Confirm button press
+            handlePress={async () => {
+              await reportInappropriateMessage(messageObj);
+              setDisplayReportMessageModal(false);
             }}
           />
           <IconButton
@@ -42,7 +52,7 @@ const ReportMessageModal = () => {
             containerStyles="p-2 w-[150px] h-[50px] bg-transparent border border-orange-300"
             title="Cancel"
             handlePress={() => {
-              // Handle Cancel button press
+              setDisplayReportMessageModal(false);
             }}
           />
         </View>
@@ -52,13 +62,3 @@ const ReportMessageModal = () => {
 };
 
 export default ReportMessageModal;
-
-{
-  /* 
-        <IconButton
-          title="Report Concern"
-          containerStyles="w-[90%] flex flex-row-reverse justify-around h-[40px]"
-          icon={<Octicons name="report" size={24} color="white" />}
-          handlePress={() => {}}
-        ></IconButton> */
-}

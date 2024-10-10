@@ -147,9 +147,10 @@ const ChatRoom = () => {
         />
       )}
 
-  
-
       <MessageSelectedModal
+        setReplyRecipientName={setReplyRecipientName}
+        setReplyMessage={setReplyMessage}
+        setDisplayShowReplyBar={setDisplayShowReplyBar}
         selectedMessage={selectedMessage}
         setSelectedMessage={setSelectedMessage}
         displayMessageSelectedModal={displayMessageSelectedModal}

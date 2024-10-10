@@ -37,8 +37,6 @@ const MessagesList = ({
 }) => {
   const [messages, setMessages] = useState([]);
 
-  console.log("mode", userDetails);
-
   const mode = userDetails?.mode;
 
   let connectedMessage = [];
@@ -143,12 +141,6 @@ const MessagesList = ({
     }
   }, [chatRoomData?.connectedMentor]);
 
-  // const resetUnreadMessageNumber = async () => {
-  //   // await updateDoc(docRef, {
-  //   //   unreadMessagesNumber: 0,
-  //   // });
-  // };
-
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     storeObjectAsyncStorage(
@@ -156,10 +148,6 @@ const MessagesList = ({
       lastMessage ? lastMessage?.text : ""
     );
     scrollToEnd();
-
-    setTimeout(() => {
-      // resetUnreadMessageNumber();
-    }, 300);
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [messages, chatRoomData.sessionCompleted]);
@@ -176,12 +164,11 @@ const MessagesList = ({
             mentorId={chatRoomData.mentorId}
             setReplyRecipientName={setReplyRecipientName}
             setReplyMessage={setReplyMessage}
-            // ShowReply={ShowReply}
-            // setShowReply={setShowReply}
             setDisplayShowReplyBar={setDisplayShowReplyBar}
             message={message}
             key={message.Id}
             userId={userId}
+            roomId={chatRoomData.roomId}
           ></MessageItem>
         );
       })}

@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import IconButton from "../../Buttons/IconButton";
 import { Entypo } from "@expo/vector-icons";
 import { useAuth } from "@/app/context/authContext";
@@ -7,9 +7,13 @@ import OtherListItemComponent from "./OtherListItemComponent";
 import BorderUnderline from "../BorderUnderline";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import MessageGeneralModal from "../../Chats/Chatroom/MessageSelected/MessageGeneralModal";
 
 const Others = () => {
   const { logOut } = useAuth();
+
+  const [displayDeleteAccountModay, setDisplayDeleteAccountModal] =
+    useState(false);
 
   const handleLogout = async () => {
     try {
@@ -20,17 +24,22 @@ const Others = () => {
     }
   };
 
-  const handleDelete = () => {
-    try {
-      console.log("delete btn clicked");
-    } catch (error) {}
-  };
   return (
     <View className="w-[93%]">
       <View className="flex flex-row items-center">
         <Entypo name="dots-three-horizontal" size={16} color="black" />
         <Text className="text-lg font-bold "> Others</Text>
       </View>
+      <MessageGeneralModal
+        type="deleteAccount"
+        text={{
+          headerText: "Delete Account",
+          bodyText:
+            "Are you sure you want to delete your account your data will be lost!",
+        }}
+        setDisplayModal={setDisplayDeleteAccountModal}
+        displayModal={displayDeleteAccountModay}
+      />
 
       <OtherListItemComponent
         icon={<FontAwesome name="share" size={20} color="white" />}
@@ -56,7 +65,7 @@ const Others = () => {
 
       <OtherListItemComponent
         icon={<MaterialIcons name="delete" size={20} color="white" />}
-        handlePress={handleDelete}
+        handlePress={() => setDisplayDeleteAccountModal(true)}
         iconColor="bg-red-500"
         text="Delete Account"
       />

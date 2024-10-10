@@ -1,13 +1,13 @@
 import { View, Text, Modal, Animated } from "react-native";
 import { useEffect, useRef } from "react";
 
-const FadeInView = ({ children, containerStyles }) => {
+const FadeInView = ({ children, containerStyles, duration }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 300,
+      duration: duration || 300,
       useNativeDriver: true,
     }).start();
   }, [fadeAnim]);

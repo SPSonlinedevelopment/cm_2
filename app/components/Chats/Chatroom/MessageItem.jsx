@@ -22,6 +22,7 @@ const MessageItem = React.memo(
     mentorName,
     setSelectedMessage,
     setDisplayMessageSelectedModal,
+    roomId,
   }) => {
     const [scrollPosition, setScrollPosition] = useState(0);
     const [ShowReply, setShowReply] = useState(false);
@@ -58,17 +59,16 @@ const MessageItem = React.memo(
       setDisplayMessageSelectedModal(true);
 
       if (ref) {
-        ref.measureInWindow((x, y, width, height, pageX, pageY) => {
+        ref.measureInWindow((x, y, width, height) => {
           setSelectedMessage({
             thisUsersMessage: thisUsersMessage,
+            roomId,
             message,
             time: time,
             x: x,
             y: y,
             width: width,
             height: height,
-            pageX: pageX,
-            pageY: pageY,
           });
         });
       }

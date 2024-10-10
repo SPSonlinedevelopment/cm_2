@@ -19,6 +19,8 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { auth, db, menteesRef } from "../../firebaseConfig";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
 import Statistics from "../components/Profile/MenteeProfile/MenteeStatistics";
