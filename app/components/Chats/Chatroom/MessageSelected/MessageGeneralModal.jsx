@@ -1,12 +1,14 @@
-import { View, Text, Modal, Alert } from "react-native";
-import React, { useState } from "react";
+import { View, Text, Modal, Alert, TextInput } from "react-native";
+import React, { useEffect, useState } from "react";
 import Octicons from "@expo/vector-icons/Octicons";
 import { useChat } from "../../../../context/chatContext";
 import IconButton from "@/app/components/Buttons/IconButton";
-import DeleteUserAccunt from "../../../Profile/Others/DeleteUserAccount";
-import firebase from "firebase/app";
-import "firebase/auth"; // Import Firebase Authentication
-import { app } from "../../../../../firebaseConfig";
+// import DeleteUserAccunt from "../../../Profile/Others/DeleteUserAccount";
+// import firebase from "firebase/app";
+// import "firebase/auth"; // Import Firebase Authentication
+// import { app } from "../../../../../firebaseConfig";
+import { auth } from "@/firebaseConfig";
+import { useAuth } from "@/app/context/authContext";
 
 // interface MessageGeneralModalProps {
 //   messageObj?: any;
@@ -22,32 +24,41 @@ const MessageGeneralModal = ({
   type,
   displayModal,
   setDisplayModal,
+  setDisplayMessageSelectedModal,
 }) => {
   const { reportInappropriateMessage, deleteSelectedMessage } = useChat();
+  const { logOut } = useAuth();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [deleteInput, setDeleteInput] = useState("");
 
   let actionFunc;
+
+  useEffect(() => {
+    setDeleteInput("");
+  }, []);
 
   if (type === "delete") {
     actionFunc = deleteSelectedMessage;
   } else if (type === "report") {
     actionFunc = reportInappropriateMessage;
+  } else if (type === "logout") {
+    actionFunc = async () => {
+      try {
+        const result = await logOut();
+        console.log("res", result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
   } else if (type === "deleteAccount") {
     actionFunc = async () => {
-      setIsLoading(true);
-      setErrorMessage(null);
-
+      console.log("wanker");
       try {
-        await app.auth().currentUser.delete();
-        Alert.alert("Account delete sucessful");
+        await auth.currentUser.delete();
+        Alert.alert("Account delete successful");
       } catch (error) {
-        setErrorMessage(error.message);
         console.log(error);
-        Alert.alert("Account delete unsucessful");
-      } finally {
-        setIsLoading(false);
+        Alert.alert("Account delete unsuccessful", error);
       }
     };
   }
@@ -61,33 +72,37 @@ const MessageGeneralModal = ({
     >
       <View className="h-full w-full bg-black opacity-40"></View>
 
-      <View className="absolute bottom-0 w-full bg-white p-3 h-[340px] rounded-xl flex flex-col items-center justify-between">
+      <View
+        className={`absolute bottom-0 w-full bg-white p-3 ${
+          type === "deleteAccount" ? "h-[500px]" : "h-[340px]"
+        } rounded-xl flex flex-col items-center justify-between`}
+      >
         <Text className="text-xl p-3 text-center font-bold">
           {text.headerText}
         </Text>
 
-        {isLoading && <Text>Deleting account...</Text>}
-        {errorMessage && <Text>{errorMessage}</Text>}
-
         <Octicons name="report" size={50} color="red" />
         <View className="w-[90%] mt-3">
-          <Text className="text-base text-black text-center">
+          <Text className="text-base font-bold text-black text-center">
             {text.bodyText}
+
+            {deleteInput}
           </Text>
+
+          {type === "deleteAccount" && (
+            <ConfirmDeleteAccount setDeleteInput={setDeleteInput} />
+          )}
         </View>
         <View className="flex flex-row justify-evenly items-center w-full">
           <IconButton
+            disabled={deleteInput !== "Delete" && type === "deleteAccount"}
             textStyles="font-bold"
             containerStyles="p-2 w-[150px] h-[50px]"
             title="Confirm"
             handlePress={async () => {
               actionFunc(messageObj);
-
-              if (type === "deleteAccount") {
-              } else {
-                actionFunc(messageObj);
-              }
-              setDisplayModal(false);
+              // setDisplayModal(false);
+              // setDisplayMessageSelectedModal(false);
             }}
           />
           <IconButton
@@ -96,6 +111,7 @@ const MessageGeneralModal = ({
             title="Cancel"
             handlePress={() => {
               setDisplayModal(false);
+              // setDisplayMessageSelectedModal(false);
             }}
           />
         </View>
@@ -105,3 +121,19 @@ const MessageGeneralModal = ({
 };
 
 export default MessageGeneralModal;
+
+const ConfirmDeleteAccount = ({ setDeleteInput }) => {
+  return (
+    <View className="w-full  my-6">
+      <Text className="text-base text-center my-2">
+        Type "Delete" below if you still you understand and still want to delete
+        your account and associated data.
+      </Text>
+      <TextInput
+        onChangeText={setDeleteInput}
+        placeholder="Type Delete"
+        className="w-full h-14 bg-white shadow rounded-xl my-2 p-2  text-base text-red-600"
+      ></TextInput>
+    </View>
+  );
+};

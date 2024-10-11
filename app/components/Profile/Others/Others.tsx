@@ -12,17 +12,9 @@ import MessageGeneralModal from "../../Chats/Chatroom/MessageSelected/MessageGen
 const Others = () => {
   const { logOut } = useAuth();
 
-  const [displayDeleteAccountModay, setDisplayDeleteAccountModal] =
+  const [displayDeleteAccountModal, setDisplayDeleteAccountModal] =
     useState(false);
-
-  const handleLogout = async () => {
-    try {
-      const result = await logOut();
-      console.log("res", result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [displayLogoutModal, setDisplayLogoutModal] = useState(false);
 
   return (
     <View className="w-[93%]">
@@ -38,7 +30,17 @@ const Others = () => {
             "Are you sure you want to delete your account your data will be lost!",
         }}
         setDisplayModal={setDisplayDeleteAccountModal}
-        displayModal={displayDeleteAccountModay}
+        displayModal={displayDeleteAccountModal}
+      />
+
+      <MessageGeneralModal
+        type="logout"
+        text={{
+          headerText: "Logout of Account",
+          bodyText: "Are you sure you want to logout?",
+        }}
+        setDisplayModal={setDisplayLogoutModal}
+        displayModal={displayLogoutModal}
       />
 
       <OtherListItemComponent
@@ -64,17 +66,18 @@ const Others = () => {
       />
 
       <OtherListItemComponent
-        icon={<MaterialIcons name="delete" size={20} color="white" />}
-        handlePress={() => setDisplayDeleteAccountModal(true)}
-        iconColor="bg-red-500"
-        text="Delete Account"
-      />
-      <OtherListItemComponent
         icon={<Entypo name="log-out" size={20} color="white" />}
         handlePress={handleLogout}
         iconColor="bg-red-500"
         iconStyles="rotate-180"
         text="Sign Out"
+      />
+
+      <OtherListItemComponent
+        icon={<MaterialIcons name="delete" size={20} color="white" />}
+        handlePress={() => setDisplayDeleteAccountModal(true)}
+        iconColor="bg-red-500"
+        text="Delete Account"
       />
     </View>
   );

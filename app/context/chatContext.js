@@ -56,9 +56,6 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const deleteSelectedMessage = (messageObj) => {
-    console.log("  messageObj.roomId,", messageObj.roomId);
-    console.log(" messagesId,", messageObj.message.messageId);
-
     try {
       const messageRef = doc(
         db,
@@ -68,7 +65,6 @@ export const ChatContextProvider = ({ children }) => {
         messageObj.message.messageId
       );
       deleteDoc(messageRef);
-      Alert.alert("Message deleted");
     } catch (error) {
       console.log("🚀 ~ deleteSelectedMessage ~ error:", error);
       Alert.alert("Error deleting messages");

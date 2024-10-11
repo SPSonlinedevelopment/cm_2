@@ -97,11 +97,11 @@ const MessageSelectedModal = ({
       func: handleReport,
       icon: <Octicons name="report" size={24} color="black" />,
     },
-    {
-      title: "Copy",
-      func: handleCopy,
-      icon: <Ionicons name="copy-outline" size={24} color="black" />,
-    },
+    // {
+    //   title: "Copy",
+    //   func: handleCopy,
+    //   icon: <Ionicons name="copy-outline" size={24} color="black" />,
+    // },
     {
       title: "Delete",
       func: handleDelete,
@@ -119,6 +119,7 @@ const MessageSelectedModal = ({
         <ExitButton toggleDisplay={setDisplayMessageSelectedModal} />
 
         <MessageGeneralModal
+          setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
           displayModal={displayReportMessageModal}
           setDisplayModal={setDisplayReportMessageModal}
           text={{
@@ -131,7 +132,7 @@ const MessageSelectedModal = ({
         />
 
         <MessageGeneralModal
-        
+          setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
           displayModal={displayDeleteMessageModal}
           setDisplayModal={setDisplayDeleteMessageModal}
           text={{

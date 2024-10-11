@@ -5,6 +5,7 @@ import {
   collection,
   updateDoc,
   getDoc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
@@ -20,49 +21,38 @@ export const handleSendTextMessageToChatroom = async (
   replyMessage
 ) => {
   let message = text.trim();
-  console.log("🚀 ~ message:", message);
 
   if (!message) return;
   {
     try {
       const docRef = doc(db, "rooms", item?.roomId);
       const messagesRef = collection(docRef, "messages");
+      const commondata = {
+        userId: userDetails?.uid,
+        userName: userDetails?.firstName,
+        text: message,
+        createdAt: Timestamp.fromDate(new Date()),
+      };
 
-      // if (inputRef) inputRef?.current?.clear();
-
-      const id = generateRandomId();
+      let result;
       if (isReply) {
-        await addDoc(
-          messagesRef,
-          {
-            userId: userDetails?.uid,
-            userName: userDetails?.firstName,
-            text: message,
-            createdAt: Timestamp.fromDate(new Date()),
-            messageId: id,
-            isReply: true,
-            reply: {
-              originalIsImage: false,
-              originalImgUrl: "asdjas",
-              originalMessage: replyMessage,
-            },
+        result = await addDoc(messagesRef, {
+          ...commondata,
+          isReply,
+          reply: {
+            originalIsImage: false,
+            originalMessage: replyMessage,
           },
-          id
-        );
+        });
       } else {
-        await addDoc(
-          messagesRef,
-          {
-            userId: userDetails?.uid,
-            userName: userDetails?.firstName,
-            text: message,
-            createdAt: Timestamp.fromDate(new Date()),
-            messageId: id,
-            isReply: isReply,
-          },
-          id
-        );
+        result = await addDoc(messagesRef, {
+          ...commondata,
+          isReply,
+        });
       }
+
+      const newMeessageDocRef = doc(messagesRef, result.id);
+      await updateDoc(newMeessageDocRef, { messageId: result.id });
     } catch (error) {
       console.log("🚀 ~ error:", error);
     }
@@ -75,24 +65,25 @@ export const handleSendSuggestedMessageToChatroom = async (
   userDetails
 ) => {
   let message = textRef.current.trim();
-  const id = generateRandomId();
+
   if (!message) return;
   try {
     const docRef = doc(db, "rooms", item?.roomId);
     const messagesRef = collection(docRef, "messages");
+    const commondata = {
+      userId: userDetails?.uid,
+      userName: userDetails?.firstName,
+      text: message,
+      createdAt: Timestamp.fromDate(new Date()),
+    };
 
-    await addDoc(
-      messagesRef,
-      {
-        userId: userDetails?.uid,
-        userName: userDetails?.firstName,
-        text: message,
-        createdAt: Timestamp.fromDate(new Date()),
-        messageId: id,
-        isReply: false,
-      },
-      id
-    );
+    const result = await addDoc(messagesRef, {
+      ...commondata,
+      isReply: false,
+    });
+
+    const newMeessageDocRef = doc(messagesRef, result.id);
+    await updateDoc(newMeessageDocRef, { messageId: result.id });
   } catch (error) {
     console.log(error);
   }
