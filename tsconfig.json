@@ -31,5 +31,5 @@
     "app/components/Home/IndexQuestionInput.jsx",
     "app/components/Chats/SearchChats.jsx",
     "app/components/Profile/MentorProfile/MentorStatistics.jsx"
-, "app/components/Profile/MenteeProfile/MenteeStatistics.jsx", "app/components/Chats/Chatroom/MessageSelected/MessageGeneralModal.jsx"  ]
+, "app/components/Profile/MenteeProfile/MenteeStatistics.jsx", "app/components/Chats/Chatroom/MessageSelected/MessageGeneralModal.jsx", "app/components/Profile/Others/Others.jsx"  ]
 }

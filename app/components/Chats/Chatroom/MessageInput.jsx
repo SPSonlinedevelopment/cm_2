@@ -59,11 +59,10 @@ const MessageInput = React.memo(
         setDisplayShowReplyBar(false);
         try {
           await handleSendTextMessageToChatroom(
-            item,
+            item.roomId,
             text,
-            inputRef,
             userDetails,
-            isReply,
+            (type = ""),
             replyMessage
           );
           setText("");

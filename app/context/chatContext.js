@@ -40,7 +40,6 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const reportInappropriateMessage = async (messageObj) => {
-    console.log("🚀 ~ reportInappropriateMessage ~ messageObj:", messageObj);
     try {
       await setDoc(
         doc(db, "reported_messages", messageObj.message.messageId),
@@ -65,9 +64,12 @@ export const ChatContextProvider = ({ children }) => {
         messageObj.message.messageId
       );
       deleteDoc(messageRef);
+      Alert.alert("Message deleted successfully");
+      return { success: true };
     } catch (error) {
       console.log("🚀 ~ deleteSelectedMessage ~ error:", error);
       Alert.alert("Error deleting messages");
+      return { success: false };
     }
   };
 

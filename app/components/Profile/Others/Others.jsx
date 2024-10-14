@@ -10,8 +10,6 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MessageGeneralModal from "../../Chats/Chatroom/MessageSelected/MessageGeneralModal";
 
 const Others = () => {
-  const { logOut } = useAuth();
-
   const [displayDeleteAccountModal, setDisplayDeleteAccountModal] =
     useState(false);
   const [displayLogoutModal, setDisplayLogoutModal] = useState(false);
@@ -67,7 +65,7 @@ const Others = () => {
 
       <OtherListItemComponent
         icon={<Entypo name="log-out" size={20} color="white" />}
-        handlePress={handleLogout}
+        handlePress={() => setDisplayLogoutModal(true)}
         iconColor="bg-red-500"
         iconStyles="rotate-180"
         text="Sign Out"

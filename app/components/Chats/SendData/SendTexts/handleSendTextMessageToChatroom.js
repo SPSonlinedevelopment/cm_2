@@ -13,49 +13,60 @@ import { generateRandomId } from "@/utils/common";
 // handle sending a message
 
 export const handleSendTextMessageToChatroom = async (
-  item,
+  roomId,
   text,
-  inputRef,
   userDetails,
-  isReply,
+  type,
   replyMessage
 ) => {
+  console.log("🚀 ~ replyMessage:", replyMessage);
+  console.log("🚀 ~ type:", type);
+  console.log("🚀 ~ text:", text);
+  console.log("🚀 ~   roomId,:", roomId);
   let message = text.trim();
 
   if (!message) return;
-  {
-    try {
-      const docRef = doc(db, "rooms", item?.roomId);
-      const messagesRef = collection(docRef, "messages");
-      const commondata = {
-        userId: userDetails?.uid,
-        userName: userDetails?.firstName,
-        text: message,
-        createdAt: Timestamp.fromDate(new Date()),
-      };
 
-      let result;
-      if (isReply) {
-        result = await addDoc(messagesRef, {
-          ...commondata,
-          isReply,
-          reply: {
-            originalIsImage: false,
-            originalMessage: replyMessage,
-          },
-        });
-      } else {
-        result = await addDoc(messagesRef, {
-          ...commondata,
-          isReply,
-        });
-      }
+  try {
+    const docRef = doc(db, "rooms", roomId);
+    const messagesRef = collection(docRef, "messages");
+    const commondata = {
+      userId: userDetails?.uid,
+      userName: userDetails?.firstName,
+      text: message,
+      createdAt: Timestamp.fromDate(new Date()),
+    };
 
-      const newMeessageDocRef = doc(messagesRef, result.id);
-      await updateDoc(newMeessageDocRef, { messageId: result.id });
-    } catch (error) {
-      console.log("🚀 ~ error:", error);
+    let result;
+    if (type === "reply") {
+      result = await addDoc(messagesRef, {
+        ...commondata,
+        isReply,
+        reply: {
+          originalIsImage: false,
+          originalMessage: replyMessage,
+        },
+      });
+    } else if (type === "complement") {
+      result = await addDoc(messagesRef, {
+        ...commondata,
+
+        isMenteeCompliment: true,
+        compliment: text,
+      });
+    } else {
+      result = await addDoc(messagesRef, {
+        ...commondata,
+      });
     }
+
+    const newMeessageDocRef = doc(messagesRef, result.id);
+    await updateDoc(newMeessageDocRef, { messageId: result.id });
+    return { success: true };
+  } catch (error) {
+    console.log("🚀 ~ error:", error);
+
+    return { success: false };
   }
 };
 

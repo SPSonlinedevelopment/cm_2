@@ -9,6 +9,7 @@ import MessageText from "./MessageText";
 import ReplyMessage from "./ReplyMessage";
 import FadeInView from "../../Effects/FadeInView";
 import ConnectedMessage from "./ConnectedMessage";
+import ComplementMessage from "./LiveCompliments/ComplementMessage";
 
 const MessageItem = React.memo(
   ({
@@ -77,6 +78,16 @@ const MessageItem = React.memo(
     if (message.isReply) {
       return (
         <ReplyMessage message={message} thisUsersMessage={thisUsersMessage} />
+      );
+    }
+
+    if (message.isMenteeCompliment) {
+      return (
+        <ComplementMessage
+          menteeName={menteeName}
+          mentorName={mentorName}
+          message={message}
+        />
       );
     }
 

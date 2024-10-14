@@ -7,10 +7,6 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 const MentorComments = () => {
   const { userDetails } = useAuth();
-  console.log(
-    "🚀 ~ MentorComments ~ userDetails:",
-    userDetails.writtenFeedback
-  );
 
   return (
     <View className="h-[200px] w-full">

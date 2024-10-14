@@ -12,7 +12,7 @@ import { useAuth } from "@/app/context/authContext";
 
 // interface MessageGeneralModalProps {
 //   messageObj?: any;
-//   text: { headerText: string; bodyText: string };
+//   text: { headerText: string, bodyText: string };
 //   type?: string;
 //   displayModal: boolean;
 //   setDisplayModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -101,8 +101,8 @@ const MessageGeneralModal = ({
             title="Confirm"
             handlePress={async () => {
               actionFunc(messageObj);
-              // setDisplayModal(false);
-              // setDisplayMessageSelectedModal(false);
+              setDisplayModal(false);
+              setDisplayMessageSelectedModal(false);
             }}
           />
           <IconButton
@@ -111,7 +111,7 @@ const MessageGeneralModal = ({
             title="Cancel"
             handlePress={() => {
               setDisplayModal(false);
-              // setDisplayMessageSelectedModal(false);
+              setDisplayMessageSelectedModal(false);
             }}
           />
         </View>
