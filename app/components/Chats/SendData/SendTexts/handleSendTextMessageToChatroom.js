@@ -19,10 +19,6 @@ export const handleSendTextMessageToChatroom = async (
   type,
   replyMessage
 ) => {
-  console.log("🚀 ~ replyMessage:", replyMessage);
-  console.log("🚀 ~ type:", type);
-  console.log("🚀 ~ text:", text);
-  console.log("🚀 ~   roomId,:", roomId);
   let message = text.trim();
 
   if (!message) return;
@@ -50,9 +46,7 @@ export const handleSendTextMessageToChatroom = async (
     } else if (type === "complement") {
       result = await addDoc(messagesRef, {
         ...commondata,
-
         isMenteeCompliment: true,
-        compliment: text,
       });
     } else {
       result = await addDoc(messagesRef, {

@@ -138,21 +138,21 @@ const ComplementSelectionsButton = ({
   const [selected, setSelected] = useState(false);
 
   const handleSelection = (selection) => {
-    const complimentSelected =
-      feedbackForm.mentorCompliments.includes(selection);
+    const complementSelected =
+      feedbackForm.mentorComplements.includes(selection);
 
     setFeedbackForm((prev) => {
-      if (complimentSelected) {
+      if (complementSelected) {
         return {
           ...prev,
-          mentorCompliments: prev.mentorCompliments.filter(
+          mentorComplements: prev.mentorComplements.filter(
             (prevSelections) => prevSelections !== selection
           ),
         };
       } else {
         return {
           ...prev,
-          mentorCompliments: [...prev.mentorCompliments, selection],
+          mentorComplements: [...prev.mentorComplements, selection],
         };
       }
     });

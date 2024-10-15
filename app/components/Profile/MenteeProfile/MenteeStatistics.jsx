@@ -35,7 +35,7 @@ const MenteeStatistics = () => {
 
   const stats = userDetails?.menteeStatistics;
 
-  const complimentsCount = Object.values(stats.compliments).reduce(
+  const complementsCount = Object.values(stats.complements).reduce(
     (accumulator, item) => {
       return accumulator + item;
     }
@@ -60,7 +60,7 @@ const MenteeStatistics = () => {
           icon={<IconGeneral size="35" source={Money} />}
         />
         <Card
-          text={` ${complimentsCount} Compliments`}
+          text={` ${complementsCount} Complements`}
           icon={<IconGeneral size="35" source={Love} />}
         />
       </View>

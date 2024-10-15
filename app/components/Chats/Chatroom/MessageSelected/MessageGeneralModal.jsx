@@ -3,20 +3,9 @@ import React, { useEffect, useState } from "react";
 import Octicons from "@expo/vector-icons/Octicons";
 import { useChat } from "../../../../context/chatContext";
 import IconButton from "@/app/components/Buttons/IconButton";
-// import DeleteUserAccunt from "../../../Profile/Others/DeleteUserAccount";
-// import firebase from "firebase/app";
-// import "firebase/auth"; // Import Firebase Authentication
-// import { app } from "../../../../../firebaseConfig";
+
 import { auth } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
-
-// interface MessageGeneralModalProps {
-//   messageObj?: any;
-//   text: { headerText: string, bodyText: string };
-//   type?: string;
-//   displayModal: boolean;
-//   setDisplayModal: React.Dispatch<React.SetStateAction<boolean>>;
-// }
 
 const MessageGeneralModal = ({
   messageObj,
@@ -24,7 +13,6 @@ const MessageGeneralModal = ({
   type,
   displayModal,
   setDisplayModal,
-  setDisplayMessageSelectedModal,
 }) => {
   const { reportInappropriateMessage, deleteSelectedMessage } = useChat();
   const { logOut } = useAuth();
@@ -102,7 +90,6 @@ const MessageGeneralModal = ({
             handlePress={async () => {
               actionFunc(messageObj);
               setDisplayModal(false);
-              setDisplayMessageSelectedModal(false);
             }}
           />
           <IconButton
@@ -111,7 +98,6 @@ const MessageGeneralModal = ({
             title="Cancel"
             handlePress={() => {
               setDisplayModal(false);
-              setDisplayMessageSelectedModal(false);
             }}
           />
         </View>

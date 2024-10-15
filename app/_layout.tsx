@@ -15,6 +15,7 @@ import Profile from "./profile";
 import VerifyEmail from "./verify-email";
 import Chats from "./chats";
 import ChatRoom from "./chat-room";
+import EditProfile from "./edit-profile";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -71,6 +72,11 @@ export default function AuthLayout() {
               options={{ headerShown: false }}
               name="chat-room"
               component={ChatRoom}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="edit-profile"
+              component={EditProfile}
             />
           </Stack.Navigator>
           {/* </NavigationContainer> */}

@@ -24,7 +24,7 @@ import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotEx
 import EmojiSelector from "./components/Chats/Chatroom/EmojiSelector";
 import MessageSelectedModal from "./components/Chats/Chatroom/MessageSelected/MessageSelectedModal";
 import ReportMessageModal from "./components/Chats/Chatroom/MessageSelected/ReportMessageModal";
-import LiveComplimentSelector from "./components/Chats/Chatroom/LiveCompliments/LiveComplimentSelector";
+import LiveComplementSelector from "./components/Chats/Chatroom/LiveComplements/LiveComplementSelector";
 
 const ChatRoom = () => {
   const ios = Platform.OS == "ios";
@@ -164,7 +164,10 @@ const ChatRoom = () => {
             setText={setText}
             displayEmojiSelector={displayEmojiSelector}
           />
-          <LiveComplimentSelector roomId={chatRoomData?.roomId} />
+          <LiveComplementSelector
+            menteeId={chatRoomData.menteeId}
+            roomId={chatRoomData?.roomId}
+          />
           <IsTypingIndicator scrollToEnd={scrollToEnd} item={chatRoomData} />
 
           <MentorConversationSuggestions

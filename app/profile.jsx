@@ -80,8 +80,6 @@ const Profile = () => {
     });
   }, [user?.uid]); // Only re-run the effect when the uid changes
 
-  // console.log("userDetails", userDetails);
-
   if (!userDetails) {
     return (
       <View className="w-full h-full flex justify-center items-center">

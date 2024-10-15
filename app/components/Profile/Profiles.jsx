@@ -14,18 +14,29 @@ import { useAuth } from "@/app/context/authContext";
 import Loading from "../Loading/LoadingSpinner";
 import MentorStatistics from "./MentorProfile/MentorStatistics";
 import ComplementsProfile from "./ComplementsProfile";
-import MentorComments from "../.././components/Profile/MentorProfile/MentorComments";
+import MentorComments from "./MentorProfile/MentorComments";
+import IconButton from "../Buttons/IconButton";
+import Entypo from "@expo/vector-icons/Entypo";
+import { useNavigation } from "@react-navigation/native";
 
 const Profiles = () => {
-  const { userDetails, getUpdatedAuthObj, user } = useAuth();
+  const { userDetails, user } = useAuth();
 
   const mode = userDetails.mode;
 
+  const navigation = useNavigation();
   return (
     <View className="h-full w-full">
       <GradientNavigation />
       <CustomKeyboardView>
         <SafeAreaView className="h=full w-full  bg-white flex flex-col ">
+          <IconButton
+            icon={<Entypo name="edit" size={24} color="black" />}
+            containerStyles=" bg-white shadow w-[40px] h-[40px] absolute right-5 top-10"
+            handlePress={() => {
+              navigation.navigate("edit-profile");
+            }}
+          ></IconButton>
           <View className="h=full w-full flex flex-col items-center">
             <Header />
             <BorderUnderline />

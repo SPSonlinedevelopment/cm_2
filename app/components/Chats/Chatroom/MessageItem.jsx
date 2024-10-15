@@ -9,7 +9,7 @@ import MessageText from "./MessageText";
 import ReplyMessage from "./ReplyMessage";
 import FadeInView from "../../Effects/FadeInView";
 import ConnectedMessage from "./ConnectedMessage";
-import ComplementMessage from "./LiveCompliments/ComplementMessage";
+import ComplementMessage from "./LiveComplements/ComplementMessage";
 
 const MessageItem = React.memo(
   ({

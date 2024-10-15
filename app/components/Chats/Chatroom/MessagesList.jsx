@@ -175,7 +175,7 @@ const MessagesList = ({
 
       {mode === "mentee" && chatRoomData.sessionCompleted && (
         <View className="w-full absolute  ">
-          <CelebrationAnimation loop={false} size={500} />
+          <CelebrationAnimation position="bottom" loop={false} size={500} />
         </View>
       )}
 

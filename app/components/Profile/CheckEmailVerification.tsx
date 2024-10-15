@@ -4,7 +4,7 @@ import { useAuth } from "@/app/context/authContext";
 import CustomButton from "../Buttons/CustomButton";
 
 const CheckEmailVerification = () => {
-  const { getUpdatedAuthObj, verifyEmail, user } = useAuth();
+  const { verifyEmail, user } = useAuth();
   const [isEmailVerified, setIsEmailVerified] = useState(user?.emailVerified);
   const [isLoading, setIsLoading] = useState(false);
 

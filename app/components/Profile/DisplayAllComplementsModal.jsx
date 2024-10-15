@@ -6,16 +6,16 @@ import { useAuth } from "@/app/context/authContext";
 import Avatar from "./Avatar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const DisplayAllComplimentsModal = ({
-  displayAllComplimentsModal,
-  setDisplayAllComplimentsModal,
+const DisplayAllComplementsModal = ({
+  displayAllComplementsModal,
+  setDisplayAllComplementsModal,
   data,
 }) => {
   const { userDetails } = useAuth();
 
   return (
-    <Modal animationType="slide" visible={displayAllComplimentsModal}>
-      <ExitButton toggleDisplay={setDisplayAllComplimentsModal} />
+    <Modal animationType="slide" visible={displayAllComplementsModal}>
+      <ExitButton toggleDisplay={setDisplayAllComplementsModal} />
 
       <SafeAreaView className="flex items-center justify-start mt-20">
         <ScrollView
@@ -33,7 +33,7 @@ const DisplayAllComplimentsModal = ({
 
           <View className="flex w-full justify-start">
             <Text className="text-lg font-bold ml-3 text-start  ">
-              Compliments
+              Complements
             </Text>
           </View>
           {data}
@@ -43,4 +43,4 @@ const DisplayAllComplimentsModal = ({
   );
 };
 
-export default DisplayAllComplimentsModal;
+export default DisplayAllComplementsModal;

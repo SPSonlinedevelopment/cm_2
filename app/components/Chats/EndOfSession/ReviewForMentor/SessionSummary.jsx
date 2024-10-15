@@ -6,7 +6,11 @@ import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation"
 const SessionSummary = ({ userDetails, chatRoomData }) => {
   return (
     <View className=" w-full  mt-2  mb-10  items-center ">
-      <CelebrationAnimation loop="false" size={200}></CelebrationAnimation>
+      <CelebrationAnimation
+        position="bottom"
+        loop="false"
+        size={200}
+      ></CelebrationAnimation>
       <View className=" w-[95%] py-3    justify-center items-between    flex flex-row rounded-2xl shadow bg-white">
         {userDetails.mode === "mentor" ? (
           <View className="ml-5">

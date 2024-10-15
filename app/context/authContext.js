@@ -195,7 +195,7 @@ export const AuthContextProvider = ({ children }) => {
             time: 0,
             ninjaLevel: 0,
             XP: 0,
-            compliments: {
+            complements: {
               "Algebra Whizz": 0,
               "High Achiever": 0,
               "Math Wizard": 0,
@@ -220,7 +220,7 @@ export const AuthContextProvider = ({ children }) => {
           mentorStatistics: {
             time: 0,
             stars: [],
-            compliments: {
+            complements: {
               Fast: 0,
               Friendly: 0,
               Clear: 0,

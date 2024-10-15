@@ -28,7 +28,6 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
         const data = docSnapshot.data();
 
         setMentorData(data.mentorStatistics);
-    
       } else {
         // Document does not exist
         console.log("No such document!");
@@ -43,13 +42,13 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
   }
   let starsCount = 0;
   let starsAvg = 0;
-  let complimentsCount;
+  let complementsCount;
   if (mentorData) {
     if (mentorData?.stars?.length) {
       starsCount = mentorData.stars.reduce((acc, star) => acc + star, 0);
       starsAvg = Math.floor(starsCount / mentorData.stars.length);
     }
-    complimentsCount = Object.values(mentorData?.compliments).reduce(
+    complementsCount = Object.values(mentorData?.complements).reduce(
       (accumulator, item) => {
         return accumulator + item;
       }
@@ -84,7 +83,7 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
                 icon={<IconGeneral size="35" source={Ambition} />}
               />
               <Card
-                text={` ${complimentsCount} Compliments`}
+                text={` ${complementsCount} Complements`}
                 icon={<IconGeneral size="35" source={Love} />}
               />
             </View>

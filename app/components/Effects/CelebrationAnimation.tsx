@@ -5,18 +5,29 @@ import AnimatedLottieView from "lottie-react-native";
 interface CelebrationProps {
   size: number;
   loop: boolean;
+  position: string;
 }
-const CelebrationAnimation: React.FC<CelebrationProps> = ({ size, loop }) => {
+const CelebrationAnimation: React.FC<CelebrationProps> = ({
+  position,
+  size,
+  loop,
+}) => {
+  let assignPos: object = { bottom: "20%" };
+  if (position === "top") {
+    assignPos = { top: "20%" };
+  }
+
   return (
     <View
       style={{
         flex: 1,
-        // width: "100%",
+        width: "100%",
         height: size,
         aspectRatio: 1,
         zIndex: 100,
         position: "absolute",
-        top: 0,
+        ...assignPos,
+        pointerEvents: "none",
       }}
     >
       <AnimatedLottieView

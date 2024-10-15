@@ -11,44 +11,33 @@ import { collection, getDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import { handleSendTextMessageToChatroom } from "../../SendData/SendTexts/handleSendTextMessageToChatroom";
+import { handleUpdateMenteeWithComplement } from "./handleUpdateMenteeWithComplement";
 
-const LiveComplimentSelector = ({ roomId }) => {
+const LiveComplementSelector = ({ roomId, menteeId }) => {
   const { userDetails } = useAuth();
   const [displayComplementSelector, setDisplayComplementSelector] =
     useState(false);
 
   const [selectedLiveComplement, SetSelectedLiveComplement] = useState("");
-  console.log(
-    "🚀 ~ LiveComplimentSelector ~ selectedLiveCompliment:",
-    selectedLiveComplement
-  );
 
   const roomRef = doc(db, "rooms", roomId);
-
   const replyMessage = null;
-
   let type = "complement";
-  const text = selectedLiveComplement;
-  const updateLiveComplements = async () => {
-    const result = handleSendTextMessageToChatroom(
-      roomId,
-      text,
-      userDetails,
-      type,
-      replyMessage
-    );
 
-    console.log("result", result);
+  const handleSelect = async (complement) => {
+    SetSelectedLiveComplement(complement);
+
+    const text = complement;
 
     try {
-      const docSnap = await getDoc(roomRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        console.log("🚀 ~ updateLiveCompliments ~ data:", data);
-      } else {
-        console.log("DOesnyt exist");
-      }
+      await handleSendTextMessageToChatroom(
+        roomId,
+        text,
+        userDetails,
+        type,
+        replyMessage
+      );
+      await handleUpdateMenteeWithComplement(menteeId, complement);
     } catch (error) {
       console.log(error);
     }
@@ -73,9 +62,9 @@ const LiveComplimentSelector = ({ roomId }) => {
               {mentorComplements.map((complement) => {
                 return (
                   <TouchableOpacity
+                    key={complement.title}
                     onPress={() => {
-                      SetSelectedLiveComplement(complement.title);
-                      updateLiveComplements();
+                      handleSelect(complement.title);
                     }}
                     className={`w-20 px-1 m-1 flex flex-col rounded-xl items-center justify-center ${
                       selectedLiveComplement === complement?.title
@@ -109,4 +98,4 @@ const LiveComplimentSelector = ({ roomId }) => {
   );
 };
 
-export default LiveComplimentSelector;
+export default LiveComplementSelector;

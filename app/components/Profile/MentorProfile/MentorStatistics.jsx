@@ -25,14 +25,14 @@ const MentorStatistics = () => {
   }
 
   let count = 0;
-  const complimentsCount = Object.values(stats.compliments).reduce(
+  const complementsCount = Object.values(stats.complements).reduce(
     (accumulator, item) => {
       return accumulator + item;
     },
     count
   );
 
-  console.log(complimentsCount); // Outputs the total count of compliments
+  console.log(complementsCount);
 
   return (
     <View className=" mt-5 w-[93%] ">
@@ -55,7 +55,7 @@ const MentorStatistics = () => {
           icon={<IconGeneral size="35" source={Ambition} />}
         />
         <Card
-          text={` ${complimentsCount} Compliments`}
+          text={` ${complementsCount} Complements`}
           icon={<IconGeneral size="35" source={Love} />}
         />
       </View>

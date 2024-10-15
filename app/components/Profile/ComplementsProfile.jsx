@@ -8,18 +8,18 @@ import {
 import { useAuth } from "@/app/context/authContext";
 import { ScrollView } from "react-native-gesture-handler";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import DisplayAllComplimentsModal from "./DisplayAllComplimentsModal";
+import DisplayAllComplementsModal from "./DisplayAllComplementsModal";
 import IconGeneral from "../IconGeneral";
 
 const ComplementsProfile = () => {
   const { userDetails } = useAuth();
-  const [displayAllComplimentsModal, setDisplayAllComplimentsModal] =
+  const [displayAllComplementsModal, setDisplayAllComplementsModal] =
     useState(false);
 
   const complelments =
     userDetails.mode === "mentor"
-      ? userDetails?.mentorStatistics.compliments
-      : userDetails?.menteeStatistics.compliments;
+      ? userDetails?.mentorStatistics.complements
+      : userDetails?.menteeStatistics.complements;
 
   const array = Object.entries(complelments);
   const test = array.map(([key, value]) => ({ key, value }));
@@ -35,19 +35,19 @@ const ComplementsProfile = () => {
     return (
       <View
         className={`justify-start items-center ${
-          displayAllComplimentsModal ? "w-[48%]" : ""
+          displayAllComplementsModal ? "w-[48%]" : ""
         } `}
       >
         <View
           className={`shadow bg-white p-5 m-3 rounded-full ${
-            displayAllComplimentsModal
+            displayAllComplementsModal
               ? "h-[100px] w-[100px]"
               : "h-[80px] w-[80px]"
           }   flex justify-center items-center relative `}
         >
           <View
             className={` ${
-              displayAllComplimentsModal
+              displayAllComplementsModal
                 ? "h-[100px] w-[100px]"
                 : "h-[80px] w-[80px]"
             }  ${
@@ -70,13 +70,13 @@ const ComplementsProfile = () => {
         </View>
         <Text
           className={`mt-3 ${
-            displayAllComplimentsModal ? "text-base" : "w-[82] text-med "
+            displayAllComplementsModal ? "text-base" : "w-[82] text-med "
           } text-center`}
         >
           {comp.title === "SolvedProblems" ? "Solved my Problems" : comp.title}
         </Text>
 
-        {comp.description && displayAllComplimentsModal && (
+        {comp.description && displayAllComplementsModal && (
           <Text className="text-base m-1   text-center text-neutral-500">
             {comp.description}
           </Text>
@@ -87,17 +87,17 @@ const ComplementsProfile = () => {
 
   return (
     <View className="h-[190px] ">
-      <DisplayAllComplimentsModal
+      <DisplayAllComplementsModal
         data={data}
-        setDisplayAllComplimentsModal={setDisplayAllComplimentsModal}
-        displayAllComplimentsModal={displayAllComplimentsModal}
+        setDisplayAllComplementsModal={setDisplayAllComplementsModal}
+        displayAllComplementsModal={displayAllComplementsModal}
       />
 
       <View className="w-full flex flex-row justify-between ">
-        <Text className="text-lg font-bold ml-3 "> Compliments</Text>
+        <Text className="text-lg font-bold ml-3 "> Complements</Text>
         <TouchableOpacity
           onPress={() => {
-            setDisplayAllComplimentsModal(true);
+            setDisplayAllComplementsModal(true);
           }}
           className="bg-white mr-3 "
           title="See All"

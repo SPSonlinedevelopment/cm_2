@@ -38,12 +38,12 @@ const ReviewMentorContainer = ({
 }) => {
   const [feedbackForm, setFeedbackForm] = useState({
     mentorRating: undefined,
-    mentorCompliments: [],
+    mentorComplements: [],
     writtenFeedback: "",
     confidenceRatingBefore: undefined,
     confidenceRatingAfter: undefined,
   });
-  console.log("🚀 ~ feedbackForm:", feedbackForm);
+
   const duration = calculateTimeDifference(createdAt, sessionCompletedAt);
 
   const addMentorReviewToRoom = async () => {
@@ -105,7 +105,7 @@ const ReviewMentorContainer = ({
         Supportive: 0,
       };
 
-      feedbackForm?.mentorCompliments.forEach((stat) => {
+      feedbackForm?.mentorComplements.forEach((stat) => {
         if (stat === "Clear") feedbackCounts.Clear++;
         if (stat === "Fast") feedbackCounts.Fast++;
         if (stat === "Friendly") feedbackCounts.Friendly++;
@@ -119,25 +119,25 @@ const ReviewMentorContainer = ({
       await updateDoc(mentorRef, {
         "mentorStatistics.stars": updatedStars,
         "mentorStatistics.questions": mentorData.mentorStatistics.questions + 1,
-        "mentorStatistics.compliments.Clear":
-          mentorData.mentorStatistics.compliments.Clear + feedbackCounts.Clear,
-        "mentorStatistics.compliments.Fast":
-          mentorData.mentorStatistics.compliments.Fast + feedbackCounts.Fast,
-        "mentorStatistics.compliments.Friendly":
-          mentorData.mentorStatistics.compliments.Friendly +
+        "mentorStatistics.complements.Clear":
+          mentorData.mentorStatistics.complements.Clear + feedbackCounts.Clear,
+        "mentorStatistics.complements.Fast":
+          mentorData.mentorStatistics.complements.Fast + feedbackCounts.Fast,
+        "mentorStatistics.complements.Friendly":
+          mentorData.mentorStatistics.complements.Friendly +
           feedbackCounts.Friendly,
-        "mentorStatistics.compliments.Helpful":
-          mentorData.mentorStatistics.compliments.Helpful +
+        "mentorStatistics.complements.Helpful":
+          mentorData.mentorStatistics.complements.Helpful +
           feedbackCounts.Helpful,
-        "mentorStatistics.compliments.Kind":
-          mentorData.mentorStatistics.compliments.Kind + feedbackCounts.Kind,
-        "mentorStatistics.compliments.Smart":
-          mentorData.mentorStatistics.compliments.Smart + feedbackCounts.Smart,
-        "mentorStatistics.compliments.SolvedProblems":
-          mentorData.mentorStatistics.compliments.SolvedProblems +
+        "mentorStatistics.complements.Kind":
+          mentorData.mentorStatistics.complements.Kind + feedbackCounts.Kind,
+        "mentorStatistics.complements.Smart":
+          mentorData.mentorStatistics.complements.Smart + feedbackCounts.Smart,
+        "mentorStatistics.complements.SolvedProblems":
+          mentorData.mentorStatistics.complements.SolvedProblems +
           feedbackCounts.SolvedProblems,
-        "mentorStatistics.compliments.Supportive":
-          mentorData.mentorStatistics.compliments.Supportive +
+        "mentorStatistics.complements.Supportive":
+          mentorData.mentorStatistics.complements.Supportive +
           feedbackCounts.Supportive,
         "mentorStatistics.time": mentorData.mentorStatistics.time + duration,
         writtenFeedback: arrayUnion({
@@ -203,10 +203,11 @@ const ReviewMentorContainer = ({
           contentContainerStyle={{
             display: "flex",
             justifyContent: "center",
+            position: "relative",
           }}
           className="mt-20 "
         >
-          <CelebrationAnimation loop={false} size={400} />
+          <CelebrationAnimation position="top" loop={false} size={700} />
           <XPEarned />
           <RateLesson setFeedbackForm={setFeedbackForm} />
           <Complements
