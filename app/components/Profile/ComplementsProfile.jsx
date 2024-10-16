@@ -39,7 +39,7 @@ const ComplementsProfile = () => {
         } `}
       >
         <View
-          className={`shadow bg-white p-5 m-3 rounded-full ${
+          className={`shadow-sm bg-white p-5 m-3 rounded-full ${
             displayAllComplementsModal
               ? "h-[100px] w-[100px]"
               : "h-[80px] w-[80px]"

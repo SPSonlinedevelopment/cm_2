@@ -35,7 +35,7 @@ const MentorComments = () => {
               return (
                 <View
                   key={comment.id}
-                  className="shadow-md bg-white w-[120px] h-full flex items-center justify-between m-1 p-2 rounded-2xl"
+                  className="shadow-sm bg-white w-[120px] h-full flex items-center justify-between m-1 p-2 rounded-2xl"
                 >
                   <Avatar avatarName={comment?.avatarName} />
                   <Text className="text-xs font-bold">

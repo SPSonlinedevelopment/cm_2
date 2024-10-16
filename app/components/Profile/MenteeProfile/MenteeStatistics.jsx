@@ -22,7 +22,7 @@ export const Card = ({ icon, text }) => {
   return (
     <View
       style={{ width: wp(45), height: 65 }}
-      className="   mt-2 rounded-2xl items-center justify-center bg-white shadow-md   "
+      className="   mt-2 rounded-2xl items-center justify-center bg-white shadow-sm   "
     >
       {icon}
       <Text className=" text-base  ">{text}</Text>
