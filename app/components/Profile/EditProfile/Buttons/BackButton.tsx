@@ -1,4 +1,4 @@
-import IconButton from "../../Buttons/IconButton";
+import IconButton from "@/app/components/Buttons/IconButton";
 import { Ionicons } from "@expo/vector-icons";
 
 const BackButton: React.FC<{ handlePress: () => {} }> = ({ handlePress }) => {

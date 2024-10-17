@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import Avatar from "./Avatar";
+import Avatar from "./EditProfile/Avatar/Avatar";
 import { useAuth } from "@/app/context/authContext";
 import ProgressBar from "./ProgressBar";
 import Statistics from "./MenteeProfile/MenteeStatistics";

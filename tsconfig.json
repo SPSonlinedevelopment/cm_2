@@ -35,5 +35,5 @@
     "app/components/Chats/Chatroom/MessageSelected/MessageGeneralModal.jsx",
     "app/components/Profile/Others/Others.jsx",
     "app/components/Profile/Profiles.jsx"
-  ]
+, "app/components/Profile/EditProfile/Avatar/Avatar.tsx"  ]
 }

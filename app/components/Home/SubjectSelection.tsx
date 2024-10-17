@@ -78,7 +78,7 @@ const SubjectSelection: React.FC<SubjectSelectionProps> = ({
         handlePress={async () => {
           await handleSendQuestion();
           setDisplaySubjectSelection(false);
-          setSelectedSubject("");
+          // setSelectedSubject("");
         }}
         textStyles="mr-2"
         title="Submit"

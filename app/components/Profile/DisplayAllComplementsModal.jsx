@@ -3,7 +3,7 @@ import React from "react";
 import ExitButton from "../Buttons/ExitButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAuth } from "@/app/context/authContext";
-import Avatar from "./Avatar";
+import Avatar from "./EditProfile/Avatar/Avatar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const DisplayAllComplementsModal = ({

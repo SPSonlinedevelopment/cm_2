@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
 
-import Avatar from "../../Profile/Avatar";
+import Avatar from "../../Profile/EditProfile/Avatar/Avatar";
 import { useAuth } from "@/app/context/authContext";
 import { db } from "@/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";

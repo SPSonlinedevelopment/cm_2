@@ -22,7 +22,6 @@ import {
 } from "firebase/firestore";
 import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation";
 import { calculateTimeDifference } from "@/utils/common";
-import { selectRandomAvatar } from "@/app/components/Profile/Avatar";
 
 const ReviewMentorContainer = ({
   setDisplayFeedback,

@@ -33,11 +33,23 @@ const InputFieldContainer: React.FC<{
     </View>
   );
 
+  type FieldLabels = {
+    [key: string]: string;
+  };
+  const fieldLabels: FieldLabels = {
+    firstName: "First Name",
+    lastName: "Last Name",
+    email: "Email",
+    partnership: "Partnership",
+  };
+
+  const displayField = fieldLabels[field] || "Unknown Field";
+
   return (
     <View className=" w-full p-4 rounded-2xl flex items-start justify-center">
-      <View className="w-full my-2 flex ">
+      <View className="w-full my-1 flex ">
         <View className="flex flex-row items-center">
-          <Text className="my-2 text-base ">{field}</Text>
+          <Text className="my-1 text-base ">{displayField}</Text>
           {emailContent}
         </View>
 

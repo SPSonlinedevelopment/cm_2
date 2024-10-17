@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import Avatar from "../../Profile/Avatar";
+import Avatar from "../../Profile/EditProfile/Avatar/Avatar";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "@/app/context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";

@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Modal } from "react-native";
 import React, { useEffect, useState } from "react";
-import Avatar from "../Profile/Avatar";
+import Avatar from "../Profile/EditProfile/Avatar/Avatar";
 
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
@@ -112,7 +112,7 @@ const ChatItem = ({
                     newQuestion ? "font-bold text-white" : "text-neutral-500"
                   } `}
                 >
-                  {item?.questionSubject} {" "}
+                  {item?.questionSubject}{" "}
                   {item.sessionName && (
                     <Text className=" text-xs ">{item.sessionName}</Text>
                   )}

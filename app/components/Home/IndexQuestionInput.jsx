@@ -20,6 +20,7 @@ const IndexQuestionInput = ({
 }) => {
   const inputRef = useRef(null);
   const [selectedSubject, setSelectedSubject] = useState("");
+  console.log("🚀 ~ selectedSubject:", selectedSubject);
   const [displaySubjectSelection, setDisplaySubjectSelection] = useState(false);
 
   useEffect(() => {

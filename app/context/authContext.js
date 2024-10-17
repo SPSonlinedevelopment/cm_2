@@ -25,7 +25,7 @@ import "firebase/auth";
 import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
 import Statistics from "../components/Profile/MenteeProfile/MenteeStatistics";
 
-import { selectRandomAvatar } from "../components/Profile/Avatar";
+import { selectRandomAvatar } from "../components/Profile/EditProfile/Avatar/Avatar";
 
 export const AuthContext = createContext();
 

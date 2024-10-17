@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import { useAuth } from "../../../context/authContext";
 import { convertFirebaseTimestampToDate } from "@/utils/common";
-import Avatar from "../Avatar";
+import Avatar from "../EditProfile/Avatar/Avatar";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 const MentorComments = () => {

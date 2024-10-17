@@ -125,6 +125,7 @@ const RootLayout = () => {
       url = await handleSaveImageToStorageGetUrl();
     }
 
+    console.log("selectedSubject22", selectedSubject);
     const roomId = generateRandomId();
 
     const newQuestionObj = {
