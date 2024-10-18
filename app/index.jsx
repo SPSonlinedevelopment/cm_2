@@ -23,44 +23,39 @@ import { storage } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
 import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotExists";
 import { screenProfanities } from "@/utils/common";
+import Profile from "./profile";
+import { getObjectAsyncStorage } from "@/utils/common";
 
 const RootLayout = () => {
+  const { user, userDetails } = useAuth();
+  const { setNewTextQuestion } = useChat();
   const [permission, requestPermission] = useCameraPermissions();
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [isSavingtoStorage, setIsSavingtoStorage] = useState(false);
   const [openDisplayImageModal, setOpenDisplayImageModal] = useState(false);
   const [displaySubjectSelection, setDisplaySubjectSelection] = useState(false);
   const [text, setText] = useState("");
   const [loading, setIsLoading] = useState(false);
+  const [image, setImage] = useState(null);
+  // const [imageFromMediaLib, setImageFromMediaLib] = useState(null);
+  const [displayQuestionInput, setDisplayQuestionInput] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [mode, setMode] = useState(null); // State to hold the mode
 
   const cameraRef = useRef(null);
-
-  const { user, userDetails } = useAuth();
-
-  const { setNewTextQuestion } = useChat();
-  const [image, setImage] = useState(null);
-  const [imageFromMediaLib, setImageFromMediaLib] = useState(null);
-  const [displayQuestionInput, setDisplayQuestionInput] = useState(false);
-
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const { getCompletedChats, getChatrooms } = useChat();
+  const navigation = useNavigation();
 
   const handleKeyboardButtonPressed = () => {
     setDisplayQuestionInput(true);
   };
-  const navigation = useNavigation();
+
+  const getMode = async () => {
+    const fetchedMode = await getObjectAsyncStorage("mode");
+    setMode(fetchedMode); // Update the state with the fetched mode
+  };
 
   useEffect(() => {
-    if (userDetails) {
-      const unsubscribeChatrooms = getChatrooms();
-      const unsubscribeCompletedChats = getCompletedChats();
-
-      return () => {
-        unsubscribeChatrooms();
-        unsubscribeCompletedChats();
-      };
-    }
-  }, [userDetails]);
+    getMode(); // Call the asynchronous function when the component mounts
+  }, []);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -188,11 +183,15 @@ const RootLayout = () => {
     }
   };
 
-  return (
+  const menteeIndex = (
     <AuthContextProvider>
       <ChatContextProvider>
         {displayQuestionInput ? (
           <IndexQuestionInput
+            setDisplaySubjectSelection={setDisplaySubjectSelection}
+            displaySubjectSelection={displaySubjectSelection}
+            selectedSubject={selectedSubject}
+            setSelectedSubject={setSelectedSubject}
             loading={loading}
             handleSendQuestion={handleSendQuestion}
             text={text}
@@ -258,5 +257,14 @@ const RootLayout = () => {
       </ChatContextProvider>
     </AuthContextProvider>
   );
+
+  return (
+    <AuthContextProvider>
+      <ChatContextProvider>
+        {mode === "mentee" ? menteeIndex : <Profile />}
+      </ChatContextProvider>
+    </AuthContextProvider>
+  );
 };
+
 export default RootLayout;

@@ -21,6 +21,7 @@ import {
 import { auth, db, menteesRef } from "../../firebaseConfig";
 import firebase from "firebase/app";
 import "firebase/auth";
+import { storeObjectAsyncStorage, getObjectAsyncStorage } from "@/utils/common";
 
 import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
 import Statistics from "../components/Profile/MenteeProfile/MenteeStatistics";
@@ -40,6 +41,7 @@ export const AuthContextProvider = ({ children }) => {
       console.log("authState changed");
 
       if (user) {
+        console.log("🚀 ~ unsub ~ user:", user);
         setIsAuthenticated(true);
         setUser(user);
       } else {
@@ -59,6 +61,8 @@ export const AuthContextProvider = ({ children }) => {
     const mentorRef = collection(db, "mentors");
     const mentorQuery = query(mentorRef, where("uid", "==", user?.uid));
 
+    console.log("test use effect run");
+
     getDocs(mentorQuery).then((mentorDoc) => {
       if (!mentorDoc.empty) {
         // Mentor found, set up listener for mentor data
@@ -69,6 +73,7 @@ export const AuthContextProvider = ({ children }) => {
           }
           const mentorDoc = querySnapshot.docs[0];
           setUserDetails(mentorDoc.data());
+          storeObjectAsyncStorage("mode", mentorDoc?.data().mode);
         });
 
         return () => unsubscribe(); // Unsubscribe when component unmounts
@@ -87,7 +92,8 @@ export const AuthContextProvider = ({ children }) => {
               }
               const menteeDoc = querySnapshot.docs[0];
 
-              setUserDetails(menteeDoc.data());
+              setUserDetails(menteeDoc?.data());
+              storeObjectAsyncStorage("mode", menteeDoc.data().mode);
             });
 
             return () => unsubscribe(); // Unsubscribe when component unmounts
@@ -99,6 +105,12 @@ export const AuthContextProvider = ({ children }) => {
       }
     });
   }, [user?.uid]); // Only re-run the effect when the uid changes
+
+  useEffect(() => {
+    if (userDetails) {
+      storeObjectAsyncStorage("mode", userDetails?.mode);
+    }
+  }, [userDetails]);
 
   const getUpdatedAuthObj = async () => {
     const auth = getAuth();

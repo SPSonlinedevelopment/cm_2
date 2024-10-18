@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 import {
   doc,
@@ -24,6 +24,18 @@ export const ChatContextProvider = ({ children }) => {
   const [completedChats, setCompletedChats] = useState([]);
 
   const modeId = userDetails?.mode === "mentee" ? "menteeId" : "mentorId";
+
+  useEffect(() => {
+    if (userDetails) {
+      const unsubscribeChatrooms = getChatrooms();
+      const unsubscribeCompletedChats = getCompletedChats();
+
+      return () => {
+        unsubscribeChatrooms();
+        unsubscribeCompletedChats();
+      };
+    }
+  }, [userDetails]);
 
   const setNewTextQuestion = async (newQuestionObj) => {
     try {

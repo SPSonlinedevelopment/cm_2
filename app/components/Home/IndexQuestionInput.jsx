@@ -17,11 +17,12 @@ const IndexQuestionInput = ({
   setText,
   handleSendQuestion,
   loading,
+  setSelectedSubject,
+  selectedSubject,
+  displaySubjectSelection,
+  setDisplaySubjectSelection,
 }) => {
   const inputRef = useRef(null);
-  const [selectedSubject, setSelectedSubject] = useState("");
-  console.log("🚀 ~ selectedSubject:", selectedSubject);
-  const [displaySubjectSelection, setDisplaySubjectSelection] = useState(false);
 
   useEffect(() => {
     if (inputRef.current) {

@@ -1,6 +1,7 @@
 import React from "react";
 import { Image } from "react-native";
 import { ImageStyle, StyleProp } from "react-native";
+import { ImageProps } from "react-native";
 
 let avatars: string[] = [];
 
