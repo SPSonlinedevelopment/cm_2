@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import ExitButton from "@/app/components/Buttons/ExitButton";
@@ -25,7 +26,7 @@ const SelectAvatarModal: React.FC<{
   const [selectedAvatar, setSelectedAvatar] = useState<{
     source: any;
     name: string;
-  }>({ source: undefined, name: "" });
+  }>({ source: undefined, name: avatarName });
 
   const { userDetails } = useAuth();
 
@@ -44,9 +45,18 @@ const SelectAvatarModal: React.FC<{
   return (
     <Modal animationType="slide" visible={displayModal}>
       <ExitButton toggleDisplay={() => setDisplayModal(false)} />
-      <SafeAreaView>
-        <View className="w-full flex items-center justify-center my-4  ">
-          {!selectedAvatar ? (
+      <View className="w-full h-full">
+        <ScrollView
+          contentContainerStyle={{
+            width: "100%",
+            height: "100%",
+            marginTop: 30,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {!selectedAvatar.source ? (
             <Avatar avatarName={avatarName} size={120} />
           ) : (
             <Image
@@ -69,10 +79,9 @@ const SelectAvatarModal: React.FC<{
               );
             })}
           </View>
-        </View>
-
-        <SaveChangesButton handlePress={() => saveChanges()} />
-      </SafeAreaView>
+          <SaveChangesButton handlePress={() => saveChanges()} />
+        </ScrollView>
+      </View>
     </Modal>
   );
 };

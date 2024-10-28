@@ -27,6 +27,7 @@ import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/
 import Statistics from "../components/Profile/MenteeProfile/MenteeStatistics";
 
 import { selectRandomAvatar } from "../components/Profile/EditProfile/Avatar/Avatar";
+import { useNavigation } from "@react-navigation/native";
 
 export const AuthContext = createContext();
 
@@ -34,8 +35,10 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(undefined);
+  const navigation = useNavigation();
 
   useEffect(() => {
+    console.log("useEFFECT 1");
     // on auth state change
     const unsub = onAuthStateChanged(auth, (user) => {
       console.log("authState changed");
@@ -55,7 +58,10 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    console.log("useEFFECT 3");
     if (!user) {
+      console.log("User is not authenticated or null; exiting useEFFECT 3");
+      navigation.navigate("sign-in");
       return;
     }
     const mentorRef = collection(db, "mentors");
@@ -91,8 +97,9 @@ export const AuthContextProvider = ({ children }) => {
                 return;
               }
               const menteeDoc = querySnapshot.docs[0];
+              console.log("🚀 ~ unsubscribe ~ menteeDoc:", menteeDoc);
 
-              setUserDetails(menteeDoc?.data());
+              setUserDetails(menteeDoc.data());
               storeObjectAsyncStorage("mode", menteeDoc.data().mode);
             });
 
@@ -104,7 +111,7 @@ export const AuthContextProvider = ({ children }) => {
         });
       }
     });
-  }, [user?.uid]); // Only re-run the effect when the uid changes
+  }, [user]); // Only re-run the effect when the uid changes
 
   useEffect(() => {
     if (userDetails) {
@@ -324,8 +331,7 @@ export const AuthContextProvider = ({ children }) => {
       console.log("result signout", result);
 
       setUser(null);
-
-      // router.push("sign-in");
+      navigation.navigate("sign-in");
 
       return { success: true };
     } catch (error) {

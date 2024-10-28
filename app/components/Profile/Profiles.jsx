@@ -1,17 +1,14 @@
-import { View, Image, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Image } from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "./Header";
 import BorderUnderline from "./BorderUnderline";
-import Leaderboard from "./MenteeProfile/Leaderboard/Leaderboard";
-
 import Achievements from "./Achievements/Achievements";
 import MenteeStatistics from "./MenteeProfile/MenteeStatistics";
 import CustomKeyboardView from "../CustomKeyboardView";
 import GradientNavigation from "./MenteeProfile/GradientNaviation/GradientNavigation";
 import Others from "./Others/Others";
 import { useAuth } from "@/app/context/authContext";
-import Loading from "../Loading/LoadingSpinner";
 import MentorStatistics from "./MentorProfile/MentorStatistics";
 import ComplementsProfile from "./ComplementsProfile";
 import MentorComments from "./MentorProfile/MentorComments";
@@ -20,7 +17,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 
 const Profiles = () => {
-  const { userDetails, user } = useAuth();
+  const { userDetails } = useAuth();
 
   const mode = userDetails.mode;
 

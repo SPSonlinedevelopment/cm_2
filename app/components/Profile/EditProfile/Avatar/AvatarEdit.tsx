@@ -6,6 +6,7 @@ import Avatar from "./Avatar";
 import SelectAvatarModal from "./SelectAvatarModal";
 
 const AvatarEdit: React.FC<{ avatarName: string }> = ({ avatarName }) => {
+  console.log("🚀 ~ avatarName3:", avatarName);
   const [displaySelectAvatarModal, setDisplayAvatarModal] = useState(false);
 
   return (

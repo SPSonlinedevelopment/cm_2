@@ -8,11 +8,13 @@ import BorderUnderline from "../BorderUnderline";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MessageGeneralModal from "../../Chats/Chatroom/MessageSelected/MessageGeneralModal";
+import PasswordModal from "../../Account/PasswordModal";
 
 const Others = () => {
   const [displayDeleteAccountModal, setDisplayDeleteAccountModal] =
     useState(false);
   const [displayLogoutModal, setDisplayLogoutModal] = useState(false);
+  const [displayPassWordModal, setDisplayChangePasswordModal] = useState(false);
 
   return (
     <View className="w-[93%]">
@@ -20,6 +22,13 @@ const Others = () => {
         <Entypo name="dots-three-horizontal" size={16} color="black" />
         <Text className="text-lg font-bold "> Others</Text>
       </View>
+
+      {displayPassWordModal && (
+        <PasswordModal
+          setDisplayChangePasswordModal={setDisplayChangePasswordModal}
+        />
+      )}
+
       <MessageGeneralModal
         type="deleteAccount"
         text={{
@@ -61,6 +70,15 @@ const Others = () => {
         handlePress={() => {}}
         iconColor="bg-orange"
         text="I'm a mentor"
+      />
+
+      <OtherListItemComponent
+        icon={<MaterialIcons name="password" size={24} color="white" />}
+        handlePress={() => {
+          setDisplayChangePasswordModal(true);
+        }}
+        iconColor="bg-orange"
+        text="Password"
       />
 
       <OtherListItemComponent

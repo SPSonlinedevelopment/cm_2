@@ -1,4 +1,4 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "./context/authContext";
@@ -12,9 +12,12 @@ import SaveChangesButton from "./components/Profile/EditProfile/Buttons/SaveChan
 import { db } from "@/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 import * as EmailValidator from "email-validator";
+import IconGeneral from "./components/IconGeneral";
+import FadeInView from "./components/Effects/FadeInView";
 
 const EditProfile = () => {
   const { userDetails } = useAuth();
+  const [displayUpdatedAlert, setDisplayUpatedAlert] = useState("");
 
   const [formField, setFormField] = useState({
     firstName: userDetails?.firstName || "",
@@ -47,18 +50,56 @@ const EditProfile = () => {
         lastName: formField.lastName,
         partnership: formField.partnership,
       });
+
+      setDisplayUpatedAlert("success");
     } catch (error) {
       console.log(error);
+      setDisplayUpatedAlert("error");
     }
+
+    setTimeout(() => {
+      setDisplayUpatedAlert("");
+    }, 3000);
   };
 
+  console.log("testavatar1", userDetails.avatarName);
   return (
     <CustomKeyboardView containerStyles="h-full">
       <SafeAreaView>
         <BackButton handlePress={async () => navigation.goBack()} />
-        <View className="w-full items-center flex flex-col  justify-start ">
+        <ScrollView
+          contentContainerStyle={{
+            width: "100%",
+            height: "100%",
+            marginTop: 30,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Text className="font-pbold text-lg">My Profile</Text>
           <AvatarEdit avatarName={userDetails?.avatarName} />
+          {displayUpdatedAlert === "success" && (
+            <FadeInView
+              duration={200}
+              containerStyles="bg-green-400 shadow rounded-xl p-2 w-[95%] m-6 flex items-center"
+            >
+              <Text className="text-white text-base font-semibold">
+                Details Updated Successfully
+              </Text>
+            </FadeInView>
+          )}
+
+          {displayUpdatedAlert === "error" && (
+            <FadeInView
+              duration={200}
+              containerStyles="bg-green-400 shadow rounded-xl p-2 w-[95%] m-6 flex items-center"
+            >
+              <Text className="text-white text-base font-semibold">
+                Details Not updated, try again later.
+              </Text>
+            </FadeInView>
+          )}
 
           <View className="w-[95%] bg-white rounded-xl">
             <InputFieldContainer
@@ -78,9 +119,8 @@ const EditProfile = () => {
               field="partnership"
             />
           </View>
-        </View>
-
-        <SaveChangesButton handlePress={() => saveChanges()} />
+          <SaveChangesButton handlePress={() => saveChanges()} />
+        </ScrollView>
       </SafeAreaView>
     </CustomKeyboardView>
   );

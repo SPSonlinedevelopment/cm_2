@@ -6,6 +6,7 @@ import IconButton from "@/app/components/Buttons/IconButton";
 
 import { auth } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
+import CustomKeyboardView from "@/app/components/CustomKeyboardView";
 
 const MessageGeneralModal = ({
   messageObj,
@@ -33,14 +34,12 @@ const MessageGeneralModal = ({
     actionFunc = async () => {
       try {
         const result = await logOut();
-        console.log("res", result);
       } catch (error) {
         console.log(error);
       }
     };
   } else if (type === "deleteAccount") {
     actionFunc = async () => {
-      console.log("wanker");
       try {
         await auth.currentUser.delete();
         Alert.alert("Account delete successful");
@@ -58,50 +57,50 @@ const MessageGeneralModal = ({
       visible={displayModal}
       animationType="fade"
     >
-      <View className="h-full w-full bg-black opacity-40"></View>
-
-      <View
-        className={`absolute bottom-0 w-full bg-white p-3 ${
-          type === "deleteAccount" ? "h-[500px]" : "h-[340px]"
-        } rounded-xl flex flex-col items-center justify-between`}
-      >
-        <Text className="text-xl p-3 text-center font-bold">
-          {text.headerText}
-        </Text>
-
-        <Octicons name="report" size={50} color="red" />
-        <View className="w-[90%] mt-3">
-          <Text className="text-base font-bold text-black text-center">
-            {text.bodyText}
-
-            {deleteInput}
+      <CustomKeyboardView className="h-full w-full bg-black opacity-40">
+        <View
+          className={`absolute bottom-0 w-full bg-white p-3 ${
+            type === "deleteAccount" ? "h-[500px]" : "h-[340px]"
+          } rounded-xl flex flex-col items-center justify-between`}
+        >
+          <Text className="text-xl p-3 text-center font-bold">
+            {text.headerText}
           </Text>
 
-          {type === "deleteAccount" && (
-            <ConfirmDeleteAccount setDeleteInput={setDeleteInput} />
-          )}
+          <Octicons name="report" size={50} color="red" />
+          <View className="w-[90%] mt-3">
+            <Text className="text-base font-bold text-black text-center">
+              {text.bodyText}
+
+              {deleteInput}
+            </Text>
+
+            {type === "deleteAccount" && (
+              <ConfirmDeleteAccount setDeleteInput={setDeleteInput} />
+            )}
+          </View>
+          <View className="flex flex-row justify-evenly items-center w-full">
+            <IconButton
+              disabled={deleteInput !== "Delete" && type === "deleteAccount"}
+              textStyles="font-bold"
+              containerStyles="p-2 w-[150px] h-[50px]"
+              title="Confirm"
+              handlePress={async () => {
+                actionFunc(messageObj);
+                setDisplayModal(false);
+              }}
+            />
+            <IconButton
+              textStyles="font-bold text-orange"
+              containerStyles="p-2 w-[150px] h-[50px] bg-transparent border border-orange-300"
+              title="Cancel"
+              handlePress={() => {
+                setDisplayModal(false);
+              }}
+            />
+          </View>
         </View>
-        <View className="flex flex-row justify-evenly items-center w-full">
-          <IconButton
-            disabled={deleteInput !== "Delete" && type === "deleteAccount"}
-            textStyles="font-bold"
-            containerStyles="p-2 w-[150px] h-[50px]"
-            title="Confirm"
-            handlePress={async () => {
-              actionFunc(messageObj);
-              setDisplayModal(false);
-            }}
-          />
-          <IconButton
-            textStyles="font-bold text-orange"
-            containerStyles="p-2 w-[150px] h-[50px] bg-transparent border border-orange-300"
-            title="Cancel"
-            handlePress={() => {
-              setDisplayModal(false);
-            }}
-          />
-        </View>
-      </View>
+      </CustomKeyboardView>
     </Modal>
   );
 };

@@ -38,7 +38,6 @@ export const avatarArray = Object.entries(avatarPaths).map(([key, value]) => ({
   name: key,
   source: value,
 }));
-console.log("🚀 ~ avatarArray ~ avatarArray:", avatarArray);
 
 const getAvatarPath = (avatarName: string): string => {
   return avatarPaths[avatarName] || avatarPaths.default;

@@ -10,6 +10,7 @@ interface IconButtonProps {
   title?: string;
   textStyles?: string;
   disabled?: boolean;
+  iconContainerStyles?: string;
 }
 const IconButton: React.FC<IconButtonProps> = ({
   containerStyles,
@@ -19,6 +20,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   isLoading,
   title,
   disabled,
+  iconContainerStyles,
 }) => {
   return (
     <TouchableOpacity
@@ -36,9 +38,11 @@ const IconButton: React.FC<IconButtonProps> = ({
       testID="custom_button"
     >
       {isLoading ? (
-        <Loading size={62} />
+        <Loading size={60} />
       ) : (
-        <View testID="icon_button_test">{icon}</View>
+        <View className={`${iconContainerStyles}`} testID="icon_button_test">
+          {icon}
+        </View>
       )}
       {title && !isLoading && (
         <Text className={`text-white ${textStyles} `}>{title}</Text>
