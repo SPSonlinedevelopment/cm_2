@@ -74,8 +74,8 @@ const PasswordModal: React.FC<{
       console.log("password changed");
       setMessage("Password changed successfully");
     } catch (error) {
-      console.log(error);
-      Alert.alert("error");
+      console.log("error setting new password ", error);
+      Alert.alert("error123");
       console.log("password  NOT changed");
     }
     setIsLoading(false);
@@ -138,7 +138,7 @@ const PasswordModal: React.FC<{
             {message === "Passwords must meet password criteria" && (
               <View className=" my-7 p-3 shadow bg-purple-200 rounded-2xl ">
                 <Text className="font-bold">Password requirements:</Text>
-                <Text className="m-1">- Minimum 6 characters</Text>
+                <Text className="m-1">- Minimum 8 characters</Text>
                 <Text className="m-1">
                   - Mix of uppercase and lowercase letters
                 </Text>

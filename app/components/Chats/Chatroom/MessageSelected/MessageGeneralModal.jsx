@@ -7,6 +7,7 @@ import IconButton from "@/app/components/Buttons/IconButton";
 import { auth } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import CustomKeyboardView from "@/app/components/CustomKeyboardView";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MessageGeneralModal = ({
   messageObj,
@@ -57,6 +58,7 @@ const MessageGeneralModal = ({
       visible={displayModal}
       animationType="fade"
     >
+      <View className=" h-full w-full absolute bg-black-100 opacity-40" />
       <CustomKeyboardView className="h-full w-full bg-black opacity-40">
         <View
           className={`absolute bottom-0 w-full bg-white p-3 ${

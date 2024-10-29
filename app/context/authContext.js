@@ -36,21 +36,19 @@ export const AuthContextProvider = ({ children }) => {
   const [userDetails, setUserDetails] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(undefined);
   const navigation = useNavigation();
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    console.log("useEFFECT 1");
     // on auth state change
-    const unsub = onAuthStateChanged(auth, (user) => {
-      console.log("authState changed");
-
-      if (user) {
-        console.log("🚀 ~ unsub ~ user:", user);
+    const unsub = onAuthStateChanged(auth, (authUser) => {
+      if (authUser) {
         setIsAuthenticated(true);
-        setUser(user);
+        setUser(authUser);
       } else {
         setIsAuthenticated(false);
         setUser(null);
       }
+      setInitialized(true);
     });
 
     // when component unmounts clears hook
@@ -58,16 +56,16 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log("useEFFECT 3");
+    if (!initialized) {
+      return;
+    }
+
     if (!user) {
-      console.log("User is not authenticated or null; exiting useEFFECT 3");
       navigation.navigate("sign-in");
       return;
     }
     const mentorRef = collection(db, "mentors");
     const mentorQuery = query(mentorRef, where("uid", "==", user?.uid));
-
-    console.log("test use effect run");
 
     getDocs(mentorQuery).then((mentorDoc) => {
       if (!mentorDoc.empty) {
@@ -111,7 +109,7 @@ export const AuthContextProvider = ({ children }) => {
         });
       }
     });
-  }, [user]); // Only re-run the effect when the uid changes
+  }, [user, initialized]); // Only re-run the effect when the uid changes
 
   useEffect(() => {
     if (userDetails) {
@@ -122,17 +120,14 @@ export const AuthContextProvider = ({ children }) => {
   const getUpdatedAuthObj = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-
     return user;
   };
 
   const verifyEmail = async () => {
     const auth = getAuth();
     const user = auth.currentUser; // Get the currently signed-in user
-
     try {
       sendEmailVerification(user);
-
       return { success: true };
     } catch (error) {
       console.error("Error sending email verification:", error);
@@ -147,18 +142,12 @@ export const AuthContextProvider = ({ children }) => {
         email,
         password
       );
-
-      // setUser((prev) => response);
-
       return {
         success: true,
         data: response?.user,
       };
     } catch (error) {
-      console.log("error", error);
-
       const editedMessage = editFirebaseMessage(error.message);
-
       return { success: false, message: editedMessage };
     }
   };
@@ -168,7 +157,6 @@ export const AuthContextProvider = ({ children }) => {
     getDoc(docRef)
       .then((doc) => {
         if (doc.exists()) {
-          console.log("Document data:", doc.data());
           setUserDetails(doc.data());
         } else {
           console.log("Document data not exists:");

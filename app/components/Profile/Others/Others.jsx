@@ -9,8 +9,11 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MessageGeneralModal from "../../Chats/Chatroom/MessageSelected/MessageGeneralModal";
 import PasswordModal from "../../Account/PasswordModal";
+import { sendEmailToColletTeam } from "./Mail/sendEmail";
+import shareApp from "./Share/shareApp";
 
 const Others = () => {
+  const { userDetails } = useAuth();
   const [displayDeleteAccountModal, setDisplayDeleteAccountModal] =
     useState(false);
   const [displayLogoutModal, setDisplayLogoutModal] = useState(false);
@@ -52,7 +55,9 @@ const Others = () => {
 
       <OtherListItemComponent
         icon={<FontAwesome name="share" size={20} color="white" />}
-        handlePress={() => {}}
+        handlePress={() => {
+          shareApp();
+        }}
         iconColor="bg-orange"
         iconStyles=""
         text="Share with Friends"
@@ -60,7 +65,9 @@ const Others = () => {
 
       <OtherListItemComponent
         icon={<MaterialIcons name="contact-support" size={20} color="white" />}
-        handlePress={() => {}}
+        handlePress={() => {
+          sendEmailToColletTeam(userDetails?.firstName);
+        }}
         iconColor="bg-orange"
         text="Contact us"
       />

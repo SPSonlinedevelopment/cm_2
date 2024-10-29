@@ -10,7 +10,6 @@ import CheckEmailVerification from "./CheckEmailVerification";
 
 const Header = () => {
   const { userDetails, user } = useAuth();
-  console.log("🚀 ~ Header ~ user:", user);
 
   if (user) {
     return (

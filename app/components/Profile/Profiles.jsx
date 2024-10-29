@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 const Profiles = () => {
   const { userDetails } = useAuth();
 
-  const mode = userDetails.mode;
+  const mode = userDetails?.mode;
 
   const navigation = useNavigation();
   return (
