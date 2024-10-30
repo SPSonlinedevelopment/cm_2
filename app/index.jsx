@@ -1,4 +1,4 @@
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, Alert } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 
 import IconButton from "./components/Buttons/IconButton";
@@ -25,6 +25,10 @@ import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotEx
 import { screenProfanities } from "@/utils/common";
 import Profile from "./profile";
 import { getObjectAsyncStorage } from "@/utils/common";
+import {
+  detectInnapropriateImageContent,
+  deleteImagesWithFace,
+} from "./safeguarding/detectInappropriateImages";
 
 const RootLayout = () => {
   const { user, userDetails } = useAuth();
@@ -105,38 +109,67 @@ const RootLayout = () => {
   //   }
   // };
 
+  const handleCleanup = () => {
+    setImage(null);
+    setOpenDisplayImageModal(false);
+    setIsLoading(false);
+    setText("");
+  };
+
+  // Helper function to create a question object
+  const createQuestionObject = (url, roomId) => ({
+    imageUrl: url,
+    menteeId: userDetails?.uid || "",
+    menteeName: userDetails?.firstName || "",
+    menteeAvatarName: userDetails?.avatarName,
+    initialMessage: text || "",
+    questionSubject: selectedSubject || "",
+    createdAt: Timestamp.fromDate(new Date()),
+    roomId: roomId,
+  });
+
   const handleSendQuestion = async () => {
     setIsLoading(true);
-    if (text.length) {
-      const hasProfanities = screenProfanities(text);
-      if (hasProfanities) {
-        setIsLoading(false);
-        return Alert.alert("text shows inappropriate text");
-      }
+
+    /// detect inappropriate text if message provided
+
+    if (text.length && screenProfanities(text)) {
+      setIsLoading(false);
+      return Alert.alert("text shows inappropriate text");
     }
 
-    let url;
-    if (image) {
-      url = await handleSaveImageToStorageGetUrl();
-    }
-
-    console.log("selectedSubject22", selectedSubject);
-    const roomId = generateRandomId();
-
-    const newQuestionObj = {
-      imageUrl: url || "",
-      menteeId: userDetails?.uid || "",
-      menteeName: userDetails?.firstName || "",
-      menteeAvatarName: userDetails?.avatarName,
-      initialMessage: text || "",
-      questionSubject: selectedSubject || "",
-      createdAt: Timestamp.fromDate(new Date()),
-      roomId: roomId,
-    };
+    const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
+    /// if image save image to google cloud storage
+    let url = image ? await handleSaveImageToStorageGetUrl(storageRef) : "";
 
     try {
-      // set new question in firebase
+      const detectFace = await deleteImagesWithFace(storageRef);
+      console.log("🚀 ~ handleSendQuestion ~ detectFace:", detectFace);
 
+      if (detectFace) {
+        handleCleanup();
+        return;
+      }
+
+      const detectInappropriateContent = await detectInnapropriateImageContent(
+        storageRef
+      );
+      console.log(
+        "🚀 ~ handleSendQuestion ~ detectInappropriateContent:",
+        detectInappropriateContent
+      );
+      if (detectInappropriateContent) {
+        handleCleanup();
+        return;
+      }
+
+      const roomId = generateRandomId();
+      console.log("🚀 ~ handleSendQuestion ~ roomId:", roomId);
+      // Prepare the question object
+      const newQuestionObj = createQuestionObject(url, roomId);
+      console.log("🚀 ~ handleSendQuestion ~ newQuestionObj:", newQuestionObj);
+
+      // Set new question in Firebase
       const result = await setNewTextQuestion(newQuestionObj);
       console.log("setNewTextQuestion", result);
 
@@ -144,28 +177,24 @@ const RootLayout = () => {
         const createRoom = await CreateRoomIfNotExists(newQuestionObj);
 
         console.log("createRoom", createRoom);
+
+        navigation.navigate("chat-room", {
+          roomId: roomId,
+          completedSession: false,
+        });
       }
-
-      navigation.navigate("chat-room", {
-        roomId: roomId,
-        completedSession: false,
-      });
     } catch (error) {
-      console.log(error);
+      console.log("🚀 ~ handleSendQuestion ~ error:", error);
+    } finally {
+      // Cleanup and reset state
+      handleCleanup();
     }
-
-    setImage(null);
-    setOpenDisplayImageModal(false);
-    setIsLoading(false);
-    setText("");
   };
 
   // this function is used in messageInput and needs to extracted to as isolated reusable function as too large
-  const handleSaveImageToStorageGetUrl = async () => {
+  const handleSaveImageToStorageGetUrl = async (storageRef) => {
     try {
       setIsSavingtoStorage(true);
-
-      const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
 
       if (!image) {
         throw new Error("Image is missing");

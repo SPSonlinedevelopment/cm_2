@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, Image } from "react-native";
 import React, { useState } from "react";
 import ActiveChatroomList from "./ActiveChatroomList";
 import GradientNavigation from "../Profile/MenteeProfile/GradientNaviation/GradientNavigation";
@@ -68,6 +68,10 @@ const ChatPreview = () => {
             <>
               <ActiveChatroomList />
               <CompletedChatList />
+              <Image
+                className="   rounded-full h-[210px] w-[210px] my-[40px] opacity-25"
+                source={require("../../../assets/images/CMlogo.png")}
+              />
             </>
           ) : filteredSearch.length > 0 ? (
             <View>

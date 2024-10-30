@@ -11,46 +11,46 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
         loop="false"
         size={200}
       ></CelebrationAnimation>
-      <View className=" w-[95%] py-3    justify-center items-between    flex flex-row rounded-2xl shadow bg-white">
+      <View className=" w-[95%] py-3    justify-center items-center    flex flex-row rounded-2xl shadow bg-white">
         {userDetails.mode === "mentor" ? (
-          <View className="ml-5">
-            <Text className="text-base font-medium ">
+          <View className="">
+            <Text className="text-base font-medium my-2 ">
               Session ended with{" "}
               <Text className=" text-base font-bold">
                 {chatRoomData.menteeName}
               </Text>
             </Text>
 
-            {!chatRoomData.mentorReview?.writtenFeedback && (
-              <View className="flex  flex-row justify-center pt-4 ">
+            {!chatRoomData.mentorReview && (
+              <View className="flex  flex-row justify-center pt-4  my-2">
                 <Text className="text-sm"> Awaiting feedback...</Text>
               </View>
             )}
 
             {chatRoomData.mentorReview?.writtenFeedback && (
-              <Text className="text-base font-medium">
-                {chatRoomData.menteeName} said : "{" "}
+              <Text className="text-base font-medium my-2">
+                🐱 {chatRoomData.menteeName} said : "{" "}
                 {chatRoomData.mentorReview.writtenFeedback}"
               </Text>
             )}
 
             {chatRoomData.mentorReview?.confidenceRatingBefore && (
-              <Text className="text-base font-medium">
-                {chatRoomData.menteeName}'s confidence before:{" "}
+              <Text className="text-base font-medium my-2">
+                😊 {chatRoomData.menteeName}'s confidence before:{" "}
                 {chatRoomData.mentorReview.confidenceRatingBefore}
               </Text>
             )}
 
             {chatRoomData.mentorReview?.confidenceRatingAfter && (
-              <Text className="text-base font-medium">
-                {chatRoomData.menteeName}'s confidence after:{" "}
+              <Text className="text-base font-medium my-2">
+                😁 {chatRoomData.menteeName}'s confidence after:{" "}
                 {chatRoomData.mentorReview.confidenceRatingAfter}
               </Text>
             )}
 
             {chatRoomData.mentorReview?.mentorRating && (
-              <Text className="text-base font-medium">
-                Your rating for this session:{" "}
+              <Text className="text-base font-medium my-2">
+                😺 Your rating for this session:{" "}
                 {chatRoomData.mentorReview.mentorRating}
               </Text>
             )}

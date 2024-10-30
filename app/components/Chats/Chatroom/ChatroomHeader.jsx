@@ -80,16 +80,15 @@ const ChatroomHeader = ({
               <View className="flex flex-col items-center">
                 {userDetails?.mode === "mentee" ? (
                   <Text className="text-lg p-2 text-black">
-                    mentor: {chatRoomData?.mentorName}
+                    {chatRoomData?.mentorName}
                   </Text>
                 ) : (
                   <Text className="text-lg p-2 text-black">
-                    mentee: {chatRoomData?.menteeName}
+                    {chatRoomData?.menteeName}
                   </Text>
                 )}
               </View>
 
-              <Text>{chatRoomData?.roomId}</Text>
               <TouchableOpacity className="m-2" onPress={() => {}}>
                 <MaterialCommunityIcons
                   name="export-variant"
