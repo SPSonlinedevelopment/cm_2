@@ -13,8 +13,8 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
       ></CelebrationAnimation>
       <View className=" w-[95%] py-3    justify-center items-center    flex flex-row rounded-2xl shadow bg-white">
         {userDetails.mode === "mentor" ? (
-          <View className="">
-            <Text className="text-base font-medium my-2 ">
+          <View className="ml-6">
+            <Text className="text-base font-medium my-2  ">
               Session ended with{" "}
               <Text className=" text-base font-bold">
                 {chatRoomData.menteeName}
@@ -22,13 +22,13 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
             </Text>
 
             {!chatRoomData.mentorReview && (
-              <View className="flex  flex-row justify-center pt-4  my-2">
+              <View className="flex  flex-row justify-center pt-4  ">
                 <Text className="text-sm"> Awaiting feedback...</Text>
               </View>
             )}
 
             {chatRoomData.mentorReview?.writtenFeedback && (
-              <Text className="text-base font-medium my-2">
+              <Text className="text-base font-medium my-2 ">
                 🐱 {chatRoomData.menteeName} said : "{" "}
                 {chatRoomData.mentorReview.writtenFeedback}"
               </Text>

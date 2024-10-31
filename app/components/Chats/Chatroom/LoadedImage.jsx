@@ -26,6 +26,7 @@ export const FullScreenImage = ({ url, onClose }) => {
 
 const LoadedImage = React.memo(({ url, thisUsersMessage, caption }) => {
   const [isFullScreen, setFullScreen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const openFullScreen = () => {
     setFullScreen(true);
@@ -49,11 +50,15 @@ const LoadedImage = React.memo(({ url, thisUsersMessage, caption }) => {
           }`}
         >
           <TouchableOpacity
+            className="relative"
             // delayLongPress={100}
             // delayPressIn={100}
             onPress={() => openFullScreen()}
           >
+            {!isLoaded && <LoadingImagePlaceholder />}
+            {/* <LoadingImagePlaceholder /> */}
             <Image
+              onLoad={() => setIsLoaded(true)}
               cachePolicy={"memory-disk"}
               className={` h-[250px] w-[200px] rounded-xl 
                `}
@@ -81,3 +86,16 @@ const LoadedImage = React.memo(({ url, thisUsersMessage, caption }) => {
 });
 
 export default LoadedImage;
+
+const LoadingImagePlaceholder = () => {
+  return (
+    <View
+      className="rounded-xl w-full  flex flex-row mb-1
+      justify-end"
+    >
+      <View className=" h-[250px] w-[254px] rounded-xl shadow flex  p-[3px] flex-col justify-center items-center bg-orange-200  mr-2">
+        <Loading size={150} />
+      </View>
+    </View>
+  );
+};

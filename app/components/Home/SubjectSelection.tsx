@@ -54,7 +54,11 @@ const SubjectSelection: React.FC<SubjectSelectionProps> = ({
       animationType="fade"
       transparent={true}
     >
-      <ExitButton toggleDisplay={setDisplaySubjectSelection} />
+      <ExitButton
+        cleanUpFunctions={() => setSelectedSubject("")}
+        toggleDisplay={setDisplaySubjectSelection}
+      />
+      <View className="w-full h-full bg-black opacity-50 absolute"></View>
       <View className="absolute bottom-0 justify-center  h-[50%] w-full  flex-row flex-wrap bg-white  shadow-xl">
         <View className="w-[80%] flex justify-center items-center p-2 ">
           <Text className="mt-4 text-purple text-xl font-bold items-center justify-center text-center">

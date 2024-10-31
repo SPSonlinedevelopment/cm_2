@@ -1,5 +1,6 @@
 import { doc, collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
+import { Alert } from "react-native";
 
 export const handleSendImageMessageToChatroom = async (
   item,
@@ -8,7 +9,6 @@ export const handleSendImageMessageToChatroom = async (
   userDetails,
   imageUrl
 ) => {
-  //   console.log("🚀 ~ handleSendTextMessage ~ message:", message);
   if (!imageUrl) return;
   let caption = "";
 
@@ -34,5 +34,8 @@ export const handleSendImageMessageToChatroom = async (
     console.log("new message id ", newDoc.id);
   } catch (error) {
     console.log("🚀 ~ error:", error);
+    Alert.alert("error sending message");
+    textRef.current = "";
   }
+  return;
 };

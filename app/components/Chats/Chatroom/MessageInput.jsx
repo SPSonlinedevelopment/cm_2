@@ -32,6 +32,8 @@ const MessageInput = React.memo(
     text,
     setText,
     inputRef,
+    isSendingImage,
+    setIsSendingImage,
   }) => {
     const { userDetails } = useAuth();
     const [TextInputFocused, setTextInputFocused] = useState(false);
@@ -43,7 +45,7 @@ const MessageInput = React.memo(
     const handlePickImage = async () => {
       try {
         const imagePicked = await pickImage();
-        setImage(imagePicked.assets[0].uri);
+        setImage(imagePicked);
         setDisplayImageCaptionModal(true);
       } catch (error) {
         console.log(error);
@@ -84,6 +86,8 @@ const MessageInput = React.memo(
         {/* <Text>{JSON.stringify(replyMessage)}</Text> */}
         {displayImageCaptionModal && (
           <ImageMessageCaption
+            isSendingImage={isSendingImage}
+            setIsSendingImage={setIsSendingImage}
             item={item}
             image={image}
             setDisplayImageCaptionModal={setDisplayImageCaptionModal}

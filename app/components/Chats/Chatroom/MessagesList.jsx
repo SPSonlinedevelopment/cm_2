@@ -21,6 +21,7 @@ import { db } from "@/firebaseConfig";
 import * as Haptics from "expo-haptics";
 import UserDetails from "@/app/user-details";
 import MessageSelectedModal from "./MessageSelected/MessageSelectedModal";
+import Loading from "../../Loading/LoadingSpinner";
 
 const MessagesList = ({
   chatRoomData,
@@ -34,6 +35,7 @@ const MessagesList = ({
   roomId,
   setSelectedMessage,
   setDisplayMessageSelectedModal,
+  isSendingImage,
 }) => {
   const [messages, setMessages] = useState([]);
 
@@ -173,6 +175,13 @@ const MessagesList = ({
         );
       })}
 
+      {isSendingImage && (
+        <LoadingImagePlaceholder
+          isSendingImage={isSendingImage}
+          scrollToEnd={scrollToEnd}
+        />
+      )}
+
       {mode === "mentee" && chatRoomData.sessionCompleted && (
         <View className="w-full absolute  ">
           <CelebrationAnimation position="bottom" loop={false} size={500} />
@@ -187,3 +196,17 @@ const MessagesList = ({
 };
 
 export default MessagesList;
+
+const LoadingImagePlaceholder = ({ scrollToEnd, isSendingImage }) => {
+  scrollToEnd();
+  return (
+    <View
+      className="rounded-xl w-full  flex flex-row mb-1
+        justify-end"
+    >
+      <View className=" h-[250px] w-[254px] rounded-xl shadow flex  p-[3px] flex-col justify-center items-center bg-orange-200  mr-2">
+        <Loading size={150} />
+      </View>
+    </View>
+  );
+};

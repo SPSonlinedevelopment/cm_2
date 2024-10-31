@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore";
+import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   RegExpMatcher,
@@ -181,11 +182,9 @@ export const screenProfanities = (text) => {
   });
 
   if (matcher.hasMatch(text)) {
-    console.log("The input text contains profanities.");
+    Alert.alert("text shows inappropriate text");
     return true;
   } else {
-    console.log("The input doesn't contain profanities.");
-
     return false;
   }
 };

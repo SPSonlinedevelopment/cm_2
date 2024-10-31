@@ -33,7 +33,7 @@ const ConfirmEndOfSessionModal = ({
       console.log(error);
     }
 
-    navigation.navigate("chats", { key: Math.random() });
+    navigation.navigate("index", { key: Math.random() });
   };
 
   return (

@@ -1,30 +1,24 @@
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "@/firebaseConfig";
+import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import createBlob from "./createBlob";
 
-export const sendImageToFirebaseStorageGetDownloadUrl = async (image, user) => {
-  try {
-    // create reference to storage image in Firebase Storage
-    const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
+export const sendImageToFirebaseStorageGetDownloadUrl = async (
+  image,
+  storageRef
+) => {
+  if (!image) {
+    throw new Error("Image is missing. Please provide an image to upload.");
+  }
 
-    if (!image) {
-      throw new Error("Image is missing. Please provide an image to upload.");
-    }
-    await uploadImageToStorage(image, storageRef);
-    const downloadUrl = await getDownloadUrlFromStorage(storageRef);
-    return downloadUrl;
+  try {
+    // Create blob and upload to Firebase
+    const blob = await createBlob(image);
+    await uploadBytesResumable(storageRef, blob);
+    blob.close(); // Cleanup blob after upload
+
+    // Get the download URL
+    return await getDownloadURL(storageRef);
   } catch (error) {
     console.error("Error uploading file:", error);
-    throw error;
+    throw new Error("Failed to upload image. Please try again.");
   }
-};
-
-const uploadImageToStorage = async (image, storageRef) => {
-  const blob = await createBlob(image);
-  await uploadBytesResumable(storageRef, blob);
-};
-
-const getDownloadUrlFromStorage = async (storageRef) => {
-  const url = await getDownloadURL(storageRef);
-  return url;
 };

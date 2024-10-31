@@ -24,14 +24,25 @@ export const ChatNavBtn = () => {
   );
 };
 
-export const AddMediaBtn = ({ setImage }) => {
+export const AddMediaBtn = ({ setImage, setOpenDisplayImageModal }) => {
   return (
     <IconButton
       title="Images"
       icon={<MaterialIcons name="perm-media" size={24} color="white" />}
-      handlePress={() => {
+      handlePress={async () => {
         console.log("open media btn clicked");
-        pickImage({ setImage });
+
+        try {
+          const imageSelected = await pickImage();
+          if (imageSelected) {
+            console.log("🚀 ~ handlePress={ ~ imageSelected:", imageSelected);
+
+            setImage(imageSelected);
+            setOpenDisplayImageModal(true);
+          }
+        } catch (error) {
+          Alert.alert("Image could not be selected");
+        }
       }}
       containerStyles="h-[60] w-[60] bg-transparent m-3"
     />
@@ -67,7 +78,7 @@ export const ActivateCameraBtn = () => {
   );
 };
 
-const HomeNavButtons = ({ setImage }) => {
+const HomeNavButtons = ({ setImage, setOpenDisplayImageModal }) => {
   return (
     <View>
       <View className="flex-row w-full justify-center items-center  ">
@@ -75,7 +86,10 @@ const HomeNavButtons = ({ setImage }) => {
       </View>
       <View className="flex-row w-full justify-between pb-3  ">
         <ChatNavBtn />
-        <AddMediaBtn setImage={setImage} />
+        <AddMediaBtn
+          setImage={setImage}
+          setOpenDisplayImageModal={setOpenDisplayImageModal}
+        />
         <ProfileNavBtn />
       </View>
     </View>

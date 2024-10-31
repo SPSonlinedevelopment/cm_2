@@ -42,6 +42,7 @@ const ChatRoom = () => {
   const [displayMessageSelectedModal, setDisplayMessageSelectedModal] =
     useState(false);
   const [selectedMessage, setSelectedMessage] = useState({});
+  const [isSendingImage, setIsSendingImage] = useState(false);
 
   const [chatRoomData, setChatRoomData] = useState();
   console.log("🚀 ~ ChatRoom ~ chatRoomData:", chatRoomData);
@@ -124,6 +125,7 @@ const ChatRoom = () => {
 
       {chatRoomData && (
         <MessagesList
+          isSendingImage={isSendingImage}
           setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
           setSelectedMessage={setSelectedMessage}
           scrollToEnd={scrollToEnd}
@@ -176,6 +178,8 @@ const ChatRoom = () => {
             item={chatRoomData}
           />
           <MessageInput
+            isSendingImage={isSendingImage}
+            setIsSendingImage={setIsSendingImage}
             text={text}
             setText={setText}
             inputRef={inputRef}

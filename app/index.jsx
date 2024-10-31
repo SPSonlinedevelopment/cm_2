@@ -29,12 +29,13 @@ import {
   detectInnapropriateImageContent,
   deleteImagesWithFace,
 } from "./safeguarding/detectInappropriateImages";
+import { sendImageToFirebaseStorageGetDownloadUrl } from "./components/Chats/SendData/SendImages/sendImageToFirebaseStorageGetDownloadUrl";
 
 const RootLayout = () => {
   const { user, userDetails } = useAuth();
   const { setNewTextQuestion } = useChat();
   const [permission, requestPermission] = useCameraPermissions();
-  const [isSavingtoStorage, setIsSavingtoStorage] = useState(false);
+  const [isSavingtoCloudStorage, setIsSavingtoCloudStorage] = useState(false);
   const [openDisplayImageModal, setOpenDisplayImageModal] = useState(false);
   const [displaySubjectSelection, setDisplaySubjectSelection] = useState(false);
   const [text, setText] = useState("");
@@ -95,25 +96,33 @@ const RootLayout = () => {
     setImage(null);
   };
 
-  // const saveImage = async () => {
-  //   console.log("function ");
-  //   if (image) {
-  //     try {
-  //       await MediaLibrary.createAssetAsync(image);
-  //       alert("picture saved");
-  //       setImage(null);
-  //       console.log("picture saved ");
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
+  const saveImageToDevice = async () => {
+    if (!image) return;
+
+    try {
+      // Request media library permission
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission to access media library is required!");
+        return;
+      }
+
+      // Save the image to the device's media library
+      await MediaLibrary.createAssetAsync(image);
+      alert("Saved to device");
+
+      console.log("Picture saved");
+    } catch (error) {
+      console.log("Error saving image:", error);
+    }
+  };
 
   const handleCleanup = () => {
     setImage(null);
     setOpenDisplayImageModal(false);
     setIsLoading(false);
     setText("");
+    setDisplayQuestionInput(false);
   };
 
   // Helper function to create a question object
@@ -134,49 +143,39 @@ const RootLayout = () => {
     /// detect inappropriate text if message provided
 
     if (text.length && screenProfanities(text)) {
-      setIsLoading(false);
-      return Alert.alert("text shows inappropriate text");
+      handleCleanup();
+      return;
     }
 
     const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
+
     /// if image save image to google cloud storage
-    let url = image ? await handleSaveImageToStorageGetUrl(storageRef) : "";
+
+    let url = image
+      ? await sendImageToFirebaseStorageGetDownloadUrl(image, storageRef)
+      : "";
 
     try {
-      const detectFace = await deleteImagesWithFace(storageRef);
-      console.log("🚀 ~ handleSendQuestion ~ detectFace:", detectFace);
-
-      if (detectFace) {
+      if (await deleteImagesWithFace(storageRef)) {
         handleCleanup();
         return;
       }
 
-      const detectInappropriateContent = await detectInnapropriateImageContent(
-        storageRef
-      );
-      console.log(
-        "🚀 ~ handleSendQuestion ~ detectInappropriateContent:",
-        detectInappropriateContent
-      );
-      if (detectInappropriateContent) {
+      if (await detectInnapropriateImageContent(storageRef)) {
         handleCleanup();
         return;
       }
 
       const roomId = generateRandomId();
-      console.log("🚀 ~ handleSendQuestion ~ roomId:", roomId);
+
       // Prepare the question object
       const newQuestionObj = createQuestionObject(url, roomId);
-      console.log("🚀 ~ handleSendQuestion ~ newQuestionObj:", newQuestionObj);
 
       // Set new question in Firebase
       const result = await setNewTextQuestion(newQuestionObj);
-      console.log("setNewTextQuestion", result);
 
       if (result.success) {
-        const createRoom = await CreateRoomIfNotExists(newQuestionObj);
-
-        console.log("createRoom", createRoom);
+        await CreateRoomIfNotExists(newQuestionObj);
 
         navigation.navigate("chat-room", {
           roomId: roomId,
@@ -188,27 +187,6 @@ const RootLayout = () => {
     } finally {
       // Cleanup and reset state
       handleCleanup();
-    }
-  };
-
-  // this function is used in messageInput and needs to extracted to as isolated reusable function as too large
-  const handleSaveImageToStorageGetUrl = async (storageRef) => {
-    try {
-      setIsSavingtoStorage(true);
-
-      if (!image) {
-        throw new Error("Image is missing");
-      }
-
-      const response = await fetch(image);
-      const blob = await response.blob();
-      await uploadBytesResumable(storageRef, blob);
-      const downloadURL = await getDownloadURL(storageRef);
-
-      return downloadURL;
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      setIsSavingtoStorage(false);
     }
   };
 
@@ -230,6 +208,7 @@ const RootLayout = () => {
         ) : (
           <View className="h-full w-full bg-red relative">
             <DisplayImageModal
+              saveImageToDevice={saveImageToDevice}
               loading={loading}
               setDisplaySubjectSelection={setDisplaySubjectSelection}
               displaySubjectSelection={displaySubjectSelection}
@@ -238,7 +217,6 @@ const RootLayout = () => {
               onClose={onClose}
               openDisplayImageModal={openDisplayImageModal}
               image={image}
-              isSavingtoStorage={isSavingtoStorage}
               handleSendQuestion={handleSendQuestion}
             />
 
@@ -278,7 +256,11 @@ const RootLayout = () => {
                     }}
                   />
                 </View>
-                <HomeNavButtons setImage={setImage} />
+                <HomeNavButtons
+                  setOpenDisplayImageModal={setOpenDisplayImageModal}
+                  // setDisplaySubjectSelection={setDisplaySubjectSelection}
+                  setImage={setImage}
+                />
               </View>
             </CameraView>
           </View>

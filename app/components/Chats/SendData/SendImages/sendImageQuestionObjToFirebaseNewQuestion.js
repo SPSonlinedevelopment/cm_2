@@ -1,5 +1,3 @@
-import { View, Text } from "react-native";
-import React from "react";
 import { useChat } from "../../../../context/chatContext";
 import { generateRandomId } from "@/utils/common";
 

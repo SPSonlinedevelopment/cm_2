@@ -12,6 +12,6 @@ export const pickImage = async () => {
   console.log("result of image picker", result.assets[0].uri);
 
   if (!result.canceled) {
-    return result;
+    return result.assets[0].uri;
   } else return null;
 };

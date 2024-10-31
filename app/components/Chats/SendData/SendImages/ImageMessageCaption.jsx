@@ -6,17 +6,29 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import IconButton from "@/app/components/Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
-
 import { Feather } from "@expo/vector-icons";
 import { handleSendImageMessageToChatroom } from "./handleSendImageMessageToChatroom";
 import { sendImageToFirebaseStorageGetDownloadUrl } from "./sendImageToFirebaseStorageGetDownloadUrl";
 import { useAuth } from "@/app/context/authContext";
+import {
+  detectInnapropriateImageContent,
+  deleteImagesWithFace,
+} from "@/app/safeguarding/detectInappropriateImages";
+import { ref } from "firebase/storage";
+import { storage } from "@/firebaseConfig";
+import { screenProfanities } from "@/utils/common";
 
-const ImageMessageCaption = ({ setDisplayImageCaptionModal, image, item }) => {
+const ImageMessageCaption = ({
+  setDisplayImageCaptionModal,
+  image,
+  item,
+  setIsSendingImage,
+}) => {
   const ios = Platform.OS == "ios";
   const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
   const [TextInputFocused, setTextInputFocused] = useState(false);
@@ -31,12 +43,27 @@ const ImageMessageCaption = ({ setDisplayImageCaptionModal, image, item }) => {
   };
 
   const handleSend = async () => {
+    setIsSendingImage(true);
+    setDisplayImageCaptionModal(false);
+
+    if (screenProfanities(textRef.current)) {
+      inputRef.current = "";
+      setIsSendingImage(false);
+
+      return;
+    }
+
+    const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
+
     try {
-      setDisplayImageCaptionModal(false);
       const downloadUrl = await sendImageToFirebaseStorageGetDownloadUrl(
         image,
-        user
+        storageRef
       );
+
+      if (await deleteImagesWithFace(storageRef)) return;
+      if (await detectInnapropriateImageContent(storageRef)) return;
+
       await handleSendImageMessageToChatroom(
         item,
         textRef,
@@ -46,6 +73,9 @@ const ImageMessageCaption = ({ setDisplayImageCaptionModal, image, item }) => {
       );
     } catch (error) {
       console.log("🚀 ~ handleSend ~ error:", error);
+      Alert.alert("error sending message");
+    } finally {
+      setIsSendingImage(false);
     }
   };
   return (

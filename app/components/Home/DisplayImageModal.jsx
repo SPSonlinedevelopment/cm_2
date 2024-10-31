@@ -12,7 +12,8 @@ const DisplayImageModal = ({
   setDisplaySubjectSelection,
   displaySubjectSelection,
   image,
-  isSavingtoStorage,
+
+  saveImageToDevice,
   handleSendQuestion,
   onClose,
   selectedSubject,
@@ -22,9 +23,6 @@ const DisplayImageModal = ({
   // handleSend();
   // console.log("pressed send button");
 
-
-
-  
   return (
     <Modal className="" visible={openDisplayImageModal} animationType="slide">
       <View className="h-full w-full bg-zinc-600 flex items-center justify-between ">
@@ -53,13 +51,22 @@ const DisplayImageModal = ({
         <View className="flex flex-col items-center justify-center w-full">
           <SubjectSelection
             loading={loading}
+            setDisplaySubjectSelection={setDisplaySubjectSelection}
             displaySubjectSelection={displaySubjectSelection}
             selectedSubject={selectedSubject}
             setSelectedSubject={setSelectedSubject}
             handleSendQuestion={handleSendQuestion}
           />
+
           <IconButton
-            containerStyles="flex flex-row-reverse  px-4 w-[100px] h-[50px] absolute bottom-2 right-2"
+            iconContainerStyles="p-2"
+            containerStyles="flex flex-row-reverse  px-4 w-[100px] h-[50px] absolute bottom-2 left-3"
+            icon={<FontAwesome name="save" size={24} color="white" />}
+            handlePress={() => saveImageToDevice()}
+            title="Save"
+          />
+          <IconButton
+            containerStyles="flex flex-row-reverse  px-4 w-[100px] h-[50px] absolute bottom-2 right-3"
             icon={
               <MaterialIcons name="navigate-next" size={24} color="white" />
             }
