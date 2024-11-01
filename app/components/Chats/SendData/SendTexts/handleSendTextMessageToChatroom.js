@@ -17,13 +17,18 @@ export const handleSendTextMessageToChatroom = async (
   text,
   userDetails,
   type,
-  replyMessage
+  replyMessage,
+  replyRecipientId
 ) => {
   let message = text.trim();
 
   if (!message) return;
 
   try {
+    console.log("text111", text);
+    console.log("type", type);
+    console.log("replytoMessage", replyMessage);
+
     const docRef = doc(db, "rooms", roomId);
     const messagesRef = collection(docRef, "messages");
     const commondata = {
@@ -37,10 +42,11 @@ export const handleSendTextMessageToChatroom = async (
     if (type === "reply") {
       result = await addDoc(messagesRef, {
         ...commondata,
-        isReply,
+        isReply: true,
         reply: {
           originalIsImage: false,
           originalMessage: replyMessage,
+          originalMessageSenderId: replyRecipientId,
         },
       });
     } else if (type === "complement") {

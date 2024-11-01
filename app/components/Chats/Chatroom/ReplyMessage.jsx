@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 
-const ReplyMessage = ({ message, thisUsersMessage }) => {
+const ReplyMessage = ({ userId, message, thisUsersMessage }) => {
   return (
     <View
       className={`flex-row  pb-2 w-full  shadow   flex ${
@@ -29,7 +29,11 @@ const ReplyMessage = ({ message, thisUsersMessage }) => {
                 <Entypo name="reply" size={20} color="white" />
               </View>
 
-              <Text className="text-base font-bold">{message.userName} </Text>
+              <Text className="text-base font-bold">
+                {message.reply.originalMessageSenderId === userId
+                  ? "You"
+                  : message.userName}
+              </Text>
             </View>
 
             <Text className="text-base"> {message.reply.originalMessage}</Text>

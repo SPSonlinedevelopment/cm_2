@@ -14,9 +14,8 @@ const ActiveChatroomList = () => {
 
   if (!allChats.length) {
     return (
-      <View className=" flex justify-around h-[240px]   items-center">
+      <View className=" flex justify-around h-[100px]   items-center">
         <Text className=" text-lg  font-bold">No Live Chatrooms </Text>
-        <IconGeneral source={Thinking} size={100} />
       </View>
     );
   } else

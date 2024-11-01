@@ -1,15 +1,10 @@
-import { View, Text, Modal, Animated } from "react-native";
-import React, { useRef, useEffect } from "react";
+import { View, Text } from "react-native";
+import React from "react";
 import IconButton from "../../Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
 import FadeInView from "../../Effects/FadeInView";
 
-const ShowReplyBar = ({
-  setDisplayShowReplyBar,
-  replyMessage,
-  displayShowReplyBar,
-  replyRecipientName,
-}) => {
+const ShowReplyBar = ({ userId, replyState, setReplyState }) => {
   return (
     <FadeInView>
       <View className="w-full h-[70px] bg-neutral-200 flex flex-column justify-between shadow p-1 border-l-8  animate-spin border-purple-100">
@@ -19,7 +14,9 @@ const ShowReplyBar = ({
           </View>
           <Text> to </Text>
           <Text className="text-base text-purple-100 font-bold ">
-            {replyRecipientName}
+            {replyState.replyRecipientId === userId
+              ? "You"
+              : replyState.replyRecipientName}
           </Text>
         </View>
 
@@ -29,14 +26,17 @@ const ShowReplyBar = ({
             numberOfLines={1}
             ellipsizeMode="tail"
           >
-            {replyMessage}
+            {replyState.replyMessage}
           </Text>
 
           <IconButton
             icon={<Entypo name="cross" size={30} color="black" />}
             containerStyles="h-[35px] w-[35px] bg-neutral-100 mr-4 mb-6 "
             handlePress={() => {
-              setDisplayShowReplyBar(false);
+              setReplyState((prevState) => ({
+                ...prevState,
+                displayShowReplyBar: true,
+              }));
             }}
           />
         </View>

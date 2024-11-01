@@ -1,5 +1,5 @@
 import { View, TouchableOpacity } from "react-native";
-import React, { useState, useLayoutEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, useRef, Children } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import * as Haptics from "expo-haptics";
 import { convertFirebaseTimestampToDate } from "@/utils/common";
@@ -15,9 +15,7 @@ const MessageItem = React.memo(
   ({
     message,
     userId,
-    setDisplayShowReplyBar,
-    setReplyMessage,
-    setReplyRecipientName,
+    setReplyState,
     mentorId,
     menteeName,
     mentorName,
@@ -26,28 +24,36 @@ const MessageItem = React.memo(
     roomId,
   }) => {
     const [scrollPosition, setScrollPosition] = useState(0);
-    const [ShowReply, setShowReply] = useState(false);
-
-    const [messageSelected, setMessageSelected] = useState(false);
+    const [ShowReply, setShowReply] = useState("");
 
     const handleMessageReplyScroll = (event) => {
       setScrollPosition(event.nativeEvent.contentOffset.x);
     };
 
     useLayoutEffect(() => {
-      if (scrollPosition < -50) {
-        setShowReply(true);
-        setReplyMessage(message?.text);
-        setDisplayShowReplyBar(true);
-        setReplyRecipientName(message.userName);
+      if (Math.abs(scrollPosition) > 50) {
+        setReplyState((prevState) => ({
+          ...prevState,
+          displayShowReplyBar: true,
+          replyMessage: message?.text,
+          replyRecipientName: message.userName,
+          replyRecipientId: message.userId,
+        }));
       } else {
-        setShowReply(false);
+        setShowReply("");
+      }
+
+      if (scrollPosition < -50) {
+        setShowReply("left");
+      }
+
+      if (scrollPosition > 50) {
+        setShowReply("right");
       }
     }, [scrollPosition]);
 
-    let result;
-
     const thisUsersMessage = message?.userId === userId;
+
     let time;
     if (message?.createdAt) {
       time = convertFirebaseTimestampToDate(message?.createdAt);
@@ -55,8 +61,7 @@ const MessageItem = React.memo(
 
     const handleSelectedMessage = (inputRef) => {
       const ref = inputRef.current; // Rename to avoid re-declaration
-      console.log("🚀 ~ handleSelectedMessage ~ inputRef:", inputRef);
-      setMessageSelected(true);
+
       setDisplayMessageSelectedModal(true);
 
       if (ref) {
@@ -77,7 +82,11 @@ const MessageItem = React.memo(
 
     if (message.isReply) {
       return (
-        <ReplyMessage message={message} thisUsersMessage={thisUsersMessage} />
+        <ReplyMessage
+          userId={userId}
+          message={message}
+          thisUsersMessage={thisUsersMessage}
+        />
       );
     }
 
@@ -90,7 +99,7 @@ const MessageItem = React.memo(
         />
       );
     }
-
+    let result;
     if (message.imageUrl) {
       result = (
         <LoadedImage
@@ -138,12 +147,19 @@ const MessageItem = React.memo(
         }}
         horizontal={true}
       >
-        {ShowReply && (
+        {ShowReply === "left" && (
           <View className="flex flex-row items-center justify-center bg-neutral-300 rounded-full h-[40px] w-[40px] ">
             <Entypo name="reply" size={24} color="white" />
           </View>
         )}
+
         <FadeInView>{result}</FadeInView>
+
+        {ShowReply === "right" && (
+          <View className="flex flex-row items-center justify-center bg-neutral-300 rounded-full h-[40px] w-[40px] ">
+            <Entypo name="reply" size={24} color="white" />
+          </View>
+        )}
       </ScrollView>
     );
   }

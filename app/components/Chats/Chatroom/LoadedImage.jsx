@@ -58,7 +58,7 @@ const LoadedImage = React.memo(({ url, thisUsersMessage, caption }) => {
             {!isLoaded && <LoadingImagePlaceholder />}
             {/* <LoadingImagePlaceholder /> */}
             <Image
-              onLoad={() => setIsLoaded(true)}
+              onLoadStart={() => setIsLoaded(true)}
               cachePolicy={"memory-disk"}
               className={` h-[250px] w-[200px] rounded-xl 
                `}

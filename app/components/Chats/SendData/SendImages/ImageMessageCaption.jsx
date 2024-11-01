@@ -63,7 +63,7 @@ const ImageMessageCaption = ({
 
       if (await deleteImagesWithFace(storageRef)) return;
       if (await detectInnapropriateImageContent(storageRef)) return;
-
+      setIsSendingImage(false);
       await handleSendImageMessageToChatroom(
         item,
         textRef,

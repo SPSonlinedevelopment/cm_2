@@ -32,7 +32,6 @@ const ProgressBar = () => {
         <View className=" w-full h-full flex flex-row items-center justify-center absolute z-10">
           <Text className=" ">2.0 %</Text>
         </View>
-        <View style={barStyle}></View>
       </View>
     </View>
   );

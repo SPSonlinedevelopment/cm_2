@@ -15,9 +15,7 @@ const MessageSelectedModal = ({
   displayMessageSelectedModal,
   setDisplayMessageSelectedModal,
   selectedMessage,
-  setReplyRecipientName,
-  setReplyMessage,
-  setDisplayShowReplyBar,
+  setReplyState,
 }) => {
   const { message, x, y, width, height, time, thisUsersMessage, roomId } =
     selectedMessage;
@@ -58,10 +56,14 @@ const MessageSelectedModal = ({
   };
 
   const handleReply = () => {
-    setReplyMessage(message?.text);
-    setDisplayShowReplyBar(true);
-    setReplyRecipientName(message.userName);
     setDisplayMessageSelectedModal(false);
+    setReplyState((prevState) => ({
+      ...prevState,
+      displayShowReplyBar: true,
+      replyMessage: message?.text,
+      replyRecipientName: message.userName,
+      replyRecipientId: message.userId,
+    }));
   };
 
   const handleReport = async () => {
@@ -70,10 +72,6 @@ const MessageSelectedModal = ({
       message: message,
       roomId,
     });
-  };
-
-  const handleCopy = () => {
-    console.log("copyt");
   };
 
   const handleDelete = () => {

@@ -25,9 +25,8 @@ const MessageInput = React.memo(
   ({
     item,
     scrollToEnd,
-    isReply,
-    setDisplayShowReplyBar,
-    replyMessage,
+    replyState,
+    setReplyState,
     setDisplayEmojiSelector,
     text,
     setText,
@@ -58,20 +57,45 @@ const MessageInput = React.memo(
       if (hasProfanities) {
         return Alert.alert("text shows inappropriate text");
       } else {
-        setDisplayShowReplyBar(false);
+        setReplyState((prev) => ({
+          ...prev,
+          displayShowReplyBar: false,
+        }));
+
         try {
-          await handleSendTextMessageToChatroom(
-            item.roomId,
-            text,
-            userDetails,
-            (type = ""),
-            replyMessage
-          );
+          if (replyState.displayShowReplyBar) {
+            let type = "reply";
+            await handleSendTextMessageToChatroom(
+              item.roomId,
+              text,
+              userDetails,
+              type,
+              replyState.replyMessage,
+              replyState.replyRecipientId
+            );
+
+            setReplyState((prev) => ({
+              ...prev,
+              displayShowReplyBar: false,
+              replyMessage: "",
+              replyRecipientName: "",
+              replyRecipientId: "",
+            }));
+          } else {
+            let type = "";
+            await handleSendTextMessageToChatroom(
+              item.roomId,
+              text,
+              userDetails,
+              type
+            );
+          }
+        } catch (error) {
+          Alert.alert("error");
+        } finally {
           setText("");
           scrollToEnd();
           setDisplayEmojiSelector(false);
-        } catch (error) {
-          console.log("🚀 ~ handleSendMessage ~ error:", error);
         }
       }
     };
@@ -83,7 +107,7 @@ const MessageInput = React.memo(
           TextInputFocused ? "pb-[0px]" : "pb-[20px]"
         }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center  `}
       >
-        {/* <Text>{JSON.stringify(replyMessage)}</Text> */}
+       
         {displayImageCaptionModal && (
           <ImageMessageCaption
             isSendingImage={isSendingImage}

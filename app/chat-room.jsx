@@ -1,16 +1,7 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  View,
-  StyleSheet,
-  Text,
-} from "react-native";
-
-import React, { useEffect, useState, useRef } from "react";
+import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import React, { useState, useRef } from "react";
 import { useRoute } from "@react-navigation/native";
 import ChatroomHeader from "./components/Chats/Chatroom/ChatroomHeader";
-import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
 import MessagesList from "./components/Chats/Chatroom/MessagesList";
 import { useAuth } from "./context/authContext";
 import MessageInput from "./components/Chats/Chatroom/MessageInput";
@@ -20,37 +11,35 @@ import IsTypingIndicator from "./components/Chats/Chatroom/IsTypingIndicator";
 import ConfirmEndOfSessionModal from "./components/Chats/EndOfSession/ConfirmEndOfSessionModal";
 import ReviewMentor from "./components/Chats/EndOfSession/ReviewForMentor/ReviewForMentor";
 import ReviewMentee from "./components/Chats/EndOfSession/ReviewForMentee";
-import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotExists";
 import EmojiSelector from "./components/Chats/Chatroom/EmojiSelector";
 import MessageSelectedModal from "./components/Chats/Chatroom/MessageSelected/MessageSelectedModal";
-import ReportMessageModal from "./components/Chats/Chatroom/MessageSelected/ReportMessageModal";
 import LiveComplementSelector from "./components/Chats/Chatroom/LiveComplements/LiveComplementSelector";
+import useChatRoomData from "./components/Chats/Chatroom/Hooks/useChatroomData";
 
 const ChatRoom = () => {
+  const { userDetails } = useAuth();
   const ios = Platform.OS == "ios";
   const route = useRoute();
   const { roomId, completedSession } = route?.params;
 
-  const [displayShowReplyBar, setDisplayShowReplyBar] = useState(false);
-  const [replyMessage, setReplyMessage] = useState("");
-  const [replyRecipientName, setReplyRecipientName] = useState("");
+  const [replyState, setReplyState] = useState({
+    displayShowReplyBar: false,
+    replyMessage: "",
+    replyRecipientName: "",
+    replyRecipientId: "",
+  });
+
   const [displayConfirmEndOfSessionModal, setDisplyConfirmEndOfSessionModal] =
     useState(false);
   const [displayEmojiSelector, setDisplayEmojiSelector] = useState(false);
   const [displayFeedback, setDisplayFeedback] = useState(false);
-  const [displayMenteeFeedback, setDisplayMenteeFeedback] = useState(false);
   const [displayMessageSelectedModal, setDisplayMessageSelectedModal] =
     useState(false);
   const [selectedMessage, setSelectedMessage] = useState({});
   const [isSendingImage, setIsSendingImage] = useState(false);
-
-  const [chatRoomData, setChatRoomData] = useState();
-  console.log("🚀 ~ ChatRoom ~ chatRoomData:", chatRoomData);
-
   const [text, setText] = useState("");
 
   const inputRef = useRef(null);
-  const { userDetails } = useAuth();
   const scrollViewRef = useRef(null);
 
   const inChat = true;
@@ -59,25 +48,7 @@ const ChatRoom = () => {
     scrollViewConfig = { contentContainerStyle: { flex: 1 } };
   }
 
-  let docRef;
-  if (roomId) {
-    docRef = doc(
-      db,
-      !completedSession ? "rooms" : "completed_sessions",
-      roomId
-    );
-  }
-
-  useEffect(() => {
-    const unsub = onSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const updatedData = docSnap.data();
-        setChatRoomData(updatedData);
-      }
-    });
-
-    return () => unsub();
-  }, [roomId]);
+  const chatRoomData = useChatRoomData(roomId, completedSession);
 
   const scrollToEnd = () => {
     setTimeout(() => {
@@ -125,35 +96,29 @@ const ChatRoom = () => {
 
       {chatRoomData && (
         <MessagesList
+          replyState={replyState}
+          setReplyState={setReplyState}
           isSendingImage={isSendingImage}
           setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
           setSelectedMessage={setSelectedMessage}
           scrollToEnd={scrollToEnd}
-          roomId={chatRoomData?.roomId}
           chatRoomData={chatRoomData}
           userDetails={userDetails}
-          setReplyRecipientName={setReplyRecipientName}
-          setReplyMessage={setReplyMessage}
-          setDisplayShowReplyBar={setDisplayShowReplyBar}
-          // setShowReply={setShowReply}
-          userId={userDetails?.uid}
           scrollViewRef={scrollViewRef}
         />
       )}
 
-      {displayShowReplyBar && !chatRoomData?.sessionCompleted && (
+      {replyState.displayShowReplyBar && !chatRoomData?.sessionCompleted && (
         <ShowReplyBar
-          replyRecipientName={replyRecipientName}
-          replyMessage={replyMessage}
-          setDisplayShowReplyBar={setDisplayShowReplyBar}
-          displayShowReplyBar={displayShowReplyBar}
+          userId={userDetails?.uid}
+          replyState={replyState}
+          setReplyState={setReplyState}
         />
       )}
 
       <MessageSelectedModal
-        setReplyRecipientName={setReplyRecipientName}
-        setReplyMessage={setReplyMessage}
-        setDisplayShowReplyBar={setDisplayShowReplyBar}
+        replyState={replyState}
+        setReplyState={setReplyState}
         selectedMessage={selectedMessage}
         setSelectedMessage={setSelectedMessage}
         displayMessageSelectedModal={displayMessageSelectedModal}
@@ -171,22 +136,20 @@ const ChatRoom = () => {
             roomId={chatRoomData?.roomId}
           />
           <IsTypingIndicator scrollToEnd={scrollToEnd} item={chatRoomData} />
-
           <MentorConversationSuggestions
             isReply={false}
             userDetails={userDetails}
             item={chatRoomData}
           />
           <MessageInput
+            replyState={replyState}
+            setReplyState={setReplyState}
             isSendingImage={isSendingImage}
             setIsSendingImage={setIsSendingImage}
             text={text}
             setText={setText}
             inputRef={inputRef}
             setDisplayEmojiSelector={setDisplayEmojiSelector}
-            setDisplayShowReplyBar={setDisplayShowReplyBar}
-            replyMessage={replyMessage}
-            isReply={displayShowReplyBar}
             scrollToEnd={scrollToEnd}
             item={chatRoomData}
           />

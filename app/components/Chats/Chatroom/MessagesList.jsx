@@ -27,12 +27,9 @@ const MessagesList = ({
   chatRoomData,
   scrollToEnd,
   scrollViewRef,
-  userId,
-  setDisplayShowReplyBar,
-  setReplyMessage,
-  setReplyRecipientName,
+  replyState,
+  setReplyState,
   userDetails,
-  roomId,
   setSelectedMessage,
   setDisplayMessageSelectedModal,
   isSendingImage,
@@ -114,7 +111,7 @@ const MessagesList = ({
       ];
     }
 
-    const docRef = doc(db, "rooms", roomId);
+    const docRef = doc(db, "rooms", chatRoomData.roomId);
     const messagesRef = collection(docRef, "messages");
     const q = query(messagesRef, orderBy("createdAt", "asc"));
 
@@ -164,12 +161,11 @@ const MessagesList = ({
             menteeName={chatRoomData.menteeName}
             mentorName={chatRoomData.mentorName}
             mentorId={chatRoomData.mentorId}
-            setReplyRecipientName={setReplyRecipientName}
-            setReplyMessage={setReplyMessage}
-            setDisplayShowReplyBar={setDisplayShowReplyBar}
+            replyState={replyState}
+            setReplyState={setReplyState}
             message={message}
             key={message.Id}
-            userId={userId}
+            userId={userDetails?.uid}
             roomId={chatRoomData.roomId}
           ></MessageItem>
         );
@@ -197,7 +193,7 @@ const MessagesList = ({
 
 export default MessagesList;
 
-const LoadingImagePlaceholder = ({ scrollToEnd, isSendingImage }) => {
+const LoadingImagePlaceholder = ({ scrollToEnd }) => {
   scrollToEnd();
   return (
     <View

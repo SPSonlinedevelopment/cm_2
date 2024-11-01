@@ -18,6 +18,7 @@ import Superhero from "../../../../../assets/icons/Achievements/Superhero.png";
 import Speedometer from "../../../../../assets/icons/Achievements/Speedometer.png";
 import Fist from "../../../../../assets/icons/Achievements/Fist.png";
 import ProblemSolving from "../../../../../assets/icons/Achievements/Problem Solving.png";
+import Courage from "../../../../../assets/icons/Achievements/Courage.png";
 import Love from "../../../../../assets/icons/Love.png";
 import IconGeneral from "@/app/components/IconGeneral";
 
@@ -74,7 +75,7 @@ export const mentorComplements = [
   },
   {
     title: "Math Genius",
-    icon: "pencil",
+    icon: Courage,
     description: "Seriously impressive number-crunching",
   },
   {
