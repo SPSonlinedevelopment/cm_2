@@ -24,66 +24,70 @@ export const FullScreenImage = ({ url, onClose }) => {
   );
 };
 
-const LoadedImage = React.memo(({ url, thisUsersMessage, caption }) => {
-  const [isFullScreen, setFullScreen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+const LoadedImage = React.memo(
+  ({ url, thisUsersMessage, caption, isPreview }) => {
+    const [isFullScreen, setFullScreen] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
-  const openFullScreen = () => {
-    setFullScreen(true);
-  };
+    const openFullScreen = () => {
+      setFullScreen(true);
+    };
 
-  const closeFullScreen = () => {
-    setFullScreen(false);
-  };
+    const closeFullScreen = () => {
+      setFullScreen(false);
+    };
 
-  return (
-    <View className="flex w-full ">
-      {isFullScreen && <FullScreenImage url={url} onClose={closeFullScreen} />}
-      <View
-        className={`rounded-xl w-full  flex flex-row mb-1 ${
-          thisUsersMessage ? "  justify-end " : " justify-start  "
-        }`}
-      >
+    return (
+      <View className="flex w-full ">
+        {isFullScreen && (
+          <FullScreenImage url={url} onClose={closeFullScreen} />
+        )}
         <View
-          className={` w-[254px]  rounded-xl shadow flex  p-[3px] flex-col justify-center items-center  ${
-            thisUsersMessage ? "bg-orange-200  mr-2  " : "bg-white  ml-2 "
-          }`}
+          className={`rounded-xl w-full  flex flex-row mb-1 ${
+            thisUsersMessage ? "  justify-end " : " justify-start  "
+          }   ${isPreview ? "justify-center" : ""}`}
         >
-          <TouchableOpacity
-            className="relative"
-            // delayLongPress={100}
-            // delayPressIn={100}
-            onPress={() => openFullScreen()}
+          <View
+            className={` w-[254px]  rounded-xl shadow flex  p-[3px] flex-col justify-center items-center  ${
+              thisUsersMessage ? "bg-orange-200  mr-2  " : "bg-white  ml-2 "
+            }  ${isPreview ? "bg-transparent m-0" : ""}`}
           >
-            {!isLoaded && <LoadingImagePlaceholder />}
-            {/* <LoadingImagePlaceholder /> */}
-            <Image
-              onLoadStart={() => setIsLoaded(true)}
-              cachePolicy={"memory-disk"}
-              className={` h-[250px] w-[200px] rounded-xl 
+            <TouchableOpacity
+              className="relative"
+              // delayLongPress={100}
+              // delayPressIn={100}
+              onPress={() => openFullScreen()}
+            >
+              {!isLoaded && <LoadingImagePlaceholder />}
+              {/* <LoadingImagePlaceholder /> */}
+              <Image
+                onLoadStart={() => setIsLoaded(true)}
+                cachePolicy={"memory-disk"}
+                className={` h-[250px] w-[200px] rounded-xl 
                `}
-              style={{
-                aspectRatio: 1,
-                resizeMode: "cover",
-              }}
-              source={{
-                uri: url,
-              }}
-              contentFit="cover"
-              transition={100}
-              effect="flip-from-top"
-            />
-          </TouchableOpacity>
-          {caption && (
-            <View className=" p-1 w-full">
-              <Text className="text-base"> {caption}</Text>
-            </View>
-          )}
+                style={{
+                  aspectRatio: 1,
+                  resizeMode: "cover",
+                }}
+                source={{
+                  uri: url,
+                }}
+                contentFit="cover"
+                transition={100}
+                effect="flip-from-top"
+              />
+            </TouchableOpacity>
+            {caption && (
+              <View className=" p-1 w-full">
+                <Text className="text-base"> {caption}</Text>
+              </View>
+            )}
+          </View>
         </View>
       </View>
-    </View>
-  );
-});
+    );
+  }
+);
 
 export default LoadedImage;
 

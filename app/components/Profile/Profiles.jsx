@@ -46,7 +46,9 @@ const Profiles = () => {
             {mode === "mentor" ? <MentorComments /> : <></>}
 
             <BorderUnderline />
-            <Achievements />
+
+            {mode === "mentor" ? <Achievements /> : <></>}
+
             <Others />
             <Image
               className="   rounded-full h-[150px] w-[150px] mb-4"

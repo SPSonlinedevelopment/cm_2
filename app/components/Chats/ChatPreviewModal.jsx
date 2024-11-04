@@ -4,7 +4,7 @@ import ExitButton from "../Buttons/ExitButton";
 import Avatar from "../Profile/EditProfile/Avatar/Avatar";
 import MessageItem from "./Chatroom/MessageItem";
 import MessageText from "./Chatroom/MessageText";
-import { FullScreenImage } from "../Chats/Chatroom/LoadedImage";
+import LoadedImage, { FullScreenImage } from "../Chats/Chatroom/LoadedImage";
 import IconButton from "../Buttons/IconButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { db } from "../../../firebaseConfig";
@@ -58,11 +58,10 @@ const ChatPreviewModal = ({
 
   return (
     <Modal
-      className="flex items-center justify-center"
+      className="flex items-center justify-center relative"
       visible={displayPreview}
-      animationType="slide"
+      animationType="fade"
       transparent={true}
-      backdropOpacity={0.5}
     >
       {displayFullScreenImage && message?.imageUrl && (
         <FullScreenImage
@@ -70,8 +69,9 @@ const ChatPreviewModal = ({
           onClose={setDisplayFullScreenImage}
         />
       )}
+      <View className="bg-black opacity-30 h-full w-full absolute "></View>
 
-      <View className="absolute bottom-0  h-[70%] w-full  bg-white rounded-">
+      <View className="absolute bottom-0   w-full  bg-white rounded-">
         <ExitButton toggleDisplay={setDisplayPreview} />
 
         <View className="flex flex-col items-center pt-4">
@@ -92,27 +92,33 @@ const ChatPreviewModal = ({
           )}
 
           {message?.imageUrl && (
-            <TouchableOpacity
-              // delayLongPress={100}
-              // delayPressIn={100}
-              onPress={() => openFullScreen()}
-            >
-              <Image
-                cachePolicy={"memory-disk"}
-                className={` h-[250px] w-[200px] rounded-xl shadow-xl 
-               `}
-                style={{
-                  aspectRatio: 1,
-                  resizeMode: "cover",
-                }}
-                source={{
-                  uri: message?.imageUrl,
-                }}
-                contentFit="cover"
-                transition={100}
-                effect="flip-from-top"
-              />
-            </TouchableOpacity>
+            <LoadedImage
+              isPreview="true"
+              url={message?.imageUrl}
+              thisUsersMessage
+              caption
+            />
+            // <TouchableOpacity
+            //   // delayLongPress={100}
+            //   // delayPressIn={100}
+            //   onPress={() => openFullScreen()}
+            // >
+            //   <Image
+            //     cachePolicy={"memory-disk"}
+            //     className={` h-[250px] w-[200px] rounded-xl shadow-xl
+            //    `}
+            //     style={{
+            //       aspectRatio: 1,
+            //       resizeMode: "cover",
+            //     }}
+            //     source={{
+            //       uri: message?.imageUrl,
+            //     }}
+            //     contentFit="cover"
+            //     transition={100}
+            //     effect="flip-from-top"
+            //   />
+            // </TouchableOpacity>
           )}
           <Text className="m-2 text-xs">Click to enlarge</Text>
         </View>

@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 import Octicons from "@expo/vector-icons/Octicons";
 import { useChat } from "../../../../context/chatContext";
 import IconButton from "@/app/components/Buttons/IconButton";
-
 import { auth } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import CustomKeyboardView from "@/app/components/CustomKeyboardView";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { switchMode } from "@/app/components/Profile/Others/switchMode";
 
 const MessageGeneralModal = ({
   messageObj,
@@ -17,39 +16,52 @@ const MessageGeneralModal = ({
   setDisplayModal,
 }) => {
   const { reportInappropriateMessage, deleteSelectedMessage } = useChat();
-  const { logOut } = useAuth();
+  const { logOut, userDetails } = useAuth();
 
   const [deleteInput, setDeleteInput] = useState("");
-
-  let actionFunc;
 
   useEffect(() => {
     setDeleteInput("");
   }, []);
 
-  if (type === "delete") {
-    actionFunc = deleteSelectedMessage;
-  } else if (type === "report") {
-    actionFunc = reportInappropriateMessage;
-  } else if (type === "logout") {
-    actionFunc = async () => {
-      try {
-        const result = await logOut();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  } else if (type === "deleteAccount") {
-    actionFunc = async () => {
-      try {
-        await auth.currentUser.delete();
-        Alert.alert("Account delete successful");
-      } catch (error) {
-        console.log(error);
-        Alert.alert("Account delete unsuccessful", error);
-      }
-    };
-  }
+  const handleDeleteAccount = async () => {
+    try {
+      await auth.currentUser.delete();
+      Alert.alert("Account delete successful");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      Alert.alert(
+        "Account delete unsuccessful",
+        error.message || error.toString()
+      );
+    }
+  };
+
+  const handleLogOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.error("Error logging out:", error);
+      Alert.alert("Logout unsuccessful", error.message || error.toString());
+    }
+  };
+
+  let actionFunc = () => {
+    switch (type) {
+      case "delete":
+        return deleteSelectedMessage;
+      case "report":
+        return reportInappropriateMessage;
+      case "logout":
+        return handleLogOut;
+      case "deleteAccount":
+        return handleDeleteAccount;
+      case "switchMode":
+        return () => switchMode(userDetails);
+      default:
+        return null;
+    }
+  };
 
   return (
     <Modal
@@ -88,7 +100,8 @@ const MessageGeneralModal = ({
               containerStyles="p-2 w-[150px] h-[50px]"
               title="Confirm"
               handlePress={async () => {
-                actionFunc(messageObj);
+                const action = actionFunc();
+                if (action) action(messageObj);
                 setDisplayModal(false);
               }}
             />

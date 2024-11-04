@@ -74,8 +74,12 @@ const PasswordModal: React.FC<{
       console.log("password changed");
       setMessage("Password changed successfully");
     } catch (error) {
-      console.log("error setting new password ", error);
-      Alert.alert("error123");
+      console.log("🚀 ~ handleChangePassword ~ error:", error);
+
+      Alert.alert(
+        "Error occoured, please note a recent sign in is required to reset your password. Please log out and log in again and try again. If you have forgot your password click the password reset to reset via email."
+      );
+
       console.log("password  NOT changed");
     }
     setIsLoading(false);
@@ -85,7 +89,10 @@ const PasswordModal: React.FC<{
     <Modal animationType="slide">
       <CustomKeyboardView>
         <SafeAreaView>
-          <ExitButton toggleDisplay={setDisplayChangePasswordModal} />
+          <ExitButton
+            cleanUpFunctions={() => {}}
+            toggleDisplay={setDisplayChangePasswordModal}
+          />
 
           <View className="w-full h-full flex items-center justify-start ">
             <View className=" w-full  flex items-center justify-between mt-[100px]">

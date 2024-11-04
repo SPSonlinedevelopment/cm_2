@@ -33,13 +33,15 @@ export const Card = ({ icon, text }) => {
 const MenteeStatistics = () => {
   const { userDetails } = useAuth();
 
-  const stats = userDetails?.menteeStatistics;
-
-  const complementsCount = Object.values(stats.complements).reduce(
-    (accumulator, item) => {
-      return accumulator + item;
-    }
-  );
+  const stats = userDetails?.menteeStatistics || {};
+  let complementsCount;
+  if (stats) {
+    complementsCount = Object.values(stats?.complements).reduce(
+      (accumulator, item) => {
+        return accumulator + item;
+      }
+    );
+  }
 
   return (
     <View className=" mt-5 w-[93%] ">
