@@ -200,7 +200,7 @@ export const AuthContextProvider = ({ children }) => {
           ...commonData,
           menteeStatistics: {
             time: 0,
-            ninjaLevel: 0,
+            questions: 0,
             XP: 0,
             complements: {
               "Algebra Whizz": 0,
@@ -225,6 +225,7 @@ export const AuthContextProvider = ({ children }) => {
           ...commonData,
           subjectSelection,
           mentorStatistics: {
+            questions: 0,
             time: 0,
             stars: [],
             complements: {
@@ -237,7 +238,6 @@ export const AuthContextProvider = ({ children }) => {
               SolvedProblems: 0,
               Supportive: 0,
             },
-            questions: 0,
           },
         };
         await setDoc(doc(db, "mentors", uid), mentorData).then(

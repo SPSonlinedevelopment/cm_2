@@ -11,7 +11,7 @@ import Others from "./Others/Others";
 import { useAuth } from "@/app/context/authContext";
 import MentorStatistics from "./MentorProfile/MentorStatistics";
 import ComplementsProfile from "./ComplementsProfile";
-import MentorComments from "./MentorProfile/MentorComments";
+import MentorComments from "./MentorProfile/comments/MentorComments";
 import IconButton from "../Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
@@ -39,16 +39,14 @@ const Profiles = () => {
             <BorderUnderline />
 
             {mode === "mentor" ? <MentorStatistics /> : <MenteeStatistics />}
-
             <BorderUnderline />
             <ComplementsProfile />
 
-            {mode === "mentor" ? <MentorComments /> : <></>}
-
             <BorderUnderline />
-
+            {mode === "mentor" ? <MentorComments /> : <></>}
+            {mode === "mentor" ? <BorderUnderline /> : <></>}
             {mode === "mentor" ? <Achievements /> : <></>}
-
+            {mode === "mentor" ? <BorderUnderline /> : <></>}
             <Others />
             <Image
               className="   rounded-full h-[150px] w-[150px] mb-4"

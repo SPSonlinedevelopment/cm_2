@@ -34,6 +34,8 @@
     "app/components/Profile/MenteeProfile/MenteeStatistics.jsx",
     "app/components/Chats/Chatroom/MessageSelected/MessageGeneralModal.jsx",
     "app/components/Profile/Others/Others.jsx",
-    "app/components/Profile/Profiles.jsx"
-, "app/components/Profile/EditProfile/Avatar/Avatar.tsx", "app/components/Profile/Achievements/Achievements.jsx"  ]
+    "app/components/Profile/Profiles.jsx",
+    "app/components/Profile/EditProfile/Avatar/Avatar.tsx",
+    "app/components/Profile/Achievements/Achievements.jsx"
+, "app/components/Profile/ProgressBar.jsx"  ]
 }

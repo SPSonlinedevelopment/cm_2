@@ -17,7 +17,7 @@ const DisplayAllComplementsModal = ({
     <Modal animationType="slide" visible={displayAllComplementsModal}>
       <ExitButton toggleDisplay={setDisplayAllComplementsModal} />
 
-      <SafeAreaView className="flex items-center justify-start mt-20">
+      <SafeAreaView className="flex items-center justify-start pt-6 ">
         <ScrollView
           contentContainerStyle={{
             display: "flex",
@@ -26,10 +26,13 @@ const DisplayAllComplementsModal = ({
             flexWrap: "wrap",
           }}
         >
-          <Avatar avatarName={userDetails.avatarName} />
-          <Text className="text-lg font-semibold">
-            {userDetails?.firstName}
-          </Text>
+          <View className="h-20 w-full " />
+          <View className="flex flex-row items-center">
+            <Avatar avatarName={userDetails.avatarName} />
+            <Text className="text-lg font-semibold p-4">
+              {userDetails?.firstName}
+            </Text>
+          </View>
 
           <View className="flex w-full justify-start">
             <Text className="text-lg font-bold ml-3 text-start  ">
@@ -37,6 +40,7 @@ const DisplayAllComplementsModal = ({
             </Text>
           </View>
           {data}
+          <View className="h-20 w-full " />
         </ScrollView>
       </SafeAreaView>
     </Modal>

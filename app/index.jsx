@@ -32,6 +32,8 @@ import {
 import { sendImageToFirebaseStorageGetDownloadUrl } from "./components/Chats/SendData/SendImages/sendImageToFirebaseStorageGetDownloadUrl";
 
 const RootLayout = () => {
+  console.log("index");
+
   const { user, userDetails } = useAuth();
   const { setNewTextQuestion } = useChat();
   const [permission, requestPermission] = useCameraPermissions();
@@ -206,7 +208,7 @@ const RootLayout = () => {
             toggleDisplayInput={setDisplayQuestionInput}
           />
         ) : (
-          <View className="h-full w-full bg-red relative">
+          <View className="h-full w-full relative">
             <DisplayImageModal
               saveImageToDevice={saveImageToDevice}
               loading={loading}
@@ -239,7 +241,7 @@ const RootLayout = () => {
                     </Text>
                   </View>
                 </View>
-                <View className="flex flex-row justify-center items-center relative z-40 bottom-[-280px]">
+                <View className="flex flex-row justify-center items-center  z-40 bottom-[-50%]">
                   <View className="h-[80px] w-[80px]" />
                   <IconButton
                     icon={<AntDesign name="camera" size={35} color="white" />}

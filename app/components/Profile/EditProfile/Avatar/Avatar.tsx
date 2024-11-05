@@ -49,7 +49,7 @@ const Avatar: React.FC<{ avatarName: string; size: number }> = ({
 }) => {
   return (
     <Image
-      className="rounded-full"
+      className="rounded-full "
       style={{ width: size || 50, height: size || 50 }}
       source={getAvatarPath(avatarName)}
     />

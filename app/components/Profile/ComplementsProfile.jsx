@@ -93,7 +93,7 @@ const ComplementsProfile = () => {
         displayAllComplementsModal={displayAllComplementsModal}
       />
 
-      <View className="w-full flex flex-row justify-between ">
+      <View className="w-full flex flex-row justify-between items-center ">
         <Text className="text-lg font-bold ml-3 "> Complements</Text>
         <TouchableOpacity
           onPress={() => {

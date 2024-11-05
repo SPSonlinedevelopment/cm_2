@@ -1,6 +1,5 @@
 import React from "react";
 import { useAuth } from "./context/authContext";
-
 import Profiles from "./components/Profile/Profiles";
 import Loading from "./components/Loading/LoadingSpinner";
 import { View, Text } from "react-native";

@@ -1,21 +1,50 @@
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
 import { useAuth } from "@/app/context/authContext";
-import bronzeMedal from "../../../../assets/images/bronzeMedal.jpg";
 import { ScrollView } from "react-native-gesture-handler";
-import Book from "../../../../assets/icons/Achievements/Book.png";
-import IconGeneral from "../../IconGeneral";
+import AchievementsModal from "./AchievementsModal";
 
 const Achievements = () => {
+  const [displayAchievementsModal, setDisplayAchievementsModal] =
+    useState(false);
+
+  return (
+    <View className="flex  flex-start h-[160px]">
+      <AchievementsModal
+        displayDescription={true}
+        setDisplayAchievementsModal={setDisplayAchievementsModal}
+        displayAchievementsModal={displayAchievementsModal}
+      />
+
+      <View className="flex flex-row justify-between items-center">
+        <Text className="text-lg font-bold ml-3 ">Achievements</Text>
+        <TouchableOpacity
+          onPress={() => {
+            setDisplayAchievementsModal(true);
+          }}
+          className="bg-white mr-3 "
+        >
+          <Text className="text-neutral-500">See All</Text>
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <AchievementListView />
+      </ScrollView>
+    </View>
+  );
+};
+
+export default Achievements;
+
+export const AchievementListView = ({ displayDescription }) => {
   const { userDetails } = useAuth();
 
   const questions = userDetails?.mentorStatistics.questions;
-  console.log("🚀 ~ Achievements ~ questions:", questions);
+
   const stars = userDetails?.mentorStatistics.stars;
-  console.log("🚀 ~ Achievements ~ stars:", stars);
 
   let numberOf5Stars = stars.filter((star) => star === 5).length;
-  console.log("🚀 ~ Achievements ~ numberOf5Stars:", numberOf5Stars);
 
   const achievmentDataList = [
     {
@@ -50,71 +79,61 @@ const Achievements = () => {
       name: "100 lessons",
       description: "Completed teaching 100 mentees",
       text: 100,
-      bgColor: "yellow",
+      bgColor: "purple",
       value: questions / 100 < 1 ? (questions / 100) * 100 : 100,
     },
     {
       name: "Bronze mentor",
-      description: "5 starts from 3+ mentees",
+      description: "5 stars from 3+ mentees",
       text: null,
       bgColor: "brown",
       value: 30,
     },
     {
       name: "Silver mentor",
-      description: "5 starts from 5+ mentees",
+      description: "5 stars from 5+ mentees",
       text: null,
       bgColor: "silver",
       value: (numberOf5Stars / 5) * 100,
     },
     {
-      name: "Bronze mentor",
-      description: "5 starts from 10+ mentees",
+      name: "Gold mentor",
+      description: "5 stars from 10+ mentees",
       text: null,
       bgColor: "gold",
       value: (numberOf5Stars / 10) * 100,
     },
     {
       name: "Platinum mentor",
-      description: "5 starts from 20+ mentees",
+      description: "5 stars from 20+ mentees",
       text: null,
       bgColor: "#E3E4E6",
       value: (numberOf5Stars / 20) * 100,
     },
   ];
 
-  console.log("achievmentDataList", achievmentDataList);
-
-  return (
-    <View className="flex flex-start h-[220px]">
-      <Text className="text-lg font-bold ml-3 "> Achievements</Text>
-      <View className="flex flex-row justify-end">
-        <TouchableOpacity onPress={() => {}} className="bg-white mr-3 ">
-          <Text className="text-neutral-500">See All</Text>
-        </TouchableOpacity>
+  return achievmentDataList.map((achievement) => {
+    return (
+      <View
+        className={` mx-4  flex items-center justify-between   ${
+          displayDescription ? "  w-[140px]  h-[120px] mt-14 mx-5  " : " mt-6 "
+        }`}
+      >
+        <View className="flex flex-col justify-between h-full w-full">
+          <AnimatedCircleComponent
+            text={achievement?.text || ""}
+            size={80}
+            strokeWidth={5}
+            percentage={10}
+            bgColor={achievement.bgColor}
+            value={achievement.value}
+          />
+          <Text className="text-sm text-center">{achievement.name}</Text>
+        </View>
+        {displayDescription && (
+          <Text className="text-xs text-center">{achievement.description}</Text>
+        )}
       </View>
-
-      {/* <Image source={Book}></Image> */}
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {achievmentDataList.map((achievement) => {
-          return (
-            <View className=" m-2 flex items-center justify-between w-[100px] h-[100px] ">
-              <AnimatedCircleComponent
-                text={achievement?.text || ""}
-                size={80}
-                strokeWidth={5}
-                percentage={10}
-                bgColor={achievement.bgColor}
-                value={achievement.value}
-              />
-              <Text className="text-base">{achievement.name}</Text>
-            </View>
-          );
-        })}
-      </ScrollView>
-    </View>
-  );
+    );
+  });
 };
-
-export default Achievements;

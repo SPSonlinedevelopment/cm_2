@@ -10,7 +10,6 @@ const ExitButton = ({ toggleDisplay, cleanUpFunctions }) => {
       containerStyles="h-[50px] w-[50px] bg-white opacity-100 absolute left-4 top-10  bg-white shadow-sm"
       handlePress={() => {
         toggleDisplay(false);
-        console.log("asjdhask");
 
         if (cleanUpFunctions) {
           cleanUpFunctions();

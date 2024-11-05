@@ -16,7 +16,7 @@ import SaveChangesButton from "../Buttons/SaveChangesButton";
 import Avatar from "./Avatar";
 import { useAuth } from "@/app/context/authContext";
 import { db } from "@/firebaseConfig";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const SelectAvatarModal: React.FC<{
   displayModal: boolean;
@@ -30,21 +30,28 @@ const SelectAvatarModal: React.FC<{
 
   const { userDetails } = useAuth();
 
-  const mode = userDetails?.mode === "mentor" ? "mentors" : "mentees";
-
   const saveChanges = async () => {
     try {
-      const docRef = doc(db, mode, userDetails.uid);
-      await updateDoc(docRef, { avatarName: selectedAvatar.name });
+      const menteeDocRef = doc(db, "mentees", userDetails.uid);
+      const getDocSnap = await getDoc(menteeDocRef);
+
+      if (getDocSnap.exists()) {
+        await updateDoc(menteeDocRef, { avatarName: selectedAvatar.name });
+      } else {
+        const mentorDocRef = doc(db, "mentors", userDetails.uid);
+        await updateDoc(mentorDocRef, { avatarName: selectedAvatar.name });
+      }
+
       setDisplayModal(false);
     } catch (error) {
+      console.log("🚀 ~ saveChanges ~ error:", error);
       Alert.alert("Error updating Avatar");
     }
   };
 
   return (
     <Modal animationType="slide" visible={displayModal}>
-      <ExitButton toggleDisplay={() => setDisplayModal(false)} />
+      <ExitButton cleanUpFunctions={() => {}} toggleDisplay={setDisplayModal} />
       <View className="w-full h-full">
         <ScrollView
           contentContainerStyle={{

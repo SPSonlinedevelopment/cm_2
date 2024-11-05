@@ -1,6 +1,5 @@
 import { View, Text } from "react-native";
 import React from "react";
-import ProgressBar from "../ProgressBar";
 import { useAuth } from "@/app/context/authContext";
 import Clock from "../../../../assets/icons/Clock.png";
 import StatsIcon from "./StatsIcon";
@@ -12,11 +11,6 @@ import IconGeneral from "../../IconGeneral";
 import Crown from "../../../../assets/icons/Crown.png";
 import Love from "../../../../assets/icons/Love.png";
 import Money from "../../../../assets/icons/Money.png";
-
-// interface CardProps {
-//   icon?: React.ReactNode;
-//   text: string;
-// }
 
 export const Card = ({ icon, text }) => {
   return (
@@ -52,7 +46,7 @@ const MenteeStatistics = () => {
           icon={<IconGeneral size="35" source={Clock} />}
         />
         <Card
-          text={` ${stats?.ninjaLevel} ninja level`}
+          text={` ${stats?.questions} questions`}
           icon={<IconGeneral size="35" source={Crown} />}
         />
       </View>
@@ -66,8 +60,6 @@ const MenteeStatistics = () => {
           icon={<IconGeneral size="35" source={Love} />}
         />
       </View>
-
-      <ProgressBar />
     </View>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Animated, Text, Image } from "react-native";
 import Svg, { Circle } from "react-native-svg";
-import IconGeneral from "../../IconGeneral";
 import Book from "../../../../assets/icons/Achievements/Book.png";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -14,7 +13,6 @@ export default AnimatedCircleComponent = ({
   bgColor,
   value,
 }) => {
-  console.log("🚀 ~ value:", value);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const [progress] = useState(new Animated.Value(0));
@@ -33,7 +31,7 @@ export default AnimatedCircleComponent = ({
   });
 
   return (
-    <View className="flex justify-center items-center  relative  h-full w-full">
+    <View className="flex justify-center items-center relative mt-10 ">
       <Text className="text-2xl font-pextrabold text-white absolute z-30 ">
         {text}
       </Text>

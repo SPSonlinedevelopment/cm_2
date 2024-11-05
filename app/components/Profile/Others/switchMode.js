@@ -25,7 +25,7 @@ export const switchMode = async (userDetails) => {
           await updateDoc(mentorRef, {
             menteeStatistics: {
               time: 0,
-              ninjaLevel: 0,
+              questions: 0,
               XP: 0,
               complements: {
                 "Algebra Whizz": 0,
