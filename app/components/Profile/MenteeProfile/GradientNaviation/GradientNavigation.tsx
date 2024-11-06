@@ -5,7 +5,8 @@ import {
   ActivateCameraBtn,
   ChatNavBtn,
   ProfileNavBtn,
-} from "../../../HomeNavButtons/HomeNavButtons";
+} from "../../../Home/HomeNavButtons/HomeNavButtons";
+
 import { useAuth } from "@/app/context/authContext";
 
 const GradientNavigation = () => {

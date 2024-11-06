@@ -2,6 +2,7 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "types": ["@testing-library/jest-native", "jest", "node"],
     "paths": {
       "@/*": ["./*"]
     }
@@ -36,6 +37,7 @@
     "app/components/Profile/Others/Others.jsx",
     "app/components/Profile/Profiles.jsx",
     "app/components/Profile/EditProfile/Avatar/Avatar.tsx",
-    "app/components/Profile/Achievements/Achievements.jsx"
-, "app/components/Profile/ProgressBar.jsx"  ]
+    "app/components/Profile/Achievements/Achievements.jsx",
+    "app/components/Profile/ProgressBar.jsx"
+  ]
 }

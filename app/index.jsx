@@ -1,6 +1,5 @@
 import { Text, View, Button, Alert } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-
 import IconButton from "./components/Buttons/IconButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -8,17 +7,14 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import IndexQuestionInput from "./components/Home/IndexQuestionInput";
 import { AuthContextProvider } from "./context/authContext";
-
-import HomeNavButtons from "./components/HomeNavButtons/HomeNavButtons";
+import HomeNavButtons from "./components/Home/HomeNavButtons/HomeNavButtons";
 import { ChatContextProvider } from "./context/chatContext";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "./context/authContext";
 import { useChat } from "./context/chatContext";
-
-import DisplayImageModal from "../app/components/Home/DisplayImageModal";
+import DisplayImageModal from "@/app/components/Home/DisplayImageModal";
 import { Timestamp } from "firebase/firestore";
-
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { ref } from "firebase/storage";
 import { storage } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
 import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotExists";

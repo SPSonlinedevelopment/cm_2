@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, Text, Keyboard } from "react-native";
+import { View, Text, Keyboard } from "react-native";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import { doc, updateDoc } from "firebase/firestore";
-import LoadingDots from "../../Loading/LoadingDots";
-import UserDetails from "@/app/user-details";
-import FadeInView from "../../Effects/FadeInView";
+import FadeInView from "@/app/components/Effects/FadeInView";
 
 const IsTypingIndicator = ({ item, scrollToEnd }) => {
   console.log("🚀 ~ IsTypingIndicator ~ item:", item);

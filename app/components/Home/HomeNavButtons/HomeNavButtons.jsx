@@ -1,10 +1,11 @@
 import { View } from "react-native";
 import React from "react";
-import IconButton from "../Buttons/IconButton";
+import IconButton from "../../Buttons/IconButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import { MaterialIcons } from "@expo/vector-icons";
-import { pickImage } from "../../../utils/imagePicker";
+import { pickImage } from "../../../../utils/imagePicker";
+
 import { useNavigation } from "@react-navigation/native";
 
 export const ChatNavBtn = () => {

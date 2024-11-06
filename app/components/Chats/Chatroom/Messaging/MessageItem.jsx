@@ -7,9 +7,9 @@ import LoadedImage from "./LoadedImage";
 import { ScrollView } from "react-native-gesture-handler";
 import MessageText from "./MessageText";
 import ReplyMessage from "./ReplyMessage";
-import FadeInView from "../../Effects/FadeInView";
+import FadeInView from "../../../Effects/FadeInView";
 import ConnectedMessage from "./ConnectedMessage";
-import ComplementMessage from "./LiveComplements/ComplementMessage";
+import ComplementMessage from "../LiveComplements/ComplementMessage";
 
 const MessageItem = React.memo(
   ({

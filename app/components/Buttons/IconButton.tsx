@@ -35,7 +35,7 @@ const IconButton: React.FC<IconButtonProps> = ({
       } bg-orange-500  rounded-full my-4 justify-center items-center    z-50 ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       } `}
-      testID="custom_button"
+      testID="icon_button"
     >
       {isLoading ? (
         <Loading size={60} />

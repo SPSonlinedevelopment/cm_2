@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1720011297805" clover="3.2.0">
-  <project timestamp="1720011297805" name="All files">
-    <metrics statements="64" coveredstatements="39" conditionals="52" coveredconditionals="33" methods="16" coveredmethods="7" elements="132" coveredelements="79" complexity="0" loc="64" ncloc="64" packages="5" files="5" classes="5"/>
-    <package name="components">
-      <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="Loading.tsx" path="/Users/colinclarke/CODE/cm_2/app/components/Loading.tsx">
-        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-      </file>
-    </package>
-    <package name="components.Auth.firebaseAuthMessages">
+<coverage generated="1730907575049" clover="3.2.0">
+  <project timestamp="1730907575049" name="All files">
+    <metrics statements="66" coveredstatements="42" conditionals="61" coveredconditionals="40" methods="18" coveredmethods="9" elements="145" coveredelements="91" complexity="0" loc="66" ncloc="66" packages="5" files="6" classes="6"/>
+    <package name="Auth.firebaseAuthMessages">
       <metrics statements="10" coveredstatements="9" conditionals="8" coveredconditionals="7" methods="1" coveredmethods="1"/>
-      <file name="editFirebaseAuthMessage.ts" path="/Users/colinclarke/CODE/cm_2/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage.ts">
+      <file name="editFirebaseAuthMessage.ts" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage.ts">
         <metrics statements="10" coveredstatements="9" conditionals="8" coveredconditionals="7" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="4" type="cond" truecount="2" falsecount="0"/>
@@ -26,9 +18,9 @@
         <line num="25" count="4" type="stmt"/>
       </file>
     </package>
-    <package name="components.Auth.validateInputs">
+    <package name="Auth.validateInputs">
       <metrics statements="15" coveredstatements="15" conditionals="16" coveredconditionals="16" methods="3" coveredmethods="3"/>
-      <file name="validateInputs.ts" path="/Users/colinclarke/CODE/cm_2/app/components/Auth/validateInputs/validateInputs.ts">
+      <file name="validateInputs.ts" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Auth/validateInputs/validateInputs.ts">
         <metrics statements="15" coveredstatements="15" conditionals="16" coveredconditionals="16" methods="3" coveredmethods="3"/>
         <line num="19" count="1" type="stmt"/>
         <line num="23" count="4" type="stmt"/>
@@ -47,19 +39,25 @@
         <line num="64" count="9" type="stmt"/>
       </file>
     </package>
-    <package name="components.CustomButton">
-      <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="2" methods="2" coveredmethods="2"/>
-      <file name="CustomButton.tsx" path="/Users/colinclarke/CODE/cm_2/app/components/CustomButton/CustomButton.tsx">
+    <package name="Buttons">
+      <metrics statements="6" coveredstatements="6" conditionals="13" coveredconditionals="9" methods="4" coveredmethods="4"/>
+      <file name="CustomButton.tsx" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Buttons/CustomButton.tsx">
         <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="2" methods="2" coveredmethods="2"/>
         <line num="12" count="1" type="stmt"/>
         <line num="19" count="3" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
       </file>
+      <file name="IconButton.tsx" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Buttons/IconButton.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="9" coveredconditionals="7" methods="2" coveredmethods="2"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+      </file>
     </package>
-    <package name="components.FormField">
-      <metrics statements="34" coveredstatements="11" conditionals="24" coveredconditionals="8" methods="9" coveredmethods="1"/>
-      <file name="FormField.tsx" path="/Users/colinclarke/CODE/cm_2/app/components/FormField/FormField.tsx">
-        <metrics statements="34" coveredstatements="11" conditionals="24" coveredconditionals="8" methods="9" coveredmethods="1"/>
+    <package name="FormField">
+      <metrics statements="33" coveredstatements="11" conditionals="24" coveredconditionals="8" methods="9" coveredmethods="1"/>
+      <file name="FormField.tsx" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/FormField/FormField.tsx">
+        <metrics statements="33" coveredstatements="11" conditionals="24" coveredconditionals="8" methods="9" coveredmethods="1"/>
         <line num="7" count="1" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
         <line num="46" count="1" type="stmt"/>
@@ -78,7 +76,6 @@
         <line num="70" count="1" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
         <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="78" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
@@ -94,6 +91,14 @@
         <line num="108" count="1" type="stmt"/>
         <line num="138" count="0" type="stmt"/>
         <line num="143" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="Loading">
+      <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="LoadingSpinner.tsx" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Loading/LoadingSpinner.tsx">
+        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
       </file>
     </package>
   </project>

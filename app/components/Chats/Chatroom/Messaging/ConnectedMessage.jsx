@@ -1,17 +1,15 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
-
-import Avatar from "../../Profile/EditProfile/Avatar/Avatar";
+import Avatar from "@/app/components/Profile/EditProfile/Avatar/Avatar";
 import { useAuth } from "@/app/context/authContext";
 import { db } from "@/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import { Card } from "../../Profile/MenteeProfile/MenteeStatistics";
-
-import IconGeneral from "../../IconGeneral";
-import Crown from "../../../../assets/icons/Crown.png";
-import Ambition from "../../../../assets/icons/Ambition.png";
-import Love from "../../../../assets/icons/Love.png";
-import Clock from "../../../../assets/icons/Clock.png";
+import { Card } from "@/app/components/Profile/MenteeProfile/MenteeStatistics";
+import IconGeneral from "@/app/components/IconGeneral";
+import Crown from "../../../../../assets/icons/Crown.png";
+import Ambition from "../../../../../assets/icons/Ambition.png";
+import Love from "../../../../../assets/icons/Love.png";
+import Clock from "../../../../../assets/icons/Clock.png";
 
 const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
   const { userDetails } = useAuth();
@@ -43,6 +41,7 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
   let starsCount = 0;
   let starsAvg = 0;
   let complementsCount;
+
   if (mentorData) {
     if (mentorData?.stars?.length) {
       starsCount = mentorData.stars.reduce((acc, star) => acc + star, 0);

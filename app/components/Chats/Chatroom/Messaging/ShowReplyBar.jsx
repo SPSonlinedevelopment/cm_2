@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
 import React from "react";
-import IconButton from "../../Buttons/IconButton";
+import IconButton from "../../../Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
-import FadeInView from "../../Effects/FadeInView";
+import FadeInView from "../../../Effects/FadeInView";
 
 const ShowReplyBar = ({ userId, replyState, setReplyState }) => {
   return (
@@ -35,7 +35,7 @@ const ShowReplyBar = ({ userId, replyState, setReplyState }) => {
             handlePress={() => {
               setReplyState((prevState) => ({
                 ...prevState,
-                displayShowReplyBar: true,
+                displayShowReplyBar: false,
               }));
             }}
           />

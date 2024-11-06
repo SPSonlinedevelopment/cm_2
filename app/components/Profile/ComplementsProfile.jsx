@@ -61,7 +61,7 @@ const ComplementsProfile = () => {
           <Icon source={comp?.icon} />
 
           {compVal[0]?.value > 0 && (
-            <View className="bg-[#FFA500] rounded-full p-1 h-6 w-10 shadow-xl flex items-center absolute bottom-[-15px]">
+            <View className=" bg-orange rounded-full p-1 h-6 w-10 shadow-xl flex items-center absolute bottom-[-15px]">
               <Text className=" font-bold text-white  ">
                 {compVal[0]?.value}
               </Text>

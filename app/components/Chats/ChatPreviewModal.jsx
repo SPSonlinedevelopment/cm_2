@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { View, Text, Modal, Image, TouchableOpacity } from "react-native";
 import ExitButton from "../Buttons/ExitButton";
 import Avatar from "../Profile/EditProfile/Avatar/Avatar";
-import MessageItem from "./Chatroom/MessageItem";
-import MessageText from "./Chatroom/MessageText";
-import LoadedImage, { FullScreenImage } from "../Chats/Chatroom/LoadedImage";
+import MessageItem from "./Chatroom/Messaging/MessageItem";
+import MessageText from "./Chatroom/Messaging/MessageText";
+import LoadedImage, {
+  FullScreenImage,
+} from "../Chats/Chatroom/Messaging/LoadedImage";
 import IconButton from "../Buttons/IconButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { db } from "../../../firebaseConfig";
@@ -92,35 +94,16 @@ const ChatPreviewModal = ({
           )}
 
           {message?.imageUrl && (
-            <LoadedImage
-              isPreview="true"
-              url={message?.imageUrl}
-              thisUsersMessage
-              caption
-            />
-            // <TouchableOpacity
-            //   // delayLongPress={100}
-            //   // delayPressIn={100}
-            //   onPress={() => openFullScreen()}
-            // >
-            //   <Image
-            //     cachePolicy={"memory-disk"}
-            //     className={` h-[250px] w-[200px] rounded-xl shadow-xl
-            //    `}
-            //     style={{
-            //       aspectRatio: 1,
-            //       resizeMode: "cover",
-            //     }}
-            //     source={{
-            //       uri: message?.imageUrl,
-            //     }}
-            //     contentFit="cover"
-            //     transition={100}
-            //     effect="flip-from-top"
-            //   />
-            // </TouchableOpacity>
+            <>
+              <LoadedImage
+                isPreview="true"
+                url={message?.imageUrl}
+                thisUsersMessage
+                caption
+              />
+              <Text className="mb-3 text-base">Click to enlarge</Text>
+            </>
           )}
-          <Text className="m-2 text-xs">Click to enlarge</Text>
         </View>
         <View className="w-full flex  flex-row items-center justify-center">
           <IconButton

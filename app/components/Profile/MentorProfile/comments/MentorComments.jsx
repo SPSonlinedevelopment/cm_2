@@ -67,7 +67,12 @@ const CommentsList = () => {
         "
           >
             {stars?.map((star, index) => (
-              <AntDesign key={index} name="star" size={10} color="orange" />
+              <AntDesign
+                key={index}
+                name="star"
+                size={10}
+                color="rgb(243, 112, 33)"
+              />
             ))}
           </View>
 

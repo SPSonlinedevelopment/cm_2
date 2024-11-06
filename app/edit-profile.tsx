@@ -12,8 +12,8 @@ import SaveChangesButton from "./components/Profile/EditProfile/Buttons/SaveChan
 import { db } from "@/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 import * as EmailValidator from "email-validator";
-import IconGeneral from "./components/IconGeneral";
 import FadeInView from "./components/Effects/FadeInView";
+import SubjectSelection from "./components/Profile/EditProfile/SubjectSelection";
 
 const EditProfile = () => {
   const { userDetails } = useAuth();
@@ -43,14 +43,23 @@ const EditProfile = () => {
       return Alert.alert("Enter Last Name");
     }
 
-    try {
-      await updateDoc(docRef, {
-        email: formField.email,
-        firstName: formField.firstName,
-        lastName: formField.lastName,
-        partnership: formField.partnership,
-      });
+    // Define the common update fields
+    const updateData: any = {
+      email: formField.email,
+      firstName: formField.firstName,
+      lastName: formField.lastName,
+      partnership: formField.partnership,
+    };
 
+    // Add mentor-specific fields if in mentor mode
+    if (userDetails?.mode === "mentor") {
+      updateData.subjectSelection = userDetails.subjectSelection;
+    }
+
+    console.log("updateData", updateData);
+
+    try {
+      await updateDoc(docRef, updateData);
       setDisplayUpatedAlert("success");
     } catch (error) {
       console.log(error);
@@ -79,16 +88,6 @@ const EditProfile = () => {
         >
           <Text className="font-pbold text-lg">My Profile</Text>
           <AvatarEdit avatarName={userDetails?.avatarName} />
-          {displayUpdatedAlert === "success" && (
-            <FadeInView
-              duration={200}
-              containerStyles="bg-green-400 shadow rounded-xl p-2 w-[95%] m-6 flex items-center"
-            >
-              <Text className="text-white text-base font-semibold">
-                Details Updated Successfully
-              </Text>
-            </FadeInView>
-          )}
 
           {displayUpdatedAlert === "error" && (
             <FadeInView
@@ -112,6 +111,9 @@ const EditProfile = () => {
               currentVal={userDetails?.lastName}
               field="lastName"
             />
+
+            {userDetails.mode === "mentor" && <SubjectSelection />}
+
             <EmailContainer setFormField={setFormField} />
             <InputFieldContainer
               setFormField={setFormField}
@@ -119,6 +121,16 @@ const EditProfile = () => {
               field="partnership"
             />
           </View>
+          {displayUpdatedAlert === "success" && (
+            <FadeInView
+              duration={200}
+              containerStyles="bg-green-400 shadow rounded-full p-2 w-[95%] flex items-center "
+            >
+              <Text className="text-white text-base font-semibold">
+                Details Updated Successfully
+              </Text>
+            </FadeInView>
+          )}
           <SaveChangesButton handlePress={() => saveChanges()} />
         </ScrollView>
       </SafeAreaView>

@@ -5,9 +5,8 @@ const SaveChangesButton: React.FC<{ handlePress: () => {} }> = ({
   handlePress,
 }) => {
   return (
-    <View className="w-full flex justify-center items-center">
+    <View className="w-full flex justify-center items-center mb-5">
       <IconButton
-        // isLoading={loading}
         title="Save Changes"
         textStyles="text-base font-semibold"
         containerStyles="   justify-center items-center  h-[40px] w-[360px] "

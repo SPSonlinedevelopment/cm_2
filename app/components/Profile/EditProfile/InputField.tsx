@@ -18,7 +18,11 @@ const InputFieldContainer: React.FC<{
   };
 
   const emailContent = field === "email" && (
-    <View className="flex flex-row items-center w-24 justify-center bg-purple-200 p-1 m-3 rounded-full">
+    <View
+      className={`flex flex-row items-center justify-center bg-purple-200 p-1 m-3 rounded-full ${
+        user.emailVerified ? " w-24" : "w-30 bg-orange-200"
+      }`}
+    >
       {user.emailVerified ? (
         <>
           <MaterialIcons name="verified-user" size={20} color="purple" />
@@ -26,8 +30,8 @@ const InputFieldContainer: React.FC<{
         </>
       ) : (
         <>
-          <Octicons name="unverified" size={24} color="red" />
-          <Text className="text-xs mx-2 text-purple-100">Not verified</Text>
+          <Octicons name="unverified" size={20} color="red" />
+          <Text className="text-xs mx-2 my-1 text-red-600">Not verified</Text>
         </>
       )}
     </View>
@@ -55,8 +59,8 @@ const InputFieldContainer: React.FC<{
 
         <TextInput
           onChangeText={handleChange}
-          placeholderTextColor={"grey"}
-          className="px-3 text-base shadow-sm bg-white rounded-full h-[46px]"
+          placeholderTextColor={"rgb(243, 112, 33)"}
+          className="px-3 text-base shadow-sm bg-white rounded-full h-[46px] text-orange "
           placeholder={currentVal}
         />
       </View>

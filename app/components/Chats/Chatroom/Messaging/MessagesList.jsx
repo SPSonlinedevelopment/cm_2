@@ -1,14 +1,9 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import MessageItem from "./MessageItem";
-import { Image } from "expo-image";
-import IconButton from "../../Buttons/IconButton";
-import SessionSummary from "../EndOfSession/ReviewForMentor/SessionSummary";
-import {
-  generateRandomId,
-  storeObjectAsyncStorage,
-} from "./../../../../utils/common";
-import CelebrationAnimation from "../../Effects/CelebrationAnimation";
+import SessionSummary from "../../EndOfSession/ReviewForMentor/SessionSummary";
+import { storeObjectAsyncStorage } from "./../../../../../utils/common";
+import CelebrationAnimation from "../../../Effects/CelebrationAnimation";
 import {
   Timestamp,
   doc,
@@ -19,9 +14,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import * as Haptics from "expo-haptics";
-import UserDetails from "@/app/user-details";
-import MessageSelectedModal from "./MessageSelected/MessageSelectedModal";
-import Loading from "../../Loading/LoadingSpinner";
+import Loading from "@/app/components/Loading/LoadingSpinner";
 
 const MessagesList = ({
   chatRoomData,

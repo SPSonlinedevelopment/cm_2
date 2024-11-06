@@ -1,13 +1,12 @@
 import { View, TouchableOpacity, TextInput, Alert, Text } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { handleSendTextMessageToChatroom } from "../SendData/SendTexts/handleSendTextMessageToChatroom";
+import { handleSendTextMessageToChatroom } from "../../SendData/SendTexts/handleSendTextMessageToChatroom";
 import { pickImage } from "@/utils/imagePicker";
-import ImageMessageCaption from "../SendData/SendImages/ImageMessageCaption";
+import ImageMessageCaption from "../../SendData/SendImages/ImageMessageCaption";
 import { screenProfanities } from "@/utils/common";
-import { ScrollView } from "react-native-gesture-handler";
 
 const SelectEmojiBtn = ({ setDisplayEmojiSelector }) => {
   return (
@@ -107,7 +106,6 @@ const MessageInput = React.memo(
           TextInputFocused ? "pb-[0px]" : "pb-[20px]"
         }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center  `}
       >
-       
         {displayImageCaptionModal && (
           <ImageMessageCaption
             isSendingImage={isSendingImage}

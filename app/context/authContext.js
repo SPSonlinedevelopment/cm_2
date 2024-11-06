@@ -189,7 +189,6 @@ export const AuthContextProvider = ({ children }) => {
       uid,
       email,
       year,
-      linkedChatrooms: [],
       writtenFeedback: [],
       avatarName: selectRandomAvatar(),
     };
@@ -223,7 +222,7 @@ export const AuthContextProvider = ({ children }) => {
       } else if (mode === "mentor") {
         const mentorData = {
           ...commonData,
-          subjectSelection,
+          subjectSelection: [],
           mentorStatistics: {
             questions: 0,
             time: 0,

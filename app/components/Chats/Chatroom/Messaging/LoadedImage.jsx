@@ -2,11 +2,8 @@ import { View, Text, ActivityIndicator, Modal } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Entypo from "@expo/vector-icons/Entypo";
-import IconButton from "../../Buttons/IconButton";
-import CMlogo from "../../../../assets/images/CMlogo.png";
-import Loading from "../../Loading/LoadingSpinner";
-import ExitButton from "../../Buttons/ExitButton";
+import Loading from "@/app/components/Loading/LoadingSpinner";
+import ExitButton from "@/app/components/Buttons/ExitButton";
 
 export const FullScreenImage = ({ url, onClose }) => {
   return (

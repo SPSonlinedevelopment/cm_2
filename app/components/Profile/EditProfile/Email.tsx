@@ -35,8 +35,9 @@ const EmailContainer: React.FC<{
       />
       {!user?.emailVerified && (
         <IconButton
+          textStyles="text-orange"
           isLoading={loading}
-          containerStyles="justify-center items-center h-[40px] w-[360px] rounded-full"
+          containerStyles="justify-center items-center bg-white rounded-full"
           title={emailVerificationButtonText}
           handlePress={handleResendVerification}
         />
