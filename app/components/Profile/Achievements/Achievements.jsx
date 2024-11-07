@@ -115,6 +115,7 @@ export const AchievementListView = ({ displayDescription }) => {
   return achievmentDataList.map((achievement) => {
     return (
       <View
+        key={achievement.name}
         className={` mx-4  flex items-center justify-between   ${
           displayDescription ? "  w-[140px]  h-[120px] mt-14 mx-5  " : " mt-6 "
         }`}

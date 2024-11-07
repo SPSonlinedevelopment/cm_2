@@ -22,19 +22,21 @@ import {
 } from "firebase/firestore";
 import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation";
 import { calculateTimeDifference } from "@/utils/common";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
-const ReviewMentorContainer = ({
-  setDisplayFeedback,
-  chatRoomData: {
-    roomId,
-    mentorId,
-    menteeId,
-    sessionCompletedAt,
-    createdAt,
-    menteeName,
-    menteeAvatar,
-  },
-}) => {
+const ReviewMentorContainer = ({ setDisplayFeedback }) => {
+  const {
+    chatRoomData: {
+      roomId,
+      mentorId,
+      menteeId,
+      sessionCompletedAt,
+      createdAt,
+      menteeName,
+      menteeAvatar,
+    },
+  } = useChatRoom;
+
   const [feedbackForm, setFeedbackForm] = useState({
     mentorRating: undefined,
     mentorComplements: [],

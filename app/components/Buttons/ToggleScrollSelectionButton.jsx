@@ -1,7 +1,5 @@
-import { View, Text } from "react-native";
 import React from "react";
 import IconButton from "./IconButton";
-import Feather from "@expo/vector-icons/Feather";
 import * as Haptics from "expo-haptics";
 import Entypo from "@expo/vector-icons/Entypo";
 

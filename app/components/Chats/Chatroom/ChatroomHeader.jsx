@@ -8,12 +8,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "../../Loading/LoadingSpinner";
 import * as Haptics from "expo-haptics";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
-const ChatroomHeader = ({
-  chatRoomData,
-  setDisplyConfirmEndOfSessionModal,
-}) => {
+const ChatroomHeader = ({ setDisplyConfirmEndOfSessionModal }) => {
   const { userDetails } = useAuth();
+  const { chatRoomData } = useChatRoom();
   const navigation = useNavigation();
 
   return (

@@ -68,6 +68,7 @@ const SubjectSelection: React.FC<SubjectSelectionProps> = ({
         {subjects.map((subject) => {
           return (
             <SubjectSelectButton
+              key={subject.subject}
               subject={subject}
               setSelectedSubject={setSelectedSubject}
               selectedSubject={selectedSubject}

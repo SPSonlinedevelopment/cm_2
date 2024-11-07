@@ -5,28 +5,22 @@ import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import { doc, updateDoc } from "firebase/firestore";
 import FadeInView from "@/app/components/Effects/FadeInView";
+import LoadingDots from "@/app/components/Loading/LoadingDots";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
-const IsTypingIndicator = ({ item, scrollToEnd }) => {
-  console.log("🚀 ~ IsTypingIndicator ~ item:", item);
+const IsTypingIndicator = () => {
+  const { chatRoomData } = useChatRoom();
   const [isTyping, setIsTyping] = useState(false);
-  // const [mentorIsTyping, setMentorIsTyping] = useState(false);
   const { userDetails } = useAuth();
 
   const roomCollectionRef = collection(db, "rooms");
-  const roomRef = doc(roomCollectionRef, item?.roomId);
+  const roomRef = doc(roomCollectionRef, chatRoomData?.roomId);
 
   useEffect(() => {
-    console.log("snapshot load");
-
     const unSubMentor = onSnapshot(roomRef, (docSnapshot) => {
       const roomData = docSnapshot.data();
 
       if (roomData) {
-        console.log(
-          "🚀 ~ unSubMentor=onSnapshot ~ roomData:",
-          roomData.menteeIsTyping
-        );
-
         let isTyping = false;
 
         if (userDetails?.mode === "mentor" && roomData.menteeIsTyping) {
@@ -36,7 +30,7 @@ const IsTypingIndicator = ({ item, scrollToEnd }) => {
           console.log("mentee typing");
           isTyping = true;
         }
-        scrollToEnd();
+
         setIsTyping(isTyping);
       } else {
         console.error("Error retrieving room data");
@@ -116,9 +110,9 @@ const IsTypingIndicator = ({ item, scrollToEnd }) => {
       {isTyping && (
         <View className="">
           {userDetails?.mode === "mentee" ? (
-            <DisplayTyping name={item.mentorName} />
+            <DisplayTyping name={chatRoomData.mentorName} />
           ) : (
-            <DisplayTyping name={item.menteeName} />
+            <DisplayTyping name={chatRoomData.menteeName} />
           )}
         </View>
       )}

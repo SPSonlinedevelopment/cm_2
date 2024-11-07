@@ -22,19 +22,21 @@ import {
 import { ref } from "firebase/storage";
 import { storage } from "@/firebaseConfig";
 import { screenProfanities } from "@/utils/common";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
 const ImageMessageCaption = ({
   setDisplayImageCaptionModal,
   image,
-  item,
   setIsSendingImage,
 }) => {
+  const { chatRoomData } = useChatRoom();
+  const { userDetails, user } = useAuth();
+
   const ios = Platform.OS == "ios";
   const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
   const [TextInputFocused, setTextInputFocused] = useState(false);
   const inputRef = useRef(null);
   const textRef = useRef(null);
-  const { userDetails, user } = useAuth();
 
   const handleChangeText = () => {
     if (inputFieldEmpty) {
@@ -65,7 +67,7 @@ const ImageMessageCaption = ({
       if (await detectInnapropriateImageContent(storageRef)) return;
       setIsSendingImage(false);
       await handleSendImageMessageToChatroom(
-        item,
+        chatRoomData,
         textRef,
         inputRef,
         userDetails,

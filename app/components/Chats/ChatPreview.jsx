@@ -49,9 +49,7 @@ const ChatPreview = () => {
       <GradientNavigation />
       <SafeAreaView className=" w-full flex-col  items-center justify-start ">
         <View className=" shadow-md  flex flex-col justify-start items-start w-full  ">
-          <Text className="text-xl font-bold">Chats</Text>
-          {/* <Text> {userDetails?.uid}</Text>
-          <Text> {user?.uid}</Text> */}
+          <Text className="text-3xl font-bold ml-4 mb-2">Chats</Text>
         </View>
         <SearchChats
           searchInput={searchInput}

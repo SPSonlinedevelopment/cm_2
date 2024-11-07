@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1730907575049" clover="3.2.0">
-  <project timestamp="1730907575049" name="All files">
-    <metrics statements="66" coveredstatements="42" conditionals="61" coveredconditionals="40" methods="18" coveredmethods="9" elements="145" coveredelements="91" complexity="0" loc="66" ncloc="66" packages="5" files="6" classes="6"/>
+<coverage generated="1730975797882" clover="3.2.0">
+  <project timestamp="1730975797882" name="All files">
+    <metrics statements="63" coveredstatements="39" conditionals="52" coveredconditionals="33" methods="16" coveredmethods="7" elements="131" coveredelements="79" complexity="0" loc="63" ncloc="63" packages="5" files="5" classes="5"/>
     <package name="Auth.firebaseAuthMessages">
       <metrics statements="10" coveredstatements="9" conditionals="8" coveredconditionals="7" methods="1" coveredmethods="1"/>
       <file name="editFirebaseAuthMessage.ts" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage.ts">
@@ -40,18 +40,12 @@
       </file>
     </package>
     <package name="Buttons">
-      <metrics statements="6" coveredstatements="6" conditionals="13" coveredconditionals="9" methods="4" coveredmethods="4"/>
+      <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="2" methods="2" coveredmethods="2"/>
       <file name="CustomButton.tsx" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Buttons/CustomButton.tsx">
         <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="2" methods="2" coveredmethods="2"/>
         <line num="12" count="1" type="stmt"/>
         <line num="19" count="3" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
-      </file>
-      <file name="IconButton.tsx" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Buttons/IconButton.tsx">
-        <metrics statements="3" coveredstatements="3" conditionals="9" coveredconditionals="7" methods="2" coveredmethods="2"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="25" count="2" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
       </file>
     </package>
     <package name="FormField">
@@ -97,7 +91,7 @@
       <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="LoadingSpinner.tsx" path="/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/app/components/Loading/LoadingSpinner.tsx">
         <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="2" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
       </file>
     </package>

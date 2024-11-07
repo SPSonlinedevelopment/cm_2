@@ -1,14 +1,13 @@
-import { View, Text, Modal, Button, Alert } from "react-native";
+import { View, Text, Modal } from "react-native";
 import React from "react";
 import IconButton from "../../Buttons/IconButton";
-
 import { db } from "@/firebaseConfig";
-import { Timestamp } from "firebase/firestore";
 import { useAuth } from "@/app/context/authContext";
 import { doc, collection, deleteDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import IconGeneral from "../../IconGeneral";
 import Fist from "../../../../assets/icons/Achievements/Fist.png";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
 const ConfirmEndOfSessionModal = ({
   setDisplyConfirmEndOfSessionModal,
@@ -16,6 +15,7 @@ const ConfirmEndOfSessionModal = ({
   roomId,
 }) => {
   const { userDetails } = useAuth();
+  const { chatRoomData } = useChatRoom();
 
   const navigation = useNavigation();
 
@@ -23,8 +23,11 @@ const ConfirmEndOfSessionModal = ({
     const newQuestionCollectionRef = collection(db, "new_questions");
     const roomCollectionRef = collection(db, "rooms");
 
-    const newQuestionDocRef = doc(newQuestionCollectionRef, roomId);
-    const roomRef = doc(roomCollectionRef, roomId);
+    const newQuestionDocRef = doc(
+      newQuestionCollectionRef,
+      chatRoomData.roomId
+    );
+    const roomRef = doc(roomCollectionRef, chatRoomData.roomId);
 
     try {
       await deleteDoc(newQuestionDocRef);

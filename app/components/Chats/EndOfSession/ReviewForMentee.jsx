@@ -7,18 +7,20 @@ import { updateDoc, doc, Timestamp } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 
 import { useAuth } from "@/app/context/authContext";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
-const ReviewForMentee = ({ setDisplayFeedback, roomId }) => {
+const ReviewForMentee = ({ setDisplayFeedback }) => {
   const [menteeFeedbackForm, setMenteeFeedbackForm] = useState({
     sessionName: "",
   });
 
   const { userDetails } = useAuth();
+  const { chatRoomData } = useChatRoom();
 
   // what are feeback field for mentor to mentee
 
   const handleConfirmEndSession = async () => {
-    const roomRef = doc(db, "rooms", roomId);
+    const roomRef = doc(db, "rooms", chatRoomData.roomId);
 
     try {
       await updateDoc(roomRef, {

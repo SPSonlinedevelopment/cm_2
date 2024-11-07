@@ -1,24 +1,19 @@
 import { View, Text, ScrollView } from "react-native";
 import React, { useRef, useState } from "react";
-import IconButton from "@/app/components/Buttons/IconButton";
 import Feather from "@expo/vector-icons/Feather";
 import {
   mentorConvoSuggestions,
   menteeConvoSuggestions,
 } from "./convoSuggestions";
-import Entypo from "@expo/vector-icons/Entypo";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import * as Haptics from "expo-haptics";
 import { handleSendSuggestedMessageToChatroom } from "../../SendData/SendTexts/handleSendTextMessageToChatroom";
-
 import ToggleScrollSelectionButton from "@/app/components/Buttons/ToggleScrollSelectionButton";
+import { useChatRoom } from "@/app/context/chatRoomContext";
+import { useAuth } from "@/app/context/authContext";
 
-// interface ConversationSelectionProps {
-//   setSelectedSubject: React.Dispatch<React.SetStateAction<string>>;
-//   selectedSubject: string;
-// }
-
-const MentorConversationSuggestions = ({ userDetails, isReply, item }) => {
+const ConversationSuggestions = () => {
+  const { chatRoomData } = useChatRoom();
+  const { userDetails } = useAuth();
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const textRef = useRef(null);
@@ -26,7 +21,11 @@ const MentorConversationSuggestions = ({ userDetails, isReply, item }) => {
   const handleClickSuggestion = async (suggestion) => {
     textRef.current = suggestion.text;
 
-    await handleSendSuggestedMessageToChatroom(item, textRef, userDetails);
+    await handleSendSuggestedMessageToChatroom(
+      chatRoomData,
+      textRef,
+      userDetails
+    );
     setShowSuggestions(!showSuggestions);
   };
 
@@ -45,12 +44,14 @@ const MentorConversationSuggestions = ({ userDetails, isReply, item }) => {
             {userDetails.mode === "mentor"
               ? mentorConvoSuggestions.map((suggestion) => (
                   <Button
+                    key={suggestion.text}
                     handleClickSuggestion={handleClickSuggestion}
                     suggestion={suggestion}
                   />
                 ))
               : menteeConvoSuggestions.map((suggestion) => (
                   <Button
+                    key={suggestion.text}
                     handleClickSuggestion={handleClickSuggestion}
                     suggestion={suggestion}
                   />
@@ -62,7 +63,7 @@ const MentorConversationSuggestions = ({ userDetails, isReply, item }) => {
   );
 };
 
-export default MentorConversationSuggestions;
+export default ConversationSuggestions;
 
 const Button = ({ handleClickSuggestion, suggestion }) => {
   return (

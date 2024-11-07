@@ -7,6 +7,7 @@ import { handleSendTextMessageToChatroom } from "../../SendData/SendTexts/handle
 import { pickImage } from "@/utils/imagePicker";
 import ImageMessageCaption from "../../SendData/SendImages/ImageMessageCaption";
 import { screenProfanities } from "@/utils/common";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
 const SelectEmojiBtn = ({ setDisplayEmojiSelector }) => {
   return (
@@ -22,7 +23,6 @@ const SelectEmojiBtn = ({ setDisplayEmojiSelector }) => {
 
 const MessageInput = React.memo(
   ({
-    item,
     scrollToEnd,
     replyState,
     setReplyState,
@@ -34,6 +34,7 @@ const MessageInput = React.memo(
     setIsSendingImage,
   }) => {
     const { userDetails } = useAuth();
+    const { chatRoomData } = useChatRoom();
     const [TextInputFocused, setTextInputFocused] = useState(false);
     const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
     const [image, setImage] = useState({});
@@ -65,7 +66,7 @@ const MessageInput = React.memo(
           if (replyState.displayShowReplyBar) {
             let type = "reply";
             await handleSendTextMessageToChatroom(
-              item.roomId,
+              chatRoomData.roomId,
               text,
               userDetails,
               type,
@@ -83,7 +84,7 @@ const MessageInput = React.memo(
           } else {
             let type = "";
             await handleSendTextMessageToChatroom(
-              item.roomId,
+              chatRoomData.roomId,
               text,
               userDetails,
               type
@@ -110,7 +111,6 @@ const MessageInput = React.memo(
           <ImageMessageCaption
             isSendingImage={isSendingImage}
             setIsSendingImage={setIsSendingImage}
-            item={item}
             image={image}
             setDisplayImageCaptionModal={setDisplayImageCaptionModal}
           />

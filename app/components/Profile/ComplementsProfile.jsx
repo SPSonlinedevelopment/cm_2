@@ -34,6 +34,7 @@ const ComplementsProfile = () => {
 
     return (
       <View
+        key={comp.title}
         className={`justify-start items-center ${
           displayAllComplementsModal ? "w-[48%]" : ""
         } `}

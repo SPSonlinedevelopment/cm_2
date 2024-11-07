@@ -1,26 +1,22 @@
 import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import React, { useState } from "react";
 import LiveComplimentsButton from "../../../Buttons/ToggleScrollSelectionButton";
-import IconButton from "@/app/components/Buttons/IconButton";
-import Entypo from "@expo/vector-icons/Entypo";
-import * as Haptics from "expo-haptics";
 import { mentorComplements } from "../../EndOfSession/ReviewForMentor/ComplementSelections";
-import IconGeneral from "@/app/components/IconGeneral";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { collection, getDoc, updateDoc, doc } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import { handleSendTextMessageToChatroom } from "../../SendData/SendTexts/handleSendTextMessageToChatroom";
 import { handleUpdateMenteeWithComplement } from "./handleUpdateMenteeWithComplement";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
-const LiveComplementSelector = ({ roomId, menteeId }) => {
+const LiveComplementSelector = () => {
   const { userDetails } = useAuth();
+  const { chatRoomData } = useChatRoom();
+
   const [displayComplementSelector, setDisplayComplementSelector] =
     useState(false);
 
   const [selectedLiveComplement, SetSelectedLiveComplement] = useState("");
 
-  const roomRef = doc(db, "rooms", roomId);
   const replyMessage = null;
   let type = "complement";
 
@@ -31,13 +27,14 @@ const LiveComplementSelector = ({ roomId, menteeId }) => {
 
     try {
       await handleSendTextMessageToChatroom(
-        roomId,
+        chatRoomData.roomId,
         text,
         userDetails,
         type,
         replyMessage
       );
-      await handleUpdateMenteeWithComplement(menteeId, complement);
+      await handleUpdateMenteeWithComplement(chatRoomData.menteeId, complement);
+      setDisplayComplementSelector(false);
     } catch (error) {
       console.log(error);
     }

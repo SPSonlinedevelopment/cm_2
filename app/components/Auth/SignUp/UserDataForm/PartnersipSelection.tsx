@@ -40,6 +40,7 @@ const PartnersipSelection: React.FC<PartnersipSelectionProps> = ({
         return (
           <View className="w-full">
             <RadioButton.Item
+              key={partnership.name}
               label={partnership.name}
               color="orange"
               uncheckedColor="black"

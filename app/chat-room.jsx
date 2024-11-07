@@ -1,12 +1,12 @@
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Children } from "react";
 import { useRoute } from "@react-navigation/native";
 import ChatroomHeader from "./components/Chats/Chatroom/ChatroomHeader";
 import MessagesList from "./components/Chats/Chatroom/Messaging/MessagesList";
 import { useAuth } from "./context/authContext";
 import MessageInput from "./components/Chats/Chatroom/Messaging/MessageInput";
 import ShowReplyBar from "./components/Chats/Chatroom/Messaging/ShowReplyBar";
-import MentorConversationSuggestions from "./components/Chats/Chatroom/ConversationSuggestions/MentorConversationSuggestions";
+import ConversationSuggestions from "./components/Chats/Chatroom/ConversationSuggestions/ConversationSuggestions";
 import IsTypingIndicator from "./components/Chats/Chatroom/Messaging/IsTypingIndicator";
 import ConfirmEndOfSessionModal from "./components/Chats/EndOfSession/ConfirmEndOfSessionModal";
 import ReviewMentor from "./components/Chats/EndOfSession/ReviewForMentor/ReviewForMentor";
@@ -14,10 +14,30 @@ import ReviewMentee from "./components/Chats/EndOfSession/ReviewForMentee";
 import EmojiSelector from "./components/Chats/Chatroom/Messaging/EmojiSelector";
 import MessageSelectedModal from "./components/Chats/Chatroom/MessageSelected/MessageSelectedModal";
 import LiveComplementSelector from "./components/Chats/Chatroom/LiveComplements/LiveComplementSelector";
-import useChatRoomData from "./components/Chats/Chatroom/Hooks/useChatroomData";
+import { useChatRoom, getChatRoomData } from "./context/chatRoomContext";
+import { ChatRoomProvider } from "./context/chatRoomContext";
+
+const useKeyboardAndScrollConfig = () => {
+  const ios = Platform.OS === "ios";
+  const scrollViewRef = useRef(null);
+
+  const scrollToEnd = () => {
+    setTimeout(() => {
+      scrollViewRef?.current?.scrollToEnd({ animated: true });
+    }, 0);
+  };
+
+  return {
+    scrollViewRef,
+    scrollToEnd,
+    kavConfig: { keyboardVerticalOffset: ios ? 0 : 0 },
+    scrollViewConfig: { contentContainerStyle: { flex: 1 } },
+  };
+};
 
 const ChatRoom = () => {
   const { userDetails } = useAuth();
+
   const ios = Platform.OS == "ios";
   const route = useRoute();
   const { roomId, completedSession } = route?.params;
@@ -38,84 +58,28 @@ const ChatRoom = () => {
   const [selectedMessage, setSelectedMessage] = useState({});
   const [isSendingImage, setIsSendingImage] = useState(false);
   const [text, setText] = useState("");
+  const { scrollViewRef, scrollToEnd, kavConfig, scrollViewConfig } =
+    useKeyboardAndScrollConfig();
 
   const inputRef = useRef(null);
-  const scrollViewRef = useRef(null);
 
-  const inChat = true;
-  if (inChat) {
-    kavConfig = { keyboardVerticalOffset: 0 };
-    scrollViewConfig = { contentContainerStyle: { flex: 1 } };
-  }
+  // const inChat = true;
+  // if (inChat) {
+  //   kavConfig = { keyboardVerticalOffset: 0 };
+  //   scrollViewConfig = { contentContainerStyle: { flex: 1 } };
+  // }
+  // get chatroom data for
+  const chatRoomData = getChatRoomData(roomId, completedSession);
 
-  const chatRoomData = useChatRoomData(roomId, completedSession);
-
-  const scrollToEnd = () => {
-    setTimeout(() => {
-      scrollViewRef?.current?.scrollToEnd({ animated: true });
-    }, 0);
-  };
-
-  return (
-    <KeyboardAvoidingView
-      behavior={ios ? "padding" : "height"}
-      style={styles.container}
-      {...kavConfig}
-      contentContainerStyle={{ flexGrow: 1 }}
-    >
-      <ChatroomHeader
-        setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
-        chatRoomData={chatRoomData}
-      />
+  // Render each modal component
+  const renderModalComponents = () => (
+    <>
       {displayConfirmEndOfSessionModal && (
         <ConfirmEndOfSessionModal
-          roomId={chatRoomData?.roomId}
           setdisplayFeedback={setDisplayFeedback}
-          setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
+          setDisplyConfirmEndOfSessionModal={setDisplayConfirmEndOfSessionModal}
         />
       )}
-
-      {displayFeedback &&
-        userDetails?.mode === "mentor" &&
-        !chatRoomData.reviewForMenteeCompleted && (
-          <ReviewMentee
-            roomId={chatRoomData?.roomId}
-            setDisplayFeedback={setDisplayFeedback}
-          ></ReviewMentee>
-        )}
-
-      {userDetails?.mode === "mentee" &&
-        chatRoomData?.sessionCompleted &&
-        !chatRoomData?.reviewForMentorCompleted &&
-        setDisplayFeedback && (
-          <ReviewMentor
-            chatRoomData={chatRoomData}
-            setDisplayFeedback={setDisplayFeedback}
-          />
-        )}
-
-      {chatRoomData && (
-        <MessagesList
-          replyState={replyState}
-          setReplyState={setReplyState}
-          isSendingImage={isSendingImage}
-          setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-          setSelectedMessage={setSelectedMessage}
-          scrollToEnd={scrollToEnd}
-          chatRoomData={chatRoomData}
-          userDetails={userDetails}
-          scrollViewRef={scrollViewRef}
-        />
-      )}
-
-      {replyState.displayShowReplyBar && !chatRoomData?.sessionCompleted && (
-        <ShowReplyBar
-          userId={userDetails?.uid}
-          replyState={replyState}
-          setReplyState={setReplyState}
-        />
-      )}
-
       <MessageSelectedModal
         replyState={replyState}
         setReplyState={setReplyState}
@@ -124,38 +88,80 @@ const ChatRoom = () => {
         displayMessageSelectedModal={displayMessageSelectedModal}
         setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
       />
+    </>
+  );
 
-      {chatRoomData && !chatRoomData?.sessionCompleted && (
-        <>
-          <EmojiSelector
-            setText={setText}
-            displayEmojiSelector={displayEmojiSelector}
-          />
-          <LiveComplementSelector
-            menteeId={chatRoomData.menteeId}
-            roomId={chatRoomData?.roomId}
-          />
-          <IsTypingIndicator scrollToEnd={scrollToEnd} item={chatRoomData} />
-          <MentorConversationSuggestions
-            isReply={false}
-            userDetails={userDetails}
-            item={chatRoomData}
-          />
-          <MessageInput
+  // Render feedback based on user mode
+  const renderFeedback = () => {
+    if (
+      displayFeedback &&
+      userDetails?.mode === "mentor" &&
+      !chatRoomData.reviewForMenteeCompleted
+    ) {
+      return <ReviewMentee setDisplayFeedback={setDisplayFeedback} />;
+    } else if (
+      userDetails?.mode === "mentee" &&
+      chatRoomData?.sessionCompleted &&
+      !chatRoomData?.reviewForMentorCompleted
+    ) {
+      return <ReviewMentor setDisplayFeedback={setDisplayFeedback} />;
+    }
+  };
+
+  return (
+    <ChatRoomProvider roomId={roomId} completedSession={completedSession}>
+      <KeyboardAvoidingView
+        behavior={ios ? "padding" : "height"}
+        style={styles.container}
+        {...kavConfig}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <ChatroomHeader
+          setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
+        />
+
+        {renderModalComponents()}
+        {renderFeedback()}
+
+        {chatRoomData && (
+          <MessagesList
             replyState={replyState}
             setReplyState={setReplyState}
             isSendingImage={isSendingImage}
-            setIsSendingImage={setIsSendingImage}
-            text={text}
-            setText={setText}
-            inputRef={inputRef}
-            setDisplayEmojiSelector={setDisplayEmojiSelector}
+            setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+            setSelectedMessage={setSelectedMessage}
+            scrollViewRef={scrollViewRef}
             scrollToEnd={scrollToEnd}
-            item={chatRoomData}
           />
-        </>
-      )}
-    </KeyboardAvoidingView>
+        )}
+        {replyState.displayShowReplyBar && !chatRoomData?.sessionCompleted && (
+          <ShowReplyBar replyState={replyState} setReplyState={setReplyState} />
+        )}
+
+        {chatRoomData && !chatRoomData?.sessionCompleted && (
+          <>
+            <EmojiSelector
+              setText={setText}
+              displayEmojiSelector={displayEmojiSelector}
+            />
+            <LiveComplementSelector />
+            <IsTypingIndicator />
+            <ConversationSuggestions isReply={false} />
+            <MessageInput
+              replyState={replyState}
+              setReplyState={setReplyState}
+              isSendingImage={isSendingImage}
+              setIsSendingImage={setIsSendingImage}
+              text={text}
+              setText={setText}
+              inputRef={inputRef}
+              setDisplayEmojiSelector={setDisplayEmojiSelector}
+              scrollToEnd={scrollToEnd}
+            />
+          </>
+        )}
+      </KeyboardAvoidingView>
+    </ChatRoomProvider>
   );
 };
 

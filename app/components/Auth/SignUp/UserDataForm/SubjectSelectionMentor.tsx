@@ -67,6 +67,7 @@ const SubjectSelectionMentor: React.FC<SubjectSelectionProps> = ({
         {subjects.map((subject, index) => (
           <View key={index}>
             <Checkbox.Item
+              key={subject}
               color="orange"
               style={{ width: "100%", borderBottomColor: "white" }}
               labelStyle={{ color: "white" }}

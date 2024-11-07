@@ -1,5 +1,5 @@
 import React from "react";
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 import { render, screen, fireEvent } from "@testing-library/react-native";
 
 describe("Button", () => {
@@ -25,6 +25,9 @@ describe("Button", () => {
 
     render(<CustomButton title={titleMessage} handlePress={() => {}} />);
     const buttonText = screen.getByText(titleMessage);
-    expect(buttonText).toBeTruthy;
+    expect(buttonText).toBeTruthy();
   });
+
+
+  
 });

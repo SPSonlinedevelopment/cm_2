@@ -184,6 +184,7 @@ const MessageSelectedModal = ({
               {selectionButtons.map((button) => {
                 return (
                   <ActionButton
+                    key={button.title}
                     handlePress={button.func}
                     icon={button.icon}
                     title={button.title}

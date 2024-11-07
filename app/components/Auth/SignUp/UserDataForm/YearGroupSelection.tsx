@@ -45,6 +45,7 @@ const YearGroupSelection: React.FC<YearGroupSelectionProps> = ({
         return (
           <View className="w-full">
             <RadioButton.Item
+              key={years.name}
               label={years.name}
               color="orange"
               uncheckedColor="black"

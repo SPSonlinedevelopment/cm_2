@@ -3,8 +3,11 @@ import React from "react";
 import IconButton from "../../../Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
 import FadeInView from "../../../Effects/FadeInView";
+import { useAuth } from "@/app/context/authContext";
 
-const ShowReplyBar = ({ userId, replyState, setReplyState }) => {
+const ShowReplyBar = ({ replyState, setReplyState }) => {
+  const { userDetails } = useAuth();
+
   return (
     <FadeInView>
       <View className="w-full h-[70px] bg-neutral-200 flex flex-column justify-between shadow p-1 border-l-8  animate-spin border-purple-100">
@@ -14,7 +17,7 @@ const ShowReplyBar = ({ userId, replyState, setReplyState }) => {
           </View>
           <Text> to </Text>
           <Text className="text-base text-purple-100 font-bold ">
-            {replyState.replyRecipientId === userId
+            {replyState.replyRecipientId === userDetails?.uid
               ? "You"
               : replyState.replyRecipientName}
           </Text>

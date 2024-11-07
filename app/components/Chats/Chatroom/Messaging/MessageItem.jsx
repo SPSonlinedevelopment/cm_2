@@ -22,6 +22,7 @@ const MessageItem = React.memo(
     setSelectedMessage,
     setDisplayMessageSelectedModal,
     roomId,
+    scrollToEnd,
   }) => {
     const [scrollPosition, setScrollPosition] = useState(0);
     const [ShowReply, setShowReply] = useState("");

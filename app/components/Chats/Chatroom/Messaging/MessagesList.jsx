@@ -15,18 +15,21 @@ import {
 import { db } from "@/firebaseConfig";
 import * as Haptics from "expo-haptics";
 import Loading from "@/app/components/Loading/LoadingSpinner";
+import { generateRandomId } from "./../../../../../utils/common";
+import { useChatRoom } from "@/app/context/chatRoomContext";
+import { useAuth } from "@/app/context/authContext";
 
 const MessagesList = ({
-  chatRoomData,
-  scrollToEnd,
   scrollViewRef,
+  scrollToEnd,
   replyState,
   setReplyState,
-  userDetails,
   setSelectedMessage,
   setDisplayMessageSelectedModal,
   isSendingImage,
 }) => {
+  const { chatRoomData } = useChatRoom();
+  const { userDetails } = useAuth();
   const [messages, setMessages] = useState([]);
 
   const mode = userDetails?.mode;
@@ -47,7 +50,7 @@ const MessagesList = ({
         }`,
 
         createdAt: Timestamp.fromDate(new Date()),
-        messageId: "TestMessageId7",
+        messageId: generateRandomId(),
         senderAvatar: `${
           mode === "mentee"
             ? chatRoomData?.mentorAvatar
@@ -66,22 +69,22 @@ const MessagesList = ({
           imageUrl: chatRoomData?.initialImageUrl,
           userId: chatRoomData?.menteeId,
           senderName: chatRoomData?.menteeName,
-          messageId: "TestMessageId2",
+          messageId: generateRandomId(),
         },
         {
           text: `Hey ${chatRoomData.menteeName} 👋. Thanks for your message!`,
           senderName: "Collet owl",
-          messageId: "TestMessageId3",
+          messageId: generateRandomId(),
         },
         {
           text: "I'm connecting you with a mentor. Meanwhile, can you tell me more about your problem? ",
           senderName: "Collet owl",
-          messageId: "TestMessageId4",
+          messageId: generateRandomId(),
         },
         {
           text: "Remember to use good English and be polite!",
           senderName: "Collet owl",
-          messageId: "TestMessageId5",
+          messageId: generateRandomId(),
         },
         ...connectedMessage,
       ];
@@ -92,12 +95,12 @@ const MessagesList = ({
           imageUrl: chatRoomData?.initialImageUrl,
           userId: chatRoomData?.menteeId,
           senderName: chatRoomData?.menteeName,
-          messageId: "TestMessageId2",
+          messageId: generateRandomId(),
         },
         {
           text: `${chatRoomData.mentorName} please remember to use good English and be polite to your mentee!`,
           senderName: "Collet owl",
-          messageId: "TestMessageId5",
+          messageId: generateRandomId(),
         },
 
         ...connectedMessage,
@@ -157,9 +160,10 @@ const MessagesList = ({
             replyState={replyState}
             setReplyState={setReplyState}
             message={message}
-            key={message.Id}
+            key={message.messageId}
             userId={userDetails?.uid}
             roomId={chatRoomData.roomId}
+            scrollToEnd={scrollToEnd}
           ></MessageItem>
         );
       })}
