@@ -2,7 +2,9 @@ import { View, Text, Image } from "react-native";
 import React, { useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
-import FormField, { initialFormState } from "./components/FormField/FormField";
+import FormField, {
+  initialFormState,
+} from "./components/Auth/FormField/FormField";
 import { validateInputs } from "./components/Auth/validateInputs/validateInputs";
 import CustomButton from "./components/Buttons/CustomButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";

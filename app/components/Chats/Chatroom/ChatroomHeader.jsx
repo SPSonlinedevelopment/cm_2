@@ -10,7 +10,7 @@ import * as Haptics from "expo-haptics";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
-const ChatroomHeader = ({ setDisplyConfirmEndOfSessionModal }) => {
+const ChatroomHeader = ({ setDisplayConfirmEndOfSessionModal }) => {
   const { userDetails } = useAuth();
   const { chatRoomData } = useChatRoom();
   const navigation = useNavigation();
@@ -24,7 +24,7 @@ const ChatroomHeader = ({ setDisplyConfirmEndOfSessionModal }) => {
               <TouchableOpacity
                 className="m-2"
                 onPress={() => {
-                  setDisplyConfirmEndOfSessionModal(true);
+                  setDisplayConfirmEndOfSessionModal(true);
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
@@ -101,7 +101,7 @@ const ChatroomHeader = ({ setDisplyConfirmEndOfSessionModal }) => {
                   <TouchableOpacity
                     className="m-2"
                     onPress={() => {
-                      setDisplyConfirmEndOfSessionModal(true);
+                      setDisplayConfirmEndOfSessionModal(true);
                     }}
                   >
                     <Entypo name="cross" size={34} color="black" />

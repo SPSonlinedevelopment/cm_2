@@ -35,7 +35,7 @@ const ReviewMentorContainer = ({ setDisplayFeedback }) => {
       menteeName,
       menteeAvatar,
     },
-  } = useChatRoom;
+  } = useChatRoom();
 
   const [feedbackForm, setFeedbackForm] = useState({
     mentorRating: undefined,

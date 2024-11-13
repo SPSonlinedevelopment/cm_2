@@ -1,6 +1,6 @@
-import { View, Text, ActivityIndicator, Modal } from "react-native";
+import { View, Text, ActivityIndicator, Modal, Image } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Image } from "expo-image";
+// import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Loading from "@/app/components/Loading/LoadingSpinner";
 import ExitButton from "@/app/components/Buttons/ExitButton";
@@ -12,8 +12,9 @@ export const FullScreenImage = ({ url, onClose }) => {
         <ExitButton toggleDisplay={onClose} />
 
         <Image
+          testID="full_screen_image"
           className="h-full w-full"
-          source={{ uri: url }}
+          source={{ url }}
           resizeMode="contain"
         />
       </View>
@@ -50,15 +51,15 @@ const LoadedImage = React.memo(
             }  ${isPreview ? "bg-transparent m-0" : ""}`}
           >
             <TouchableOpacity
+              testID="image_button"
               className="relative"
-              // delayLongPress={100}
-              // delayPressIn={100}
               onPress={() => openFullScreen()}
             >
               {!isLoaded && <LoadingImagePlaceholder />}
-              {/* <LoadingImagePlaceholder /> */}
+
               <Image
-                onLoadStart={() => setIsLoaded(true)}
+                testID="image_element"
+                onLoadEnd={() => setIsLoaded(true)}
                 cachePolicy={"memory-disk"}
                 className={` h-[250px] w-[200px] rounded-xl 
                `}
@@ -67,13 +68,14 @@ const LoadedImage = React.memo(
                   resizeMode: "cover",
                 }}
                 source={{
-                  uri: url,
+                  url,
                 }}
                 contentFit="cover"
                 transition={100}
                 effect="flip-from-top"
               />
             </TouchableOpacity>
+
             {caption && (
               <View className=" p-1 w-full">
                 <Text className="text-base"> {caption}</Text>
@@ -91,6 +93,7 @@ export default LoadedImage;
 const LoadingImagePlaceholder = () => {
   return (
     <View
+      testID="loading_image_placeholder"
       className="rounded-xl w-full  flex flex-row mb-1
       justify-end"
     >

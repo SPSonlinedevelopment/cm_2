@@ -4,11 +4,8 @@ import {
   addDoc,
   collection,
   updateDoc,
-  getDoc,
-  setDoc,
 } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
-import { generateRandomId } from "@/utils/common";
 
 // handle sending a message
 
@@ -25,10 +22,6 @@ export const handleSendTextMessageToChatroom = async (
   if (!message) return;
 
   try {
-    console.log("text111", text);
-    console.log("type", type);
-    console.log("replytoMessage", replyMessage);
-
     const docRef = doc(db, "rooms", roomId);
     const messagesRef = collection(docRef, "messages");
     const commondata = {
@@ -62,6 +55,7 @@ export const handleSendTextMessageToChatroom = async (
 
     const newMeessageDocRef = doc(messagesRef, result.id);
     await updateDoc(newMeessageDocRef, { messageId: result.id });
+
     return { success: true };
   } catch (error) {
     console.log("🚀 ~ error:", error);

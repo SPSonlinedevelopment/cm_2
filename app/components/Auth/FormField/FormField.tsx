@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Button } from "react-native";
 import React, { useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import CustomButton from "../Buttons/CustomButton";
+import CustomButton from "../../Buttons/CustomButton";
 import { BaseButton, RawButton } from "react-native-gesture-handler";
 
 export const initialFormState = {
@@ -71,8 +71,6 @@ const FormField: React.FC<CustomFormFieldProps> = ({
     refName.current = value;
 
     setAlertMessage("");
-
-
 
     if (type === "name") {
       seterror((prevErrors) => {

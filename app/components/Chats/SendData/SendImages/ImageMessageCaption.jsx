@@ -87,7 +87,7 @@ const ImageMessageCaption = ({
         style={{
           flex: 1,
         }}
-        {...kavConfig}
+        // {...kavConfig}
         contentContainerStyle={{ flex: 1 }}
       >
         <View className="relative h-full bg-black">

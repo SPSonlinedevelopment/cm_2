@@ -28,11 +28,10 @@ const IconButton: React.FC<IconButtonProps> = ({
       disabled={disabled}
       activeOpacity={0.7}
       onPress={() => {
-        console.log("Button pressed");
         handlePress();
       }}
-      className={` bg-red-100 ${
-        disabled ? "opacity-50 " : "opacity" 
+      className={` ${
+        disabled ? "opacity-50 " : "opacity"
       } bg-orange-500  rounded-full my-4 justify-center items-center    z-50 ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       } `}

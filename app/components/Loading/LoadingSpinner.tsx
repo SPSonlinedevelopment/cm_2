@@ -7,8 +7,12 @@ interface LoadingProps {
 }
 const Loading: React.FC<LoadingProps> = ({ size }) => {
   return (
-    <View testID="loading_indicator" style={{ height: size, aspectRatio: 1 }}>
+    <View
+      testID="loading-spinner-indicator"
+      style={{ height: size, aspectRatio: 1 }}
+    >
       <AnimatedLottieView
+        testID="lottie-view-test"
         source={require("../../../assets/loadingAnimation.json")}
         style={{ flex: 1 }}
         autoPlay

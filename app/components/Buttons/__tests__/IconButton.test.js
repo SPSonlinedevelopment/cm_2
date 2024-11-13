@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import { render, screen, fireEvent } from "@testing-library/react-native";
 import IconButton from "../IconButton";
 import "@testing-library/jest-native/extend-expect";
+import { StyleSheet } from "react-native";
 
 describe("IconButton Component", () => {
   const mockHandlePress = jest.fn();
@@ -63,7 +64,7 @@ describe("IconButton Component", () => {
       <IconButton handlePress={mockHandlePress} isLoading />
     );
 
-    const loading = getByTestId("loading_indicator");
+    const loading = getByTestId("loading-spinner-indicator");
 
     expect(loading).toBeTruthy();
   });
@@ -100,17 +101,45 @@ describe("IconButton Component", () => {
   it("passes tailwind content container styles correctly when provided as a string ", () => {
     render(
       <IconButton
-        containerStyles="bg-red-100"
         title="Press me"
         handlePress={mockHandlePress}
+        textStyles="font-pbold"
+        containerStyles="bg-blue-300"
       />
     );
+    const textElement = screen.getByText("Press me");
 
-    screen.debug();
-    expect(receivedObject.backgroundColor).toBe("#fee2e2");
-    // expect(screen.getByTestId("icon_button").props.style).toContain({
-    //   backgroundColor: "#fee2e2",
-    // });
+    // Check that the fontFamily is Montserrat-Bold
+    const textStyle = textElement.props.style;
+
+    // Flatten the style array (in case it is an array)
+    const flattenedStyle = Array.isArray(textStyle)
+      ? Object.assign({}, ...textStyle)
+      : textStyle;
+
+    expect(flattenedStyle.fontFamily).toBe("Montserrat-Bold");
+
+    const button = screen.getByTestId("icon_button");
+
+    const buttonStyle = button.props.style;
+
+    const flattenedButtonStyle = Array.isArray(buttonStyle)
+      ? Object.assign({}, ...buttonStyle)
+      : buttonStyle;
+
+    expect(flattenedButtonStyle.backgroundColor).toBe("#93c5fd");
+  });
+
+  it("passes icon container styles when passed as string props", () => {
+    render(<IconButton iconContainerStyles="bg-blue-300" title="Press me" />);
+
+    const iconElement = screen.getByTestId("icon_button_test");
+
+    const iconStyles = iconElement.props.style;
+
+    const flattenedStyle = StyleSheet.flatten(iconStyles);
+
+    expect(flattenedStyle.backgroundColor).toBe("#93c5fd");
   });
 
   afterEach(() => {

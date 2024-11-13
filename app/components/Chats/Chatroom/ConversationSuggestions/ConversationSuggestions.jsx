@@ -26,12 +26,18 @@ const ConversationSuggestions = () => {
       textRef,
       userDetails
     );
-    setShowSuggestions(!showSuggestions);
+    setShowSuggestions(false);
   };
+
+  const suggestions =
+    userDetails.mode === "mentor"
+      ? mentorConvoSuggestions
+      : menteeConvoSuggestions;
 
   return (
     <>
       <ToggleScrollSelectionButton
+        testId="toggle-button"
         icon={<Feather name="message-square" size={24} color="black" />}
         display={showSuggestions}
         setDisplay={setShowSuggestions}
@@ -39,23 +45,19 @@ const ConversationSuggestions = () => {
       />
 
       {showSuggestions && (
-        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
+        <ScrollView
+          testID="suggestions-list"
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+        >
           <View className="flex flex-row  justify-end items-end">
-            {userDetails.mode === "mentor"
-              ? mentorConvoSuggestions.map((suggestion) => (
-                  <Button
-                    key={suggestion.text}
-                    handleClickSuggestion={handleClickSuggestion}
-                    suggestion={suggestion}
-                  />
-                ))
-              : menteeConvoSuggestions.map((suggestion) => (
-                  <Button
-                    key={suggestion.text}
-                    handleClickSuggestion={handleClickSuggestion}
-                    suggestion={suggestion}
-                  />
-                ))}
+            {suggestions.map((suggestion) => (
+              <Button
+                key={suggestion.text}
+                handleClickSuggestion={handleClickSuggestion}
+                suggestion={suggestion}
+              />
+            ))}
           </View>
         </ScrollView>
       )}
@@ -68,6 +70,7 @@ export default ConversationSuggestions;
 const Button = ({ handleClickSuggestion, suggestion }) => {
   return (
     <TouchableOpacity
+      testID="suggestion_select_button"
       onPress={() => handleClickSuggestion(suggestion)}
       key={suggestion.id}
       className="flex m-2 max-w-[200px]  relative p-2 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow bg-white self-start"

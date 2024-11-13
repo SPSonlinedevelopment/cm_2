@@ -10,7 +10,7 @@ import Fist from "../../../../assets/icons/Achievements/Fist.png";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
 const ConfirmEndOfSessionModal = ({
-  setDisplyConfirmEndOfSessionModal,
+  setDisplayConfirmEndOfSessionModal,
   setdisplayFeedback,
   roomId,
 }) => {
@@ -65,7 +65,7 @@ const ConfirmEndOfSessionModal = ({
             containerStyles="p-2 w-[150px] h-[50px]"
             title="Confirm"
             handlePress={() => {
-              setDisplyConfirmEndOfSessionModal(false);
+              setDisplayConfirmEndOfSessionModal(false);
 
               setdisplayFeedback(true);
 

@@ -9,6 +9,7 @@ import SearchChats from "./SearchChats";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import CompletedChatList from "./CompletedChatList";
+import LoadedImage from "./Chatroom/Messaging/LoadedImage";
 
 import ChatItem from "./ChatItem";
 import { useChat } from "@/app/context/chatContext";

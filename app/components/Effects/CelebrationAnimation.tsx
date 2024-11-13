@@ -19,6 +19,7 @@ const CelebrationAnimation: React.FC<CelebrationProps> = ({
 
   return (
     <View
+      testID="celebration_animation"
       style={{
         flex: 1,
         width: "100%",
@@ -31,6 +32,7 @@ const CelebrationAnimation: React.FC<CelebrationProps> = ({
       }}
     >
       <AnimatedLottieView
+      testID="lottie_view"
         source={require("../../../assets/celebrationAnimation.json")}
         style={{ flex: 1 }}
         autoPlay

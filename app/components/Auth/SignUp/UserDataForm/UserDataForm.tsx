@@ -10,7 +10,7 @@ import PartnersipSelection from "./PartnersipSelection";
 import BorderUnderline from "@/app/components/Profile/BorderUnderline";
 import SelectUserMode from "./SelectUserMode";
 import { router } from "expo-router";
-import FormField from "@/app/components/FormField/FormField";
+import FormField from "@/app/components/Auth/FormField/FormField";
 import Names from "./Names";
 import { useAuth } from "@/app/context/authContext";
 import { doc, getDoc, setDoc } from "firebase/firestore";

@@ -5,7 +5,7 @@ import { mentorComplements } from "../../EndOfSession/ReviewForMentor/Complement
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useAuth } from "@/app/context/authContext";
 import { handleSendTextMessageToChatroom } from "../../SendData/SendTexts/handleSendTextMessageToChatroom";
-import { handleUpdateMenteeWithComplement } from "./handleUpdateMenteeWithComplement";
+import handleUpdateMenteeWithComplement from "./handleUpdateMenteeWithComplement";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
 const LiveComplementSelector = () => {
@@ -24,7 +24,7 @@ const LiveComplementSelector = () => {
     SetSelectedLiveComplement(complement);
 
     const text = complement;
-
+    setDisplayComplementSelector(false);
     try {
       await handleSendTextMessageToChatroom(
         chatRoomData.roomId,
@@ -34,9 +34,8 @@ const LiveComplementSelector = () => {
         replyMessage
       );
       await handleUpdateMenteeWithComplement(chatRoomData.menteeId, complement);
-      setDisplayComplementSelector(false);
     } catch (error) {
-      console.log(error);
+      console.log("hdjsh", error);
     }
   };
 
@@ -50,7 +49,7 @@ const LiveComplementSelector = () => {
           position="left"
         />
         {displayComplementSelector && (
-          <View className="bg-transparent">
+          <View testID="complement_selector" className="bg-transparent">
             <ScrollView
               showsHorizontalScrollIndicator={false}
               className="bg-transparent"

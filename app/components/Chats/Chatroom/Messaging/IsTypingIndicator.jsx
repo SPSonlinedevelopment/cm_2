@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Children, useRef } from "react";
 import { View, Text, Keyboard } from "react-native";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
@@ -8,13 +8,67 @@ import FadeInView from "@/app/components/Effects/FadeInView";
 import LoadingDots from "@/app/components/Loading/LoadingDots";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
-const IsTypingIndicator = () => {
+export const SenseTypingIndicator = () => {};
+
+const IsTypingIndicator = ({ text }) => {
   const { chatRoomData } = useChatRoom();
   const [isTyping, setIsTyping] = useState(false);
   const { userDetails } = useAuth();
+  const [currentlyTyping, setIsCurrentlyTyping] = useState(false);
+  const [prevTextLength, setPrevTextLength] = useState(false);
 
   const roomCollectionRef = collection(db, "rooms");
   const roomRef = doc(roomCollectionRef, chatRoomData?.roomId);
+
+  const typingTimeoutRef = useRef(null);
+
+  const updateUserTyping = async (currentlyTyping, mode) => {
+    const update =
+      mode === "mentee"
+        ? { menteeIsTyping: currentlyTyping }
+        : { mentorIsTyping: currentlyTyping };
+
+    try {
+      await updateDoc(roomRef, update);
+      console.log("Mentee typing status updated successfully!");
+    } catch (error) {
+      console.error("Error updating mentee typing status:", error);
+    }
+  };
+
+  const detectTypingStatus = () => {
+    console.log(text.length);
+
+    if (text.length > 0) {
+      if (prevTextLength !== text.length) {
+        // Clear any previous timeout if text length changes
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
+        setIsCurrentlyTyping(true);
+        updateUserTyping(true, userDetails.mode);
+      }
+
+      // Set a new timeout for detecting typing inactivity
+      typingTimeoutRef.current = setTimeout(() => {
+        updateUserTyping(false, userDetails.mode);
+      }, 2000);
+    } else {
+      updateUserTyping(false, userDetails.mode);
+    }
+
+    setPrevTextLength(text.length);
+  };
+
+  useEffect(() => {
+    detectTypingStatus();
+    return () => {
+      // Cleanup timeout on unmount
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, [text]);
 
   useEffect(() => {
     const unSubMentor = onSnapshot(roomRef, (docSnapshot) => {
@@ -46,46 +100,6 @@ const IsTypingIndicator = () => {
       }
     };
   }, []);
-  // Remember to unsubscribe from the listener when you no longer need it
-  // For example, when the user leaves the room:
-  // unsubscribe();
-
-  useEffect(() => {
-    const updateUserTyping = async (isTyping, mode) => {
-      const update =
-        mode === "mentee"
-          ? { menteeIsTyping: isTyping }
-          : { mentorIsTyping: isTyping };
-
-      try {
-        await updateDoc(roomRef, update);
-        console.log("Mentee typing status updated successfully!");
-      } catch (error) {
-        console.error("Error updating mentee typing status:", error);
-      }
-    };
-
-    const keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      () => {
-        updateUserTyping(true, userDetails?.mode);
-      }
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      () => {
-        updateUserTyping(false, userDetails?.mode);
-      }
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-
-      updateUserTyping(false, userDetails?.mode);
-    };
-  }, []);
 
   const DisplayTyping = ({ name }) => {
     return (
@@ -107,6 +121,9 @@ const IsTypingIndicator = () => {
   };
   return (
     <View>
+      {/* <Text> currently typing {JSON.stringify(currentlyTyping)}</Text>
+      <Text> prev length{JSON.stringify(prevTextLength)}</Text>
+      <Text> current length{JSON.stringify(text.length)}</Text> */}
       {isTyping && (
         <View className="">
           {userDetails?.mode === "mentee" ? (

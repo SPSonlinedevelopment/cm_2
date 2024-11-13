@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, Text } from "react-native";
 import React, { useState, useRef, Children } from "react";
 import { useRoute } from "@react-navigation/native";
 import ChatroomHeader from "./components/Chats/Chatroom/ChatroomHeader";
@@ -49,7 +49,7 @@ const ChatRoom = () => {
     replyRecipientId: "",
   });
 
-  const [displayConfirmEndOfSessionModal, setDisplyConfirmEndOfSessionModal] =
+  const [displayConfirmEndOfSessionModal, setDisplayConfirmEndOfSessionModal] =
     useState(false);
   const [displayEmojiSelector, setDisplayEmojiSelector] = useState(false);
   const [displayFeedback, setDisplayFeedback] = useState(false);
@@ -77,7 +77,9 @@ const ChatRoom = () => {
       {displayConfirmEndOfSessionModal && (
         <ConfirmEndOfSessionModal
           setdisplayFeedback={setDisplayFeedback}
-          setDisplyConfirmEndOfSessionModal={setDisplayConfirmEndOfSessionModal}
+          setDisplayConfirmEndOfSessionModal={
+            setDisplayConfirmEndOfSessionModal
+          }
         />
       )}
       <MessageSelectedModal
@@ -117,7 +119,9 @@ const ChatRoom = () => {
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <ChatroomHeader
-          setDisplyConfirmEndOfSessionModal={setDisplyConfirmEndOfSessionModal}
+          setDisplayConfirmEndOfSessionModal={
+            setDisplayConfirmEndOfSessionModal
+          }
         />
 
         {renderModalComponents()}
@@ -137,6 +141,7 @@ const ChatRoom = () => {
         {replyState.displayShowReplyBar && !chatRoomData?.sessionCompleted && (
           <ShowReplyBar replyState={replyState} setReplyState={setReplyState} />
         )}
+        <Text>{text}</Text>
 
         {chatRoomData && !chatRoomData?.sessionCompleted && (
           <>
@@ -145,7 +150,7 @@ const ChatRoom = () => {
               displayEmojiSelector={displayEmojiSelector}
             />
             <LiveComplementSelector />
-            <IsTypingIndicator />
+            <IsTypingIndicator text={text} />
             <ConversationSuggestions isReply={false} />
             <MessageInput
               replyState={replyState}

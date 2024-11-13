@@ -65,6 +65,7 @@ const MessageGeneralModal = ({
 
   return (
     <Modal
+      testID="message_general_modal"
       transparent
       className="flex items-center w-full bg-opacity-50 justify-center"
       visible={displayModal}
@@ -85,8 +86,6 @@ const MessageGeneralModal = ({
           <View className="w-[90%] mt-3">
             <Text className="text-base font-bold text-black text-center">
               {text.bodyText}
-
-              {deleteInput}
             </Text>
 
             {type === "deleteAccount" && (
@@ -95,7 +94,9 @@ const MessageGeneralModal = ({
           </View>
           <View className="flex flex-row justify-evenly items-center w-full">
             <IconButton
-              disabled={deleteInput !== "Delete" && type === "deleteAccount"}
+              disabled={
+                deleteInput.trim() !== "Delete" && type === "deleteAccount"
+              }
               textStyles="font-bold"
               containerStyles="p-2 w-[150px] h-[50px]"
               title="Confirm"
@@ -122,7 +123,7 @@ const MessageGeneralModal = ({
 
 export default MessageGeneralModal;
 
-const ConfirmDeleteAccount = ({ setDeleteInput }) => {
+export const ConfirmDeleteAccount = ({ setDeleteInput }) => {
   return (
     <View className="w-full  my-6">
       <Text className="text-base text-center my-2">

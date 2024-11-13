@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React, { Children, useEffect, useRef, useState } from "react";
 import { Link, router } from "expo-router";
 import CustomButton from "../../Buttons/CustomButton";
-import FormField from "../../FormField/FormField";
+import FormField from "../FormField/FormField";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";

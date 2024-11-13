@@ -7,7 +7,7 @@ import {
   userEvent,
 } from "@testing-library/react-native";
 
-describe("TextInput", () => {
+describe("Form Field Component", () => {
   const user = userEvent.setup();
   // test("renders correctly", () => {
   //   render(<FormField />);

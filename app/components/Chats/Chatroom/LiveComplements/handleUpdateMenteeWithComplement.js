@@ -1,14 +1,13 @@
 import { updateDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../../../firebaseConfig";
-import { useAuth } from "@/app/context/authContext";
 
-export const handleUpdateMenteeWithComplement = async (
-  menteeId,
-  complement
-) => {
+const handleUpdateMenteeWithComplement = async (menteeId, complement) => {
   const docRef = doc(db, "mentees", menteeId);
 
+  console.log("  menteeIdcomplement", menteeId, complement);
+
   try {
+    console.log("handleUpdateMenteeWithComplement called start");
     const doc = await getDoc(docRef);
 
     if (!doc.exists) {
@@ -26,7 +25,10 @@ export const handleUpdateMenteeWithComplement = async (
       [updateComp]: compsVal + 1,
       "menteeStatistics.XP": data.menteeStatistics.XP + 10,
     });
+
+    console.log("handleUpdateMenteeWithComplement called end success");
   } catch (error) {
     console.log("🚀 ~ error:", error);
   }
 };
+export default handleUpdateMenteeWithComplement;

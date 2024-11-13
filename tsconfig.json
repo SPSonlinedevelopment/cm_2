@@ -12,7 +12,7 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "app/components/FormField/__tests__/FormField.test.js",
+    "app/components/Auth/FormField/__tests__/FormField.test.js",
     "app/components/Buttons/__tests__/CustomButton.test.js",
     "app/context/__tests__/authContext.test.js",
     "app/user-details.tsx",

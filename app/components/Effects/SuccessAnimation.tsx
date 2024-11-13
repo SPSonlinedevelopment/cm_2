@@ -11,9 +11,6 @@ const SuccessAnimation: React.FC<SuccessProps> = ({ size }) => {
       style={{
         height: size,
         aspectRatio: 1,
-        // zIndex: 100,
-        // position: "absolute",
-        // top: 0,
       }}
     >
       <AnimatedLottieView
