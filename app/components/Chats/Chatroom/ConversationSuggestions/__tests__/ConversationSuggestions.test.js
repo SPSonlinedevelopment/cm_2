@@ -103,7 +103,7 @@ describe("ConversationSuggestions Component", () => {
     // Expect handleSendSuggestedMessageToChatroom to be called
     expect(handleSendSuggestedMessageToChatroom).toHaveBeenCalledWith(
       { id: "testRoom" },
-      { current: mentorConvoSuggestions[0].text },
+      { mentorConvoSuggestions[0].text },
       { mode: "mentor" }
     );
 

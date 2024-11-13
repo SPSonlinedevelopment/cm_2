@@ -154,7 +154,7 @@ const MessageItem = React.memo(
           </View>
         )}
 
-        <FadeInView>{result}</FadeInView>
+        {result}
 
         {ShowReply === "right" && (
           <View className="flex flex-row items-center justify-center bg-neutral-300 rounded-full h-[40px] w-[40px] ">

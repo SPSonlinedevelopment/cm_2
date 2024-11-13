@@ -69,7 +69,7 @@ export const handleSendSuggestedMessageToChatroom = async (
   textRef,
   userDetails
 ) => {
-  let message = textRef.current.trim();
+  let message = textRef.trim();
 
   if (!message) return;
   try {

@@ -41,6 +41,8 @@ const MessageInput = React.memo(
     const [displayImageCaptionModal, setDisplayImageCaptionModal] =
       useState(false);
 
+    const [isSendingMessage, setIsSendingMessage] = useState(false);
+
     const handlePickImage = async () => {
       try {
         const imagePicked = await pickImage();
@@ -53,8 +55,10 @@ const MessageInput = React.memo(
 
     // handle sending a message
     const handleSendMessage = async () => {
+      setIsSendingMessage(true);
       const hasProfanities = screenProfanities(text);
       if (hasProfanities) {
+        setIsSendingMessage(false);
         return Alert.alert("text shows inappropriate text");
       } else {
         setReplyState((prev) => ({
@@ -90,11 +94,11 @@ const MessageInput = React.memo(
               type
             );
           }
+          setText("");
         } catch (error) {
           Alert.alert("error");
         } finally {
-          setText("");
-          scrollToEnd();
+          setIsSendingMessage(false);
           setDisplayEmojiSelector(false);
         }
       }
@@ -104,9 +108,10 @@ const MessageInput = React.memo(
       <View
         style={{}}
         className={`${
-          TextInputFocused ? "pb-[0px]" : "pb-[20px]"
+          TextInputFocused ? "pb-[0px] " : "pb-[10px]"
         }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center  `}
       >
+        <Text>{JSON.stringify(isSendingMessage)}</Text>
         {displayImageCaptionModal && (
           <ImageMessageCaption
             isSendingImage={isSendingImage}
@@ -147,6 +152,7 @@ const MessageInput = React.memo(
 
           {!inputFieldEmpty && (
             <TouchableOpacity
+              disabled={isSendingMessage}
               onPress={handleSendMessage}
               className="bh-neutral-200  h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
             >

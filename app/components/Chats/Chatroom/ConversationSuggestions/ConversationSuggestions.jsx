@@ -16,17 +16,13 @@ const ConversationSuggestions = () => {
   const { userDetails } = useAuth();
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const textRef = useRef(null);
-
   const handleClickSuggestion = async (suggestion) => {
-    textRef.current = suggestion.text;
-
+    setShowSuggestions(false);
     await handleSendSuggestedMessageToChatroom(
       chatRoomData,
-      textRef,
+      suggestion.text,
       userDetails
     );
-    setShowSuggestions(false);
   };
 
   const suggestions =
@@ -46,6 +42,12 @@ const ConversationSuggestions = () => {
 
       {showSuggestions && (
         <ScrollView
+          style={{
+            position: "absolute",
+            bottom: 70,
+            backgroundColor: "transparent",
+            marginBottom: 5,
+          }}
           testID="suggestions-list"
           showsHorizontalScrollIndicator={false}
           horizontal={true}
