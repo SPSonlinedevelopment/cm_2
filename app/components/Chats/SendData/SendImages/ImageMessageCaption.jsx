@@ -24,7 +24,14 @@ import { storage } from "@/firebaseConfig";
 import { screenProfanities } from "@/utils/common";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
+// displayImageCaptionModal={displayImageCaptionModal}
+// isSendingImage={isSendingImage}
+// setIsSendingImage={setIsSendingImage}
+// image={image}
+// setDisplayImageCaptionModal={setDisplayImageCaptionModal}
+
 const ImageMessageCaption = ({
+  displayImageCaptionModal,
   setDisplayImageCaptionModal,
   image,
   setIsSendingImage,
@@ -81,7 +88,7 @@ const ImageMessageCaption = ({
     }
   };
   return (
-    <Modal visible animationType="slide">
+    <Modal visible={displayImageCaptionModal} animationType="slide">
       <KeyboardAvoidingView
         behavior={ios ? "padding" : "height"}
         style={{

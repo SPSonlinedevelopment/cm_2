@@ -17,6 +17,8 @@ import MessageSelectedModal from "./components/Chats/Chatroom/MessageSelected/Me
 import LiveComplementSelector from "./components/Chats/Chatroom/LiveComplements/LiveComplementSelector";
 import { useChatRoom, getChatRoomData } from "./context/chatRoomContext";
 import { ChatRoomProvider } from "./context/chatRoomContext";
+import ImageMessageCaption from "./components/Chats/SendData/SendImages/ImageMessageCaption";
+import { pickImage } from "@/utils/imagePicker";
 
 export const useKeyboardAndScrollConfig = () => {
   const ios = Platform.OS === "ios";
@@ -63,7 +65,21 @@ const ChatRoom = () => {
   const { scrollViewRef, scrollToEnd, kavConfig, scrollViewConfig } =
     useKeyboardAndScrollConfig();
 
+  const [image, setImage] = useState({});
+  const [displayImageCaptionModal, setDisplayImageCaptionModal] =
+    useState(false);
+
   const inputRef = useRef(null);
+
+  const handlePickImage = async () => {
+    try {
+      const imagePicked = await pickImage();
+      setImage(imagePicked);
+      setDisplayImageCaptionModal(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // const inChat = true;
   // if (inChat) {
@@ -146,6 +162,14 @@ const ChatRoom = () => {
 
         {chatRoomData && !chatRoomData?.sessionCompleted && (
           <View>
+            <ImageMessageCaption
+              displayImageCaptionModal={displayImageCaptionModal}
+              isSendingImage={isSendingImage}
+              setIsSendingImage={setIsSendingImage}
+              image={image}
+              setDisplayImageCaptionModal={setDisplayImageCaptionModal}
+            />
+
             <EmojiSelector
               setText={setText}
               displayEmojiSelector={displayEmojiSelector}
@@ -155,15 +179,13 @@ const ChatRoom = () => {
             <CurrentUserTyping text={text} />
             <ConversationSuggestions isReply={false} />
             <MessageInput
+              handlePickImage={handlePickImage}
               replyState={replyState}
               setReplyState={setReplyState}
-              isSendingImage={isSendingImage}
-              setIsSendingImage={setIsSendingImage}
               text={text}
               setText={setText}
               inputRef={inputRef}
               setDisplayEmojiSelector={setDisplayEmojiSelector}
-              scrollToEnd={scrollToEnd}
             />
           </View>
         )}

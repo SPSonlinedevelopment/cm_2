@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Modal, Image, TouchableOpacity } from "react-native";
 import ExitButton from "../Buttons/ExitButton";
 import Avatar from "../Profile/EditProfile/Avatar/Avatar";
-import MessageItem from "./Chatroom/Messaging/MessageItem";
+import MessageItem from "./Chatroom/Messaging/MessageItems/MessageItem";
 import MessageText from "./Chatroom/Messaging/MessageText";
 import LoadedImage, {
   FullScreenImage,

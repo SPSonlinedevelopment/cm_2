@@ -4,56 +4,26 @@ import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { handleSendTextMessageToChatroom } from "../../SendData/SendTexts/handleSendTextMessageToChatroom";
-import { pickImage } from "@/utils/imagePicker";
-import ImageMessageCaption from "../../SendData/SendImages/ImageMessageCaption";
 import { screenProfanities } from "@/utils/common";
 import { useChatRoom } from "@/app/context/chatRoomContext";
-
-const SelectEmojiBtn = ({ setDisplayEmojiSelector }) => {
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        setDisplayEmojiSelector((prev) => !prev);
-      }}
-    >
-      <Text>😊</Text>
-    </TouchableOpacity>
-  );
-};
+import SelectEmojiButton from "./SelectEmojiButton";
+import FadeInView from "@/app/components/Effects/FadeInView";
 
 const MessageInput = React.memo(
   ({
-    scrollToEnd,
+    handlePickImage,
     replyState,
     setReplyState,
     setDisplayEmojiSelector,
     text,
     setText,
     inputRef,
-    isSendingImage,
-    setIsSendingImage,
   }) => {
     const { userDetails } = useAuth();
     const { chatRoomData } = useChatRoom();
-    const [TextInputFocused, setTextInputFocused] = useState(false);
-    const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
-    const [image, setImage] = useState({});
-    const [displayImageCaptionModal, setDisplayImageCaptionModal] =
-      useState(false);
-
+    const [inputFieldEmpty, setInputFieldEmpty] = useState(true);
     const [isSendingMessage, setIsSendingMessage] = useState(false);
 
-    const handlePickImage = async () => {
-      try {
-        const imagePicked = await pickImage();
-        setImage(imagePicked);
-        setDisplayImageCaptionModal(true);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    // handle sending a message
     const handleSendMessage = async () => {
       setIsSendingMessage(true);
       const hasProfanities = screenProfanities(text);
@@ -96,7 +66,7 @@ const MessageInput = React.memo(
           }
           setText("");
         } catch (error) {
-          Alert.alert("error");
+          Alert.alert("error sending message");
         } finally {
           setIsSendingMessage(false);
           setDisplayEmojiSelector(false);
@@ -106,42 +76,38 @@ const MessageInput = React.memo(
 
     return (
       <View
+        testID="message_input"
         style={{}}
-        className={`${
-          TextInputFocused ? "pb-[0px] " : "pb-[10px]"
-        }  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center  `}
+        className={`  shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center  `}
       >
-        <Text>{JSON.stringify(isSendingMessage)}</Text>
-        {displayImageCaptionModal && (
-          <ImageMessageCaption
-            isSendingImage={isSendingImage}
-            setIsSendingImage={setIsSendingImage}
-            image={image}
-            setDisplayImageCaptionModal={setDisplayImageCaptionModal}
-          />
-        )}
-
         <View className="flex-row justify-around  items-center  w-full  p-2    ">
           <TouchableOpacity
+            testID="image_picker_button"
             onPress={() => handlePickImage()}
             className="bh-neutral-200    flex items-center justify-center rounded-full  pr-[10px] "
           >
             <Ionicons name="add-outline" size={20} color="black" />
           </TouchableOpacity>
 
-          <SelectEmojiBtn setDisplayEmojiSelector={setDisplayEmojiSelector} />
+          <SelectEmojiButton
+            testID="emoji_button"
+            setDisplayEmojiSelector={setDisplayEmojiSelector}
+          />
           <TextInput
             value={text}
             ref={inputRef}
-            onFocus={() => setTextInputFocused(!TextInputFocused)}
-            onBlur={() => setTextInputFocused(!TextInputFocused)}
+            // onFocus={() => setTextInputFocused(!TextInputFocused)}
+            // onBlur={() => setTextInputFocused(!TextInputFocused)}
             onChangeText={(value) => {
               setText(value);
+              value.length > 0
+                ? setInputFieldEmpty(false)
+                : setInputFieldEmpty(true);
             }}
             style={{
               backgroundColor: "white",
               display: "flex",
-              padding: 4,
+              padding: 3,
               borderRadius: "20%",
             }}
             className="flex-1 m-1 mr-3 text-base  p-2 items-center justify-center"
@@ -151,13 +117,16 @@ const MessageInput = React.memo(
           />
 
           {!inputFieldEmpty && (
-            <TouchableOpacity
-              disabled={isSendingMessage}
-              onPress={handleSendMessage}
-              className="bh-neutral-200  h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
-            >
-              <Feather name="send" color="white" size={20} />
-            </TouchableOpacity>
+            <FadeInView>
+              <TouchableOpacity
+                testID="send_message_button"
+                disabled={isSendingMessage}
+                onPress={handleSendMessage}
+                className="bh-neutral-200  h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
+              >
+                <Feather name="send" color="white" size={20} />
+              </TouchableOpacity>
+            </FadeInView>
           )}
         </View>
       </View>

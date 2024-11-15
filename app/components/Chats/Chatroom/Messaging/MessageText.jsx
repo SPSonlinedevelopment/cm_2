@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import * as Haptics from "expo-haptics";
 
 const MessageText = ({
@@ -38,7 +38,6 @@ const MessageText = ({
             <Text
               className={`text-xs ${thisUsersMessage ? "" : "text-white"}  `}
             >
-              {/* {time.hours}:{time.minutes} {time.period} */}
               {time}
             </Text>
           </View>

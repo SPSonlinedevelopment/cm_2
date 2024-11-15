@@ -326,6 +326,26 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const getMentorDoc = async (mentorId) => {
+    try {
+      const docRef = doc(db, "mentors", mentorId);
+
+      const docSnapshot = await getDoc(docRef); // Use await here
+
+      if (docSnapshot.exists()) {
+        // Document data
+        const data = docSnapshot.data();
+
+        return data;
+      } else {
+        // Document does not exist
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error getting document:", error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -341,6 +361,7 @@ export const AuthContextProvider = ({ children }) => {
         getUpdatedAuthObj,
         setUserDetails,
         userDetails,
+        getMentorDoc,
       }}
     >
       {children}

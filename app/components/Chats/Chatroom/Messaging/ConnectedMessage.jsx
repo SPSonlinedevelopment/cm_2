@@ -2,8 +2,6 @@ import { View, Text } from "react-native";
 import React, { useState } from "react";
 import Avatar from "@/app/components/Profile/EditProfile/Avatar/Avatar";
 import { useAuth } from "@/app/context/authContext";
-import { db } from "@/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
 import { Card } from "@/app/components/Profile/MenteeProfile/MenteeStatistics";
 import IconGeneral from "@/app/components/IconGeneral";
 import Crown from "../../../../../assets/icons/Crown.png";
@@ -12,47 +10,29 @@ import Love from "../../../../../assets/icons/Love.png";
 import Clock from "../../../../../assets/icons/Clock.png";
 
 const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
-  const { userDetails } = useAuth();
-  const [mentorData, setMentorData] = useState();
+  const { userDetails, getMentorDoc } = useAuth();
+  // const [mentorData, setMentorData] = useState();
 
-  const getMentorDoc = async () => {
-    try {
-      const docRef = doc(db, "mentors", mentorId);
-
-      const docSnapshot = await getDoc(docRef); // Use await here
-
-      if (docSnapshot.exists()) {
-        // Document data
-        const data = docSnapshot.data();
-
-        setMentorData(data.mentorStatistics);
-      } else {
-        // Document does not exist
-        console.log("No such document!");
-      }
-    } catch (error) {
-      console.error("Error getting document:", error);
-    }
-  };
-
-  if (userDetails?.mode === "mentee" && !mentorData) {
-    getMentorDoc();
+  if (userDetails?.mode === "mentee") {
+    const mentorData = getMentorDoc(mentorId);
+    console.log("🚀 ~ ConnectedMessage ~ mentorData:", mentorData);
+    const stats = mentorData.mentorStatistics;
   }
   let starsCount = 0;
   let starsAvg = 0;
   let complementsCount;
 
-  if (mentorData) {
-    if (mentorData?.stars?.length) {
-      starsCount = mentorData.stars.reduce((acc, star) => acc + star, 0);
-      starsAvg = Math.floor(starsCount / mentorData.stars.length);
-    }
-    complementsCount = Object.values(mentorData?.complements).reduce(
-      (accumulator, item) => {
-        return accumulator + item;
-      }
-    );
-  }
+  // if (stats) {
+  //   if (stats?.stars?.length) {
+  //     starsCount = stats.stars.reduce((acc, star) => acc + star, 0);
+  //     starsAvg = Math.floor(starsCount / stats.stars.length);
+  //   }
+  //   complementsCount = Object.values(stats?.complements).reduce(
+  //     (accumulator, item) => {
+  //       return accumulator + item;
+  //     }
+  //   );
+  // }
 
   return (
     <View className="full flex items-center m-2">
@@ -63,7 +43,7 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
           {userDetails.mode === "mentor" ? menteeName : mentorName}
         </Text>
 
-        {userDetails?.mode === "mentee" && (
+        {/* {userDetails?.mode === "mentee" && (
           <View>
             <View className="flex w-full flex-row justify-between">
               <Card
@@ -87,7 +67,7 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
               />
             </View>
           </View>
-        )}
+        )} */}
       </View>
     </View>
   );

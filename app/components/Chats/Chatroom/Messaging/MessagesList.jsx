@@ -1,6 +1,6 @@
 import { View, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import MessageItem from "./MessageItem";
+import MessageItem from "./MessageItems/MessageItem";
 import SessionSummary from "../../EndOfSession/ReviewForMentor/SessionSummary";
 import { storeObjectAsyncStorage } from "./../../../../../utils/common";
 import CelebrationAnimation from "../../../Effects/CelebrationAnimation";

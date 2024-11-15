@@ -1,8 +1,6 @@
 import "@testing-library/jest-native/extend-expect";
+import AsyncStorage from "@react-native-async-storage/async-storage/jest/async-storage-mock";
 
-module.exports = {
-  moduleNameMapper: {
-    "^@/(.*)$": "/Users/colinclarke/CODE/Colet_Mentoring2/cm_2/$1",
-  },
-  // other Jest config options
-};
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
+);

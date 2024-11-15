@@ -1,59 +1,30 @@
 import { View, Text, Dimensions, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import ExitButton from "../../../Buttons/ExitButton";
 import { BlurView } from "expo-blur";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Octicons from "@expo/vector-icons/Octicons";
-import ReportMessageModal from "./ReportMessageModal";
-import FadeInView from "@/app/components/Effects/FadeInView";
-import { useChat } from "@/app/context/chatContext";
 import MessageGeneralModal from "./MessageGeneralModal";
+import { usePositioning } from "../MessageSelected/usePositioning";
+import FadeInView from "@/app/components/Effects/FadeInView";
 
 const MessageSelectedModal = ({
   displayMessageSelectedModal,
   setDisplayMessageSelectedModal,
   selectedMessage,
   setReplyState,
+  setSelectedMessage,
 }) => {
-  const { message, x, y, width, height, time, thisUsersMessage, roomId } =
+  const { thisUsersMessage, message, width, height, time, roomId } =
     selectedMessage;
   const [messageObj, setMessageObj] = useState({});
   const [displayReportMessageModal, setDisplayReportMessageModal] =
     useState(false);
   const [displayDeleteMessageModal, setDisplayDeleteMessageModal] =
     useState(false);
-  const [newX, setNewX] = useState(false);
-  const [position, setPosition] = useState({ x: x, y: y });
 
-  const [isOffViewport, setIsOffViewport] = useState(false);
-
-  useEffect(() => {
-    if (selectedMessage) {
-      setPosition({ x: selectedMessage.x || 0, y: selectedMessage.y || 0 });
-    }
-  }, [selectedMessage]);
-
-  useEffect(() => {
-    if (isOffViewport) {
-      setPosition({ x: newX, y: 400 });
-    }
-  }, [isOffViewport, newX]);
-
-  const handleLayout = (event) => {
-    const { y, height } = event.nativeEvent.layout;
-    const { width } = event.nativeEvent.layout;
-    const screenHeight = Dimensions.get("window").height;
-    const screenWidth = Dimensions.get("window").width;
-
-    const newX = screenWidth / 2 - width / 2;
-    setNewX(newX);
-
-    const offBottom = y + height > screenHeight;
-    const offTop = y < 0;
-    setIsOffViewport(offBottom || offTop);
-  };
+  const { position, isReady } = usePositioning(selectedMessage);
 
   const handleReply = () => {
     setDisplayMessageSelectedModal(false);
@@ -114,7 +85,11 @@ const MessageSelectedModal = ({
         tint="dark"
         className="w-full h-full absolute z-[200]  "
       >
-        <ExitButton toggleDisplay={setDisplayMessageSelectedModal} />
+        <ExitButton
+          toggleDisplay={() => {
+            setDisplayMessageSelectedModal(false);
+          }}
+        />
 
         <MessageGeneralModal
           setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
@@ -140,15 +115,15 @@ const MessageSelectedModal = ({
           type="delete"
           messageObj={messageObj}
         />
-        <FadeInView duration={300}>
+
+        {isReady && selectedMessage && (
           <View
             className="rounded-xl"
-            onLayout={handleLayout}
             style={{
               zIndex: 100,
               position: "absolute",
-              left: position.x,
-              top: position.y,
+              left: position.x || null,
+              top: position.y || null,
               display: "flex",
               alignItems: thisUsersMessage ? "flex-end" : "flex-start",
               width: width,
@@ -193,7 +168,7 @@ const MessageSelectedModal = ({
               })}
             </View>
           </View>
-        </FadeInView>
+        )}
       </BlurView>
     )
   );

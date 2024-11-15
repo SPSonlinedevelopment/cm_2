@@ -10,7 +10,7 @@ const ComplementMessage = ({ message }) => {
   );
   const complement = filtered[0];
   return (
-    <View className="justify-center items-center">
+    <View className="justify-center items-center w-full">
       <View className="w-[140px]  flex items-center m-2 rounded-xl p-2 bg-white shadow-2xl">
         <SuccessAnimation size={70} loop={true} />
         <Text className="text-base font-bold">Well done!!</Text>
