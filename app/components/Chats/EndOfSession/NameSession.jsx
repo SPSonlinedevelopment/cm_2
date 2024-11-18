@@ -30,7 +30,7 @@ const NameSession = ({
       <IconButton
         disabled={menteeFeedbackForm.sessionName.length > 0 ? false : true}
         textStyles="text-base "
-        containerStyles=" p-3"
+        containerStyles=" p-3 w-[370px]"
         title="Name Session"
         handlePress={() => {
           handleConfirmEndSession();

@@ -30,9 +30,7 @@ export const usePositioning = (selectedMessage) => {
     setIsOffViewport(offBottom || offTop);
 
     if (newPosition.x && newPosition.y) {
-      setTimeout(() => {
-        setIsReady(true);
-      }, 0);
+      setIsReady(true);
     }
 
     return () => {
@@ -40,7 +38,7 @@ export const usePositioning = (selectedMessage) => {
       setIsOffViewport(false);
       setIsReady(false);
     };
-  }, [selectedMessage, screenHeight, screenWidth]);
+  }, [selectedMessage, selectedMessage, screenHeight, screenWidth]);
 
   useEffect(() => {
     // Center element horizontally if off-viewport
@@ -56,5 +54,5 @@ export const usePositioning = (selectedMessage) => {
     };
   }, [isOffViewport, screenWidth]);
 
-  return { position, isReady };
+  return { position, isReady, setIsReady };
 };

@@ -1,21 +1,37 @@
-import { View, Text, ActivityIndicator, Modal, Image } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  Modal,
+  Image,
+  StyleSheet,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 // import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Loading from "@/app/components/Loading/LoadingSpinner";
 import ExitButton from "@/app/components/Buttons/ExitButton";
+import FadeInView from "@/app/components/Effects/FadeInView";
 
 export const FullScreenImage = ({ url, onClose }) => {
+  const [loading, setLoading] = useState(false);
   return (
     <Modal visible animationType="slide">
-      <View className="relative">
+      <View style={styles.container}>
         <ExitButton toggleDisplay={onClose} />
+        {loading && (
+          <ActivityIndicator
+            size="large"
+            color="purple"
+            style={styles.loadingSpinner}
+          />
+        )}
 
         <Image
-          testID="full_screen_image"
-          className="h-full w-full"
           source={{ url }}
-          resizeMode="contain"
+          className="h-full w-full"
+          onLoadStart={() => setLoading(true)} // Show spinner when loading starts
+          onLoadEnd={() => setLoading(false)} // Hide spinner when loading ends
         />
       </View>
     </Modal>
@@ -25,7 +41,7 @@ export const FullScreenImage = ({ url, onClose }) => {
 const LoadedImage = React.memo(
   ({ url, thisUsersMessage, caption, isPreview }) => {
     const [isFullScreen, setFullScreen] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const openFullScreen = () => {
       setFullScreen(true);
@@ -47,38 +63,53 @@ const LoadedImage = React.memo(
         >
           <View
             className={` w-[254px]  rounded-xl shadow flex  p-[3px] flex-col justify-center items-center  ${
-              thisUsersMessage ? "bg-orange-200  mr-2  " : "bg-white  ml-2 "
+              thisUsersMessage ? "bg-orange-200  mr-2  " : "bg-purple  ml-2 "
             }  ${isPreview ? "bg-transparent m-0" : ""}`}
           >
             <TouchableOpacity
               testID="image_button"
-              className="relative"
+              className="flex justify-center items-center"
               onPress={() => openFullScreen()}
             >
-              {!isLoaded && <LoadingImagePlaceholder />}
-
-              <Image
-                testID="image_element"
-                onLoadEnd={() => setIsLoaded(true)}
-                cachePolicy={"memory-disk"}
-                className={` h-[250px] w-[200px] rounded-xl 
+              {loading && (
+                <ActivityIndicator
+                  size="large"
+                  color="white"
+                  style={styles.loadingSpinner}
+                />
+              )}
+              <FadeInView>
+                <Image
+                  testID="image_element"
+                  onLoadStart={() => setLoading(true)}
+                  onLoadEnd={() => setLoading(false)}
+                  cachePolicy={"memory-disk"}
+                  className={` h-[250px] w-[200px] rounded-xl 
                `}
-                style={{
-                  aspectRatio: 1,
-                  resizeMode: "cover",
-                }}
-                source={{
-                  url,
-                }}
-                contentFit="cover"
-                transition={100}
-                effect="flip-from-top"
-              />
+                  style={{
+                    aspectRatio: 1,
+                    resizeMode: "cover",
+                  }}
+                  source={{
+                    url,
+                  }}
+                  contentFit="cover"
+                  transition={100}
+                  effect="flip-from-top"
+                />
+              </FadeInView>
             </TouchableOpacity>
 
             {caption && (
               <View className=" p-1 w-full">
-                <Text className="text-base"> {caption}</Text>
+                <Text
+                  className={`text-base ${
+                    thisUsersMessage ? "" : "text-white"
+                  } `}
+                >
+                  {" "}
+                  {caption}
+                </Text>
               </View>
             )}
           </View>
@@ -103,3 +134,14 @@ const LoadingImagePlaceholder = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingSpinner: {
+    position: "absolute",
+    zIndex: 1,
+  },
+});

@@ -335,6 +335,7 @@ export const AuthContextProvider = ({ children }) => {
       if (docSnapshot.exists()) {
         // Document data
         const data = docSnapshot.data();
+        console.log("🚀 ~ getMentorDoc ~ data:", data);
 
         return data;
       } else {

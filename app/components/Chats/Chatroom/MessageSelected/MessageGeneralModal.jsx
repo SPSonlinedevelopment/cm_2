@@ -21,15 +21,14 @@ const MessageGeneralModal = ({
   const [deleteInput, setDeleteInput] = useState("");
 
   useEffect(() => {
-    setDeleteInput("");
-  }, []);
+    if (type === "deleteAccount") setDeleteInput("");
+  }, [type, displayModal]);
 
   const handleDeleteAccount = async () => {
     try {
       await auth.currentUser.delete();
       Alert.alert("Account delete successful");
     } catch (error) {
-      console.error("Error deleting account:", error);
       Alert.alert(
         "Account delete unsuccessful",
         error.message || error.toString()
@@ -41,27 +40,32 @@ const MessageGeneralModal = ({
     try {
       await logOut();
     } catch (error) {
-      console.error("Error logging out:", error);
       Alert.alert("Logout unsuccessful", error.message || error.toString());
     }
   };
 
-  let actionFunc = () => {
-    switch (type) {
-      case "delete":
-        return deleteSelectedMessage;
-      case "report":
-        return reportInappropriateMessage;
-      case "logout":
-        return handleLogOut;
-      case "deleteAccount":
-        return handleDeleteAccount;
-      case "switchMode":
-        return () => switchMode(userDetails);
-      default:
-        return null;
-    }
+  const actionMap = {
+    delete: deleteSelectedMessage,
+    report: reportInappropriateMessage,
+    logout: handleLogOut,
+    deleteAccount: handleDeleteAccount,
+    switchMode: () => switchMode(userDetails),
   };
+
+  const handleConfirm = async () => {
+    const action = actionMap[type];
+    if (action) await action(messageObj);
+    closeAndReset();
+  };
+
+  const closeAndReset = () => {
+    setDisplayModal(false);
+    setDeleteInput("");
+  };
+
+  const renderConfirmDeleteAccount = () => (
+    <ConfirmDeleteAccount setDeleteInput={setDeleteInput} />
+  );
 
   return (
     <Modal
@@ -80,6 +84,7 @@ const MessageGeneralModal = ({
         >
           <Text className="text-xl p-3 text-center font-bold">
             {text.headerText}
+            {deleteInput}
           </Text>
 
           <Octicons name="report" size={50} color="red" />
@@ -93,7 +98,7 @@ const MessageGeneralModal = ({
             )}
           </View>
           <View className="flex flex-row justify-evenly items-center w-full">
-            <IconButton
+            {/* <IconButton
               disabled={
                 deleteInput.trim() !== "Delete" && type === "deleteAccount"
               }
@@ -104,6 +109,8 @@ const MessageGeneralModal = ({
                 const action = actionFunc();
                 if (action) action(messageObj);
                 setDisplayModal(false);
+                setDisplayMessageSelectedModal(false);
+                setDeleteInput("");
               }}
             />
             <IconButton
@@ -112,7 +119,26 @@ const MessageGeneralModal = ({
               title="Cancel"
               handlePress={() => {
                 setDisplayModal(false);
+                setDeleteInput("");
               }}
+
+              
+            /> */}
+
+            <IconButton
+              disabled={
+                deleteInput.trim() !== "Delete" && type === "deleteAccount"
+              }
+              textStyles="font-bold"
+              containerStyles="p-2 w-[150px] h-[50px]"
+              title="Confirm"
+              handlePress={handleConfirm}
+            />
+            <IconButton
+              textStyles="font-bold text-orange"
+              containerStyles="p-2 w-[150px] h-[50px] bg-transparent border border-orange-300"
+              title="Cancel"
+              handlePress={closeAndReset}
             />
           </View>
         </View>

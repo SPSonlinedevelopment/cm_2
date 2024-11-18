@@ -1,11 +1,7 @@
 import { View, Text, Modal } from "react-native";
 import React from "react";
-import { BlurView } from "expo-blur";
-import ExitButton from "@/app/components/Buttons/ExitButton";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Octicons from "@expo/vector-icons/Octicons";
 import IconButton from "@/app/components/Buttons/IconButton";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useChat } from "@/app/context/chatContext";
 
 const ReportMessageModal = ({
@@ -13,7 +9,6 @@ const ReportMessageModal = ({
   displayReportMessageModal,
   messageObj,
 }) => {
-  console.log("🚀 ~ messageObjReportMessageModal:", messageObj);
   const { reportInappropriateMessage } = useChat();
 
   return (

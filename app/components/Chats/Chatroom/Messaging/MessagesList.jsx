@@ -34,79 +34,75 @@ const MessagesList = ({
 
   const mode = userDetails?.mode;
 
-  let connectedMessage = [];
+  let connectedMessage = chatRoomData?.connectedMentor
+    ? [
+        {
+          messageType: "connected",
+          senderName: "Collet owl",
+          text: `You are now connected with your ${
+            mode === "mentee" ? "mentor" : "mentee"
+          } , their name is ${
+            mode === "mentee"
+              ? chatRoomData?.mentorName
+              : chatRoomData?.menteeName
+          }`,
 
-  if (chatRoomData?.connectedMentor) {
-    connectedMessage = [
-      {
-        messageType: "connected",
-        senderName: "Collet owl",
-        text: `You are now connected with your ${
-          mode === "mentee" ? "mentor" : "mentee"
-        } , their name is ${
-          mode === "mentee"
-            ? chatRoomData?.mentorName
-            : chatRoomData?.menteeName
-        }`,
+          createdAt: Timestamp.fromDate(new Date()),
+          messageId: generateRandomId(),
+          senderAvatar: `${
+            mode === "mentee"
+              ? chatRoomData?.mentorAvatar
+              : chatRoomData?.menteeAvatar
+          }`,
+        },
+      ]
+    : [];
 
-        createdAt: Timestamp.fromDate(new Date()),
-        messageId: generateRandomId(),
-        senderAvatar: `${
-          mode === "mentee"
-            ? chatRoomData?.mentorAvatar
-            : chatRoomData?.menteeAvatar
-        }`,
-      },
-    ];
-  }
+  const initialMessage =
+    mode === "mentee"
+      ? [
+          {
+            text: chatRoomData?.initialMessage || "",
+            imageUrl: chatRoomData?.initialImageUrl,
+            userId: chatRoomData?.menteeId,
+            senderName: chatRoomData?.menteeName,
+            messageId: generateRandomId(),
+          },
+          {
+            text: `Hey ${chatRoomData.menteeName} 👋. Thanks for your message!`,
+            senderName: "Collet owl",
+            messageId: generateRandomId(),
+          },
+          {
+            text: "I'm connecting you with a mentor. Meanwhile, can you tell me more about your problem? ",
+            senderName: "Collet owl",
+            messageId: generateRandomId(),
+          },
+          {
+            text: "Remember to use good English and be polite!",
+            senderName: "Collet owl",
+            messageId: generateRandomId(),
+          },
+          ...connectedMessage,
+        ]
+      : [
+          {
+            text: chatRoomData?.initialMessage || "",
+            imageUrl: chatRoomData?.initialImageUrl,
+            userId: chatRoomData?.menteeId,
+            senderName: chatRoomData?.menteeName,
+            messageId: generateRandomId(),
+          },
+          {
+            text: `${chatRoomData.mentorName} please remember to use good English and be polite to your mentee!`,
+            senderName: "Collet owl",
+            messageId: generateRandomId(),
+          },
+
+          ...connectedMessage,
+        ];
 
   useEffect(() => {
-    let initialMessage = [];
-    if (mode === "mentee") {
-      initialMessage = [
-        {
-          text: chatRoomData?.initialMessage || "",
-          imageUrl: chatRoomData?.initialImageUrl,
-          userId: chatRoomData?.menteeId,
-          senderName: chatRoomData?.menteeName,
-          messageId: generateRandomId(),
-        },
-        {
-          text: `Hey ${chatRoomData.menteeName} 👋. Thanks for your message!`,
-          senderName: "Collet owl",
-          messageId: generateRandomId(),
-        },
-        {
-          text: "I'm connecting you with a mentor. Meanwhile, can you tell me more about your problem? ",
-          senderName: "Collet owl",
-          messageId: generateRandomId(),
-        },
-        {
-          text: "Remember to use good English and be polite!",
-          senderName: "Collet owl",
-          messageId: generateRandomId(),
-        },
-        ...connectedMessage,
-      ];
-    } else {
-      initialMessage = [
-        {
-          text: chatRoomData?.initialMessage || "",
-          imageUrl: chatRoomData?.initialImageUrl,
-          userId: chatRoomData?.menteeId,
-          senderName: chatRoomData?.menteeName,
-          messageId: generateRandomId(),
-        },
-        {
-          text: `${chatRoomData.mentorName} please remember to use good English and be polite to your mentee!`,
-          senderName: "Collet owl",
-          messageId: generateRandomId(),
-        },
-
-        ...connectedMessage,
-      ];
-    }
-
     const docRef = doc(db, "rooms", chatRoomData.roomId);
     const messagesRef = collection(docRef, "messages");
     const q = query(messagesRef, orderBy("createdAt", "asc"));
@@ -130,8 +126,7 @@ const MessagesList = ({
   useEffect(() => {
     if (chatRoomData?.connectedMentor) {
       setMessages((prev) => {
-        const newState = [...prev, ...connectedMessage];
-        return newState;
+        return [...prev, ...connectedMessage];
       });
     }
   }, [chatRoomData?.connectedMentor]);
@@ -142,6 +137,7 @@ const MessagesList = ({
       chatRoomData?.roomId,
       lastMessage ? lastMessage?.text : ""
     );
+
     scrollToEnd();
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

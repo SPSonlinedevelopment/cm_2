@@ -14,7 +14,6 @@ const MessageSelectedModal = ({
   setDisplayMessageSelectedModal,
   selectedMessage,
   setReplyState,
-  setSelectedMessage,
 }) => {
   const { thisUsersMessage, message, width, height, time, roomId } =
     selectedMessage;
@@ -24,7 +23,7 @@ const MessageSelectedModal = ({
   const [displayDeleteMessageModal, setDisplayDeleteMessageModal] =
     useState(false);
 
-  const { position, isReady } = usePositioning(selectedMessage);
+  const { position, isReady, setIsReady } = usePositioning(selectedMessage);
 
   const handleReply = () => {
     setDisplayMessageSelectedModal(false);
@@ -88,6 +87,7 @@ const MessageSelectedModal = ({
         <ExitButton
           toggleDisplay={() => {
             setDisplayMessageSelectedModal(false);
+            setIsReady(false);
           }}
         />
 
@@ -117,57 +117,59 @@ const MessageSelectedModal = ({
         />
 
         {isReady && selectedMessage && (
-          <View
-            className="rounded-xl"
-            style={{
-              zIndex: 100,
-              position: "absolute",
-              left: position.x || null,
-              top: position.y || null,
-              display: "flex",
-              alignItems: thisUsersMessage ? "flex-end" : "flex-start",
-              width: width,
-            }}
-          >
+          <FadeInView duration={200}>
             <View
-              className={`  ${
-                thisUsersMessage ? "bg-orange-200  " : "bg-white"
-              }   rounded-xl  opacity-100 p-3 shadow-lg `}
+              className="rounded-xl"
               style={{
-                zIndex: 200,
-                position: "relative",
+                zIndex: 100,
+                position: "absolute",
+                left: position.x || null,
+                top: position.y || null,
+                display: "flex",
+                alignItems: thisUsersMessage ? "flex-end" : "flex-start",
                 width: width,
-                height: height,
               }}
             >
-              <Text className=" text-base">{message?.text}</Text>
-              {time && (
-                <View className=" w-full  flex items-end mt-1 ">
-                  <Text className="text-xs ">{time}</Text>
-                </View>
-              )}
               <View
-                className={`h-3 w-2   absolute    ${
-                  thisUsersMessage
-                    ? "bg-orange-200 bottom-0 rotate-[-30deg] right-[-2px]  rounded-bl-xl  "
-                    : "bg-white  bottom-0 rotate-[30deg] left-[-2px]  rounded-br-xl   "
-                }`}
-              />
-            </View>
+                className={`  ${
+                  thisUsersMessage ? "bg-orange-200  " : "bg-white"
+                }   rounded-xl  opacity-100 p-3 shadow-lg `}
+                style={{
+                  zIndex: 200,
+                  position: "relative",
+                  width: width,
+                  height: height,
+                }}
+              >
+                <Text className=" text-base">{message?.text}</Text>
+                {time && (
+                  <View className=" w-full  flex items-end mt-1 ">
+                    <Text className="text-xs ">{time}</Text>
+                  </View>
+                )}
+                <View
+                  className={`h-3 w-2   absolute    ${
+                    thisUsersMessage
+                      ? "bg-orange-200 bottom-0 rotate-[-30deg] right-[-2px]  rounded-bl-xl  "
+                      : "bg-white  bottom-0 rotate-[30deg] left-[-2px]  rounded-br-xl   "
+                  }`}
+                />
+              </View>
 
-            <View className={`mt-3 bg-white  rounded-xl  relative  `}>
-              {selectionButtons.map((button) => {
-                return (
-                  <ActionButton
-                    key={button.title}
-                    handlePress={button.func}
-                    icon={button.icon}
-                    title={button.title}
-                  />
-                );
-              })}
+              <View className={`mt-3 bg-white  rounded-xl  relative  `}>
+                {selectionButtons.map((button) => {
+                  return (
+                    <ActionButton
+                      key={button.title}
+                      handlePress={button.func}
+                      icon={button.icon}
+                      title={button.title}
+                    />
+                  );
+                })}
+              </View>
             </View>
-          </View>
+          </FadeInView>
         )}
       </BlurView>
     )

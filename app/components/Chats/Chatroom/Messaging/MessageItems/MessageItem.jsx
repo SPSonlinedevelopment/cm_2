@@ -11,21 +11,22 @@ import FadeInView from "../../../../Effects/FadeInView";
 import ConnectedMessage from "../ConnectedMessage";
 import ComplementMessage from "../../LiveComplements/ComplementMessage";
 import useReplyScroll from "../MessageItems/useReplyScroll";
+import { useChatRoom } from "@/app/context/chatRoomContext";
 
 const MessageItem = React.memo(
   ({
     message,
     userId,
     setReplyState,
-    mentorId,
-    menteeName,
-    mentorName,
     setSelectedMessage,
     setDisplayMessageSelectedModal,
-    roomId,
   }) => {
     const { showReply, handleMessageReplyScroll, triggerHaptics } =
       useReplyScroll(setReplyState, message);
+
+    const {
+      chatRoomData: { mentorId, menteeName, mentorName, roomId },
+    } = useChatRoom();
 
     const thisUsersMessage = message?.userId === userId;
 
@@ -34,7 +35,7 @@ const MessageItem = React.memo(
       : null;
 
     const handleSelectedMessage = (inputRef) => {
-      const ref = inputRef.current; 
+      const ref = inputRef.current;
 
       setDisplayMessageSelectedModal(true);
 
