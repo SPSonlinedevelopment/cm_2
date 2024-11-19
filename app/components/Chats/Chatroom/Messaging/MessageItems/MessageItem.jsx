@@ -6,7 +6,7 @@ import { convertFirebaseTimestampToDate } from "@/utils/common";
 import LoadedImage from "../LoadedImage";
 import { ScrollView } from "react-native-gesture-handler";
 import MessageText from "../MessageText";
-import ReplyMessage from "../ReplyMessage";
+import ReplyMessage from "../Reply/ReplyMessage";
 import FadeInView from "../../../../Effects/FadeInView";
 import ConnectedMessage from "../ConnectedMessage";
 import ComplementMessage from "../../LiveComplements/ComplementMessage";

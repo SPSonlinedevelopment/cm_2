@@ -9,8 +9,32 @@ import Ambition from "../../../../../assets/icons/Ambition.png";
 import Love from "../../../../../assets/icons/Love.png";
 import Clock from "../../../../../assets/icons/Clock.png";
 import Loading from "@/app/components/Loading/LoadingSpinner";
+import FadeInView from "@/app/components/Effects/FadeInView";
 
-const useMentorData = (mentorId) => {
+const useCalculateStarsOrComplements = (mentorData) => {
+  let starsCount = 0;
+  let starsAvg = 0;
+  let complementsCount = 0;
+
+  if (mentorData?.mentorStatistics?.stars.length) {
+    starsCount = mentorData?.mentorStatistics?.stars.reduce(
+      (acc, star) => acc + star,
+      0
+    );
+    starsAvg = Math.floor(
+      starsCount / mentorData?.mentorStatistics?.stars.length
+    );
+
+    complementsCount = Object.values(
+      mentorData?.mentorStatistics?.complements
+    ).reduce((accumulator, item) => {
+      return accumulator + item;
+    });
+  }
+  return { starsAvg, complementsCount };
+};
+
+export const useMentorData = (mentorId) => {
   const { getMentorDoc } = useAuth();
   const [mentorData, setMentorData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -46,32 +70,13 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
 
   const { mentorData, loading, error } = useMentorData(mentorId);
 
-  console.log("🚀 ~ ConnectedMessage99 ~ mentorData:", mentorData);
-
-  let starsCount = 0;
-  let starsAvg = 0;
-  let complementsCount = 0;
-
-  if (mentorData?.mentorStatistics?.stars.length) {
-    starsCount = mentorData?.mentorStatistics?.stars.reduce(
-      (acc, star) => acc + star,
-      0
-    );
-    starsAvg = Math.floor(
-      starsCount / mentorData?.mentorStatistics?.stars.length
-    );
-
-    complementsCount = Object.values(
-      mentorData?.mentorStatistics?.complements
-    ).reduce((accumulator, item) => {
-      return accumulator + item;
-    });
-  }
+  const { starsAvg, complementsCount } =
+    useCalculateStarsOrComplements(mentorData);
 
   return (
-    <View className="full flex items-center m-2">
-      <View className=" flex items-center  justify-center bg-purple shadow rounded-xl p-2">
-        <Avatar avatarName={message.senderAvatar}></Avatar>
+    <FadeInView containerStyles=" w-full flex items-center ">
+      <View className="flex w-[410px] items-center justify-center bg-purple shadow rounded-xl p-3">
+        <Avatar avatarName={message.senderAvatar} />
         <Text className="text-white">
           You are now connected to{" "}
           {userDetails.mode === "mentor" ? menteeName : mentorName}
@@ -83,37 +88,39 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
           <Text className="text-red-500">Error loading mentor data</Text>
         ) : (
           userDetails?.mode === "mentee" && (
-            <View>
-              <View className="flex w-full flex-row justify-between">
-                <Card
-                  text={`${Math.ceil(
-                    mentorData?.mentorStatistics?.time || 0
-                  )} Total Mins`}
-                  icon={<IconGeneral size="35" source={Clock} />}
-                />
-                <Card
-                  text={`${
-                    mentorData?.mentorStatistics?.questions || 0
-                  } Questions`}
-                  icon={<IconGeneral size="35" source={Crown} />}
-                />
-              </View>
+            <>
+              <View>
+                <View className="flex w-full flex-row justify-between">
+                  <Card
+                    text={`${Math.ceil(
+                      mentorData?.mentorStatistics?.time || 0
+                    )} Total Mins`}
+                    icon={<IconGeneral size="35" source={Clock} />}
+                  />
+                  <Card
+                    text={`${
+                      mentorData?.mentorStatistics?.questions || 0
+                    } Questions`}
+                    icon={<IconGeneral size="35" source={Crown} />}
+                  />
+                </View>
 
-              <View className="flex flex-row justify-between">
-                <Card
-                  text={`${starsAvg || 0} stars`}
-                  icon={<IconGeneral size="35" source={Ambition} />}
-                />
-                <Card
-                  text={`${complementsCount || 0} Complements`}
-                  icon={<IconGeneral size="35" source={Love} />}
-                />
+                <View className="flex flex-row justify-between">
+                  <Card
+                    text={`${starsAvg || 0} stars`}
+                    icon={<IconGeneral size="35" source={Ambition} />}
+                  />
+                  <Card
+                    text={`${complementsCount || 0} Complements`}
+                    icon={<IconGeneral size="35" source={Love} />}
+                  />
+                </View>
               </View>
-            </View>
+            </>
           )
         )}
       </View>
-    </View>
+    </FadeInView>
   );
 };
 

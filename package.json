@@ -12,6 +12,7 @@
     "lint": "expo lint"
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "preset": "jest-expo",
     "moduleDirectories": [
       "node_modules",

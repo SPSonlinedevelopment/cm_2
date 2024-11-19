@@ -67,11 +67,17 @@ const RootLayout = () => {
 
   if (!permission.granted) {
     return (
-      <View className="h-full bg-purple flex flex-col  items-center justify-between">
-        <Text style={{ textAlign: "center" }}>
+      <View className="h-full bg-purple flex flex-col  items-center justify-center">
+        <Text className="text-xl text-white">
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+
+        <IconButton
+          containerStyles="h=[60px] w-[370px] py-3 "
+          textStyles="text-base"
+          handlePress={requestPermission}
+          title="Grant Permission"
+        />
       </View>
     );
   }

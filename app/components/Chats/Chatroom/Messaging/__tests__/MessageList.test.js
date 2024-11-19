@@ -1,14 +1,18 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import MessagesList from "../MessagesList";
+import MessagesList from "../MessageList/MessagesList";
 import { useChatRoom } from "../../../../../context/chatRoomContext";
 import { useAuth } from "../../../../../context/authContext";
 import * as Haptics from "expo-haptics";
 import {
   storeObjectAsyncStorage,
   generateRandomId,
+  convertFirebaseTimestampToDate,
 } from "../../../../../../utils/common";
-// import { onSnapshot } from "firebase/firestore";
+import { useMentorData } from "../ConnectedMessage";
+import { useMessagesListener } from "../MessageList/useMessagesListener";
+import { Timestamp } from "firebase/firestore";
+import { Text } from "react-native";
 
 // Mock dependencies
 jest.mock("../../../../../context/chatRoomContext", () => ({
@@ -18,11 +22,28 @@ jest.mock("../../../../../context/authContext", () => ({
   useAuth: jest.fn(),
 }));
 
-// jest.mock("firebase/firestore");
+jest.mock("../MessageList/useMessagesListener", () => ({
+  useMessagesListener: jest.fn(),
+}));
+jest.mock("../ConnectedMessage", () => ({
+  useMentorData: jest.fn(),
+}));
+
 jest.mock("expo-haptics");
+
 jest.mock("../../../../../../utils/common", () => ({
   storeObjectAsyncStorage: jest.fn(),
   generateRandomId: jest.fn(),
+  convertFirebaseTimestampToDate: jest.fn(),
+}));
+
+jest.mock("firebase/firestore", () => ({
+  Timestamp: {
+    fromDate: jest.fn((date) => ({
+      seconds: date.getTime() / 1000,
+      nanoseconds: 0,
+    })),
+  },
 }));
 
 describe("MessagesList Component", () => {
@@ -39,7 +60,6 @@ describe("MessagesList Component", () => {
     setSelectedMessage = jest.fn();
     setDisplayMessageSelectedModal = jest.fn();
 
-    // Mock chatRoomData and userDetails
     useChatRoom.mockReturnValue({
       chatRoomData: {
         roomId: "testRoom",
@@ -54,110 +74,156 @@ describe("MessagesList Component", () => {
       getMentorDoc: jest.fn(),
     });
 
-    Haptics.impactAsync.mockResolvedValue();
+    useMentorData.mockReturnValue({
+      mentorData: "mentorData",
+      loading: false,
+      error: null,
+    });
 
-    // onSnapshot.mockImplementation((_, callback) => {
-    //   callback({
-    //     docs: [{ data: () => ({ text: "New message", messageId: "123" }) }],
-    //   });
-    //   return jest.fn(); // mock unsubscribe
-    // });
+    const mockMessages = [
+      {
+        text: "Hello",
+        messageId: "Mock-Id",
+        senderName: "mock sender",
+      },
+      {
+        text: "World",
+        messageId: "Mock-Id",
+        senderName: "mock sender",
+      },
+    ];
+
+    useMessagesListener.mockReturnValue({
+      messages: mockMessages,
+      loading: false,
+      error: null,
+    });
+
+    Haptics.impactAsync.mockResolvedValue();
   });
 
-  //   it("renders the initial set of messages and subscribes to Firestore updates", async () => {
-  //     const { getByText } = render(
-  //       <MessagesList
-  //         scrollViewRef={scrollViewRef}
-  //         scrollToEnd={scrollToEnd}
-  //         replyState={null}
-  //         setReplyState={setReplyState}
-  //         setSelectedMessage={setSelectedMessage}
-  //         setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-  //         isSendingImage={false}
-  //       />
-  //     );
+  it("displays LoadingImagePlaceholder when isSendingImage is true", () => {
+    const { getByTestId } = render(
+      <MessagesList
+        scrollViewRef={scrollViewRef}
+        scrollToEnd={scrollToEnd}
+        replyState={null}
+        setReplyState={setReplyState}
+        setSelectedMessage={setSelectedMessage}
+        setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+        isSendingImage={true}
+      />
+    );
 
-  //     expect(getByText(/connecting you with a mentor/i)).toBeTruthy();
-  //     expect(onSnapshot).toHaveBeenCalledTimes(1);
+    expect(getByTestId("loading-image-placeholder")).toBeTruthy();
+  });
 
-  //     await waitFor(() => {
-  //       expect(getByText(/New message/)).toBeTruthy();
-  //     });
-  //   });
+  test("renders loading indicator when loading is true", () => {
+    useMessagesListener.mockReturnValue({
+      messages: [],
+      loading: true,
+      error: null,
+    });
 
-  //   it('triggers scrollToEnd and stores last message text in async storage', async () => {
-  //     render(
-  //       <MessagesList
-  //         scrollViewRef={scrollViewRef}
-  //         scrollToEnd={scrollToEnd}
-  //         replyState={null}
-  //         setReplyState={setReplyState}
-  //         setSelectedMessage={setSelectedMessage}
-  //         setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-  //         isSendingImage={false}
-  //       />
-  //     );
+    const { getByTestId } = render(
+      <MessagesList
+        scrollViewRef={scrollViewRef}
+        scrollToEnd={scrollToEnd}
+        replyState={null}
+        setReplyState={setReplyState}
+        setSelectedMessage={setSelectedMessage}
+        setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+        isSendingImage={false}
+      />
+    );
+    expect(getByTestId("loading-messages-placeholder")).toBeTruthy();
+  });
 
-  //     await waitFor(() => {
-  //       expect(storeObjectAsyncStorage).toHaveBeenCalledWith('testRoom', 'New message');
-  //       expect(scrollToEnd).toHaveBeenCalled();
-  //       expect(Haptics.impactAsync).toHaveBeenCalledWith(Haptics.ImpactFeedbackStyle.Light);
-  //     });
-  //   });
+  test("renders error message when error occurs", () => {
+    useMessagesListener.mockReturnValue({
+      messages: [],
+      loading: false,
+      error: true,
+    });
 
-  //   it('shows CelebrationAnimation if sessionCompleted is true', () => {
-  //     const { getByTestId } = render(
-  //       <MessagesList
-  //         scrollViewRef={scrollViewRef}
-  //         scrollToEnd={scrollToEnd}
-  //         replyState={null}
-  //         setReplyState={setReplyState}
-  //         setSelectedMessage={setSelectedMessage}
-  //         setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-  //         isSendingImage={false}
-  //       />
-  //     );
+    const { getByText } = render(
+      <MessagesList
+        scrollViewRef={scrollViewRef}
+        scrollToEnd={scrollToEnd}
+        replyState={null}
+        setReplyState={setReplyState}
+        setSelectedMessage={setSelectedMessage}
+        setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+        isSendingImage={false}
+      />
+    );
+    expect(
+      getByText("Sorry: unable to find message at this time!")
+    ).toBeTruthy();
+  });
 
-  //     expect(getByTestId('celebration-animation')).toBeTruthy();
-  //   });
+  test("renders messages correctly", () => {
+    const { getByText } = render(
+      <MessagesList
+        scrollViewRef={scrollViewRef}
+        scrollToEnd={scrollToEnd}
+        replyState={null}
+        setReplyState={setReplyState}
+        setSelectedMessage={setSelectedMessage}
+        setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+        isSendingImage={false}
+      />
+    );
+    expect(getByText("Hello")).toBeTruthy();
+    expect(getByText("World")).toBeTruthy();
+  });
 
-  //   it('does not render CelebrationAnimation if sessionCompleted is false', () => {
-  //     useChatRoom.mockReturnValueOnce({
-  //       chatRoomData: {
-  //         roomId: 'testRoom',
-  //         connectedMentor: true,
-  //         sessionCompleted: false,
-  //       },
-  //     });
+  test("renders SessionSummary and celbration animatiob when session is completed", () => {
+    const mockChatRoomData = {
+      roomId: "room-id",
+      connectedMentor: true,
+      mentorName: "Mock Mentor",
+      menteeName: "Mock Mentee",
+      initialMessage: "Initial Message",
+      mentorAvatar: "mentor-avatar-url",
+      menteeAvatar: "mentee-avatar-url",
+      sessionCompleted: false,
+    };
 
-  //     const { queryByTestId } = render(
-  //       <MessagesList
-  //         scrollViewRef={scrollViewRef}
-  //         scrollToEnd={scrollToEnd}
-  //         replyState={null}
-  //         setReplyState={setReplyState}
-  //         setSelectedMessage={setSelectedMessage}
-  //         setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-  //         isSendingImage={false}
-  //       />
-  //     );
+    const mockMessages = [
+      {
+        text: "Test Message 1",
+        messageId: "1",
+        senderName: "Test Sender 1",
+      },
+      {
+        text: "Test Message 2",
+        messageId: "2",
+        senderName: "Test Sender 2",
+      },
+    ];
 
-  //     expect(queryByTestId('celebration-animation')).toBeNull();
-  //   });
+    useChatRoom.mockReturnValue({
+      chatRoomData: { ...mockChatRoomData, sessionCompleted: true },
+    });
 
-  //   it('displays LoadingImagePlaceholder when isSendingImage is true', () => {
-  //     const { getByTestId } = render(
-  //       <MessagesList
-  //         scrollViewRef={scrollViewRef}
-  //         scrollToEnd={scrollToEnd}
-  //         replyState={null}
-  //         setReplyState={setReplyState}
-  //         setSelectedMessage={setSelectedMessage}
-  //         setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-  //         isSendingImage={true}
-  //       />
-  //     );
+    useMessagesListener.mockReturnValue({
+      messages: mockMessages,
+      loading: false,
+      error: null,
+    });
 
-  //     expect(getByTestId('loading-image-placeholder')).toBeTruthy();
-  //   });
+    const { getByTestId } = render(
+      <MessagesList
+        scrollViewRef={scrollViewRef}
+        scrollToEnd={scrollToEnd}
+        replyState={null}
+        setReplyState={setReplyState}
+        setSelectedMessage={setSelectedMessage}
+        setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+        isSendingImage={false}
+      />
+    );
+    expect(getByTestId("session_summary")).toBeTruthy();
+  });
 });

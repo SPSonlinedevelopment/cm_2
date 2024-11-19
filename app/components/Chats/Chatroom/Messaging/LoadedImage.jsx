@@ -28,6 +28,8 @@ export const FullScreenImage = ({ url, onClose }) => {
         )}
 
         <Image
+          testID="full_screen_image"
+          resizeMode="contain"
           source={{ url }}
           className="h-full w-full"
           onLoadStart={() => setLoading(true)} // Show spinner when loading starts

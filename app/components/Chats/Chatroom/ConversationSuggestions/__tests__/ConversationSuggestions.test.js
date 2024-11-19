@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { render, screen, fireEvent, act } from "@testing-library/react-native";
-
 import "@testing-library/jest-native/extend-expect";
 import { StyleSheet } from "react-native";
 import ConversationSuggestions from "../ConversationSuggestions";

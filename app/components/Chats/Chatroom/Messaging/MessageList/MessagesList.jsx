@@ -1,23 +1,15 @@
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, ActivityIndicator, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import MessageItem from "./MessageItems/MessageItem";
-import SessionSummary from "../../EndOfSession/ReviewForMentor/SessionSummary";
-import { storeObjectAsyncStorage } from "./../../../../../utils/common";
-import CelebrationAnimation from "../../../Effects/CelebrationAnimation";
-import {
-  Timestamp,
-  doc,
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-} from "firebase/firestore";
-import { db } from "@/firebaseConfig";
+import MessageItem from "../MessageItems/MessageItem";
+import SessionSummary from "../../../EndOfSession/ReviewForMentor/SessionSummary";
+import { storeObjectAsyncStorage } from "../../../../../../utils/common";
+import CelebrationAnimation from "../../../../Effects/CelebrationAnimation";
 import * as Haptics from "expo-haptics";
-import Loading from "@/app/components/Loading/LoadingSpinner";
-import { generateRandomId } from "./../../../../../utils/common";
+import { generateRandomId } from "../../../../../../utils/common";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 import { useAuth } from "@/app/context/authContext";
+import { useMessagesListener } from "./useMessagesListener";
+import { Timestamp } from "firebase/firestore";
 
 const MessagesList = ({
   scrollViewRef,
@@ -30,33 +22,34 @@ const MessagesList = ({
 }) => {
   const { chatRoomData } = useChatRoom();
   const { userDetails } = useAuth();
-  const [messages, setMessages] = useState([]);
 
   const mode = userDetails?.mode;
 
-  let connectedMessage = chatRoomData?.connectedMentor
-    ? [
-        {
-          messageType: "connected",
-          senderName: "Collet owl",
-          text: `You are now connected with your ${
-            mode === "mentee" ? "mentor" : "mentee"
-          } , their name is ${
-            mode === "mentee"
-              ? chatRoomData?.mentorName
-              : chatRoomData?.menteeName
-          }`,
+  let connectedMessage = [];
 
-          createdAt: Timestamp.fromDate(new Date()),
-          messageId: generateRandomId(),
-          senderAvatar: `${
-            mode === "mentee"
-              ? chatRoomData?.mentorAvatar
-              : chatRoomData?.menteeAvatar
-          }`,
-        },
-      ]
-    : [];
+  if (chatRoomData?.connectedMentor) {
+    connectedMessage = [
+      {
+        messageType: "connected",
+        senderName: "Collet owl",
+        text: `You are now connected with your ${
+          mode === "mentee" ? "mentor" : "mentee"
+        } , their name is ${
+          mode === "mentee"
+            ? chatRoomData?.mentorName
+            : chatRoomData?.menteeName
+        }`,
+
+        createdAt: Timestamp.fromDate(new Date()),
+        messageId: generateRandomId(),
+        senderAvatar: `${
+          mode === "mentee"
+            ? chatRoomData?.mentorAvatar
+            : chatRoomData?.menteeAvatar
+        }`,
+      },
+    ];
+  }
 
   const initialMessage =
     mode === "mentee"
@@ -102,34 +95,11 @@ const MessagesList = ({
           ...connectedMessage,
         ];
 
-  useEffect(() => {
-    const docRef = doc(db, "rooms", chatRoomData.roomId);
-    const messagesRef = collection(docRef, "messages");
-    const q = query(messagesRef, orderBy("createdAt", "asc"));
-
-    // get all current messages from firebase
-    let unsub = onSnapshot(q, (snapshot) => {
-      let allMessages = snapshot.docs.map((doc) => {
-        return doc.data();
-      });
-      setMessages((prev) => {
-        const newState = [...initialMessage, ...allMessages];
-        return newState;
-      });
-    });
-
-    return () => {
-      unsub();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (chatRoomData?.connectedMentor) {
-      setMessages((prev) => {
-        return [...prev, ...connectedMessage];
-      });
-    }
-  }, [chatRoomData?.connectedMentor]);
+  const { messages, loading, error } = useMessagesListener(
+    chatRoomData?.roomId,
+    initialMessage,
+    chatRoomData?.connectedMentor
+  );
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
@@ -143,6 +113,27 @@ const MessagesList = ({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [messages, chatRoomData.sessionCompleted]);
 
+  if (loading) {
+    return (
+      <View
+        testID="loading-messages-placeholder"
+        className="flex justify-center items-center"
+      >
+        <ActivityIndicator size="large" color="purple" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View className="flex justify-center items-center ">
+        <Text className="text-base">
+          Sorry: unable to find message at this time!
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView ref={scrollViewRef}>
       {messages?.map((message) => {
@@ -150,17 +141,13 @@ const MessagesList = ({
           <MessageItem
             setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
             setSelectedMessage={setSelectedMessage}
-            menteeName={chatRoomData.menteeName}
-            mentorName={chatRoomData.mentorName}
-            mentorId={chatRoomData.mentorId}
             replyState={replyState}
             setReplyState={setReplyState}
             message={message}
             key={message.messageId}
             userId={userDetails?.uid}
-            roomId={chatRoomData.roomId}
             scrollToEnd={scrollToEnd}
-          ></MessageItem>
+          />
         );
       })}
 
@@ -171,14 +158,16 @@ const MessagesList = ({
         />
       )}
 
-      {mode === "mentee" && chatRoomData.sessionCompleted && (
-        <View className="w-full absolute  ">
-          <CelebrationAnimation position="bottom" loop={false} size={500} />
-        </View>
-      )}
-
       {chatRoomData.sessionCompleted && (
-        <SessionSummary userDetails={userDetails} chatRoomData={chatRoomData} />
+        <>
+          <View className="w-full absolute  ">
+            <CelebrationAnimation position="bottom" loop={false} size={500} />
+          </View>
+          <SessionSummary
+            userDetails={userDetails}
+            chatRoomData={chatRoomData}
+          />
+        </>
       )}
     </ScrollView>
   );
@@ -187,14 +176,17 @@ const MessagesList = ({
 export default MessagesList;
 
 const LoadingImagePlaceholder = ({ scrollToEnd }) => {
-  scrollToEnd();
+  useEffect(() => {
+    scrollToEnd();
+  }, []);
   return (
     <View
+      testID="loading-image-placeholder"
       className="rounded-xl w-full  flex flex-row mb-1
         justify-end"
     >
       <View className=" h-[250px] w-[254px] rounded-xl shadow flex  p-[3px] flex-col justify-center items-center bg-orange-200  mr-2">
-        <Loading size={150} />
+        <ActivityIndicator size={"large"} color="purple" />
       </View>
     </View>
   );

@@ -5,7 +5,10 @@ import CelebrationAnimation from "@/app/components/Effects/CelebrationAnimation"
 
 const SessionSummary = ({ userDetails, chatRoomData }) => {
   return (
-    <View className=" w-full  mt-2  mb-10  items-center ">
+    <View
+      testID="session_summary"
+      className=" w-full  mt-2  mb-20  items-center "
+    >
       <CelebrationAnimation
         position="bottom"
         loop="false"
