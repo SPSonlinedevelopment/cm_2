@@ -9,7 +9,7 @@ const CompletedChatList = () => {
   if (!completedChats?.length) {
     return (
       <View className="mt-[300px] ">
-        <Text className="text-purple text-lg"> No completed chats! </Text>
+        <Text className=" text-lg  font-bold">No completed chats </Text>
       </View>
     );
   } else return <List completedChats={completedChats}></List>;

@@ -25,7 +25,7 @@ const DisplayMentorCommentsModal = ({
               width: "100%",
             }}
           >
-            <View className="h-20  " />
+            <View className="h-20  w-full  " />
             <View className="flex flex-row items-center  justify-center">
               <Avatar avatarName={userDetails.avatarName} />
               <Text className="text-lg font-semibold p-4">
@@ -33,13 +33,14 @@ const DisplayMentorCommentsModal = ({
               </Text>
             </View>
 
-            <View className="flex w-full justify-start">
+            <View className="flex w-full justify-start"></View>
+            <View className="w-full br">
               <Text className="text-lg font-bold ml-3 text-start  ">
                 Comments
               </Text>
-
-              <CommentsList />
             </View>
+
+            <CommentsList />
           </ScrollView>
         </SafeAreaView>
       </View>

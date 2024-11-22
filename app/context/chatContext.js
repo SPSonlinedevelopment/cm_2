@@ -143,33 +143,19 @@ export const ChatContextProvider = ({ children }) => {
     // Attach a listener to the collection
     console.log("subjectSelection", userDetails.subjectSelection);
 
-    if (userDetails.subjectSelection.length === 0) {
+    if (userDetails?.subjectSelection.length === 0) {
       Alert.alert(
         "You have no specialist subjects selected, please edit this in profile page"
       );
 
-      return;
+      // Return a no-op function if there's no valid listener
+      return () => {};
     }
 
     console.log(
       "userDetails.subjectSelection.length",
       userDetails.subjectSelection
     );
-
-    // Create the query based on subjectSelection length
-
-    // const whereQuery =
-    //   userDetails.subjectSelection.length > 1
-    //     ? where(
-    //         "questionSubject",
-    //         "array-contains-any",
-    //         userDetails.subjectSelection
-    //       )
-    //     : where(
-    //         "questionSubject",
-    //         "array-contains",
-    //         userDetails.subjectSelection[0]
-    //       );
 
     const unsubscribe = onSnapshot(
       query(

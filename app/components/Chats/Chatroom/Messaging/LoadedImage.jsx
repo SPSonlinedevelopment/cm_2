@@ -76,7 +76,7 @@ const LoadedImage = React.memo(
               {loading && (
                 <ActivityIndicator
                   size="large"
-                  color="white"
+                  color="purple"
                   style={styles.loadingSpinner}
                 />
               )}

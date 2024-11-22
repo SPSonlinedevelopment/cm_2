@@ -13,10 +13,10 @@ const GradientNavigation = () => {
   const { userDetails, getUpdatedAuthObj, user } = useAuth();
 
   return (
-    <View className="absolute h-[20vh] w-[100%] z-20 bottom-0  flex flex-col justify-end   ">
+    <View className="absolute h-[100px]  w-[100%] z-20 bottom-0  flex flex-col justify-end   ">
       <LinearGradient
         // Background Linear Gradient
-        colors={["transparent", "rgba(0,0,0,0.6)"]}
+        colors={["transparent", "rgba(0,0,0,0.4)", "rgba(0,0,0,1)"]}
         style={styles.background}
       />
       <View className="flex flex-row w-full justify-between items-end mb-4">

@@ -9,15 +9,16 @@ const Achievements = () => {
     useState(false);
 
   return (
-    <View className="flex  flex-start h-[160px]">
+    <View className="flex w-full  h-[160px] justify-center items-center">
       <AchievementsModal
         displayDescription={true}
         setDisplayAchievementsModal={setDisplayAchievementsModal}
         displayAchievementsModal={displayAchievementsModal}
       />
 
-      <View className="flex flex-row justify-between items-center">
-        <Text className="text-lg font-bold ml-3 ">Achievements</Text>
+      <View className=" w-full flex-row justify-between items-center ">
+        <Text className="text-lg ml-4 font-bold ">Achievements</Text>
+
         <TouchableOpacity
           onPress={() => {
             setDisplayAchievementsModal(true);
@@ -87,7 +88,7 @@ export const AchievementListView = ({ displayDescription }) => {
       description: "5 stars from 3+ mentees",
       text: null,
       bgColor: "brown",
-      value: 30,
+      value: (numberOf5Stars / 3) * 100,
     },
     {
       name: "Silver mentor",

@@ -3,13 +3,12 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useAuth } from "@/app/context/authContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Picker } from "@react-native-picker/picker";
+import { StyleSheet } from "react-native";
 
 const SubjectSelection = () => {
   const { userDetails, setUserDetails } = useAuth(); // Assuming you have a function to update userDetails
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
-
-  console.log("subjects22", userDetails.subjectSelection);
 
   const availableSubjects = [
     "Maths",
@@ -46,7 +45,7 @@ const SubjectSelection = () => {
   };
 
   return (
-    <View className="p-3">
+    <View className="p-3 flex items-center  w-full">
       <Text className="my-1 text-base">Specialist Subjects</Text>
 
       {userDetails.subjectSelection.length ? (
@@ -55,7 +54,7 @@ const SubjectSelection = () => {
             (subject: string, index: number) => (
               <View
                 key={index}
-                className="flex flex-row justify-between bg-white rounded-full my-2 py-2 items-center shadow"
+                className="flex flex-row w-[200px] justify-between bg-white rounded-full my-2 py-2 items-center shadow"
               >
                 <Text className="ml-5 text-orange">{subject}</Text>
                 <TouchableOpacity onPress={() => handleDeleteSubject(subject)}>
@@ -77,26 +76,34 @@ const SubjectSelection = () => {
       {showDropdown ? (
         <>
           <Picker
+            style={{ width: 300 }}
+            itemStyle={{ width: 300 }} // For iOS
             selectedValue={selectedSubject}
             onValueChange={(itemValue) => setSelectedSubject(itemValue)}
           >
             <Picker.Item label="Select a subject" value="" />
             {availableSubjects.map((subject, index) => (
-              <Picker.Item key={index} label={subject} value={subject} />
+              <Picker.Item
+                style={{ width: 400 }}
+                key={index}
+                label={subject}
+                value={subject}
+              />
             ))}
           </Picker>
-
-          <TouchableOpacity
-            onPress={addSubject}
-            className="bg-orange-500 py-2 px-4 rounded-full mt-2"
-          >
-            <Text className="text-white text-center">Add Subject</Text>
-          </TouchableOpacity>
+          <View className="flex items-center">
+            <TouchableOpacity
+              onPress={addSubject}
+              className="bg-white-500 w-[370px] py-2 px-4 rounded-full mt-2"
+            >
+              <Text className="text-orange text-center">Add Subject</Text>
+            </TouchableOpacity>
+          </View>
         </>
       ) : (
         <TouchableOpacity
           onPress={() => setShowDropdown(true)}
-          className="rounded-full mt-3"
+          className="rounded-full mt-3 shadow"
         >
           <Text className="text-orange text-center">Add New</Text>
         </TouchableOpacity>

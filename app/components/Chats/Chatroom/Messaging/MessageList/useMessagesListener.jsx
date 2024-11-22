@@ -10,10 +10,11 @@ import { db } from "@/firebaseConfig";
 
 export const useMessagesListener = (roomId, initialMessages, connected) => {
   const [messages, setMessages] = useState(initialMessages);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    setLoading(true);
     if (!roomId) {
       setError("Invalid room ID");
       setLoading(false);
@@ -29,14 +30,12 @@ export const useMessagesListener = (roomId, initialMessages, connected) => {
       (snapshot) => {
         const allMessages = snapshot.docs.map((doc) => doc.data());
         setMessages((prev) => [...initialMessages, ...allMessages]);
-        setLoading(false);
       },
       (err) => {
         setError(err);
-        setLoading(false);
       }
     );
-
+    setLoading(false);
     return () => unsubscribe();
   }, [roomId, connected]);
 

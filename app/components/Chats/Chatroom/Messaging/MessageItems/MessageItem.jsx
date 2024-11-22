@@ -20,6 +20,7 @@ const MessageItem = React.memo(
     setReplyState,
     setSelectedMessage,
     setDisplayMessageSelectedModal,
+    scrollToEnd,
   }) => {
     const { showReply, handleMessageReplyScroll, triggerHaptics } =
       useReplyScroll(setReplyState, message);

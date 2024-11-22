@@ -53,9 +53,9 @@ const MessageGeneralModal = ({
   };
 
   const handleConfirm = async () => {
+    closeAndReset();
     const action = actionMap[type];
     if (action) await action(messageObj);
-    closeAndReset();
   };
 
   const closeAndReset = () => {
@@ -84,7 +84,6 @@ const MessageGeneralModal = ({
         >
           <Text className="text-xl p-3 text-center font-bold">
             {text.headerText}
-            {deleteInput}
           </Text>
 
           <Octicons name="report" size={50} color="red" />
@@ -98,33 +97,6 @@ const MessageGeneralModal = ({
             )}
           </View>
           <View className="flex flex-row justify-evenly items-center w-full">
-            {/* <IconButton
-              disabled={
-                deleteInput.trim() !== "Delete" && type === "deleteAccount"
-              }
-              textStyles="font-bold"
-              containerStyles="p-2 w-[150px] h-[50px]"
-              title="Confirm"
-              handlePress={async () => {
-                const action = actionFunc();
-                if (action) action(messageObj);
-                setDisplayModal(false);
-                setDisplayMessageSelectedModal(false);
-                setDeleteInput("");
-              }}
-            />
-            <IconButton
-              textStyles="font-bold text-orange"
-              containerStyles="p-2 w-[150px] h-[50px] bg-transparent border border-orange-300"
-              title="Cancel"
-              handlePress={() => {
-                setDisplayModal(false);
-                setDeleteInput("");
-              }}
-
-              
-            /> */}
-
             <IconButton
               disabled={
                 deleteInput.trim() !== "Delete" && type === "deleteAccount"

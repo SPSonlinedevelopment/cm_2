@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   render,
   fireEvent,
@@ -63,6 +63,10 @@ describe("MessageInput Component", () => {
     jest.clearAllMocks();
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("renders correctly", () => {
     const { getByPlaceholderText } = render(
       <MessageInput
@@ -97,7 +101,32 @@ describe("MessageInput Component", () => {
   });
 
   it("updates text input value", () => {
-    const { getByPlaceholderText } = render(
+    const Wrapper = () => {
+      const [text, setText] = useState("");
+      return (
+        <MessageInput
+          text={text}
+          setText={setText}
+          setDisplayEmojiSelector={jest.fn()}
+          setReplyState={jest.fn()}
+          setIsSendingImage={jest.fn()}
+          inputRef={React.createRef()}
+        />
+      );
+    };
+
+    const { getByTestId } = render(<Wrapper />);
+
+    // Simulate user input
+    const input = getByTestId("text_message_input");
+    fireEvent.changeText(input, "Hello");
+
+    // Verify the value is updated
+    expect(input.props.value).toBe("Hello");
+  });
+
+  it("updates text input value", () => {
+    const { getByTestId } = render(
       <MessageInput
         text=""
         setText={setText}
@@ -108,7 +137,8 @@ describe("MessageInput Component", () => {
       />
     );
 
-    const input = getByPlaceholderText("type message ...");
+    const input = getByTestId("text_message_input");
+
     fireEvent.changeText(input, "Hello");
 
     expect(setText).toHaveBeenCalledWith("Hello");
@@ -117,25 +147,36 @@ describe("MessageInput Component", () => {
   it("shows alert for inappropriate text", async () => {
     screenProfanities.mockReturnValue(true);
 
-    const { getByPlaceholderText, getByTestId } = render(
-      <MessageInput
-        text=""
-        setText={setText}
-        setDisplayEmojiSelector={setDisplayEmojiSelector}
-        setReplyState={setReplyState}
-        setIsSendingImage={setIsSendingImage}
-        inputRef={inputRef}
-      />
-    );
+    const Wrapper = () => {
+      const [text, setText] = useState("");
+      return (
+        <MessageInput
+          text={text}
+          setText={setText}
+          setDisplayEmojiSelector={jest.fn()}
+          setReplyState={jest.fn()}
+          setIsSendingImage={jest.fn()}
+          inputRef={React.createRef()}
+        />
+      );
+    };
 
-    const input = getByPlaceholderText("type message ...");
+    const { getByText, getByTestId } = render(<Wrapper />);
+
+    const input = getByTestId("text_message_input");
+
     fireEvent.changeText(input, "bad text");
+    expect(input.props.value).toBe("bad text");
+    expect(getByText("bad text")).toBeTruthy();
 
     const sendButton = getByTestId("send_message_button");
     fireEvent.press(sendButton);
     console.log(Alert.alert.mock.calls);
     // Check if Alert.alert was called with the expected message
-    expect(Alert.alert).toHaveBeenCalledWith("text shows inappropriate text");
+
+    await waitFor(() => {
+      expect(Alert.alert).toHaveBeenCalledWith("text shows inappropriate text");
+    });
 
     // Ensure no message is sent if text is inappropriate
     expect(handleSendTextMessageToChatroom).not.toHaveBeenCalled();
@@ -183,7 +224,7 @@ describe("MessageInput Component", () => {
   it("does not display send button if text is empty", () => {
     const { queryByTestId } = render(
       <MessageInput
-        text="test text"
+        text=""
         setText={setText}
         setDisplayEmojiSelector={setDisplayEmojiSelector}
         setReplyState={setReplyState}

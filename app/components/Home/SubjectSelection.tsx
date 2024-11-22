@@ -78,7 +78,7 @@ const SubjectSelection: React.FC<SubjectSelectionProps> = ({
       </View>
 
       <IconButton
-        disabled={selectedSubject.length > 0 ? false : true}
+        disabled={selectedSubject?.length > 0 ? false : true}
         isLoading={loading}
         handlePress={async () => {
           await handleSendQuestion();

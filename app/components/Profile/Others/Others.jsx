@@ -72,7 +72,7 @@ const Others = () => {
       icon: <Entypo name="dots-three-horizontal" size={20} color="white" />,
       handlePress: toggleModal(setDisplaySwitchModeModal),
       iconColor: "bg-orange",
-      text: "I'm a mentor",
+      text: "Switch Mode",
     },
     {
       icon: <MaterialIcons name="password" size={24} color="white" />,

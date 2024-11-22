@@ -86,7 +86,9 @@ const CommentsList = () => {
   });
 
   return userDetails?.writtenFeedback.length ? (
-    <ScrollView horizontal>{content}</ScrollView>
+    <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+      {content}
+    </ScrollView>
   ) : (
     <View className="h-[100px] flex items-center justify-center">
       <Text>No feedback comments yet!</Text>

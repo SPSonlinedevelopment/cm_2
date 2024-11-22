@@ -71,7 +71,6 @@ const ConfirmEndOfSessionModal = ({
 
               if (userDetails.mode === "mentee") {
                 handleExitChatroom();
-              } else {
               }
             }}
           />

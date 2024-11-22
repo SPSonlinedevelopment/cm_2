@@ -3,8 +3,11 @@ import { TouchableOpacity, Text } from "react-native";
 
 const SelectEmojiButton = ({ setDisplayEmojiSelector }) => {
   return (
-    <TouchableOpacity onPress={() => setDisplayEmojiSelector((prev) => !prev)}>
-      <Text>😊</Text>
+    <TouchableOpacity
+      className=""
+      onPress={() => setDisplayEmojiSelector((prev) => !prev)}
+    >
+      <Text className="text-base">😊</Text>
     </TouchableOpacity>
   );
 };

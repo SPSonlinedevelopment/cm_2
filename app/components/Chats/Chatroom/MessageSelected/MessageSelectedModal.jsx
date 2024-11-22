@@ -23,7 +23,10 @@ const MessageSelectedModal = ({
   const [displayDeleteMessageModal, setDisplayDeleteMessageModal] =
     useState(false);
 
-  const { position, isReady, setIsReady } = usePositioning(selectedMessage);
+  const { isOffViewport, position, isReady, setIsReady } =
+    usePositioning(selectedMessage);
+
+  console.log("isOffViewport", isOffViewport);
 
   const handleReply = () => {
     setDisplayMessageSelectedModal(false);
@@ -117,59 +120,66 @@ const MessageSelectedModal = ({
         />
 
         {isReady && selectedMessage && (
-          <FadeInView duration={200}>
+          <View
+            style={{
+              zIndex: 100,
+              position: "absolute",
+              left: position.x || null,
+              top: position.y || null,
+              display: "flex",
+              alignItems: thisUsersMessage ? "flex-end" : "flex-start",
+              width: width,
+            }}
+          >
             <View
-              className="rounded-xl"
+              className={`  ${
+                thisUsersMessage ? "bg-orange-200  " : "bg-purple"
+              }   rounded-xl  opacity-100 p-3 shadow-lg `}
               style={{
-                zIndex: 100,
-                position: "absolute",
-                left: position.x || null,
-                top: position.y || null,
-                display: "flex",
-                alignItems: thisUsersMessage ? "flex-end" : "flex-start",
+                zIndex: 200,
+                position: "relative",
                 width: width,
+                height: height,
               }}
             >
-              <View
-                className={`  ${
-                  thisUsersMessage ? "bg-orange-200  " : "bg-white"
-                }   rounded-xl  opacity-100 p-3 shadow-lg `}
-                style={{
-                  zIndex: 200,
-                  position: "relative",
-                  width: width,
-                  height: height,
-                }}
+              <Text
+                className={` ${thisUsersMessage ? "" : "text-white"} text-base`}
               >
-                <Text className=" text-base">{message?.text}</Text>
-                {time && (
-                  <View className=" w-full  flex items-end mt-1 ">
-                    <Text className="text-xs ">{time}</Text>
-                  </View>
-                )}
-                <View
-                  className={`h-3 w-2   absolute    ${
-                    thisUsersMessage
-                      ? "bg-orange-200 bottom-0 rotate-[-30deg] right-[-2px]  rounded-bl-xl  "
-                      : "bg-white  bottom-0 rotate-[30deg] left-[-2px]  rounded-br-xl   "
-                  }`}
-                />
-              </View>
-
-              <View className={`mt-3 bg-white  rounded-xl  relative  `}>
-                {selectionButtons.map((button) => {
-                  return (
-                    <ActionButton
-                      key={button.title}
-                      handlePress={button.func}
-                      icon={button.icon}
-                      title={button.title}
-                    />
-                  );
-                })}
-              </View>
+                {message?.text}
+              </Text>
+              {time && (
+                <View className=" w-full  flex items-end mt-1 ">
+                  <Text
+                    className={` ${
+                      thisUsersMessage ? "" : "text-white"
+                    } text-xs`}
+                  >
+                    {time}
+                  </Text>
+                </View>
+              )}
+              <View
+                className={`h-3 w-2   absolute    ${
+                  thisUsersMessage
+                    ? "bg-orange-200 bottom-0 rotate-[-30deg] right-[-2px]  rounded-bl-xl  "
+                    : "bg-purple  bottom-0 rotate-[30deg] left-[-2px]  rounded-br-xl   "
+                }`}
+              />
             </View>
-          </FadeInView>
+
+            <View className={`mt-3 bg-white  rounded-xl  relative  `}>
+              {selectionButtons.map((button) => {
+                return (
+                  <ActionButton
+                    key={button.title}
+                    handlePress={button.func}
+                    icon={button.icon}
+                    title={button.title}
+                  />
+                );
+              })}
+            </View>
+          </View>
         )}
       </BlurView>
     )

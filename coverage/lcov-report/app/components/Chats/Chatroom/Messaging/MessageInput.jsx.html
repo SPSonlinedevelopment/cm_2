@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">34.48% </span>
+                <span class="strong">22.58% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/29</span>
+                <span class='fraction'>7/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">12.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/8</span>
+                <span class='fraction'>1/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">16.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/6</span>
+                <span class='fraction'>1/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.03% </span>
+                <span class="strong">24.13% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/27</span>
+                <span class='fraction'>7/29</span>
             </div>
         
             
@@ -200,7 +200,10 @@
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a>
 <a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,12 +224,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -276,7 +279,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -285,7 +288,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,10 +303,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -347,6 +351,7 @@ import { screenProfanities } from "@/utils/common";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 import SelectEmojiButton from "./SelectEmojiButton";
 import FadeInView from "@/app/components/Effects/FadeInView";
+import OpenCameraButton from "./OpenCameraButton";
 &nbsp;
 const MessageInput = React.memo(
   ({
@@ -360,15 +365,15 @@ const MessageInput = React.memo(
   }) =&gt; {
     const { userDetails } = useAuth();
     const { chatRoomData } = useChatRoom();
-    const [inputFieldEmpty, setInputFieldEmpty] = useState(true);
     const [isSendingMessage, setIsSendingMessage] = useState(false);
+    const [inputIsEmpty, setInputIsEmpty] = useState(true);
 &nbsp;
     const handleSendMessage = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
 <span class="cstat-no" title="statement not covered" >      setIsSendingMessage(true);</span>
       const hasProfanities = <span class="cstat-no" title="statement not covered" >screenProfanities(text);</span>
 <span class="cstat-no" title="statement not covered" >      if (hasProfanities) {</span>
 <span class="cstat-no" title="statement not covered" >        setIsSendingMessage(false);</span>
-<span class="cstat-no" title="statement not covered" >        return Alert.alert("text shows inappropriate text");</span>
+<span class="cstat-no" title="statement not covered" >        setText("");</span>
       } else {
 <span class="cstat-no" title="statement not covered" >        setReplyState(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
           ...prev,
@@ -422,26 +427,27 @@ const MessageInput = React.memo(
         &lt;View className="flex-row justify-around  items-center  w-full  p-2    "&gt;
           &lt;TouchableOpacity
             testID="image_picker_button"
-            onPress={() =&gt; handlePickImage()}
+            onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handlePickImage()}</span>
             className="bh-neutral-200    flex items-center justify-center rounded-full  pr-[10px] "
           &gt;
             &lt;Ionicons name="add-outline" size={20} color="black" /&gt;
           &lt;/TouchableOpacity&gt;
-&nbsp;
+          &lt;Text&gt;{text}&lt;/Text&gt;
           &lt;SelectEmojiButton
             testID="emoji_button"
             setDisplayEmojiSelector={setDisplayEmojiSelector}
           /&gt;
           &lt;TextInput
+            testID="text_message_input"
             value={text}
             ref={inputRef}
-            // onFocus={() =&gt; setTextInputFocused(!TextInputFocused)}
-            // onBlur={() =&gt; setTextInputFocused(!TextInputFocused)}
-            onChangeText={(value) =&gt; {
-              setText(value);
-              value.length &gt; 0
-                ? setInputFieldEmpty(false)
-                : <span class="branch-1 cbranch-no" title="branch not covered" >setInputFieldEmpty(true);</span>
+            onChangeText={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
+<span class="cstat-no" title="statement not covered" >              setText(value);</span>
+<span class="cstat-no" title="statement not covered" >              if (value.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                setInputIsEmpty(false);</span>
+              } else {
+<span class="cstat-no" title="statement not covered" >                setInputIsEmpty(true);</span>
+              }
             }}
             style={{
               backgroundColor: "white",
@@ -455,18 +461,18 @@ const MessageInput = React.memo(
             placeholder="type message ..."
           /&gt;
 &nbsp;
-          {!inputFieldEmpty &amp;&amp; (
-            &lt;FadeInView&gt;
-              &lt;TouchableOpacity
-                testID="send_message_button"
-                disabled={isSendingMessage}
-                onPress={handleSendMessage}
-                className="bh-neutral-200  h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
-              &gt;
-                &lt;Feather name="send" color="white" size={20} /&gt;
-              &lt;/TouchableOpacity&gt;
-            &lt;/FadeInView&gt;
+          {!inputIsEmpty &amp;&amp; (
+            &lt;TouchableOpacity
+              testID="send_message_button"
+              disabled={isSendingMessage}
+              onPress={handleSendMessage}
+              className="bh-neutral-200  h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
+            &gt;
+              &lt;Feather name="send" color="white" size={20} /&gt;
+            &lt;/TouchableOpacity&gt;
           )}
+&nbsp;
+          &lt;OpenCameraButton /&gt;
         &lt;/View&gt;
       &lt;/View&gt;
     );
@@ -481,7 +487,7 @@ export default MessageInput;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-19T14:54:48.031Z
+                at 2024-11-20T14:37:30.122Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

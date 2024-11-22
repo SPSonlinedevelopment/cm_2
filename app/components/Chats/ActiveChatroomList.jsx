@@ -9,7 +9,7 @@ const ActiveChatroomList = () => {
   if (!allChats.length) {
     return (
       <View className=" flex justify-around h-[100px]   items-center">
-        <Text className=" text-lg  font-bold">No Live Chatrooms </Text>
+        <Text className=" text-lg  font-bold">No live chatrooms </Text>
       </View>
     );
   } else

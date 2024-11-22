@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import Avatar from "../../Profile/EditProfile/Avatar/Avatar";
+import Avatar from "../../../Profile/EditProfile/Avatar/Avatar";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "@/app/context/authContext";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Loading from "../../Loading/LoadingSpinner";
+import Loading from "../../../Loading/LoadingSpinner";
 import * as Haptics from "expo-haptics";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useChatRoom } from "@/app/context/chatRoomContext";
@@ -37,16 +37,15 @@ const ChatroomHeader = ({ setDisplayConfirmEndOfSessionModal }) => {
             </View>
           ) : (
             <View className="flex flex-row items-center justify-between w-full p-2 ">
-              {userDetails.mode === "mentor" && (
-                <TouchableOpacity
-                  className="m-2"
-                  onPress={() => {
-                    navigation.navigate("chats", { key: Math.random() });
-                  }}
-                >
-                  <Ionicons name="chevron-back" size={24} color="black" />
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity
+                className="m-2"
+                onPress={() => {
+                  navigation.navigate("chats", { key: Math.random() });
+                }}
+              >
+                <Ionicons name="chevron-back" size={24} color="black" />
+              </TouchableOpacity>
+
               {chatRoomData?.sessionCompleted &&
                 userDetails?.mode === "mentee" && (
                   <TouchableOpacity
@@ -69,33 +68,41 @@ const ChatroomHeader = ({ setDisplayConfirmEndOfSessionModal }) => {
                   <Ionicons name="chevron-back" size={24} color="black" />
                 </TouchableOpacity>
               )}
-              <Avatar
-                avatarName={
-                  userDetails?.mode === "mentee"
-                    ? chatRoomData?.mentorAvatar
-                    : chatRoomData?.menteeAvatar
-                }
-              />
-              <View className="flex flex-col items-center">
-                {userDetails?.mode === "mentee" ? (
-                  <Text className="text-lg p-2 text-black">
-                    {chatRoomData?.mentorName}
-                  </Text>
-                ) : (
-                  <Text className="text-lg p-2 text-black">
-                    {chatRoomData?.menteeName}
-                  </Text>
-                )}
-              </View>
 
-              <TouchableOpacity className="m-2" onPress={() => {}}>
+              <View className=" flex flex-row justify-center items-center">
+                <Avatar
+                  avatarName={
+                    userDetails?.mode === "mentee"
+                      ? chatRoomData?.mentorAvatar
+                      : chatRoomData?.menteeAvatar
+                  }
+                />
+                <View className="flex flex-col items-center">
+                  {userDetails?.mode === "mentee" ? (
+                    <Text className="text-lg p-2 text-black">
+                      {chatRoomData?.mentorName}
+                    </Text>
+                  ) : (
+                    <Text className="text-lg p-2 text-black">
+                      {chatRoomData?.menteeName}
+                    </Text>
+                  )}
+                </View>
+              </View>
+              {/* <TouchableOpacity
+                className="m-2"
+                onPress={() => {
+                  setDisplayPDFModal(true);
+                }}
+              >
                 <MaterialCommunityIcons
                   name="export-variant"
                   size={24}
                   color="black"
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
+              <View></View>
               {!chatRoomData?.sessionCompleted &&
                 userDetails.mode === "mentor" && (
                   <TouchableOpacity

@@ -31,6 +31,7 @@ const RootLayout = () => {
   console.log("index");
 
   const { user, userDetails } = useAuth();
+  console.log("🚀 ~ RootLayout ~ userDetails:", userDetails?.mode);
   const { setNewTextQuestion } = useChat();
   const [permission, requestPermission] = useCameraPermissions();
   const [isSavingtoCloudStorage, setIsSavingtoCloudStorage] = useState(false);
@@ -43,6 +44,7 @@ const RootLayout = () => {
   const [displayQuestionInput, setDisplayQuestionInput] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [mode, setMode] = useState(null); // State to hold the mode
+  console.log("🚀 ~ RootLayout ~ mode:", mode);
 
   const cameraRef = useRef(null);
   const navigation = useNavigation();
@@ -262,7 +264,7 @@ const RootLayout = () => {
                 </View>
                 <HomeNavButtons
                   setOpenDisplayImageModal={setOpenDisplayImageModal}
-                  // setDisplaySubjectSelection={setDisplaySubjectSelection}
+                  setDisplaySubjectSelection={setDisplaySubjectSelection}
                   setImage={setImage}
                 />
               </View>
@@ -276,7 +278,7 @@ const RootLayout = () => {
   return (
     <AuthContextProvider>
       <ChatContextProvider>
-        {mode === "mentee" ? menteeIndex : <Profile />}
+        {userDetails?.mode === "mentee" ? menteeIndex : <Profile />}
       </ChatContextProvider>
     </AuthContextProvider>
   );

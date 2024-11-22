@@ -26,7 +26,7 @@ const Profiles = () => {
     <View className="h-full w-full">
       <GradientNavigation />
       <CustomKeyboardView>
-        <SafeAreaView className="h=full w-full  bg-white flex flex-col ">
+        <SafeAreaView className="h-full w-full  bg-white flex flex-col ">
           <IconButton
             icon={<Entypo name="edit" size={24} color="black" />}
             containerStyles=" bg-white shadow w-[40px] h-[40px] absolute right-5 top-10"

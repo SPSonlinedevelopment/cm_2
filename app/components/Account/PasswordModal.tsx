@@ -97,7 +97,7 @@ const PasswordModal: React.FC<{
           <View className="w-full h-full flex items-center justify-start ">
             <View className=" w-full  flex items-center justify-between mt-[100px]">
               <Text className="text-lg font-bold ">Password</Text>
-              <View className=" w-full p-4 rounded-2xl flex items-start justify-center">
+              <View className=" w-full p-4 rounded-2xl flex items-center justify-center">
                 {message.length > 0 && (
                   <View
                     className={` ${
@@ -180,7 +180,7 @@ const Input: React.FC<{
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
-    <View className="w-full my-3 ">
+    <View className="w-[370px] my-3 ">
       <Text className="text-base">{text}</Text>
       <View
         className={`flex my-2 flex-row w-full shadow-sm bg-white rounded-2xl p-1 items-center  justify-between ${

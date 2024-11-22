@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { useAuth } from "@/app/context/authContext";
 import Clock from "../../../../assets/icons/Clock.png";
-import StatsIcon from "./StatsIcon";
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -38,8 +38,9 @@ const MenteeStatistics = () => {
   }
 
   return (
-    <View className=" mt-5 w-[93%] ">
-      <StatsIcon />
+    <View className=" mt-5 w-full ">
+      <Text className="text-lg ml-3 font-bold "> Statistics</Text>
+
       <View className="flex flex-row justify-between">
         <Card
           text={` ${Math.ceil(stats?.time)} mins`}

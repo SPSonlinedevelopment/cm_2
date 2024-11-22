@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import IconButton from "@/app/components/Buttons/IconButton";
@@ -24,12 +25,6 @@ import { storage } from "@/firebaseConfig";
 import { screenProfanities } from "@/utils/common";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
-// displayImageCaptionModal={displayImageCaptionModal}
-// isSendingImage={isSendingImage}
-// setIsSendingImage={setIsSendingImage}
-// image={image}
-// setDisplayImageCaptionModal={setDisplayImageCaptionModal}
-
 const ImageMessageCaption = ({
   displayImageCaptionModal,
   setDisplayImageCaptionModal,
@@ -41,7 +36,7 @@ const ImageMessageCaption = ({
 
   const ios = Platform.OS == "ios";
   const [inputFieldEmpty, setInputFieldEmpty] = useState(false);
-  const [TextInputFocused, setTextInputFocused] = useState(false);
+
   const inputRef = useRef(null);
   const textRef = useRef(null);
 
@@ -106,25 +101,25 @@ const ImageMessageCaption = ({
             icon={<Entypo name="cross" size={34} color="black" />}
           ></IconButton>
 
-          {image && (
+          {image ? (
             <Image
               className="h-full w-full"
               source={{ uri: image }}
               resizeMode="contain"
             />
+          ) : (
+            <ActivityIndicator />
           )}
 
           <View
             style={{}}
-            className={`${
-              TextInputFocused ? "pb-[0px]" : "pb-[20px]"
-            }  shadow-2xl bg-black-200  w-full flex flex-row justify-center absolute bottom-0  items-center `}
+            className={`${"pb-[20px]"}  shadow-2xl bg-black-200  w-full flex flex-row justify-center absolute bottom-0  items-center `}
           >
             <View className="flex-row justify-around  items-center  w-full  p-2   z-10  ">
               <TextInput
                 ref={inputRef}
-                onFocus={() => setTextInputFocused(true)}
-                onBlur={() => setTextInputFocused(false)}
+                // onFocus={() => setTextInputFocused(true)}
+                // onBlur={() => setTextInputFocused(false)}
                 onChangeText={(value) => {
                   (textRef.current = value), handleChangeText();
                 }}
@@ -146,7 +141,7 @@ const ImageMessageCaption = ({
                   }}
                   className="bh-neutral-200  text-base h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
                 >
-                  <Feather name="send" color="white" />
+                  <Feather size={20} name="send" color="white" />
                 </TouchableOpacity>
               )}
             </View>

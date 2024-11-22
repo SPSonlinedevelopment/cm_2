@@ -109,13 +109,13 @@ export const AuthContextProvider = ({ children }) => {
         });
       }
     });
-  }, [user, initialized]); // Only re-run the effect when the uid changes
+  }, [user, initialized, userDetails?.mode]); // Only re-run the effect when the uid changes or if mode changes
 
   useEffect(() => {
     if (userDetails) {
       storeObjectAsyncStorage("mode", userDetails?.mode);
     }
-  }, [userDetails]);
+  }, [userDetails?.mode]);
 
   const getUpdatedAuthObj = async () => {
     const auth = getAuth();

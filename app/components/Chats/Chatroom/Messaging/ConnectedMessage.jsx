@@ -11,26 +11,34 @@ import Clock from "../../../../../assets/icons/Clock.png";
 import Loading from "@/app/components/Loading/LoadingSpinner";
 import FadeInView from "@/app/components/Effects/FadeInView";
 
-const useCalculateStarsOrComplements = (mentorData) => {
-  let starsCount = 0;
-  let starsAvg = 0;
-  let complementsCount = 0;
+export const useCalculateStarsOrComplements = (mentorStatistics = {}) => {
+  const { stars = [], complements = {} } = mentorStatistics;
 
-  if (mentorData?.mentorStatistics?.stars.length) {
-    starsCount = mentorData?.mentorStatistics?.stars.reduce(
-      (acc, star) => acc + star,
-      0
-    );
-    starsAvg = Math.floor(
-      starsCount / mentorData?.mentorStatistics?.stars.length
-    );
+  console.log("useCalculateStarsOrComplements", mentorStatistics);
 
-    complementsCount = Object.values(
-      mentorData?.mentorStatistics?.complements
-    ).reduce((accumulator, item) => {
-      return accumulator + item;
-    });
-  }
+  // Calculate total stars
+  const starsCount = stars?.length
+    ? stars?.reduce((acc, star) => acc + star, 0)
+    : 0;
+
+  console.log("starsCount", starsCount);
+
+  // Calculate average stars (rounded to 1 decimal place)
+  const starsAvg = stars?.length
+    ? Number((starsCount / stars?.length).toFixed(1))
+    : 0;
+
+  console.log("starsAvg", starsAvg);
+
+  // Calculate total complements
+
+  const complementsCount = Object.values(complements).reduce(
+    (acc, count) => acc + count,
+    0
+  );
+
+  console.log("complementsCount", complementsCount);
+
   return { starsAvg, complementsCount };
 };
 
@@ -70,16 +78,19 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
 
   const { mentorData, loading, error } = useMentorData(mentorId);
 
-  const { starsAvg, complementsCount } =
-    useCalculateStarsOrComplements(mentorData);
+  const { starsAvg, complementsCount } = useCalculateStarsOrComplements(
+    mentorData?.mentorStatistics || {}
+  );
+
+  console.log("starsAvg, complementsCount", starsAvg, complementsCount);
 
   return (
     <FadeInView containerStyles=" w-full flex items-center ">
-      <View className="flex w-[410px] items-center justify-center bg-purple shadow rounded-xl p-3">
-        <Avatar avatarName={message.senderAvatar} />
-        <Text className="text-white">
-          You are now connected to{" "}
-          {userDetails.mode === "mentor" ? menteeName : mentorName}
+      <View className="flex w-[400px] items-center justify-center shadow rounded-xl p-3">
+        <Avatar avatarName={message?.senderAvatar} />
+        <Text className="text-purple font-bold">
+          You are now connected to
+          {userDetails?.mode === "mentor" ? menteeName : mentorName}
         </Text>
 
         {loading ? (
@@ -93,25 +104,24 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
                 <View className="flex w-full flex-row justify-between">
                   <Card
                     text={`${Math.ceil(
-                      mentorData?.mentorStatistics?.time || 0
+                      mentorData?.mentorStatistics?.time
                     )} Total Mins`}
                     icon={<IconGeneral size="35" source={Clock} />}
                   />
                   <Card
-                    text={`${
-                      mentorData?.mentorStatistics?.questions || 0
-                    } Questions`}
+                    text={`${mentorData?.mentorStatistics?.questions} Questions`}
                     icon={<IconGeneral size="35" source={Crown} />}
                   />
                 </View>
 
                 <View className="flex flex-row justify-between">
                   <Card
-                    text={`${starsAvg || 0} stars`}
+                    text={`${starsAvg} stars`}
                     icon={<IconGeneral size="35" source={Ambition} />}
                   />
+
                   <Card
-                    text={`${complementsCount || 0} Complements`}
+                    text={`${complementsCount} Complements`}
                     icon={<IconGeneral size="35" source={Love} />}
                   />
                 </View>

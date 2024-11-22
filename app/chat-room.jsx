@@ -1,7 +1,13 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+  Text,
+} from "react-native";
 import React, { useState, useRef, Children } from "react";
 import { useRoute } from "@react-navigation/native";
-import ChatroomHeader from "./components/Chats/Chatroom/ChatroomHeader";
+import ChatroomHeader from "./components/Chats/Chatroom/Header/ChatroomHeader";
 import MessagesList from "./components/Chats/Chatroom/Messaging/MessageList/MessagesList";
 import { useAuth } from "./context/authContext";
 import MessageInput from "./components/Chats/Chatroom/Messaging/MessageInput";
@@ -15,7 +21,7 @@ import ReviewMentee from "./components/Chats/EndOfSession/ReviewForMentee";
 import EmojiSelector from "./components/Chats/Chatroom/Messaging/EmojiSelector";
 import MessageSelectedModal from "./components/Chats/Chatroom/MessageSelected/MessageSelectedModal";
 import LiveComplementSelector from "./components/Chats/Chatroom/LiveComplements/LiveComplementSelector";
-import { useChatRoom, getChatRoomData } from "./context/chatRoomContext";
+import { getChatRoomData } from "./context/chatRoomContext";
 import { ChatRoomProvider } from "./context/chatRoomContext";
 import ImageMessageCaption from "./components/Chats/SendData/SendImages/ImageMessageCaption";
 import { pickImage } from "@/utils/imagePicker";
@@ -34,7 +40,7 @@ export const useKeyboardAndScrollConfig = () => {
   return {
     scrollViewRef,
     scrollToEnd,
-    kavConfig: { keyboardVerticalOffset: ios ? 5 : 5 },
+    kavConfig: { keyboardVerticalOffset: ios ? 0 : 5 },
     scrollViewConfig: { contentContainerStyle: { flex: 1 } },
   };
 };
@@ -81,12 +87,6 @@ const ChatRoom = () => {
     }
   };
 
-  // const inChat = true;
-  // if (inChat) {
-  //   kavConfig = { keyboardVerticalOffset: 0 };
-  //   scrollViewConfig = { contentContainerStyle: { flex: 1 } };
-  // }
-  // get chatroom data for
   const chatRoomData = getChatRoomData(roomId, completedSession);
 
   // Render each modal component
@@ -100,6 +100,7 @@ const ChatRoom = () => {
           }
         />
       )}
+
       <MessageSelectedModal
         replyState={replyState}
         setReplyState={setReplyState}
@@ -143,6 +144,7 @@ const ChatRoom = () => {
         />
 
         {renderModalComponents()}
+
         {renderFeedback()}
 
         {chatRoomData && (
@@ -179,6 +181,9 @@ const ChatRoom = () => {
             <CurrentUserTyping text={text} />
             <ConversationSuggestions isReply={false} />
             <MessageInput
+              setDisplayImageCaptionModal={setDisplayImageCaptionModal}
+              image={image}
+              setImage={setImage}
               handlePickImage={handlePickImage}
               replyState={replyState}
               setReplyState={setReplyState}

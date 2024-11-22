@@ -10,7 +10,7 @@ import InputFieldContainer from "./components/Profile/EditProfile/InputField";
 import EmailContainer from "./components/Profile/EditProfile/Email";
 import SaveChangesButton from "./components/Profile/EditProfile/Buttons/SaveChangesButton";
 import { db } from "@/firebaseConfig";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import * as EmailValidator from "email-validator";
 import FadeInView from "./components/Effects/FadeInView";
 import SubjectSelection from "./components/Profile/EditProfile/SubjectSelection";
@@ -31,10 +31,10 @@ const EditProfile = () => {
   const navigation = useNavigation();
 
   const mode = userDetails?.mode === "mentor" ? "mentors" : "mentees";
+  console.log("🚀 ~ EditProfile ~ mode:", mode);
+  const docRef = doc(db, mode, userDetails?.uid);
 
   const saveChanges = async () => {
-    const docRef = doc(db, mode, userDetails?.uid);
-
     if (!EmailValidator.validate(formField.email)) {
       return Alert.alert("Email is invalid");
     } else if (!formField.firstName.length) {
@@ -59,16 +59,28 @@ const EditProfile = () => {
     console.log("updateData", updateData);
 
     try {
-      await updateDoc(docRef, updateData);
-      setDisplayUpatedAlert("success");
-    } catch (error) {
-      console.log(error);
-      setDisplayUpatedAlert("error");
-    }
+      const result = await getDoc(docRef);
 
-    setTimeout(() => {
-      setDisplayUpatedAlert("");
-    }, 3000);
+      if (result.exists()) {
+        await updateDoc(docRef, updateData);
+        setDisplayUpatedAlert("success");
+        return;
+      } else {
+        // need to update other document incase they are admin and have switched modes
+        const mode = userDetails?.mode === "mentor" ? "mentees" : "mentors";
+        const docRef = doc(db, mode, userDetails?.uid);
+        await updateDoc(docRef, updateData);
+        setDisplayUpatedAlert("success");
+        return;
+      }
+    } catch (error) {
+      console.log("error", error);
+      setDisplayUpatedAlert("error");
+    } finally {
+      setTimeout(() => {
+        setDisplayUpatedAlert("");
+      }, 3000);
+    }
   };
 
   console.log("testavatar1", userDetails.avatarName);
@@ -92,7 +104,7 @@ const EditProfile = () => {
           {displayUpdatedAlert === "error" && (
             <FadeInView
               duration={200}
-              containerStyles="bg-green-400 shadow rounded-xl p-2 w-[95%] m-6 flex items-center"
+              containerStyles="bg-green-400 shadow rounded-full p-2 w-[370px] m-6 flex items-center"
             >
               <Text className="text-white text-base font-semibold">
                 Details Not updated, try again later.
@@ -124,7 +136,7 @@ const EditProfile = () => {
           {displayUpdatedAlert === "success" && (
             <FadeInView
               duration={200}
-              containerStyles="bg-green-400 shadow rounded-full p-2 w-[95%] flex items-center "
+              containerStyles="bg-green-400 shadow rounded-full p-2 w-[360px] flex items-center "
             >
               <Text className="text-white text-base font-semibold">
                 Details Updated Successfully
