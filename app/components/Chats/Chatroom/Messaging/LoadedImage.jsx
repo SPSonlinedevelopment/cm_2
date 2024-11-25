@@ -21,7 +21,7 @@ export const FullScreenImage = ({ url, onClose }) => {
         <ExitButton toggleDisplay={onClose} />
         {loading && (
           <ActivityIndicator
-            size="large"
+            // size="large"
             color="purple"
             style={styles.loadingSpinner}
           />
@@ -75,7 +75,7 @@ const LoadedImage = React.memo(
             >
               {loading && (
                 <ActivityIndicator
-                  size="large"
+                  // size="large"
                   color="purple"
                   style={styles.loadingSpinner}
                 />

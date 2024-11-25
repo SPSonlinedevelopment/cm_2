@@ -89,7 +89,7 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
       <View className="flex w-[400px] items-center justify-center shadow rounded-xl p-3">
         <Avatar avatarName={message?.senderAvatar} />
         <Text className="text-purple font-bold">
-          You are now connected to
+          You are now connected to{" "}
           {userDetails?.mode === "mentor" ? menteeName : mentorName}
         </Text>
 

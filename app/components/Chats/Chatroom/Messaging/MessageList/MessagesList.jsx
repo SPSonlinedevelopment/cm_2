@@ -119,7 +119,11 @@ const MessagesList = ({
         testID="loading-messages-placeholder"
         className="flex justify-center items-center w-full h-full"
       >
-        <ActivityIndicator size="large" color="purple" />
+        <ActivityIndicator
+          // size="large"
+
+          color="purple"
+        />
       </View>
     );
   }
@@ -186,7 +190,7 @@ const LoadingImagePlaceholder = ({ scrollToEnd }) => {
         justify-end"
     >
       <View className=" h-[250px] w-[254px] rounded-xl shadow flex  p-[3px] flex-col justify-center items-center bg-orange-200  mr-2">
-        <ActivityIndicator size={"large"} color="purple" />
+        <ActivityIndicator size="large" color="purple" />
       </View>
     </View>
   );

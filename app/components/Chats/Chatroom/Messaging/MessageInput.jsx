@@ -132,7 +132,7 @@ const MessageInput = React.memo(
             setDisplayTakePhotoModal={setDisplayTakePhotoModal}
           />
           <View className="h-[55px] w-[50px]  flex justify-center items-center">
-            {!inputIsEmpty ? (
+            {text.length > 0 ? (
               <SendMessageButton
                 disabled={isSendingMessage}
                 handlePress={handleSendMessage}

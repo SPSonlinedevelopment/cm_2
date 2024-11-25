@@ -18,6 +18,8 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
+      "newArchEnabled": true,
+
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"

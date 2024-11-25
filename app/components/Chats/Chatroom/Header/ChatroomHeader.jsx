@@ -46,7 +46,7 @@ const ChatroomHeader = ({ setDisplayConfirmEndOfSessionModal }) => {
                 <Ionicons name="chevron-back" size={24} color="black" />
               </TouchableOpacity>
 
-              {chatRoomData?.sessionCompleted &&
+              {/* {chatRoomData?.sessionCompleted &&
                 userDetails?.mode === "mentee" && (
                   <TouchableOpacity
                     className="m-2"
@@ -56,7 +56,7 @@ const ChatroomHeader = ({ setDisplayConfirmEndOfSessionModal }) => {
                   >
                     <Ionicons name="chevron-back" size={24} color="black" />
                   </TouchableOpacity>
-                )}
+                )} */}
 
               {!chatRoomData.connectedMentor && (
                 <TouchableOpacity
