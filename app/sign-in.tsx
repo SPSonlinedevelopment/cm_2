@@ -4,12 +4,15 @@ import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomKeyboardView from "./components/CustomKeyboardView";
 import SignInForm from "./components/Auth/SignIn/SignInForm";
+import { StatusBar } from "expo-status-bar";
 
 const SignIn = () => {
   return (
     <CustomKeyboardView>
-      <SafeAreaView className="flex-1 w-full flex flex-col bg-purple border  items-center justify-start">
+      <SafeAreaView className="flex-1 pt-3 w-full flex flex-col bg-purple border  items-center justify-start">
+     
         <View className="flex flex-row  justify-between  items-center  w-full">
+       
           <Link
             className="ml-6 text-neutral-300 font-pmedium text-lg"
             href={"index"}

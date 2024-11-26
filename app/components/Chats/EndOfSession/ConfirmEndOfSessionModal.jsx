@@ -78,7 +78,7 @@ const ConfirmEndOfSessionModal = ({
             textStyles="font-bold text-orange"
             containerStyles="p-2 w-[150px] h-[50px] bg-transparent border border-orange-300 "
             title="Cancel"
-            handlePress={() => setDisplyConfirmEndOfSessionModal(false)}
+            handlePress={() => setDisplayConfirmEndOfSessionModal(false)}
           />
         </View>
       </View>

@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
-import AnimatedLottieView from "lottie-react-native";
+import LottieView from "lottie-react-native";
 
 interface CelebrationProps {
   size: number;
-  loop: boolean;
+  loop: any;
   position: string;
 }
 const CelebrationAnimation: React.FC<CelebrationProps> = ({
@@ -31,13 +31,13 @@ const CelebrationAnimation: React.FC<CelebrationProps> = ({
         pointerEvents: "none",
       }}
     >
-      <AnimatedLottieView
-        testID="lottie_view"
+      <LottieView
+        // testID="lottie_view"
         source={require("../../../assets/celebrationAnimation.json")}
         style={{ flex: 1 }}
         autoPlay
         loop={loop}
-      ></AnimatedLottieView>
+      ></LottieView>
     </View>
   );
 };

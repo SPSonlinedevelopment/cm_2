@@ -10,6 +10,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import CompletedChatList from "./CompletedChatList";
 import LoadedImage from "./Chatroom/Messaging/LoadedImage";
+import FadeInView from "../Effects/FadeInView";
 
 import ChatItem from "./ChatItem";
 import { useChat } from "@/app/context/chatContext";
@@ -75,6 +76,7 @@ const ChatPreview = () => {
           ) : filteredSearch.length > 0 ? (
             <View>
               <FlatList
+                nestedScrollEnabled
                 style={{ width: "95%" }}
                 data={filteredSearch}
                 keyExtractor={(item) => item.id}

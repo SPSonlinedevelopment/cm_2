@@ -15,6 +15,7 @@ import MentorComments from "./MentorProfile/comments/MentorComments";
 import IconButton from "../Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 const Profiles = () => {
   const { userDetails } = useAuth();
@@ -24,9 +25,10 @@ const Profiles = () => {
   const navigation = useNavigation();
   return (
     <View className="h-full w-full">
+      <StatusBar style="dark" />
       <GradientNavigation />
       <CustomKeyboardView>
-        <SafeAreaView className="h-full w-full  bg-white flex flex-col ">
+        <SafeAreaView className="h-full w-full  bg-neutral-50 flex flex-col ">
           <IconButton
             icon={<Entypo name="edit" size={24} color="black" />}
             containerStyles=" bg-white shadow w-[40px] h-[40px] absolute right-5 top-10"

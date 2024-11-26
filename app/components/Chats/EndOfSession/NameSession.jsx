@@ -17,7 +17,7 @@ const NameSession = ({
   };
 
   return (
-    <View className="w-full flex-1 h-full justify-between items-center">
+    <View className="w-full flex-1 bg-neutral-50 h-full justify-between items-center">
       <TextInput
         onChangeText={(val) => {
           handleChange(val);

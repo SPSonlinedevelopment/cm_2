@@ -94,15 +94,20 @@ const ChatPreviewModal = ({
           )}
 
           {message?.imageUrl && (
-            <>
-              <LoadedImage
-                isPreview="true"
-                url={message?.imageUrl}
-                thisUsersMessage
-                caption
-              />
-              <Text className="mb-3 text-base">Click to enlarge</Text>
-            </>
+            <View className="w-full  flex flex-col items-center justify-center">
+              <TouchableOpacity
+                className=" w-[270px] h-[260px] my-10   flex flex-col items-center justify-center"
+                onPress={openFullScreen}
+              >
+                <LoadedImage
+                  isPreview="true"
+                  url={message?.imageUrl}
+                  thisUsersMessage
+                  caption
+                />
+              </TouchableOpacity>
+              <Text>Click image to enlarge</Text>
+            </View>
           )}
         </View>
         <View className="w-full flex  flex-row items-center justify-center">

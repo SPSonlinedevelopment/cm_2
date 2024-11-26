@@ -1,4 +1,11 @@
-import { View, Text, Modal, Image, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  Image,
+  ActivityIndicator,
+  Platform,
+} from "react-native";
 import IconButton from "../Buttons/IconButton";
 import React from "react";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -6,13 +13,13 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import ExitButton from "../Buttons/ExitButton";
 import SubjectSelection from "./SubjectSelection";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import FadeInView from "../Effects/FadeInView";
 
 const DisplayImageModal = ({
   openDisplayImageModal,
   setDisplaySubjectSelection,
   displaySubjectSelection,
   image,
-
   saveImageToDevice,
   handleSendQuestion,
   onClose,
@@ -22,10 +29,19 @@ const DisplayImageModal = ({
 }) => {
   // handleSend();
   // console.log("pressed send button");
+  const isIos = Platform.OS === "ios";
 
   return (
-    <Modal className="" visible={openDisplayImageModal} animationType="slide">
-      <View className="h-full w-full bg-zinc-600 flex items-center justify-between ">
+    <FadeInView
+      className=""
+      visible={openDisplayImageModal}
+      animationType="slide"
+    >
+      <View
+        className={`h-full w-full flex items-center justify-between ${
+          isIos ? "bg-black" : "bg-white"
+        } `}
+      >
         <ExitButton
           toggleDisplay={() => {
             onClose();
@@ -77,7 +93,7 @@ const DisplayImageModal = ({
           />
         </View>
       </View>
-    </Modal>
+    </FadeInView>
   );
 };
 

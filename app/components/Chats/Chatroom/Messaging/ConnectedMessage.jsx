@@ -86,7 +86,7 @@ const ConnectedMessage = ({ message, mentorId, mentorName, menteeName }) => {
 
   return (
     <FadeInView containerStyles=" w-full flex items-center ">
-      <View className="flex w-[400px] items-center justify-center shadow rounded-xl p-3">
+      <View className="flex w-[400px] items-center justify-center rounded-xl p-3">
         <Avatar avatarName={message?.senderAvatar} />
         <Text className="text-purple font-bold">
           You are now connected to{" "}

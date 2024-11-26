@@ -23,7 +23,7 @@ const Achievements = () => {
           onPress={() => {
             setDisplayAchievementsModal(true);
           }}
-          className="bg-white mr-3 "
+          className=" mr-3 "
         >
           <Text className="text-neutral-500">See All</Text>
         </TouchableOpacity>

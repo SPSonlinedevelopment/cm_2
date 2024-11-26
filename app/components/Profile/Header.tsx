@@ -8,10 +8,10 @@ const Header = () => {
 
   if (user) {
     return (
-      <View className="w-full mt-3 ml-6 relative bg-white flex flex-row items-center  justify-between">
+      <View className="w-full mt-3 ml-5 relative flex flex-row items-center  justify-between">
         {/* {!user.emailVerified && <CheckEmailVerification />} */}
         <View className="  flex flex-col justify-start items-start">
-          <Avatar avatarName={userDetails.avatarName} />
+          <Avatar size={50} avatarName={userDetails.avatarName} />
           <Text className="text-lg font-semibold">
             {userDetails?.firstName}
           </Text>

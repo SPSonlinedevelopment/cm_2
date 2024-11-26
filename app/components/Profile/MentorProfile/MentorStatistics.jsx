@@ -25,7 +25,7 @@ const MentorStatistics = () => {
     <View className=" mt-5 w-[100%] ">
       <Text className="text-lg ml-3 font-bold "> Statistics</Text>
 
-      <View className="flex flex-row justify-between">
+      <View className="flex flex-row justify-between mx-3">
         <Card
           text={` ${Math.ceil(userDetails?.mentorStatistics?.time)} Total Mins`}
           icon={<IconGeneral size="35" source={Clock} />}
@@ -36,7 +36,7 @@ const MentorStatistics = () => {
         />
       </View>
 
-      <View className="flex flex-row justify-between">
+      <View className="flex flex-row justify-between mx-3">
         <Card
           text={` ${starsAvg} stars`}
           icon={<IconGeneral size="35" source={Ambition} />}

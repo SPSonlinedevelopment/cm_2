@@ -15,9 +15,10 @@ const ActiveChatroomList = () => {
   } else
     return (
       <FlatList
+        nestedScrollEnabled
         style={{ width: "95%" }}
         data={allChats}
-        keyExtractor={(item) => Math.random()}
+        keyExtractor={(item) => item.roomId}
         showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <ChatItem

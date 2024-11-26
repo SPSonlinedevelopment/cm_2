@@ -39,7 +39,7 @@ const ReviewForMentee = ({ setDisplayFeedback }) => {
 
   return (
     <SafeAreaView>
-      <Modal animationType="fade">
+      <Modal className="bg-neutral-50" animationType="fade">
         <ExitButton toggleDisplay={setDisplayFeedback} />
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -47,7 +47,7 @@ const ReviewForMentee = ({ setDisplayFeedback }) => {
             display: "flex",
             justifyContent: "center",
           }}
-          className="mt-20 "
+          className="pt-20 "
         >
           {userDetails?.mode === "mentor" && (
             <NameSession

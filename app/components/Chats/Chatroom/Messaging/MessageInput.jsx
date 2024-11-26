@@ -84,7 +84,6 @@ const MessageInput = React.memo(
     return (
       <View
         testID="message_input"
-        style={{}}
         className="shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center"
       >
         <View className="flex-row justify-around  items-center  w-full  p-2 pb-4    ">
@@ -117,9 +116,8 @@ const MessageInput = React.memo(
               backgroundColor: "white",
               display: "flex",
               padding: 3,
-              borderRadius: "20%",
             }}
-            className="flex-1  mr-1 text-base  p-2 items-center justify-center"
+            className="flex-1  mr-1 text-base rounded-full  p-2 items-center justify-center"
             multiline={true}
             numberOfLines={10}
             placeholder="type message ..."

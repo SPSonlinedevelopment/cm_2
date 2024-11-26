@@ -9,15 +9,11 @@ const SessionSummary = ({ userDetails, chatRoomData }) => {
       testID="session_summary"
       className=" w-full  mt-2  mb-20  items-center "
     >
-      <CelebrationAnimation
-        position="bottom"
-        loop="false"
-        size={200}
-      ></CelebrationAnimation>
+      <CelebrationAnimation position="bottom" loop={false} size={200} />
       <View className=" w-[95%] py-3    justify-center items-center    flex flex-row rounded-2xl shadow bg-white">
         {userDetails.mode === "mentor" ? (
           <View className="ml-6">
-            <Text className="text-base font-medium my-2  ">
+            <Text className="text-base font-medium ">
               Session ended with{" "}
               <Text className=" text-base font-bold">
                 {chatRoomData.menteeName}

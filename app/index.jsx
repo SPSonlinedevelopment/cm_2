@@ -26,6 +26,7 @@ import {
   deleteImagesWithFace,
 } from "./safeguarding/detectInappropriateImages";
 import { sendImageToFirebaseStorageGetDownloadUrl } from "./components/Chats/SendData/SendImages/sendImageToFirebaseStorageGetDownloadUrl";
+import NetInfo from "@react-native-community/netinfo";
 
 const RootLayout = () => {
   console.log("index");
@@ -44,7 +45,23 @@ const RootLayout = () => {
   const [displayQuestionInput, setDisplayQuestionInput] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [mode, setMode] = useState(null); // State to hold the mode
+
   console.log("🚀 ~ RootLayout ~ mode:", mode);
+
+  const [isConnected, setIsConnected] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected);
+    });
+
+    if (!isConnected) {
+      Alert.alert("No Internet", "Please check your connection and try again.");
+      setIsLoading(false);
+    }
+
+    return () => unsubscribe();
+  }, [isConnected]);
 
   const cameraRef = useRef(null);
   const navigation = useNavigation();
@@ -70,12 +87,12 @@ const RootLayout = () => {
   if (!permission.granted) {
     return (
       <View className="h-full bg-purple flex flex-col  items-center justify-center">
-        <Text className="text-xl text-white">
+        <Text className="text-xl text-center text-white">
           We need your permission to show the camera
         </Text>
 
         <IconButton
-          containerStyles="h=[60px] w-[370px] py-3 "
+          containerStyles="h=[60px] w-[330px] py-3 "
           textStyles="text-base"
           handlePress={requestPermission}
           title="Grant Permission"
@@ -213,19 +230,20 @@ const RootLayout = () => {
           />
         ) : (
           <View className="h-full w-full relative">
-            <DisplayImageModal
-              saveImageToDevice={saveImageToDevice}
-              loading={loading}
-              setDisplaySubjectSelection={setDisplaySubjectSelection}
-              displaySubjectSelection={displaySubjectSelection}
-              setSelectedSubject={setSelectedSubject}
-              selectedSubject={selectedSubject}
-              onClose={onClose}
-              openDisplayImageModal={openDisplayImageModal}
-              image={image}
-              handleSendQuestion={handleSendQuestion}
-            />
-
+            {openDisplayImageModal && (
+              <DisplayImageModal
+                saveImageToDevice={saveImageToDevice}
+                loading={loading}
+                setDisplaySubjectSelection={setDisplaySubjectSelection}
+                displaySubjectSelection={displaySubjectSelection}
+                setSelectedSubject={setSelectedSubject}
+                selectedSubject={selectedSubject}
+                onClose={onClose}
+                openDisplayImageModal={openDisplayImageModal}
+                image={image}
+                handleSendQuestion={handleSendQuestion}
+              />
+            )}
             <CameraView
               facing={"back"}
               className="bg-purple flex flex-col items-center justify-between"
@@ -245,7 +263,7 @@ const RootLayout = () => {
                     </Text>
                   </View>
                 </View>
-                <View className="flex flex-row justify-center items-center  z-40 bottom-[-50%]">
+                <View className="flex flex-row justify-center items-center  z-40 bottom-[-30%]">
                   <View className="h-[80px] w-[80px]" />
                   <IconButton
                     icon={<AntDesign name="camera" size={35} color="white" />}

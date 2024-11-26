@@ -20,6 +20,7 @@ export default CompletedChatList;
 const List = React.memo(({ completedChats }) => {
   return (
     <FlatList
+      nestedScrollEnabled
       style={{ width: "95%" }}
       data={completedChats}
       keyExtractor={(item) => item.roomId}

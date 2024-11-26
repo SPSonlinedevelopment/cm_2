@@ -119,11 +119,7 @@ const MessagesList = ({
         testID="loading-messages-placeholder"
         className="flex justify-center items-center w-full h-full"
       >
-        <ActivityIndicator
-          // size="large"
-
-          color="purple"
-        />
+        <ActivityIndicator size="large" color="purple" />
       </View>
     );
   }

@@ -100,7 +100,7 @@ const ComplementsProfile = () => {
           onPress={() => {
             setDisplayAllComplementsModal(true);
           }}
-          className="bg-white mr-3 "
+          className=" mr-3 "
           title="See All"
         >
           <Text className="text-neutral-500">See All</Text>

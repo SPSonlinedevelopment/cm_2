@@ -30,7 +30,7 @@ const ProgressBar = () => {
       inputRange: [0, 100],
       outputRange: ["0%", "100%"],
     }),
-    borderRadius: 20,
+
     backgroundColor: "rgb(243, 112, 33)",
     position: "absolute",
     left: 0,
@@ -44,7 +44,7 @@ const ProgressBar = () => {
           position: "relative",
           width: "100%",
           height: 20,
-          borderRadius: 20,
+
           backgroundColor: "rgb(254, 226, 211)",
           overflow: "hidden",
         }}

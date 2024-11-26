@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import Avatar from "../../../Profile/EditProfile/Avatar/Avatar";
 import { useNavigation } from "@react-navigation/native";
@@ -15,8 +15,32 @@ const ChatroomHeader = ({ setDisplayConfirmEndOfSessionModal }) => {
   const { chatRoomData } = useChatRoom();
   const navigation = useNavigation();
 
+  const [findingMentorText, setFindingMentorText] = useState(
+    "Looking for a mentor ..."
+  );
+  const messages = [
+    "Still looking, please wait!",
+    "Hmm taking longer than expected, bear with us!",
+    "We have let the mentor know you are waiting!",
+  ];
+
+  useEffect(() => {
+    if (!chatRoomData?.connectedMentor) {
+      let count = 0;
+
+      const intervalId = setInterval(() => {
+        setFindingMentorText(messages[count]);
+        count = (count + 1) % messages.length;
+      }, 4000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [chatRoomData?.connectedMentor]);
+
+  const ios = Platform.OS === "ios";
+
   return (
-    <SafeAreaView className="bg-white h-[130px] w-full ">
+    <SafeAreaView className={`bg-white w-full ${ios ? "h-[130px]" : ""}  `}>
       <View className="flex  shadow ">
         <View className="flex flex-row items-center justify-between">
           {!chatRoomData?.connectedMentor ? (
@@ -31,7 +55,7 @@ const ChatroomHeader = ({ setDisplayConfirmEndOfSessionModal }) => {
                 <Entypo name="cross" size={34} color="black" />
               </TouchableOpacity>
               <Text className="text-base font-semibold">
-                Looking for a mentor ...
+                {findingMentorText}
               </Text>
               <Loading size={80} />
             </View>

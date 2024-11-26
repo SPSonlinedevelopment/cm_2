@@ -7,11 +7,12 @@ import {
   StyleSheet,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-// import { Image } from "expo-image";
+
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Loading from "@/app/components/Loading/LoadingSpinner";
 import ExitButton from "@/app/components/Buttons/ExitButton";
 import FadeInView from "@/app/components/Effects/FadeInView";
+// import { Image } from "expo-image";
 
 export const FullScreenImage = ({ url, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ export const FullScreenImage = ({ url, onClose }) => {
         <ExitButton toggleDisplay={onClose} />
         {loading && (
           <ActivityIndicator
-            // size="large"
+            size="large"
             color="purple"
             style={styles.loadingSpinner}
           />
@@ -30,7 +31,7 @@ export const FullScreenImage = ({ url, onClose }) => {
         <Image
           testID="full_screen_image"
           resizeMode="contain"
-          source={{ url }}
+          source={{ uri: url }}
           className="h-full w-full"
           onLoadStart={() => setLoading(true)} // Show spinner when loading starts
           onLoadEnd={() => setLoading(false)} // Hide spinner when loading ends
@@ -45,6 +46,7 @@ const LoadedImage = React.memo(
     const [isFullScreen, setFullScreen] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    console.log("url", url);
     const openFullScreen = () => {
       setFullScreen(true);
     };
@@ -64,7 +66,7 @@ const LoadedImage = React.memo(
           }   ${isPreview ? "justify-center" : ""}`}
         >
           <View
-            className={` w-[254px]  rounded-xl shadow flex  p-[3px] flex-col justify-center items-center  ${
+            className={` w-[254px]  rounded-xl  flex  p-[3px] flex-col justify-center items-center  ${
               thisUsersMessage ? "bg-orange-200  mr-2  " : "bg-purple  ml-2 "
             }  ${isPreview ? "bg-transparent m-0" : ""}`}
           >
@@ -75,7 +77,7 @@ const LoadedImage = React.memo(
             >
               {loading && (
                 <ActivityIndicator
-                  // size="large"
+                  size="large"
                   color="purple"
                   style={styles.loadingSpinner}
                 />
@@ -93,8 +95,9 @@ const LoadedImage = React.memo(
                     resizeMode: "cover",
                   }}
                   source={{
-                    url,
+                    uri: url,
                   }}
+                  // source={url}
                   contentFit="cover"
                   transition={100}
                   effect="flip-from-top"

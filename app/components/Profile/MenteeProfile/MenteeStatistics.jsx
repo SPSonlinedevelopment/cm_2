@@ -41,7 +41,7 @@ const MenteeStatistics = () => {
     <View className=" mt-5 w-full ">
       <Text className="text-lg ml-3 font-bold "> Statistics</Text>
 
-      <View className="flex flex-row justify-between">
+      <View className="flex flex-row justify-between  mx-3">
         <Card
           text={` ${Math.ceil(stats?.time)} mins`}
           icon={<IconGeneral size="35" source={Clock} />}
@@ -51,7 +51,7 @@ const MenteeStatistics = () => {
           icon={<IconGeneral size="35" source={Crown} />}
         />
       </View>
-      <View className="flex flex-row justify-between">
+      <View className="flex flex-row justify-between  mx-3">
         <Card
           text={` ${stats?.XP} XP`}
           icon={<IconGeneral size="35" source={Money} />}

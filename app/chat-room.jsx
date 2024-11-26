@@ -109,6 +109,15 @@ const ChatRoom = () => {
         displayMessageSelectedModal={displayMessageSelectedModal}
         setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
       />
+
+      {displayImageCaptionModal && (
+        <ImageMessageCaption
+          isSendingImage={isSendingImage}
+          setIsSendingImage={setIsSendingImage}
+          image={image}
+          setDisplayImageCaptionModal={setDisplayImageCaptionModal}
+        />
+      )}
     </>
   );
 
@@ -142,9 +151,7 @@ const ChatRoom = () => {
             setDisplayConfirmEndOfSessionModal
           }
         />
-
         {renderModalComponents()}
-
         {renderFeedback()}
 
         {chatRoomData && (
@@ -164,14 +171,6 @@ const ChatRoom = () => {
 
         {chatRoomData && !chatRoomData?.sessionCompleted && (
           <View>
-            <ImageMessageCaption
-              displayImageCaptionModal={displayImageCaptionModal}
-              isSendingImage={isSendingImage}
-              setIsSendingImage={setIsSendingImage}
-              image={image}
-              setDisplayImageCaptionModal={setDisplayImageCaptionModal}
-            />
-
             <EmojiSelector
               setText={setText}
               displayEmojiSelector={displayEmojiSelector}

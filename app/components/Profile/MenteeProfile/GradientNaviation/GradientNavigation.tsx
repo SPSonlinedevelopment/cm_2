@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
   button: {
     padding: 15,
     alignItems: "center",
-    borderRadius: 5,
   },
   text: {
     backgroundColor: "transparent",
