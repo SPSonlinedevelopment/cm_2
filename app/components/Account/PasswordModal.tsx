@@ -7,6 +7,7 @@ import {
   Alert,
 } from "react-native";
 import React, { Children, useState } from "react";
+
 import ExitButton from "../Buttons/ExitButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BaseButton } from "react-native-gesture-handler";
@@ -16,7 +17,8 @@ import { useAuth } from "@/app/context/authContext";
 import { auth } from "@/firebaseConfig";
 import { updatePassword } from "firebase/auth";
 import { Entypo } from "@expo/vector-icons";
-import { validatePassword } from "../../components/Auth/validateInputs/validation";
+import { validatePassword } from "@/utils/validateInputs/emailValidation";
+
 import CustomKeyboardView from "../CustomKeyboardView";
 
 const PasswordModal: React.FC<{

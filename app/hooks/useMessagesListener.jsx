@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 
-export const useMessagesListener = (roomId, initialMessages, connected) => {
+const useMessagesListener = (roomId, initialMessages, connected) => {
   const [messages, setMessages] = useState(initialMessages);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,3 +41,5 @@ export const useMessagesListener = (roomId, initialMessages, connected) => {
 
   return { messages, loading, error };
 };
+
+export default useMessagesListener;

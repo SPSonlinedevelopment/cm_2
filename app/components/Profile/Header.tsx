@@ -12,8 +12,9 @@ const Header = () => {
         {/* {!user.emailVerified && <CheckEmailVerification />} */}
         <View className="  flex flex-col justify-start items-start">
           <Avatar size={50} avatarName={userDetails.avatarName} />
-          <Text className="text-lg font-semibold">
-            {userDetails?.firstName}
+
+          <Text className="text-lg font-semibold my-2">
+            Welcome back, {userDetails?.firstName} 👋
           </Text>
           <Text className="text-sm text-neutral-400 font-medium">
             {userDetails?.email}

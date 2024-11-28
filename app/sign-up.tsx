@@ -5,7 +5,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomKeyboardView from "./components/CustomKeyboardView";
 import SignUpForm from "./components/Auth/SignUp/SignUpForm";
 
-
 const SignUp = () => {
   return (
     <CustomKeyboardView>

@@ -5,8 +5,8 @@ import { useAuth } from "@/app/context/authContext";
 import OtherListItemComponent from "./OtherListItemComponent";
 import MessageGeneralModal from "../../Chats/Chatroom/MessageSelected/MessageGeneralModal";
 import PasswordModal from "../../Account/PasswordModal";
-import { sendEmailToColletTeam } from "./Mail/sendEmail";
-import shareApp from "./Share/shareApp";
+import { sendEmailToColletTeam } from "../../../../services/mail/sendEmail";
+import shareApp from "../../../../services/share/shareApp";
 
 const Others = () => {
   const { userDetails } = useAuth();
@@ -96,7 +96,7 @@ const Others = () => {
   ];
 
   return (
-    <View className="w-[93%]">
+    <View className=" w-full bg-white rounded-2xl shadow p-3 my-3">
       <View className="flex flex-row items-center">
         <Entypo name="dots-three-horizontal" size={16} color="black" />
         <Text className="text-lg font-bold"> Others</Text>

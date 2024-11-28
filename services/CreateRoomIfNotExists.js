@@ -1,19 +1,20 @@
 import { setDoc, Timestamp, doc, deleteDoc } from "firebase/firestore";
 import { getRoomId } from "@/utils/common";
 import { db } from "@/firebaseConfig";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../app/context/authContext";
 import { serverTimestamp } from "firebase/firestore";
 
-export default CreateRoomIfNotExists = async (newQuestionObj) => {
+export const CreateRoomIfNotExists = async (newQuestionObj) => {
   console.log("🚀 ~ CreateRoomIfNotExists= ~ newQuestionObj:", newQuestionObj);
+
   try {
     // Create room document
     const roomData = {
       initialImageUrl: newQuestionObj?.imageUrl,
       connectedMentor: false,
-      // mentorId: userDetails?.uid,
-      // mentorName: userDetails?.firstName,
-      // mentorAvatar: userDetails?.avatarName,
+      mentorId: userDetails?.uid,
+      mentorName: userDetails?.firstName,
+      mentorAvatar: userDetails?.avatarName,
       menteeId: newQuestionObj?.menteeId,
       menteeName: newQuestionObj?.menteeName,
       menteeAvatar: newQuestionObj?.menteeAvatarName,

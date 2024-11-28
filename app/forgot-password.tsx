@@ -4,7 +4,7 @@ import { Link } from "expo-router";
 import FormField, {
   initialFormState,
 } from "./components/Auth/FormField/FormField";
-import { validateInputs } from "./components/Auth/validateInputs/validateInputs";
+import { validateInputs } from "@/utils/validateInputs/validateInputs";
 import CustomButton from "./components/Buttons/CustomButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CustomKeyboardView from "./components/CustomKeyboardView";

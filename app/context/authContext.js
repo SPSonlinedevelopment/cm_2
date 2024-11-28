@@ -23,7 +23,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { storeObjectAsyncStorage, getObjectAsyncStorage } from "@/utils/common";
 
-import { editFirebaseMessage } from "@/app/components/Auth/firebaseAuthMessages/editFirebaseAuthMessage";
+import { editFirebaseMessage } from "@/utils/firebaseAuthMessages/editFirebaseAuthMessage";
 import Statistics from "../components/Profile/MenteeProfile/MenteeStatistics";
 
 import { selectRandomAvatar } from "../components/Profile/EditProfile/Avatar/Avatar";

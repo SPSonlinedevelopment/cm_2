@@ -11,12 +11,14 @@ import { useAuth } from "@/app/context/authContext";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
 import { mentorComplements } from "../../../EndOfSession/ReviewForMentor/ComplementSelections";
+
 import {
   handleSendTextMessageToChatroom,
   handleSendSuggestedMessageToChatroom,
-} from "../../../SendData/SendTexts/handleSendTextMessageToChatroom";
+} from "../../../../../../services/sendTexts/handleSendTextMessageToChatroom";
 
 import handleUpdateMenteeWithComplement from "../handleUpdateMenteeWithComplement";
+
 import { queryByTestId } from "@testing-library/react";
 
 jest.mock("@/app/context/authContext", () => ({
@@ -26,13 +28,10 @@ jest.mock("@/app/context/chatRoomContext", () => ({
   useChatRoom: jest.fn(() => {}),
 }));
 
-jest.mock(
-  "../../../SendData/SendTexts/handleSendTextMessageToChatroom",
-  () => ({
-    handleSendTextMessageToChatroom: jest.fn(),
-    handleSendSuggestedMessageToChatroom: jest.fn(),
-  })
-);
+jest.mock("@/services/SendTexts/handleSendTextMessageToChatroom", () => ({
+  handleSendTextMessageToChatroom: jest.fn(),
+  handleSendSuggestedMessageToChatroom: jest.fn(),
+}));
 
 jest.mock("../handleUpdateMenteeWithComplement", () => jest.fn());
 
@@ -108,8 +107,6 @@ describe("LiveComplementSelector", () => {
     });
     expect(screen.queryByTestId("complement_selector")).toBeNull();
   });
-
-
 
   afterEach(() => {
     jest.clearAllMocks();

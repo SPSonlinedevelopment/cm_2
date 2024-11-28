@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react-native";
-import { editFirebaseMessage } from "../firebaseAuthMessages/editFirebaseAuthMessage";
+import { editFirebaseMessage } from "../../../../utils/firebaseAuthMessages/editFirebaseAuthMessage";
 
 describe("editFirebaseMessage", () => {
   test("should return the correct message for invalid email", () => {

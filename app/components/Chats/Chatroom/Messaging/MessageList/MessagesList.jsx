@@ -8,7 +8,7 @@ import * as Haptics from "expo-haptics";
 import { generateRandomId } from "../../../../../../utils/common";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 import { useAuth } from "@/app/context/authContext";
-import { useMessagesListener } from "./useMessagesListener";
+import useMessagesListener from "../../../../../hooks/useMessagesListener";
 import { Timestamp } from "firebase/firestore";
 
 const MessagesList = ({

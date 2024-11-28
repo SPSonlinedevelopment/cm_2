@@ -1,4 +1,4 @@
-import { View, Image } from "react-native";
+import { View, Image, Platform, Text } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "./Header";
@@ -16,6 +16,10 @@ import IconButton from "../Buttons/IconButton";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import Navigation from "../Navigation/Navigation";
+import NavHeaderBar from "../Navigation/NavHeaderBar";
+import { MenuButton } from "@/app";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Profiles = () => {
   const { userDetails } = useAuth();
@@ -23,42 +27,69 @@ const Profiles = () => {
   const mode = userDetails?.mode;
 
   const navigation = useNavigation();
-  return (
-    <View className="h-full w-full">
-      <StatusBar style="dark" />
+
+  const universalContent = (
+    <View
+      className={`w-full flex items-center justify-center rounded-2xl bg-neutral-50  ${
+        Platform.OS === "web" ? "px-[10px]" : ""
+      }`}
+    >
+      <NavHeaderBar />
+
+      {/* {Platform.OS !== "web" && <EditProfile />} */}
+      <View
+        className={`h-full  w-full rounded-xl  max-w-[1000px]  flex-1 flex-col  items-center
+    `}
+      >
+        <Header />
+        <BorderUnderline />
+
+        {mode === "mentor" ? <MentorStatistics /> : <MenteeStatistics />}
+
+        <ComplementsProfile />
+
+        {mode === "mentor" ? <MentorComments /> : <></>}
+
+        {mode === "mentor" ? <Achievements /> : <></>}
+
+        <Others />
+        <Image
+          className="   rounded-full h-[150px] w-[150px] mb-4"
+          source={require("../../../assets/images/CMlogo.png")}
+        />
+      </View>
+    </View>
+  );
+
+  const webContent = <ScrollView> {universalContent} </ScrollView>;
+
+  const mobileContent = (
+    <View className="bg-neutral-50 flex flex-col justify-center">
       <GradientNavigation />
+
       <CustomKeyboardView>
-        <SafeAreaView className="h-full w-full  bg-neutral-50 flex flex-col ">
-          <IconButton
-            icon={<Entypo name="edit" size={24} color="black" />}
-            containerStyles=" bg-white shadow w-[40px] h-[40px] absolute right-5 top-10"
-            handlePress={() => {
-              navigation.navigate("edit-profile");
-            }}
-          ></IconButton>
-          <View className="h=full w-full flex flex-col items-center">
-            <Header />
-            <BorderUnderline />
+        <SafeAreaView style={{ margin: 10 }}>
+          <StatusBar style="dark" />
 
-            {mode === "mentor" ? <MentorStatistics /> : <MenteeStatistics />}
-            <BorderUnderline />
-            <ComplementsProfile />
-
-            <BorderUnderline />
-            {mode === "mentor" ? <MentorComments /> : <></>}
-            {mode === "mentor" ? <BorderUnderline /> : <></>}
-            {mode === "mentor" ? <Achievements /> : <></>}
-            {mode === "mentor" ? <BorderUnderline /> : <></>}
-            <Others />
-            <Image
-              className="   rounded-full h-[150px] w-[150px] mb-4"
-              source={require("../../../assets/images/CMlogo.png")}
-            />
-          </View>
+          {universalContent}
         </SafeAreaView>
       </CustomKeyboardView>
     </View>
   );
+
+  return Platform.OS === "web" ? webContent : mobileContent;
 };
 
 export default Profiles;
+
+const EditProfile = () => {
+  return (
+    <IconButton
+      icon={<Entypo name="edit" size={24} color="black" />}
+      containerStyles=" bg-white shadow w-[40px] h-[40px] absolute right-5 top-10"
+      handlePress={() => {
+        navigation.navigate("edit-profile");
+      }}
+    />
+  );
+};

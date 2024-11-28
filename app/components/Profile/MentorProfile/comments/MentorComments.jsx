@@ -8,13 +8,9 @@ import DisplayMentorCommentsModal from "./DisplayMentorCommentsModal";
 
 const MentorComments = () => {
   const [displayAllCommentsModal, setDisplayAllCommentsModal] = useState(false);
-  console.log(
-    "🚀 ~ MentorComments ~ setDisplayAllCommentsModal:",
-    setDisplayAllCommentsModal
-  );
 
   return (
-    <View className=" w-full ">
+    <View className=" w-full  rounded-2xl shadow bg-white py-2  my-3">
       <DisplayMentorCommentsModal
         displayAllCommentsModal={displayAllCommentsModal}
         setDisplayAllCommentsModal={setDisplayAllCommentsModal}

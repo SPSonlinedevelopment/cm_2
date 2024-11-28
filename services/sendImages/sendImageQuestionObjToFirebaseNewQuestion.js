@@ -1,12 +1,10 @@
-import { useChat } from "../../../../context/chatContext";
+import { useChat } from "../../app/context/chatContext";
 import { generateRandomId } from "@/utils/common";
 
 const sendImageQuestionObjToFirebaseNewQuestion = async (url, userDetails) => {
   const { setNewTextQuestion } = useChat();
   const sendData = async () => {
     try {
-      console.log("🚀 ~ handleSendQuestion ~ url:", url);
-
       const newquestionObj = {
         imageUrl: url,
         menteeId: userDetails?.uid || "",

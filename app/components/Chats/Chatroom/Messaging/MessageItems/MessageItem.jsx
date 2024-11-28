@@ -10,7 +10,7 @@ import ReplyMessage from "../Reply/ReplyMessage";
 import FadeInView from "../../../../Effects/FadeInView";
 import ConnectedMessage from "../ConnectedMessage";
 import ComplementMessage from "../../LiveComplements/ComplementMessage";
-import useReplyScroll from "../MessageItems/useReplyScroll";
+import useReplyScroll from "../../../../../hooks/useReplyScroll";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
 const MessageItem = React.memo(

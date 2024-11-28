@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { handleSendTextMessageToChatroom } from "../../SendData/SendTexts/handleSendTextMessageToChatroom";
+import { handleSendTextMessageToChatroom } from "../../../../../services/sendTexts/handleSendTextMessageToChatroom";
 import { screenProfanities } from "@/utils/common";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 import SelectEmojiButton from "./SelectEmojiButton";

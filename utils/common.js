@@ -1,12 +1,11 @@
 import { Timestamp } from "firebase/firestore";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  RegExpMatcher,
-  TextCensor,
-  englishDataset,
-  englishRecommendedTransformers,
-} from "obscenity";
+// import {
+//   RegExpMatcher,
+//   // englishDataset,
+//   englishRecommendedTransformers,
+// } from "obscenity";
 
 export const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
@@ -175,16 +174,16 @@ export const calculateTimeDifference = (createdAt, sessionCompletedAt) => {
   return timeDifferenceMins;
 };
 
-export const screenProfanities = (text) => {
-  const matcher = new RegExpMatcher({
-    ...englishDataset.build(),
-    ...englishRecommendedTransformers,
-  });
+// export const screenProfanities = (text) => {
+//   const matcher = new RegExpMatcher({
+//     // ...englishDataset.build(),
+//     ...englishRecommendedTransformers,
+//   });
 
-  if (matcher.hasMatch(text)) {
-    Alert.alert("text shows inappropriate text");
-    return true;
-  } else {
-    return false;
-  }
-};
+//   if (matcher.hasMatch(text)) {
+//     Alert.alert("text shows inappropriate text");
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };

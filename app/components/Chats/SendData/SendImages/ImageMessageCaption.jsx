@@ -11,11 +11,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState, useRef } from "react";
-import IconButton from "@/app/components/Buttons/IconButton";
-import Entypo from "@expo/vector-icons/Entypo";
+
 import { Feather } from "@expo/vector-icons";
-import { handleSendImageMessageToChatroom } from "./handleSendImageMessageToChatroom";
-import { sendImageToFirebaseStorageGetDownloadUrl } from "./sendImageToFirebaseStorageGetDownloadUrl";
+
+import { sendImageToFirebaseStorageGetDownloadUrl } from "../../../../../services/sendImages/sendImageToFirebaseStorageGetDownloadUrl";
+
+import { handleSendImageMessageToChatroom } from "../../../../../services/sendImages/handleSendImageMessageToChatroom";
+
 import { useAuth } from "@/app/context/authContext";
 import {
   detectInnapropriateImageContent,

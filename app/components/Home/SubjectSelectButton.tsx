@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import SubjectIcon from "./subjects";
+import SubjectIcon from "../../../services/subjects";
 
 interface SubjectSelectionButtonProps {
   setSelectedSubject: React.Dispatch<React.SetStateAction<string>>;

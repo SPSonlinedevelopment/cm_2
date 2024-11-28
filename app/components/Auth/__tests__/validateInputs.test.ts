@@ -1,5 +1,6 @@
 import * as EmailValidator from "email-validator";
-import { validateInputs } from "../validateInputs/validateInputs";
+
+import { validateInputs } from "@/utils/validateInputs/validateInputs";
 
 interface ErrorObj {
   isError: boolean;

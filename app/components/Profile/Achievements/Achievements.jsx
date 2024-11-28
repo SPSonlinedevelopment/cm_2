@@ -9,7 +9,7 @@ const Achievements = () => {
     useState(false);
 
   return (
-    <View className="flex w-full  h-[160px] justify-center items-center">
+    <View className=" w-full  h-[200px] rounded-2xl shadow bg-white py-2  my-3">
       <AchievementsModal
         displayDescription={true}
         setDisplayAchievementsModal={setDisplayAchievementsModal}
@@ -29,7 +29,13 @@ const Achievements = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        pointerEvents="auto"
+        horizontal
+        keyboardShouldPersistTaps="handled"
+        showsHorizontalScrollIndicator={true}
+      >
         <AchievementListView />
       </ScrollView>
     </View>
@@ -118,7 +124,7 @@ export const AchievementListView = ({ displayDescription }) => {
       <View
         key={achievement.name}
         className={` mx-4  flex items-center justify-between   ${
-          displayDescription ? "  w-[140px]  h-[120px] mt-14 mx-5  " : " mt-6 "
+          displayDescription ? "    h-[120px] mt-14  mx-5  " : " mt-6  "
         }`}
       >
         <View className="flex flex-col justify-between h-full w-full">
@@ -130,10 +136,12 @@ export const AchievementListView = ({ displayDescription }) => {
             bgColor={achievement.bgColor}
             value={achievement.value}
           />
-          <Text className="text-sm text-center">{achievement.name}</Text>
+          <Text className="text-sm text-center pb-4">{achievement.name}</Text>
         </View>
         {displayDescription && (
-          <Text className="text-xs text-center">{achievement.description}</Text>
+          <Text className="text-xs  text-center">
+            {achievement.description}
+          </Text>
         )}
       </View>
     );

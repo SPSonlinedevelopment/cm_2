@@ -1,13 +1,9 @@
 import { View, Text, SafeAreaView, Image } from "react-native";
-import React, { Children, useEffect, useState } from "react";
+import React from "react";
 import CustomKeyboardView from "./components/CustomKeyboardView";
 import { Link } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
-
 import { useAuth } from "./context/authContext";
 import CustomButton from "./components/Buttons/CustomButton";
-
 import { useNavigation } from "@react-navigation/native";
 
 const VerifyEmail = () => {

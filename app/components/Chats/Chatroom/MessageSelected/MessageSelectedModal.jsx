@@ -6,7 +6,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Octicons from "@expo/vector-icons/Octicons";
 import MessageGeneralModal from "./MessageGeneralModal";
-import { usePositioning } from "../MessageSelected/usePositioning";
+import { usePositioning } from "../../../../hooks/usePositioning";
 import FadeInView from "@/app/components/Effects/FadeInView";
 
 const MessageSelectedModal = ({

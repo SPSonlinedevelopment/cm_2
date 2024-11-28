@@ -1,4 +1,4 @@
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../app/context/authContext";
 import { Alert } from "react-native";
 
 import { db } from "@/firebaseConfig";

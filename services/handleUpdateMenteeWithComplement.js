@@ -1,7 +1,10 @@
 import { updateDoc, doc, getDoc } from "firebase/firestore";
-import { db } from "../../../../../firebaseConfig";
+import { db } from "@/firebaseConfig";
 
-const handleUpdateMenteeWithComplement = async (menteeId, complement) => {
+export const handleUpdateMenteeWithComplement = async (
+  menteeId,
+  complement
+) => {
   const docRef = doc(db, "mentees", menteeId);
 
   console.log("  menteeIdcomplement", menteeId, complement);
@@ -31,4 +34,3 @@ const handleUpdateMenteeWithComplement = async (menteeId, complement) => {
     console.log("🚀 ~ error:", error);
   }
 };
-export default handleUpdateMenteeWithComplement;

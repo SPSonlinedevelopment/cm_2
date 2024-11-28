@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Platform, Dimensions } from "react-native";
 import React from "react";
 import { Card } from "../MenteeProfile/MenteeStatistics";
 import { useAuth } from "@/app/context/authContext";
@@ -16,35 +16,43 @@ const MentorStatistics = () => {
   const { starsAvg, complementsCount } = useCalculateStarsOrComplements(
     userDetails?.mentorStatistics
   );
-  console.log(" userDetails?.mentorStatistics", userDetails?.mentorStatistics);
 
-  console.log("starsAvg", starsAvg);
-  console.log("🚀 ~ MentorStatistics ~ complementsCount:", complementsCount);
+  const isWeb = Platform.OS === "web";
+  const { width, height } = Dimensions.get("window");
 
-  return (
-    <View className=" mt-5 w-[100%] ">
-      <Text className="text-lg ml-3 font-bold "> Statistics</Text>
-
-      <View className="flex flex-row justify-between mx-3">
+  const StatsCards = () => {
+    return (
+      <>
         <Card
-          text={` ${Math.ceil(userDetails?.mentorStatistics?.time)} Total Mins`}
+          text={`${Math.ceil(userDetails?.mentorStatistics?.time)} Total Mins`}
           icon={<IconGeneral size="35" source={Clock} />}
         />
         <Card
-          text={` ${userDetails?.mentorStatistics?.questions} Questions`}
+          text={`${userDetails?.mentorStatistics?.questions} Questions`}
           icon={<IconGeneral size="35" source={Crown} />}
         />
-      </View>
-
-      <View className="flex flex-row justify-between mx-3">
         <Card
-          text={` ${starsAvg} stars`}
+          text={`${starsAvg} stars`}
           icon={<IconGeneral size="35" source={Ambition} />}
         />
         <Card
-          text={` ${complementsCount} Complements`}
+          text={`${complementsCount} Complements`}
           icon={<IconGeneral size="35" source={Love} />}
         />
+      </>
+    );
+  };
+
+  return (
+    <View className="w-full  rounded-2xl shadow bg-white p-2 my-3 ">
+      <Text className="text-lg font-bold ml-3 "> Statistics</Text>
+
+      <View className={`flex-col w-full`}>
+        <View
+          className={` w-full  flex flex-row flex-wrap justify-center items-center`}
+        >
+          <StatsCards />
+        </View>
       </View>
     </View>
   );

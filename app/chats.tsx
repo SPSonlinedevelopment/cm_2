@@ -4,7 +4,6 @@ import ChatPreview from "./components/Chats/ChatPreview";
 import { ChatContextProvider, useChat } from "./context/chatContext";
 
 const Chats = () => {
-
   return <ChatPreview />;
 };
 

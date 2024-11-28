@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "scheme": "cm-2",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
@@ -18,7 +19,6 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "newArchEnabled": true,
 
       "permissions": [
         "android.permission.CAMERA",

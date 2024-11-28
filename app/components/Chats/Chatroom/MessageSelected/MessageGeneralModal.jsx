@@ -1,4 +1,4 @@
-import { View, Text, Modal, Alert, TextInput } from "react-native";
+import { View, Text, Modal, Alert, TextInput, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import Octicons from "@expo/vector-icons/Octicons";
 import { useChat } from "../../../../context/chatContext";
@@ -6,7 +6,7 @@ import IconButton from "@/app/components/Buttons/IconButton";
 import { auth } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import CustomKeyboardView from "@/app/components/CustomKeyboardView";
-import { switchMode } from "@/app/components/Profile/Others/switchMode";
+import switchMode from "@/services/switchMode";
 
 const MessageGeneralModal = ({
   messageObj,
@@ -71,50 +71,48 @@ const MessageGeneralModal = ({
     <Modal
       testID="message_general_modal"
       transparent
-      className="flex items-center w-full bg-opacity-50 justify-center"
+      className=""
       visible={displayModal}
       animationType="fade"
     >
-      <View className=" h-full w-full absolute bg-black-100 opacity-40" />
-      <CustomKeyboardView className="h-full w-full bg-black opacity-40">
-        <View
-          className={`absolute bottom-0 w-full bg-white p-3 ${
-            type === "deleteAccount" ? "h-[500px]" : "h-[340px]"
-          } rounded-xl flex flex-col items-center justify-between`}
-        >
-          <Text className="text-xl p-3 text-center font-bold">
-            {text.headerText}
+      <View className=" h-full w-full absolute bg-black-100 opacity-40 flex justify-center items-end " />
+
+      <View
+        className={` max-w-[500px] rounded-2xl p-2 m-4 bg-white  flex justify-between items-center ${
+          type === "deleteAccount" ? "h-[500px]" : "h-[340px]"
+        } `}
+      >
+        <Text className="text-xl p-3 text-center font-bold">
+          {text.headerText}
+        </Text>
+        <Octicons name="report" size={50} color="red" />
+        <View className="w-[90%] mt-3">
+          <Text className="text-base font-bold text-black text-center">
+            {text.bodyText}
           </Text>
 
-          <Octicons name="report" size={50} color="red" />
-          <View className="w-[90%] mt-3">
-            <Text className="text-base font-bold text-black text-center">
-              {text.bodyText}
-            </Text>
-
-            {type === "deleteAccount" && (
-              <ConfirmDeleteAccount setDeleteInput={setDeleteInput} />
-            )}
-          </View>
-          <View className="flex flex-row justify-evenly items-center w-full">
-            <IconButton
-              disabled={
-                deleteInput.trim() !== "Delete" && type === "deleteAccount"
-              }
-              textStyles="font-bold"
-              containerStyles="p-2 w-[150px] h-[50px]"
-              title="Confirm"
-              handlePress={handleConfirm}
-            />
-            <IconButton
-              textStyles="font-bold text-orange"
-              containerStyles="p-2 w-[150px] h-[50px] bg-transparent border border-orange-300"
-              title="Cancel"
-              handlePress={closeAndReset}
-            />
-          </View>
+          {type === "deleteAccount" && (
+            <ConfirmDeleteAccount setDeleteInput={setDeleteInput} />
+          )}
         </View>
-      </CustomKeyboardView>
+        <View className="flex flex-row justify-between items-center w-full border">
+          <IconButton
+            disabled={
+              deleteInput.trim() !== "Delete" && type === "deleteAccount"
+            }
+            textStyles="font-bold"
+            containerStyles="p-2 m-3 w-[150px] h-[50px]"
+            title="Confirm"
+            handlePress={handleConfirm}
+          />
+          <IconButton
+            textStyles="font-bold text-orange"
+            containerStyles="p-2 m-3 w-[150px] h-[50px] bg-transparent border border-orange-300"
+            title="Cancel"
+            handlePress={closeAndReset}
+          />
+        </View>
+      </View>
     </Modal>
   );
 };
@@ -123,7 +121,7 @@ export default MessageGeneralModal;
 
 export const ConfirmDeleteAccount = ({ setDeleteInput }) => {
   return (
-    <View className="w-full  my-6">
+    <View className="w-full flex justify-center items-center">
       <Text className="text-base text-center my-2">
         Type "Delete" below if you still you understand and still want to delete
         your account and associated data.
@@ -131,7 +129,7 @@ export const ConfirmDeleteAccount = ({ setDeleteInput }) => {
       <TextInput
         onChangeText={setDeleteInput}
         placeholder="Type Delete"
-        className="w-full h-14 bg-white shadow rounded-xl my-2 p-2  text-base text-red-600"
+        className="w-full w-[300px] h-14 bg-white shadow rounded-xl my-2 p-2  text-base text-red-600"
       ></TextInput>
     </View>
   );

@@ -4,8 +4,11 @@ import LiveComplimentsButton from "../../../Buttons/ToggleScrollSelectionButton"
 import { mentorComplements } from "../../EndOfSession/ReviewForMentor/ComplementSelections";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useAuth } from "@/app/context/authContext";
-import { handleSendTextMessageToChatroom } from "../../SendData/SendTexts/handleSendTextMessageToChatroom";
-import handleUpdateMenteeWithComplement from "./handleUpdateMenteeWithComplement";
+// import { handleSendTextMessageToChatroom } from "../../../../../services/sendTexts/handleSendTextMessageToChatroom";
+
+import { handleSendTextMessageToChatroom } from "@/services/sendTexts/handleSendTextMessageToChatroom";
+
+import { handleUpdateMenteeWithComplement } from "../../../../../services/handleUpdateMenteeWithComplement";
 import { useChatRoom } from "@/app/context/chatRoomContext";
 
 const LiveComplementSelector = () => {

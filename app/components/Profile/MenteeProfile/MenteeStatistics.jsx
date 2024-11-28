@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Platform, Dimensions } from "react-native";
 import React from "react";
 import { useAuth } from "@/app/context/authContext";
 import Clock from "../../../../assets/icons/Clock.png";
@@ -13,18 +13,23 @@ import Love from "../../../../assets/icons/Love.png";
 import Money from "../../../../assets/icons/Money.png";
 
 export const Card = ({ icon, text }) => {
+  const { width, height } = Dimensions.get("window");
+
   return (
     <View
-      style={{ width: wp(45), height: 65 }}
-      className="  mx-1  mt-2 rounded-2xl items-center justify-center bg-white shadow-sm   "
+      style={{ height: 85 }}
+      className={` min-w-[150px] rounded-2xl m-2 items-center justify-center bg-white  shadow-sm ${
+        Platform.OS === "web" ? "w-[20%]" : "w-[40%]"
+      }  `}
     >
       {icon}
-      <Text className=" text-base  ">{text}</Text>
+      <Text className={` text-base text-center `}>{text}</Text>
     </View>
   );
 };
 
 const MenteeStatistics = () => {
+  console.log("platform", Platform.OS);
   const { userDetails } = useAuth();
 
   const stats = userDetails?.menteeStatistics || {};
@@ -37,11 +42,14 @@ const MenteeStatistics = () => {
     );
   }
 
-  return (
-    <View className=" mt-5 w-full ">
-      <Text className="text-lg ml-3 font-bold "> Statistics</Text>
+  const isWeb = Platform.OS === "web";
+  console.log("🚀 ~ MenteeStatistics ~ isWeb:", Platform.OS);
 
-      <View className="flex flex-row justify-between  mx-3">
+  return (
+    <View className={`  w-full rounded-2xl shadow bg-white p-2  my-3 `}>
+      <Text className="text-lg font-bold "> Statistics</Text>
+
+      <View className="flex-wrap flex-row justify-center">
         <Card
           text={` ${Math.ceil(stats?.time)} mins`}
           icon={<IconGeneral size="35" source={Clock} />}
@@ -50,8 +58,7 @@ const MenteeStatistics = () => {
           text={` ${stats?.questions} questions`}
           icon={<IconGeneral size="35" source={Crown} />}
         />
-      </View>
-      <View className="flex flex-row justify-between  mx-3">
+
         <Card
           text={` ${stats?.XP} XP`}
           icon={<IconGeneral size="35" source={Money} />}

@@ -1,14 +1,11 @@
-import { View, Text } from "react-native";
-import React, { Children, useEffect, useRef, useState } from "react";
-import { Link, router } from "expo-router";
+import { Text } from "react-native";
+import React, { useRef, useState } from "react";
+import { router } from "expo-router";
 import CustomButton from "../../Buttons/CustomButton";
 import FormField from "../FormField/FormField";
-
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
-
-import { validateInputs } from "../validateInputs/validateInputs";
-
+import { validateInputs } from "@/utils/validateInputs/validateInputs";
 import { useAuth } from "../../../context/authContext";
 
 const initialState = {

@@ -1,3 +1,9 @@
+// allows for styling on web
+import { NativeWindStyleSheet } from "nativewind";
+NativeWindStyleSheet.setOutput({
+  default: "native",
+});
+
 import { Text, View, Button, Alert } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import IconButton from "./components/Buttons/IconButton";
@@ -17,7 +23,7 @@ import { Timestamp } from "firebase/firestore";
 import { ref } from "firebase/storage";
 import { storage } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
-import CreateRoomIfNotExists from "./components/Chats/SendData/CreateRoomIfNotExists";
+
 import { screenProfanities } from "@/utils/common";
 import Profile from "./profile";
 import { getObjectAsyncStorage } from "@/utils/common";
@@ -25,7 +31,13 @@ import {
   detectInnapropriateImageContent,
   deleteImagesWithFace,
 } from "./safeguarding/detectInappropriateImages";
-import { sendImageToFirebaseStorageGetDownloadUrl } from "./components/Chats/SendData/SendImages/sendImageToFirebaseStorageGetDownloadUrl";
+import Navigation from "./components/Navigation/Navigation";
+import NavHeaderBar from "./components/Navigation/NavHeaderBar";
+
+import { CreateRoomIfNotExists } from "../services/CreateRoomIfNotExists";
+
+import { sendImageToFirebaseStorageGetDownloadUrl } from "../services/sendImages/sendImageToFirebaseStorageGetDownloadUrl";
+
 import NetInfo from "@react-native-community/netinfo";
 
 const RootLayout = () => {
@@ -45,7 +57,7 @@ const RootLayout = () => {
   const [displayQuestionInput, setDisplayQuestionInput] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [mode, setMode] = useState(null); // State to hold the mode
-
+  const [menuVisible, setMenuVisible] = useState(false);
   console.log("🚀 ~ RootLayout ~ mode:", mode);
 
   const [isConnected, setIsConnected] = useState(true);
@@ -160,11 +172,63 @@ const RootLayout = () => {
     roomId: roomId,
   });
 
+  // const handleSendQuestion = async () => {
+  //   setIsLoading(true);
+
+  //   /// detect inappropriate text if message provided
+
+  //   if (text.length && screenProfanities(text)) {
+  //     handleCleanup();
+  //     return;
+  //   }
+
+  //   const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
+
+  //   /// if image save image to google cloud storage
+
+  //   let url = image
+  //     ? await sendImageToFirebaseStorageGetDownloadUrl(image, storageRef)
+  //     : "";
+
+  //   try {
+  //     if (await deleteImagesWithFace(storageRef)) {
+  //       handleCleanup();
+  //       return;
+  //     }
+
+  //     if (await detectInnapropriateImageContent(storageRef)) {
+  //       handleCleanup();
+  //       return;
+  //     }
+
+  //     const roomId = generateRandomId();
+
+  //     // Prepare the question object
+  //     const newQuestionObj = createQuestionObject(url, roomId);
+
+  //     // Set new question in Firebase
+  //     const result = await setNewTextQuestion(newQuestionObj);
+
+  //     if (result.success) {
+  //       await CreateRoomIfNotExists(newQuestionObj);
+
+  //       navigation.navigate("chat-room", {
+  //         roomId: roomId,
+  //         completedSession: false,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log("🚀 ~ handleSendQuestion ~ error:", error);
+  //   } finally {
+  //     // Cleanup and reset state
+  //     handleCleanup();
+  //   }
+  // };
+
   const handleSendQuestion = async () => {
     setIsLoading(true);
 
     /// detect inappropriate text if message provided
-
     if (text.length && screenProfanities(text)) {
       handleCleanup();
       return;
@@ -173,7 +237,6 @@ const RootLayout = () => {
     const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
 
     /// if image save image to google cloud storage
-
     let url = image
       ? await sendImageToFirebaseStorageGetDownloadUrl(image, storageRef)
       : "";
@@ -198,7 +261,8 @@ const RootLayout = () => {
       const result = await setNewTextQuestion(newQuestionObj);
 
       if (result.success) {
-        await CreateRoomIfNotExists(newQuestionObj);
+        // Wrap CreateRoomIfNotExists inside a separate function and call it
+        await handleCreateRoom(newQuestionObj);
 
         navigation.navigate("chat-room", {
           roomId: roomId,
@@ -210,6 +274,16 @@ const RootLayout = () => {
     } finally {
       // Cleanup and reset state
       handleCleanup();
+    }
+  };
+
+  // Async function to handle room creation
+  const handleCreateRoom = async (newQuestionObj) => {
+    try {
+      const roomResult = await CreateRoomIfNotExists(newQuestionObj);
+      console.log("Room creation result:", roomResult);
+    } catch (error) {
+      console.log("Error creating room:", error);
     }
   };
 
@@ -296,6 +370,9 @@ const RootLayout = () => {
   return (
     <AuthContextProvider>
       <ChatContextProvider>
+        <Navigation setMenuVisible={setMenuVisible} menuVisible={menuVisible} />
+
+        <MenuButton handlePress={setMenuVisible} />
         {userDetails?.mode === "mentee" ? menteeIndex : <Profile />}
       </ChatContextProvider>
     </AuthContextProvider>
@@ -303,3 +380,14 @@ const RootLayout = () => {
 };
 
 export default RootLayout;
+
+export const MenuButton = ({ handlePress }) => {
+  return (
+    <IconButton
+      handlePress={handlePress}
+      icon={<Entypo name="menu" size={24} color="black" />}
+      containerStyles="  z-100 absolute right-[20px] top-[20px]"
+      title="menu"
+    />
+  );
+};

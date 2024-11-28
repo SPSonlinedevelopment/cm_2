@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { convertFirebaseTimestampToDate } from "@/utils/common";
 import { useAuth } from "@/app/context/authContext";
-import CreateRoomIfNotExists from "./SendData/CreateRoomIfNotExists";
+
 import { getObjectAsyncStorage } from "../../../utils/common";
 import DateToDayConverter from "./DateToDayConverter";
 

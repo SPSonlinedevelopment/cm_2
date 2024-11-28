@@ -87,7 +87,7 @@ const ComplementsProfile = () => {
   });
 
   return (
-    <View className="h-[190px] ">
+    <View className=" w-full rounded-2xl pb-4 pt-2   my-3 shadow bg-white  ">
       <DisplayAllComplementsModal
         data={data}
         setDisplayAllComplementsModal={setDisplayAllComplementsModal}
