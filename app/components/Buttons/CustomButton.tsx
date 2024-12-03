@@ -23,7 +23,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       onPress={() => {
         handlePress();
       }}
-      className={` bg-orange  rounded-3xl my-4 h-[45px] w-[330px] justify-center items-center ${containerStyles} ${
+      className={` bg-orange   rounded-3xl my-4 h-[45px] w-[330px] justify-center items-center ${containerStyles} ${
         isLoading ? "opacity-50" : ""
       } `}
       testID="custom_button"
@@ -33,7 +33,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       ) : (
         <Text
           testID="custom_button_text"
-          className={`text-white font-psemibold  text-base text-center ${textStyles} `}
+          className={`text-white text-base text-center ${textStyles} `}
         >
           {title}
         </Text>

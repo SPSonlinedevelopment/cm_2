@@ -13,6 +13,7 @@ import VerifyEmail from "./verify-email";
 import Chats from "./chats";
 import ChatRoom from "./chat-room";
 import EditProfile from "./edit-profile";
+import WebChat from "./web-chat";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -70,10 +71,18 @@ export default function AuthLayout() {
               name="chat-room"
               component={ChatRoom}
             />
+
             <Stack.Screen
               options={{ headerShown: false }}
               name="edit-profile"
               component={EditProfile}
+            />
+
+            {/* only for web */}
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="web-chat"
+              component={WebChat}
             />
           </Stack.Navigator>
           {/* </NavigationContainer> */}

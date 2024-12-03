@@ -39,5 +39,5 @@
     "app/components/Profile/EditProfile/Avatar/Avatar.tsx",
     "app/components/Profile/Achievements/Achievements.jsx",
     "app/components/Profile/ProgressBar.jsx"
-  ]
+, "app/sign-in.jsx", "app/components/Auth/SignIn/SignInForm.jsx", "app/forgot-password.jsx", "app/chats.jsx"  ]
 }

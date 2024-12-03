@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Modal, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import Avatar from "../Profile/EditProfile/Avatar/Avatar";
 
@@ -19,6 +19,8 @@ const ChatItem = ({
   newQuestion,
   completedSession,
   activeSession,
+  setCompletedSessionWeb,
+  setRoomIdWeb,
 }) => {
   const { userDetails } = useAuth();
   const [lastMessage, setLastMessage] = useState("");
@@ -49,13 +51,18 @@ const ChatItem = ({
   }, [item?.roomId]); // Re-run only if item.roomId changes
 
   const openChatRoom = () => {
-    if (newQuestion) {
-      setDisplayPreview(true);
+    if (Platform.OS !== "web") {
+      if (newQuestion) {
+        setDisplayPreview(true);
+      } else {
+        navigation.navigate("chat-room", {
+          roomId: item?.roomId,
+          completedSession: completedSession,
+        });
+      }
     } else {
-      navigation.navigate("chat-room", {
-        roomId: item?.roomId,
-        completedSession: completedSession,
-      });
+      setRoomIdWeb(item?.roomId);
+      setCompletedSessionWeb(completedSession);
     }
   };
 
@@ -132,7 +139,7 @@ const ChatItem = ({
 
             {!newQuestion ? (
               <FadeInView duration={0}>
-                <Text className="truncate text-neutral-500 text-sm">
+                <Text className="truncate  text-neutral-500 text-sm">
                   {lastMessage}
                 </Text>
               </FadeInView>

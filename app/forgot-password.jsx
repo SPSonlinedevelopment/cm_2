@@ -1,6 +1,12 @@
-import { View, Text, Image } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Platform,
+  Touchable,
+  TouchableOpacity,
+} from "react-native";
 import React, { useRef, useState } from "react";
-import { Link } from "expo-router";
 import FormField, {
   initialFormState,
 } from "./components/Auth/FormField/FormField";
@@ -9,6 +15,8 @@ import CustomButton from "./components/Buttons/CustomButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CustomKeyboardView from "./components/CustomKeyboardView";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 const ForgotPassword = () => {
   const emailRef = useRef(undefined);
@@ -19,6 +27,7 @@ const ForgotPassword = () => {
 
   const validateParams = [{ type: "email", ref: emailRef }];
 
+  const navigation = useNavigation();
   let showPasswordInput;
 
   if (!resetEmailSent) {
@@ -31,7 +40,7 @@ const ForgotPassword = () => {
             <MaterialCommunityIcons
               name="email-outline"
               size={24}
-              color="white"
+              color="purple"
             />
           }
           refName={emailRef}
@@ -54,7 +63,7 @@ const ForgotPassword = () => {
   if (resetEmailSent) {
     showPasswordInput = (
       <View className="w-full flex flex-row items-center justify-center">
-        <Text className="text-orange-400  my-5 text-2xl text-center font-psemibold">
+        <Text className="text-orange-400  text-2xl font-medium mb-8">
           Success! Check your email!
         </Text>
       </View>
@@ -84,8 +93,9 @@ const ForgotPassword = () => {
       }
     }
   };
-  return (
-    <CustomKeyboardView>
+
+  const content = (
+    <SafeAreaView className=" pt-3 w-full h-full flex flex-col bg-purple   items-center justify-start">
       <View className="bg-purple h-full flex-col justify-start  items-center">
         <View className="mt-20"></View>
 
@@ -105,16 +115,21 @@ const ForgotPassword = () => {
 
           {showPasswordInput}
           <View className="flex-col items-center justify-center">
-            <Link
-              className="text-orange-400  text-base font-psemibold"
-              href={"sign-in"}
-            >
-              Return to login
-            </Link>
+            <TouchableOpacity onPress={() => navigation.navigate("sign-in")}>
+              <Text className="text-orange-400  text-base font-medium">
+                Return to Login
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-    </CustomKeyboardView>
+    </SafeAreaView>
+  );
+
+  return Platform.OS === "web" ? (
+    content
+  ) : (
+    <CustomKeyboardView>{content}</CustomKeyboardView>
   );
 };
 

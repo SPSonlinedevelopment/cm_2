@@ -1,4 +1,4 @@
-import { View, Text, Alert, ScrollView } from "react-native";
+import { View, Text, Alert, ScrollView, Platform } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "./context/authContext";
@@ -14,6 +14,8 @@ import { doc, updateDoc, getDoc } from "firebase/firestore";
 import * as EmailValidator from "email-validator";
 import FadeInView from "./components/Effects/FadeInView";
 import SubjectSelection from "./components/Profile/EditProfile/SubjectSelection";
+import NavHeaderBar from "./components/Navigation/NavHeaderBar";
+import GradientNavigation from "./components/Profile/MenteeProfile/GradientNaviation/GradientNavigation";
 
 const EditProfile = () => {
   const { userDetails } = useAuth();
@@ -83,9 +85,9 @@ const EditProfile = () => {
     }
   };
 
-  console.log("testavatar1", userDetails.avatarName);
   return (
     <CustomKeyboardView containerStyles="h-full">
+      {Platform.OS === "web" && <NavHeaderBar />}
       <SafeAreaView>
         <BackButton handlePress={async () => navigation.goBack()} />
         <ScrollView

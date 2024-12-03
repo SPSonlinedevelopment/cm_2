@@ -8,7 +8,7 @@ const Header = () => {
 
   if (user) {
     return (
-      <View className="w-full mt-3 ml-5 relative flex flex-row items-center  justify-between">
+      <View className="w-full mt-3 ml-5 my-5 relative flex flex-row items-center  justify-between">
         {/* {!user.emailVerified && <CheckEmailVerification />} */}
         <View className="  flex flex-col justify-start items-start">
           <Avatar size={50} avatarName={userDetails.avatarName} />

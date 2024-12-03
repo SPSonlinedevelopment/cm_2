@@ -1,4 +1,5 @@
 import React from "react";
+import { Platform } from "react-native";
 import IconButton from "./IconButton";
 import * as Haptics from "expo-haptics";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -17,7 +18,9 @@ const ToggleScrollSelectionButton = ({
       icon={display ? <Entypo name="cross" size={24} color="black" /> : icon}
       handlePress={() => {
         setDisplay((prev) => !prev);
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+        Platform.OS !== "web" &&
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       }}
     />
   );

@@ -7,6 +7,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { validateInputs } from "@/utils/validateInputs/validateInputs";
 import { useAuth } from "../../../context/authContext";
+import { useNavigation } from "@react-navigation/native";
 
 const initialState = {
   name: { isError: false, message: "" },
@@ -19,6 +20,7 @@ const SignUpForm = () => {
   const [errors, setErrors] = useState(initialState);
   const [alertMessage, setAlertMessage] = useState("");
   const { createNewUser, setUser, verifyEmail } = useAuth();
+  const navigation = useNavigation();
 
   const nameRef = useRef(undefined);
   const emailRef = useRef(undefined);
@@ -30,7 +32,7 @@ const SignUpForm = () => {
     { type: "password", ref: passwordRef },
   ];
 
-  const handleClick = async () => {
+  const handleSignUp = async () => {
     if (validateInputs(validateParams, setErrors)) {
       setLoading(true);
 
@@ -50,7 +52,7 @@ const SignUpForm = () => {
           console.log(error);
         }
 
-        router.push("verify-email");
+        navigation.navgate("verify-email");
       } else setAlertMessage(result.message);
       setLoading(false);
     }
@@ -66,7 +68,7 @@ const SignUpForm = () => {
           <MaterialCommunityIcons
             name="email-outline"
             size={24}
-            color="white"
+            color="purple"
           />
         }
         placeholderText="Email"
@@ -78,7 +80,7 @@ const SignUpForm = () => {
         setAlertMessage={setAlertMessage}
         refName={passwordRef}
         type="password"
-        icon={<AntDesign name="lock" size={24} color="white" />}
+        icon={<AntDesign color="purple" name="lock" size={24} />}
         placeholderText="Password"
         error={errors}
         seterror={setErrors}
@@ -89,7 +91,7 @@ const SignUpForm = () => {
         isLoading={loading}
         containerStyles="my-0"
         handlePress={() => {
-          handleClick();
+          handleSignUp();
         }}
         title="Sign Up"
       ></CustomButton>

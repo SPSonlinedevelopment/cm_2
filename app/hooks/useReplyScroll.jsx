@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect, Children } from "react";
+import { useState, useRef, Platform, Children } from "react";
 import * as Haptics from "expo-haptics";
 
 const useReplyScroll = (setReplyState, message) => {
@@ -30,7 +30,8 @@ const useReplyScroll = (setReplyState, message) => {
   };
 
   const triggerHaptics = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    Platform.OS !== "web" &&
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
   return { showReply, handleMessageReplyScroll, triggerHaptics };

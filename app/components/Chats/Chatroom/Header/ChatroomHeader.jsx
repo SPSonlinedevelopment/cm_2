@@ -49,7 +49,9 @@ const ChatroomHeader = ({ setDisplayConfirmEndOfSessionModal }) => {
                 className="m-2"
                 onPress={() => {
                   setDisplayConfirmEndOfSessionModal(true);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+                  Platform.OS !== "web" &&
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }}
               >
                 <Entypo name="cross" size={34} color="black" />

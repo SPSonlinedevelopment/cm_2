@@ -39,6 +39,11 @@ import { CreateRoomIfNotExists } from "../services/CreateRoomIfNotExists";
 import { sendImageToFirebaseStorageGetDownloadUrl } from "../services/sendImages/sendImageToFirebaseStorageGetDownloadUrl";
 
 import NetInfo from "@react-native-community/netinfo";
+import { useFonts } from "expo-font";
+import {
+  Montserrat_400Regular,
+  Montserrat_700Bold,
+} from "@expo-google-fonts/montserrat";
 
 const RootLayout = () => {
   console.log("index");
@@ -61,6 +66,11 @@ const RootLayout = () => {
   console.log("🚀 ~ RootLayout ~ mode:", mode);
 
   const [isConnected, setIsConnected] = useState(true);
+
+  const [fontsLoaded] = useFonts({
+    "Montserrat-Regular": Montserrat_400Regular,
+    "Montserrat-Bold": Montserrat_700Bold,
+  });
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {

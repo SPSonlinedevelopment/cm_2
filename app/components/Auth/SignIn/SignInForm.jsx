@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Touchable, TouchableOpacity } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, router } from "expo-router";
 import CustomButton from "../../Buttons/CustomButton";
@@ -11,8 +11,11 @@ import { validateInputs } from "@/utils/validateInputs/validateInputs";
 
 import { initialFormState } from "../FormField/FormField";
 import { useAuth } from "@/app/context/authContext";
+import { useNavigation } from "@react-navigation/native";
+import { TextInput } from "react-native-gesture-handler";
 
 const SignInForm = () => {
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialFormState);
   const [alertMessage, setAlertMessage] = useState("");
@@ -26,13 +29,13 @@ const SignInForm = () => {
     { type: "password", ref: passwordRef },
   ];
 
-  const handleClick = async () => {
+  const handleSignIn = async () => {
     if (validateInputs(validateParams, setErrors)) {
       try {
         setLoading(true);
         const result = await signIn(emailRef.current, passwordRef.current);
         if (result.success) {
-          router.push("profile");
+          navigation.navigate("profile");
         } else {
           setAlertMessage(result.message);
         }
@@ -45,7 +48,7 @@ const SignInForm = () => {
     }
   };
   return (
-    <>
+    <View className="flex flex-col justify-center items-center ">
       <FormField
         setAlertMessage={setAlertMessage}
         refName={emailRef}
@@ -54,49 +57,48 @@ const SignInForm = () => {
           <MaterialCommunityIcons
             name="email-outline"
             size={24}
-            color="white"
+            color="purple"
           />
         }
         placeholderText="Email"
         error={errors}
         seterror={setErrors}
         editable={loading}
-      ></FormField>
+      />
       <FormField
         setAlertMessage={setAlertMessage}
         refName={passwordRef}
         type="password"
-        icon={<AntDesign name="lock" size={24} color="white" />}
+        icon={<AntDesign name="lock" size={24} color="purple" />}
         placeholderText="Password"
         error={errors}
         seterror={setErrors}
         editable={loading}
-      ></FormField>
-
-      <View className=" flex flex-row justify-center w-[80%]">
-        <Link
-          href={"forgot-password"}
-          className=" text-orange-400  mt-2 text-sm  "
-        >
-          Forgot password?{" "}
-        </Link>
-      </View>
+      />
 
       {alertMessage && (
-        <Text className="text-white font-pextrabold  mt-2 text-center w-[80%]">
-          {alertMessage}
-        </Text>
+        <View className=" w-full flex justify-center items-center">
+          <Text className="text-red-600  mt-2 text-center w-[80%]">
+            {alertMessage}
+          </Text>
+        </View>
       )}
 
       <CustomButton
         isLoading={loading}
         containerStyles=""
         handlePress={() => {
-          handleClick();
+          handleSignIn();
         }}
         title="Sign In"
       ></CustomButton>
-    </>
+
+      <TouchableOpacity onPress={() => navigation.navigate("forgot-password")}>
+        <Text className="text-orange-400  text-base font-medium">
+          Forgot password?
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 

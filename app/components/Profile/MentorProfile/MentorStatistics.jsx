@@ -22,7 +22,7 @@ const MentorStatistics = () => {
 
   const StatsCards = () => {
     return (
-      <>
+      <View className="flex flex-row flex-wrap   ">
         <Card
           text={`${Math.ceil(userDetails?.mentorStatistics?.time)} Total Mins`}
           icon={<IconGeneral size="35" source={Clock} />}
@@ -39,21 +39,14 @@ const MentorStatistics = () => {
           text={`${complementsCount} Complements`}
           icon={<IconGeneral size="35" source={Love} />}
         />
-      </>
+      </View>
     );
   };
 
   return (
-    <View className="w-full  rounded-2xl shadow bg-white p-2 my-3 ">
+    <View className="w-full  rounded-2xl   ">
       <Text className="text-lg font-bold ml-3 "> Statistics</Text>
-
-      <View className={`flex-col w-full`}>
-        <View
-          className={` w-full  flex flex-row flex-wrap justify-center items-center`}
-        >
-          <StatsCards />
-        </View>
-      </View>
+      <StatsCards />
     </View>
   );
 };

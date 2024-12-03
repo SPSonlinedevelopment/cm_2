@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, Platform } from "react-native";
 import React, { useState, useLayoutEffect, useRef, Children } from "react";
 import Entypo from "@expo/vector-icons/Entypo";
 import * as Haptics from "expo-haptics";
@@ -111,7 +111,8 @@ const MessageItem = React.memo(
       <ScrollView
         scrollEventThrottle={16}
         onMomentumScrollBegin={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+          Platform.OS !== "web" &&
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         }}
         onScroll={(event) => {
           handleMessageReplyScroll(event);

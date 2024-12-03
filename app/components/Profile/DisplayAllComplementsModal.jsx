@@ -1,4 +1,4 @@
-import { View, Text, Modal } from "react-native";
+import { View, Text, Modal, Platform } from "react-native";
 import React from "react";
 import ExitButton from "../Buttons/ExitButton";
 import { ScrollView } from "react-native-gesture-handler";
@@ -13,8 +13,10 @@ const DisplayAllComplementsModal = ({
 }) => {
   const { userDetails } = useAuth();
 
+  const animation = Platform.OS === "web" ? "fade" : "slide";
+
   return (
-    <Modal animationType="slide" visible={displayAllComplementsModal}>
+    <Modal animationType={animation} visible={displayAllComplementsModal}>
       <ExitButton toggleDisplay={setDisplayAllComplementsModal} />
 
       <SafeAreaView className="flex items-center justify-start pt-6 ">

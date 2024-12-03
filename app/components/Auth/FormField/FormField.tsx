@@ -1,5 +1,5 @@
 import { View, Text, TextInput, Button } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BaseButton, RawButton } from "react-native-gesture-handler";
 
@@ -43,7 +43,11 @@ const FormField: React.FC<CustomFormFieldProps> = ({
   setAlertMessage,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [passwordVisible, setPasswordVisble] = useState(true);
+  const [passwordVisible, setPasswordVisble] = useState(false);
+
+  useEffect(() => {
+    setPasswordVisble(true);
+  }, []);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -105,49 +109,54 @@ const FormField: React.FC<CustomFormFieldProps> = ({
   return (
     <View>
       <View
-        className={`h-[50px] w-[330px] my-1 flex-row items-center justify-start ${
+        className={`h-[50px] w-[330px] my-1 flex-row items-center justify-start bg-white ${
           isFocused
-            ? `border border-white `
+            ? `border-4 border-purple-300 bg-white `
             : errorObj.isError
-            ? `border border-red-500`
+            ? `border `
             : `border-none`
-        } pl-3  rounded-full font-semibold  bg-purple-100 ${otherStyles}`}
+        } pl-3  rounded-full font-semibold  ${otherStyles}`}
       >
         {icon}
 
         <TextInput
+          textContentType="none"
+          autoComplete="off"
           testID="input"
           editable={!editable}
-          placeholderTextColor="grey"
-          secureTextEntry={type === "password" ? passwordVisible : false}
+          placeholderTextColor="purple"
+          secureTextEntry={type === "password" && passwordVisible}
           style={{
-            borderColor: "white",
             justifyContent: "center",
-            color: "white",
-            fontSize: 18,
+            fontSize: 16,
+            borderWidth: 0,
+            outline: "none",
+            color: "purple",
           }}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className={` h-full w-[80%] pl-2 justify-center items-center 
-        }`}
+          className={` h-full w-[80%] pl-2  justify-center items-center border-none
+          }`}
           placeholder={placeholderText}
           onChangeText={(value) => {
             handleInputChange(value);
           }}
-        ></TextInput>
+        />
 
         {type === "password" && (
           <BaseButton onPress={() => setPasswordVisble(!passwordVisible)}>
             {!passwordVisible ? (
-              <Ionicons name="eye-outline" size={24} color="white" />
+              <Ionicons name="eye-outline" size={24} color="purple" />
             ) : (
-              <Ionicons name="eye-off-outline" size={24} color="white" />
+              <Ionicons name="eye-off-outline" size={24} color="purple" />
             )}
           </BaseButton>
         )}
       </View>
       {errorObj?.isError && (
-        <Text className="text-red-500 ml-5 py-1">{errorObj.message}</Text>
+        <View className="w-full flex items-center">
+          <Text className="text-red-500  py-1">{errorObj.message}</Text>
+        </View>
       )}
     </View>
   );

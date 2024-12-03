@@ -12,14 +12,14 @@ import Crown from "../../../../assets/icons/Crown.png";
 import Love from "../../../../assets/icons/Love.png";
 import Money from "../../../../assets/icons/Money.png";
 
-export const Card = ({ icon, text }) => {
+export const Card = ({ icon, text, contentStyles }) => {
   const { width, height } = Dimensions.get("window");
 
   return (
     <View
       style={{ height: 85 }}
-      className={` min-w-[150px] rounded-2xl m-2 items-center justify-center bg-white  shadow-sm ${
-        Platform.OS === "web" ? "w-[20%]" : "w-[40%]"
+      className={`min-w-[140px] flex-1 my-2 rounded-2xl items-center justify-center bg-white  shadow  m-1 ${
+        Platform.OS === "web" ? "" : ""
       }  `}
     >
       {icon}
@@ -45,29 +45,38 @@ const MenteeStatistics = () => {
   const isWeb = Platform.OS === "web";
   console.log("🚀 ~ MenteeStatistics ~ isWeb:", Platform.OS);
 
-  return (
-    <View className={`  w-full rounded-2xl shadow bg-white p-2  my-3 `}>
-      <Text className="text-lg font-bold "> Statistics</Text>
-
-      <View className="flex-wrap flex-row justify-center">
+  const StatsCards = () => {
+    return (
+      <View className="flex flex-row  flex-wrap ">
         <Card
+          
           text={` ${Math.ceil(stats?.time)} mins`}
           icon={<IconGeneral size="35" source={Clock} />}
         />
         <Card
+         
           text={` ${stats?.questions} questions`}
           icon={<IconGeneral size="35" source={Crown} />}
         />
 
         <Card
+       
           text={` ${stats?.XP} XP`}
           icon={<IconGeneral size="35" source={Money} />}
         />
         <Card
+         
           text={` ${complementsCount} Complements`}
           icon={<IconGeneral size="35" source={Love} />}
         />
       </View>
+    );
+  };
+
+  return (
+    <View className="w-full  rounded-2xl   ">
+      <Text className="text-lg font-bold ml-3 "> Statistics</Text>
+      <StatsCards />
     </View>
   );
 };

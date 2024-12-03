@@ -25,7 +25,7 @@ module.exports = {
         pthin: ["Montserrat-Black", "sans-serif"],
         pextralight: ["Montserrat-ExtraLight", "sans-serif"],
         plight: ["Montserrat-Light", "sans-serif"],
-        pregular: ["Montserrat-Regular", "sans-serif"],
+        pregular: ["Montserrat-Regular", "sans-serif"], // Match the registered name
         pmedium: ["Montserrat-Medium", "sans-serif"],
         psemibold: ["Montserrat-SemiBold", "sans-serif"],
         pbold: ["Montserrat-Bold", "sans-serif"],

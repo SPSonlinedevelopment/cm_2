@@ -1,4 +1,4 @@
-import { View, Text, Modal, ScrollView } from "react-native";
+import { View, Text, Modal, ScrollView, Platform } from "react-native";
 import React from "react";
 import ExitButton from "../../../Buttons/ExitButton";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,8 +14,10 @@ const DisplayMentorCommentsModal = ({
 }) => {
   const { userDetails } = useAuth();
 
+  const animation = Platform.OS === "web" ? "fade" : "slide";
+
   return (
-    <Modal animationType="slide" visible={displayAllCommentsModal}>
+    <Modal animationType={animation} visible={displayAllCommentsModal}>
       <View className="w-full">
         <ExitButton toggleDisplay={setDisplayAllCommentsModal} />
         <SafeAreaView className="flex items-center justify-start   h-full w-full">

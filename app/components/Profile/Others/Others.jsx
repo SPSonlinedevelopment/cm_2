@@ -96,7 +96,7 @@ const Others = () => {
   ];
 
   return (
-    <View className=" w-full bg-white rounded-2xl shadow p-3 my-3">
+    <View className=" w-[99%] bg-white rounded-2xl shadow p-3 my-3">
       <View className="flex flex-row items-center">
         <Entypo name="dots-three-horizontal" size={16} color="black" />
         <Text className="text-lg font-bold"> Others</Text>

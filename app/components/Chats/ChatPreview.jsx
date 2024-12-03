@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image } from "react-native";
+import { View, Text, FlatList, Image, Platform } from "react-native";
 import React, { useState } from "react";
 import ActiveChatroomList from "./ActiveChatroomList";
 import GradientNavigation from "../Profile/MenteeProfile/GradientNaviation/GradientNavigation";
@@ -11,11 +11,12 @@ import { useNavigation } from "@react-navigation/native";
 import CompletedChatList from "./CompletedChatList";
 import LoadedImage from "./Chatroom/Messaging/LoadedImage";
 import FadeInView from "../Effects/FadeInView";
+import NavHeaderBar from "../Navigation/NavHeaderBar";
 
 import ChatItem from "./ChatItem";
 import { useChat } from "@/app/context/chatContext";
 
-const ChatPreview = () => {
+const ChatPreview = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
   const { userDetails, user } = useAuth();
 
   const [searchInput, setSearchInput] = useState("");
@@ -48,16 +49,18 @@ const ChatPreview = () => {
 
   return (
     <View className="h-full">
-      <GradientNavigation />
+      {Platform.OS === "web" && <GradientNavigation />}
+
       <SafeAreaView className=" w-full flex-col  items-center justify-start ">
-        <View className=" shadow-md  flex flex-col justify-start items-start w-full  ">
-          <Text className="text-3xl font-bold ml-4 mb-2">Chats</Text>
+        <View className="  justify-start items-start w-full  ">
+          <Text className="text-2xl font-bold ml-4 pb-">Chats</Text>
         </View>
-        <SearchChats
+
+        {/* <SearchChats
           searchInput={searchInput}
           setSearchInput={setSearchInput}
           searchArr={searchArr}
-        />
+        /> */}
         <ScrollView
           contentContainerStyle={{ display: "flex", alignItems: "center" }}
           className="w-full h-full flex"
@@ -66,7 +69,10 @@ const ChatPreview = () => {
 
           {!searchInput ? (
             <>
-              <ActiveChatroomList />
+              <ActiveChatroomList
+                setCompletedSessionWeb={setCompletedSessionWeb}
+                setRoomIdWeb={setRoomIdWeb}
+              />
               <CompletedChatList />
               <Image
                 className="   rounded-full h-[210px] w-[210px] my-[40px] opacity-25"
@@ -74,7 +80,7 @@ const ChatPreview = () => {
               />
             </>
           ) : filteredSearch.length > 0 ? (
-            <View>
+            <View className="w-full">
               <FlatList
                 nestedScrollEnabled
                 style={{ width: "95%" }}

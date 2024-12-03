@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import React, { useRef } from "react";
 import * as Haptics from "expo-haptics";
 
@@ -21,7 +21,9 @@ const MessageText = ({
         delayPressIn={400}
         onLongPress={() => {
           handleSelectedMessage(messageRef);
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+          Platform.OS !== "web" &&
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         }}
         className={` relative p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl  max-w-[320px] rounded-br-xl shadow   ${
           thisUsersMessage

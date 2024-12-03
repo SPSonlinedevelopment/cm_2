@@ -20,7 +20,7 @@ export default AnimatedCircleComponent = ({
   useEffect(() => {
     Animated.timing(progress, {
       toValue: value,
-      duration: 1000,
+      duration: 1500,
       useNativeDriver: false,
     }).start();
   }, [percentage]);
@@ -32,7 +32,7 @@ export default AnimatedCircleComponent = ({
 
   return (
     <View className="flex justify-center items-center relative mt-10 ">
-      <Text className="text-2xl font-pextrabold text-white absolute z-30 ">
+      <Text className="text-2xl font-medim text-purple absolute z-30 ">
         {text}
       </Text>
 

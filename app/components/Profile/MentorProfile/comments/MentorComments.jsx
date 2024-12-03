@@ -10,7 +10,7 @@ const MentorComments = () => {
   const [displayAllCommentsModal, setDisplayAllCommentsModal] = useState(false);
 
   return (
-    <View className=" w-full  rounded-2xl shadow bg-white py-2  my-3">
+    <View className=" w-[99%]  rounded-2xl shadow bg-white py-2  my-3">
       <DisplayMentorCommentsModal
         displayAllCommentsModal={displayAllCommentsModal}
         setDisplayAllCommentsModal={setDisplayAllCommentsModal}

@@ -45,12 +45,13 @@ export const useKeyboardAndScrollConfig = () => {
   };
 };
 
-const ChatRoom = () => {
+const ChatRoom = ({ roomIdWeb, completedSessionWeb }) => {
   const { userDetails } = useAuth();
 
   const ios = Platform.OS == "ios";
   const route = useRoute();
-  const { roomId, completedSession } = route?.params;
+
+  const { roomId = "", completedSession } = route?.params || {};
 
   const [replyState, setReplyState] = useState({
     displayShowReplyBar: false,
@@ -87,7 +88,10 @@ const ChatRoom = () => {
     }
   };
 
-  const chatRoomData = getChatRoomData(roomId, completedSession);
+  const chatRoomData = getChatRoomData(
+    Platform.OS === "web" ? roomIdWeb : roomId,
+    Platform.OS === "web" ? completedSessionWeb : completedSession
+  );
 
   // Render each modal component
   const renderModalComponents = () => (
@@ -138,8 +142,13 @@ const ChatRoom = () => {
     }
   };
 
-  return (
-    <ChatRoomProvider roomId={roomId} completedSession={completedSession}>
+  let content = (
+    <ChatRoomProvider
+      roomId={Platform.OS === "web" ? roomIdWeb : roomId}
+      completedSession={
+        Platform.OS === "web" ? completedSessionWeb : completedSession
+      }
+    >
       <KeyboardAvoidingView
         behavior={ios ? "padding" : "height"}
         style={styles.container}
@@ -196,6 +205,16 @@ const ChatRoom = () => {
       </KeyboardAvoidingView>
     </ChatRoomProvider>
   );
+
+  if (Platform.OS === "web" && !roomIdWeb) {
+    content = (
+      <View>
+        <Text> Select a chat</Text>
+      </View>
+    );
+  }
+
+  return content;
 };
 
 export default ChatRoom;

@@ -3,13 +3,14 @@ import { View, Text, TouchableOpacity, Modal } from "react-native";
 import { useAuth } from "@/app/context/authContext";
 import { ScrollView } from "react-native-gesture-handler";
 import AchievementsModal from "./AchievementsModal";
+import AnimatedCircleComponent from "../Achievements/AnimatedCIrcle";
 
 const Achievements = () => {
   const [displayAchievementsModal, setDisplayAchievementsModal] =
     useState(false);
 
   return (
-    <View className=" w-full  h-[200px] rounded-2xl shadow bg-white py-2  my-3">
+    <View className=" w-[99%]  h-[200px] rounded-2xl shadow bg-white py-2  my-3">
       <AchievementsModal
         displayDescription={true}
         setDisplayAchievementsModal={setDisplayAchievementsModal}

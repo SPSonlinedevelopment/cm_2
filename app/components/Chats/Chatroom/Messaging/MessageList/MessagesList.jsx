@@ -1,4 +1,10 @@
-import { View, ScrollView, ActivityIndicator, Text } from "react-native";
+import {
+  View,
+  ScrollView,
+  ActivityIndicator,
+  Text,
+  Platform,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import MessageItem from "../MessageItems/MessageItem";
 import SessionSummary from "../../../EndOfSession/ReviewForMentor/SessionSummary";
@@ -110,7 +116,8 @@ const MessagesList = ({
 
     scrollToEnd();
 
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    Platform.OS !== "web" &&
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [messages, chatRoomData.sessionCompleted]);
 
   if (loading) {

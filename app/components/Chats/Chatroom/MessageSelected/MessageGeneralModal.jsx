@@ -77,40 +77,42 @@ const MessageGeneralModal = ({
     >
       <View className=" h-full w-full absolute bg-black-100 opacity-40 flex justify-center items-end " />
 
-      <View
-        className={` max-w-[500px] rounded-2xl p-2 m-4 bg-white  flex justify-between items-center ${
-          type === "deleteAccount" ? "h-[500px]" : "h-[340px]"
-        } `}
-      >
-        <Text className="text-xl p-3 text-center font-bold">
-          {text.headerText}
-        </Text>
-        <Octicons name="report" size={50} color="red" />
-        <View className="w-[90%] mt-3">
-          <Text className="text-base font-bold text-black text-center">
-            {text.bodyText}
+      <View className="w-full h-full flex items-center justify-center">
+        <View
+          className={` max-w-[500px] rounded-2xl p-2 m-4 bg-white  flex justify-between items-center ${
+            type === "deleteAccount" ? "h-[500px]" : "h-[340px]"
+          } `}
+        >
+          <Text className="text-xl p-3 text-center font-bold">
+            {text.headerText}
           </Text>
+          <Octicons name="report" size={50} color="red" />
+          <View className="w-[90%] mt-3">
+            <Text className="text-base font-bold text-black text-center">
+              {text.bodyText}
+            </Text>
 
-          {type === "deleteAccount" && (
-            <ConfirmDeleteAccount setDeleteInput={setDeleteInput} />
-          )}
-        </View>
-        <View className="flex flex-row justify-between items-center w-full border">
-          <IconButton
-            disabled={
-              deleteInput.trim() !== "Delete" && type === "deleteAccount"
-            }
-            textStyles="font-bold"
-            containerStyles="p-2 m-3 w-[150px] h-[50px]"
-            title="Confirm"
-            handlePress={handleConfirm}
-          />
-          <IconButton
-            textStyles="font-bold text-orange"
-            containerStyles="p-2 m-3 w-[150px] h-[50px] bg-transparent border border-orange-300"
-            title="Cancel"
-            handlePress={closeAndReset}
-          />
+            {type === "deleteAccount" && (
+              <ConfirmDeleteAccount setDeleteInput={setDeleteInput} />
+            )}
+          </View>
+          <View className="flex flex-row justify-between items-center w-full ">
+            <IconButton
+              disabled={
+                deleteInput.trim() !== "Delete" && type === "deleteAccount"
+              }
+              textStyles="font-bold"
+              containerStyles="p-2 m-3 w-[150px] h-[50px]"
+              title="Confirm"
+              handlePress={handleConfirm}
+            />
+            <IconButton
+              textStyles="font-bold text-orange"
+              containerStyles="p-2 m-3 w-[150px] h-[50px] bg-transparent border border-orange-300"
+              title="Cancel"
+              handlePress={closeAndReset}
+            />
+          </View>
         </View>
       </View>
     </Modal>

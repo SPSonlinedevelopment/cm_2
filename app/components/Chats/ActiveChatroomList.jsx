@@ -3,7 +3,7 @@ import React from "react";
 import ChatItem from "./ChatItem";
 import { useChat } from "@/app/context/chatContext";
 
-const ActiveChatroomList = () => {
+const ActiveChatroomList = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
   const { allChats } = useChat();
 
   if (!allChats.length) {
@@ -22,6 +22,8 @@ const ActiveChatroomList = () => {
         showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <ChatItem
+            setCompletedSessionWeb={setCompletedSessionWeb}
+            setRoomIdWeb={setRoomIdWeb}
             newQuestion={false}
             completedSession={false}
             activeSession={true}
