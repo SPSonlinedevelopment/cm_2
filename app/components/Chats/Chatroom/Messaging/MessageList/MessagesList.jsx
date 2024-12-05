@@ -16,6 +16,7 @@ import { useChatRoom } from "@/app/context/chatRoomContext";
 import { useAuth } from "@/app/context/authContext";
 import useMessagesListener from "../../../../../hooks/useMessagesListener";
 import { Timestamp } from "firebase/firestore";
+import { platformColor } from "nativewind";
 
 const MessagesList = ({
   scrollViewRef,
@@ -142,7 +143,10 @@ const MessagesList = ({
   }
 
   return (
-    <ScrollView ref={scrollViewRef}>
+    <ScrollView
+      showsVerticalScrollIndicator={Platform.OS === "web" ? true : false}
+      ref={scrollViewRef}
+    >
       {messages?.map((message) => {
         return (
           <MessageItem

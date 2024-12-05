@@ -31,7 +31,7 @@ const NavHeaderBar = () => {
   ];
 
   return (
-    <View className="flex flex-row justify-between w-full items-center shadow-lg">
+    <View className="flex flex-row justify-between w-full items-center shadow relative z-50 bg-neutral-50  ">
       <View className="flex  flex-row-reverse justify-center items-center ">
         <Text className="text-purple font-bold text-2xl ml-3">Collet</Text>
         <Image className="h-14 w-14 rounded-full shadow" source={CMlogo} />

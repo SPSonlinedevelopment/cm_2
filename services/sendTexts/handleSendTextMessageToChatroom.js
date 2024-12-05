@@ -21,6 +21,8 @@ export const handleSendTextMessageToChatroom = async (
 
   if (!message) return;
 
+  console.log("handleSendTextMessageToChatroom executed");
+
   try {
     const docRef = doc(db, "rooms", roomId);
     const messagesRef = collection(docRef, "messages");

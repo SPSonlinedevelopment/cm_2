@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import {
 //   RegExpMatcher,
-//   // englishDataset,
+//   englishDataset,
 //   englishRecommendedTransformers,
 // } from "obscenity";
 
@@ -174,16 +174,15 @@ export const calculateTimeDifference = (createdAt, sessionCompletedAt) => {
   return timeDifferenceMins;
 };
 
-// export const screenProfanities = (text) => {
-//   const matcher = new RegExpMatcher({
-//     // ...englishDataset.build(),
-//     ...englishRecommendedTransformers,
-//   });
-
-//   if (matcher.hasMatch(text)) {
-//     Alert.alert("text shows inappropriate text");
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
+export const screenProfanities = (text) => {
+  // const matcher = new RegExpMatcher({
+  //   ...englishDataset.build(),
+  //   ...englishRecommendedTransformers,
+  // });
+  // if (matcher.hasMatch(text)) {
+  //   Alert.alert("text shows inappropriate text");
+  //   return true;
+  // } else {
+  //   return false;
+  // }
+};

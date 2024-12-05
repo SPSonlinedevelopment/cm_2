@@ -21,7 +21,7 @@ const List = React.memo(({ completedChats }) => {
   return (
     <FlatList
       nestedScrollEnabled
-      style={{ width: "95%" }}
+      style={{ width: "100%" }}
       data={completedChats}
       keyExtractor={(item) => item.roomId}
       showsVerticalScrollIndicator={false}

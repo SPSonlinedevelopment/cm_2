@@ -75,13 +75,13 @@ const LoadedImage = React.memo(
               className="flex justify-center items-center"
               onPress={() => openFullScreen()}
             >
-              {loading && (
+              {/* {loading && (
                 <ActivityIndicator
                   size="large"
                   color="purple"
-                  style={styles.loadingSpinner}
+                  // style={styles.loadingSpinner}
                 />
-              )}
+              )} */}
               <FadeInView>
                 <Image
                   testID="image_element"

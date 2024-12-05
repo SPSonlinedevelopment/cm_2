@@ -194,8 +194,6 @@ const ConversationSuggestions = () => {
       {showSuggestions && (
         <ScrollView
           style={{
-            position: "absolute",
-            bottom: 70,
             backgroundColor: "transparent",
             marginBottom: 5,
           }}

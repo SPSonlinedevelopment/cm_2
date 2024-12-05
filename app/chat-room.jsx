@@ -4,6 +4,10 @@ import {
   StyleSheet,
   View,
   Text,
+  Image,
+  Touchable,
+  TouchableOpacity,
+  useWindowDimensions,
 } from "react-native";
 import React, { useState, useRef, Children } from "react";
 import { useRoute } from "@react-navigation/native";
@@ -25,6 +29,7 @@ import { getChatRoomData } from "./context/chatRoomContext";
 import { ChatRoomProvider } from "./context/chatRoomContext";
 import ImageMessageCaption from "./components/Chats/SendData/SendImages/ImageMessageCaption";
 import { pickImage } from "@/utils/imagePicker";
+import IconButton from "./components/Buttons/IconButton";
 
 export const useKeyboardAndScrollConfig = () => {
   const ios = Platform.OS === "ios";
@@ -59,6 +64,8 @@ const ChatRoom = ({ roomIdWeb, completedSessionWeb }) => {
     replyRecipientName: "",
     replyRecipientId: "",
   });
+
+  const { width } = useWindowDimensions();
 
   const [displayConfirmEndOfSessionModal, setDisplayConfirmEndOfSessionModal] =
     useState(false);
@@ -149,17 +156,27 @@ const ChatRoom = ({ roomIdWeb, completedSessionWeb }) => {
         Platform.OS === "web" ? completedSessionWeb : completedSession
       }
     >
-      <KeyboardAvoidingView
+      {/* <KeyboardAvoidingView
         behavior={ios ? "padding" : "height"}
         style={styles.container}
         {...kavConfig}
         contentContainerStyle={{ flexGrow: 1 }}
+      > */}
+      <View
+        className={` h-full bg-[#F0F2F5] shadow ${
+          Platform.OS === "web" && width < 900
+            ? "w-[50%]"
+            : Platform.OS === "web"
+            ? "w-[70%]"
+            : "w-full"
+        } `}
       >
         <ChatroomHeader
           setDisplayConfirmEndOfSessionModal={
             setDisplayConfirmEndOfSessionModal
           }
         />
+
         {renderModalComponents()}
         {renderFeedback()}
 
@@ -179,7 +196,7 @@ const ChatRoom = ({ roomIdWeb, completedSessionWeb }) => {
         )}
 
         {chatRoomData && !chatRoomData?.sessionCompleted && (
-          <View>
+          <View className="">
             <EmojiSelector
               setText={setText}
               displayEmojiSelector={displayEmojiSelector}
@@ -202,14 +219,42 @@ const ChatRoom = ({ roomIdWeb, completedSessionWeb }) => {
             />
           </View>
         )}
-      </KeyboardAvoidingView>
+      </View>
+
+      {/* </KeyboardAvoidingView> */}
     </ChatRoomProvider>
   );
 
   if (Platform.OS === "web" && !roomIdWeb) {
     content = (
-      <View>
-        <Text> Select a chat</Text>
+      <View
+        className={` h-full bg-[#F0F2F5] shadow ${
+          Platform.OS === "web" && width < 900
+            ? "w-[50%]"
+            : Platform.OS === "web"
+            ? "w-[70%]"
+            : "w-full"
+        } `}
+      >
+        <View className=" h-full  pt-20 flex flex-col shadow  bg-neutral   ">
+          <View className="flex  w-full h-full justify-center items-center  ">
+            <Image
+              className="  m-10 rounded-full h-[221px] w-[221px]"
+              source={require("../assets/images/CMlogo.png")}
+            />
+            <Text className="text-2xl m-10 text-center">
+              Select a chat to begin
+            </Text>
+            <Text className="text-base text-center ">
+              Take pictures of your work and get help
+            </Text>
+            <IconButton
+              handlePress={() => {}}
+              containerStyles="w-[200px] h-[40px] mt-10 "
+              title="Download for mobile"
+            ></IconButton>
+          </View>
+        </View>
       </View>
     );
   }

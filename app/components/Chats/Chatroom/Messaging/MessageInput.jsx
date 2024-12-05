@@ -1,4 +1,11 @@
-import { View, TouchableOpacity, TextInput, Alert, Text } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  Text,
+  Platform,
+} from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "@/app/context/authContext";
 import { Feather } from "@expo/vector-icons";
@@ -33,6 +40,9 @@ const MessageInput = React.memo(
 
     const handleSendMessage = async () => {
       setIsSendingMessage(true);
+
+      // need another solution as this doesnt work on web
+
       const hasProfanities = screenProfanities(text);
       if (hasProfanities) {
         setIsSendingMessage(false);
@@ -84,10 +94,12 @@ const MessageInput = React.memo(
     return (
       <View
         testID="message_input"
-        className="shadow-2xl bg-neutral-200  w-full flex flex-row justify-center items-center"
+        className={`shadow-2xl   ${
+          Platform.OS === "web" ? "mb-[65px]" : "mb-[30px]"
+        }  bg-neutral-200  shadow flex flex-row  items-center`}
       >
-        <View className="flex-row justify-around  items-center  w-full  p-2 pb-4    ">
-          <View className="h-[55px]  w-[70px]   flex-row justify-center items-center">
+        <View className="  w-full   flex-row  items-center justify-between">
+          <View className=" flex flex-row p-2">
             <TouchableOpacity
               testID="image_picker_button"
               onPress={() => handlePickImage()}
@@ -100,7 +112,9 @@ const MessageInput = React.memo(
               setDisplayEmojiSelector={setDisplayEmojiSelector}
             />
           </View>
+
           <TextInput
+            placeholderTextColor={"grey"}
             testID="text_message_input"
             value={text}
             ref={inputRef}
@@ -115,33 +129,46 @@ const MessageInput = React.memo(
             style={{
               backgroundColor: "white",
               display: "flex",
-              padding: 3,
+              padding: 5,
+              borderWidth: 0,
+              outline: "none",
             }}
-            className="flex-1  mr-1 text-base rounded-full  p-2 items-center justify-center"
+            className={`    ${
+              Platform.OS === "web" && "h-[60px]"
+            }  flex-1 mr-1 text-base rounded-2xl  w-full p-2  m-3  items-center justify-center `}
             multiline={true}
-            numberOfLines={10}
-            placeholder="type message ..."
+            numberOfLines={Platform.OS !== "web" ? 2 : 1}
+            placeholder="Type message ..."
           />
+          <View className="h-[55px] w-[50px]  justify-center items-center">
+            {Platform.OS !== "web" ? (
+              text.length > 0 ? (
+                <SendMessageButton
+                  disabled={isSendingMessage}
+                  handlePress={() => handleSendMessage()}
+                />
+              ) : (
+                <OpenCameraButton
+                  setDisplayTakePhotoModal={setDisplayTakePhotoModal}
+                />
+              )
+            ) : null}
 
-          <TakePhotoModal
-            displayTakePhotoModal={displayTakePhotoModal}
-            setDisplayImageCaptionModal={setDisplayImageCaptionModal}
-            setImage={setImage}
-            setDisplayTakePhotoModal={setDisplayTakePhotoModal}
-          />
-          <View className="h-[55px] w-[50px]  flex justify-center items-center">
-            {text.length > 0 ? (
+            {Platform.OS === "web" && (
               <SendMessageButton
                 disabled={isSendingMessage}
-                handlePress={handleSendMessage}
-              />
-            ) : (
-              <OpenCameraButton
-                setDisplayTakePhotoModal={setDisplayTakePhotoModal}
+                handlePress={() => handleSendMessage()}
               />
             )}
           </View>
         </View>
+
+        <TakePhotoModal
+          displayTakePhotoModal={displayTakePhotoModal}
+          setDisplayImageCaptionModal={setDisplayImageCaptionModal}
+          setImage={setImage}
+          setDisplayTakePhotoModal={setDisplayTakePhotoModal}
+        />
       </View>
     );
   }

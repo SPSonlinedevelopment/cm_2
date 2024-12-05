@@ -15,8 +15,8 @@ const ActiveChatroomList = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
   } else
     return (
       <FlatList
+        style={{ width: "100%" }}
         nestedScrollEnabled
-        style={{ width: "95%" }}
         data={allChats}
         keyExtractor={(item) => item.roomId}
         showsVerticalScrollIndicator={false}

@@ -1,4 +1,11 @@
-import { View, Text, FlatList, Image, Platform } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  Platform,
+  useWindowDimensions,
+} from "react-native";
 import React, { useState } from "react";
 import ActiveChatroomList from "./ActiveChatroomList";
 import GradientNavigation from "../Profile/MenteeProfile/GradientNaviation/GradientNavigation";
@@ -21,6 +28,8 @@ const ChatPreview = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
 
   const [searchInput, setSearchInput] = useState("");
   const { completedChats, allChats } = useChat();
+
+  const { width } = useWindowDimensions();
 
   let searchArr;
 
@@ -47,65 +56,95 @@ const ChatPreview = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
     );
   });
 
+  const content = (
+    <>
+      <View
+        className={` px-2 flex flex-col   justify-center items-start  w-full  ${
+          Platform.OS === "web" ? "my-2" : ""
+        }`}
+      >
+        <Text className="text-2xl font-bold ml-2">Chats</Text>
+      </View>
+      <SearchChats
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        searchArr={searchArr}
+      />
+      <ScrollView
+        showsVerticalScrollIndicator={Platform.OS === "web" ? true : false}
+        contentContainerStyle={{ display: "flex", alignItems: "center" }}
+        className="w-full h-full flex"
+      >
+        {!searchInput ? (
+          <View className="w-full flex items-center p-2 ">
+            {userDetails?.mode === "mentor" && <NewQuestionList />}
+            <ActiveChatroomList
+              setCompletedSessionWeb={setCompletedSessionWeb}
+              setRoomIdWeb={setRoomIdWeb}
+            />
+            <CompletedChatList />
+            <Image
+              className="   rounded-full h-[210px] w-[210px] my-[40px] opacity-25"
+              source={require("../../../assets/images/CMlogo.png")}
+            />
+          </View>
+        ) : filteredSearch.length > 0 ? (
+          <View className="w-full">
+            <FlatList
+              nestedScrollEnabled
+              style={{ width: "100%" }}
+              data={filteredSearch}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item, index }) => (
+                <ChatItem
+                  newQuestion={false}
+                  activeSession={false}
+                  completedSession={true}
+                  item={item}
+                  index={index}
+                  noBorder={filteredSearch.length !== index + 1}
+                />
+              )}
+            />
+          </View>
+        ) : (
+          <View className="items-center justify-center">
+            <Text className="mt-7 text-base font-bold">No results found</Text>
+          </View>
+        )}
+      </ScrollView>
+    </>
+  );
+
+  // <View
+  //   className={` ${
+  //     Platform.OS === "web" && width < 1000
+  //       ? "h-full w-[50%]"
+  //       : Platform.OS === "web"
+  //       ? "w-[70%]"
+  //       : "w-full"
+  //   } `}
+  // ></View>;
+
   return (
-    <View className="h-full">
-      {Platform.OS === "web" && <GradientNavigation />}
-
-      <SafeAreaView className=" w-full flex-col  items-center justify-start ">
-        <View className="  justify-start items-start w-full  ">
-          <Text className="text-2xl font-bold ml-4 pb-">Chats</Text>
-        </View>
-
-        {/* <SearchChats
-          searchInput={searchInput}
-          setSearchInput={setSearchInput}
-          searchArr={searchArr}
-        /> */}
-        <ScrollView
-          contentContainerStyle={{ display: "flex", alignItems: "center" }}
-          className="w-full h-full flex"
-        >
-          {userDetails?.mode === "mentor" && <NewQuestionList />}
-
-          {!searchInput ? (
-            <>
-              <ActiveChatroomList
-                setCompletedSessionWeb={setCompletedSessionWeb}
-                setRoomIdWeb={setRoomIdWeb}
-              />
-              <CompletedChatList />
-              <Image
-                className="   rounded-full h-[210px] w-[210px] my-[40px] opacity-25"
-                source={require("../../../assets/images/CMlogo.png")}
-              />
-            </>
-          ) : filteredSearch.length > 0 ? (
-            <View className="w-full">
-              <FlatList
-                nestedScrollEnabled
-                style={{ width: "95%" }}
-                data={filteredSearch}
-                keyExtractor={(item) => item.id}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item, index }) => (
-                  <ChatItem
-                    newQuestion={false}
-                    activeSession={false}
-                    completedSession={true}
-                    item={item}
-                    index={index}
-                    noBorder={filteredSearch.length !== index + 1}
-                  />
-                )}
-              />
-            </View>
-          ) : (
-            <View className="items-center justify-center">
-              <Text className="mt-7 text-base font-bold">No results found</Text>
-            </View>
-          )}
-        </ScrollView>
-      </SafeAreaView>
+    <View
+      className={`flex-col h-full  items-center justify-start shadow  ${
+        Platform.OS === "web" && width < 900
+          ? " w-[50%]"
+          : Platform.OS === "web"
+          ? " w-[30%]"
+          : "w-full"
+      } `}
+    >
+      {Platform.OS === "web" ? (
+        content
+      ) : (
+        <SafeAreaView>
+          <GradientNavigation />
+          {content}
+        </SafeAreaView>
+      )}
     </View>
   );
 };
