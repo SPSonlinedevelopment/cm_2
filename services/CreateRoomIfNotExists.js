@@ -1,12 +1,7 @@
 import { setDoc, Timestamp, doc, deleteDoc } from "firebase/firestore";
-import { getRoomId } from "@/utils/common";
 import { db } from "@/firebaseConfig";
-import { useAuth } from "../app/context/authContext";
-import { serverTimestamp } from "firebase/firestore";
 
-export const CreateRoomIfNotExists = async (newQuestionObj) => {
-  console.log("🚀 ~ CreateRoomIfNotExists= ~ newQuestionObj:", newQuestionObj);
-
+export const CreateRoomIfNotExists = async (newQuestionObj, userDetails) => {
   try {
     // Create room document
     const roomData = {

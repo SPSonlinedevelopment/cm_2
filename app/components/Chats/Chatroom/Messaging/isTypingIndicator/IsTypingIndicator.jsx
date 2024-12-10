@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
 import { collection, onSnapshot, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
@@ -57,8 +57,9 @@ export default IsTypingIndicator;
 const DisplayTyping = memo(({ name }) => (
   <View
     testID="is_typing_indicator"
-    className="flex flex-row items-center absolute bottom-[75px] p-1 mb-2 mt-1 h-[45px] 
-               rounded-xl shadow-sm bg-white self-start ml-3"
+    className={`flex flex-row items-center absolute bottom-[75px] p-1 mb-2 mt-1 h-[45px] rounded-xl shadow-sm bg-white self-start ml-3 ${
+      Platform.OS === "web" ? " bottom-[95px]" : " bottom-[75px]"
+    }`}
   >
     <Text className="text-base">{name} is Typing</Text>
     <LoadingDots size={70} />

@@ -57,14 +57,11 @@ const ChatPreview = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
   });
 
   const content = (
-    <>
-      <View
-        className={` px-2 flex flex-col   justify-center items-start  w-full  ${
-          Platform.OS === "web" ? "my-2" : ""
-        }`}
-      >
+    <View className="flex w-full h-full items-center  rounded-2xl  bg-white  ">
+      <View className="flex flex-row justify-start mt-2">
         <Text className="text-2xl font-bold ml-2">Chats</Text>
       </View>
+
       <SearchChats
         searchInput={searchInput}
         setSearchInput={setSearchInput}
@@ -72,24 +69,36 @@ const ChatPreview = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
       />
       <ScrollView
         showsVerticalScrollIndicator={Platform.OS === "web" ? true : false}
-        contentContainerStyle={{ display: "flex", alignItems: "center" }}
+        contentContainerStyle={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
         className="w-full h-full flex"
       >
         {!searchInput ? (
           <View className="w-full flex items-center p-2 ">
-            {userDetails?.mode === "mentor" && <NewQuestionList />}
+            {userDetails?.mode === "mentor" && (
+              <NewQuestionList
+                setCompletedSessionWeb={setCompletedSessionWeb}
+                setRoomIdWeb={setRoomIdWeb}
+              />
+            )}
             <ActiveChatroomList
               setCompletedSessionWeb={setCompletedSessionWeb}
               setRoomIdWeb={setRoomIdWeb}
             />
-            <CompletedChatList />
+            <CompletedChatList
+              setCompletedSessionWeb={setCompletedSessionWeb}
+              setRoomIdWeb={setRoomIdWeb}
+            />
             <Image
               className="   rounded-full h-[210px] w-[210px] my-[40px] opacity-25"
               source={require("../../../assets/images/CMlogo.png")}
             />
           </View>
         ) : filteredSearch.length > 0 ? (
-          <View className="w-full">
+          <View className="w-full p-2">
             <FlatList
               nestedScrollEnabled
               style={{ width: "100%" }}
@@ -109,27 +118,17 @@ const ChatPreview = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
             />
           </View>
         ) : (
-          <View className="items-center justify-center">
-            <Text className="mt-7 text-base font-bold">No results found</Text>
+          <View className="  mt-20 flex flex-col justify-center items-center w-full h-full ">
+            <Text className="text-base font-bold">No results found</Text>
           </View>
         )}
       </ScrollView>
-    </>
+    </View>
   );
-
-  // <View
-  //   className={` ${
-  //     Platform.OS === "web" && width < 1000
-  //       ? "h-full w-[50%]"
-  //       : Platform.OS === "web"
-  //       ? "w-[70%]"
-  //       : "w-full"
-  //   } `}
-  // ></View>;
 
   return (
     <View
-      className={`flex-col h-full  items-center justify-start shadow  ${
+      className={`flex-col bg-white h-full  items-center justify-start shadow rounded-2xl   ${
         Platform.OS === "web" && width < 900
           ? " w-[50%]"
           : Platform.OS === "web"
@@ -141,8 +140,8 @@ const ChatPreview = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
         content
       ) : (
         <SafeAreaView>
-          <GradientNavigation />
           {content}
+          {width > 500 ? <NavHeaderBar /> : <GradientNavigation />}
         </SafeAreaView>
       )}
     </View>

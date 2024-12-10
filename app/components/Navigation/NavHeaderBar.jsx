@@ -41,7 +41,11 @@ const NavHeaderBar = () => {
         <View className="flex flex-row ">
           {navLinks.map((link) => {
             return (
-              <TouchableOpacity className="m-5" onPress={link.onPress}>
+              <TouchableOpacity
+                key={link.name}
+                className="m-5"
+                onPress={link.onPress}
+              >
                 <Text className="text-base text-neutral-500  font-bold font-med">
                   {link.name}
                 </Text>

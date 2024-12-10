@@ -2,7 +2,8 @@ import { View, Text, Modal } from "react-native";
 import React from "react";
 import Octicons from "@expo/vector-icons/Octicons";
 import IconButton from "@/app/components/Buttons/IconButton";
-import { useChat } from "@/app/context/chatContext";
+// import { useChat } from "@/app/context/chatContext";
+import { useChat } from "../../../../context/chatContext";
 
 const ReportMessageModal = ({
   setDisplayReportMessageModal,

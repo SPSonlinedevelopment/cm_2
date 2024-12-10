@@ -1,25 +1,20 @@
-import { View, Text, Touchable, TouchableOpacity } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import { Link, router } from "expo-router";
+import { View, Text, TouchableOpacity } from "react-native";
+import React, { useRef, useState } from "react";
 import CustomButton from "../../Buttons/CustomButton";
-
 import FormField from "../FormField/FormField";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
-
 import { validateInputs } from "@/utils/validateInputs/validateInputs";
-
 import { initialFormState } from "../FormField/FormField";
 import { useAuth } from "@/app/context/authContext";
 import { useNavigation } from "@react-navigation/native";
-import { TextInput } from "react-native-gesture-handler";
 
 const SignInForm = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(initialFormState);
   const [alertMessage, setAlertMessage] = useState("");
-  const { user, signIn } = useAuth();
+  const { signIn } = useAuth();
 
   const emailRef = useRef(undefined);
   const passwordRef = useRef(undefined);
@@ -48,7 +43,7 @@ const SignInForm = () => {
     }
   };
   return (
-    <View className="flex flex-col justify-center items-center ">
+    <View className="flex flex-col justify-center items-center">
       <FormField
         setAlertMessage={setAlertMessage}
         refName={emailRef}
@@ -77,7 +72,7 @@ const SignInForm = () => {
       />
 
       {alertMessage && (
-        <View className=" w-full flex justify-center items-center">
+        <View className="w-full flex justify-center items-center">
           <Text className="text-red-600  mt-2 text-center w-[80%]">
             {alertMessage}
           </Text>
@@ -91,7 +86,7 @@ const SignInForm = () => {
           handleSignIn();
         }}
         title="Sign In"
-      ></CustomButton>
+      />
 
       <TouchableOpacity onPress={() => navigation.navigate("forgot-password")}>
         <Text className="text-orange-400  text-base font-medium">

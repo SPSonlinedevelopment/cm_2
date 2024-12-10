@@ -1,4 +1,4 @@
-import { View, Image, Platform, Text } from "react-native";
+import { View, Image, Platform, Text, Dimensions } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "./Header";
@@ -28,15 +28,14 @@ const Profiles = () => {
 
   const navigation = useNavigation();
 
+  const { width } = Dimensions.get("window");
+
   const universalContent = (
     <View
       className={`w-full flex items-center justify-center rounded-2xl bg-neutral-50  ${
         Platform.OS === "web" ? "px-[10px]" : ""
       }`}
     >
-      <NavHeaderBar />
-
-      {/* {Platform.OS !== "web" && <EditProfile />} */}
       <View
         className={`h-full  w-full rounded-xl  max-w-[1000px]  flex-1 flex-col  items-center
     `}
@@ -65,8 +64,6 @@ const Profiles = () => {
 
   const mobileContent = (
     <View className="bg-neutral-50 flex flex-col justify-center">
-      <GradientNavigation />
-
       <CustomKeyboardView>
         <SafeAreaView style={{ margin: 10 }}>
           <StatusBar style="dark" />
@@ -77,7 +74,12 @@ const Profiles = () => {
     </View>
   );
 
-  return Platform.OS === "web" ? webContent : mobileContent;
+  return (
+    <View className="bg-neutral-50 h-full">
+      {width > 500 ? <NavHeaderBar /> : <GradientNavigation />}
+      {Platform.OS === "web" ? webContent : mobileContent}
+    </View>
+  );
 };
 
 export default Profiles;

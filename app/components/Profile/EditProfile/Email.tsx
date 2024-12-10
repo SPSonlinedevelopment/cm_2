@@ -27,7 +27,7 @@ const EmailContainer: React.FC<{
   };
 
   return (
-    <View>
+    <View className="w-full">
       <InputFieldContainer
         setFormField={setFormField}
         currentVal={user?.email}

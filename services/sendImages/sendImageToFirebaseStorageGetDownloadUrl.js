@@ -2,8 +2,9 @@ import { getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import createBlob from "./createBlob";
 
 const handleCreateBlob = async (image) => {
+  let blob;
   try {
-    const blob = await createBlob(image);
+    blob = await createBlob(image);
   } catch (error) {
     console.log(error);
   }
@@ -22,7 +23,6 @@ export const sendImageToFirebaseStorageGetDownloadUrl = async (
     // Create blob and upload to Firebase
     const blob = await handleCreateBlob(image);
     await uploadBytesResumable(storageRef, blob);
-    blob.close(); // Cleanup blob after upload
 
     // Get the download URL
     return await getDownloadURL(storageRef);

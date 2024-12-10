@@ -185,7 +185,7 @@ const Input: React.FC<{
     <View className="w-[370px] my-3 ">
       <Text className="text-base">{text}</Text>
       <View
-        className={`flex my-2 flex-row w-full shadow-sm bg-white rounded-2xl p-1 items-center  justify-between ${
+        className={`flex my-2 flex-row w-full shadow bg-white rounded-2xl p-1 items-center  justify-between ${
           error ? "border border-red-600" : ""
         }`}
       >
@@ -198,6 +198,8 @@ const Input: React.FC<{
             width: "90%",
             height: 46,
             fontSize: 16,
+            borderColor: "none",
+            outline: "none",
           }}
           // placeholder={text}
         />

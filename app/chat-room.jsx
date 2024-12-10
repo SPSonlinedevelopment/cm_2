@@ -30,6 +30,7 @@ import { ChatRoomProvider } from "./context/chatRoomContext";
 import ImageMessageCaption from "./components/Chats/SendData/SendImages/ImageMessageCaption";
 import { pickImage } from "@/utils/imagePicker";
 import IconButton from "./components/Buttons/IconButton";
+import { LinearGradient } from "expo-linear-gradient";
 
 export const useKeyboardAndScrollConfig = () => {
   const ios = Platform.OS === "ios";
@@ -76,6 +77,15 @@ const ChatRoom = ({ roomIdWeb, completedSessionWeb }) => {
   const [selectedMessage, setSelectedMessage] = useState({});
   const [isSendingImage, setIsSendingImage] = useState(false);
   const [text, setText] = useState("");
+
+  const [displayReportMessageModal, setDisplayReportMessageModal] =
+    useState(false);
+  const [displayDeleteMessageModal, setDisplayDeleteMessageModal] =
+    useState(false);
+
+  // should rename this obj as its used in delete function and report message funtions
+  const [replyMessageObj, setReplyMessageObj] = useState({});
+
   const { scrollViewRef, scrollToEnd, kavConfig, scrollViewConfig } =
     useKeyboardAndScrollConfig();
 
@@ -113,6 +123,12 @@ const ChatRoom = ({ roomIdWeb, completedSessionWeb }) => {
       )}
 
       <MessageSelectedModal
+        replyMessageObj={replyMessageObj}
+        setReplyMessageObj={setReplyMessageObj}
+        displayReportMessageModal={displayReportMessageModal}
+        setDisplayReportMessageModal={setDisplayReportMessageModal}
+        displayDeleteMessageModal={displayDeleteMessageModal}
+        setDisplayDeleteMessageModal={setDisplayDeleteMessageModal}
         replyState={replyState}
         setReplyState={setReplyState}
         selectedMessage={selectedMessage}
@@ -149,117 +165,130 @@ const ChatRoom = ({ roomIdWeb, completedSessionWeb }) => {
     }
   };
 
-  let content = (
-    <ChatRoomProvider
-      roomId={Platform.OS === "web" ? roomIdWeb : roomId}
-      completedSession={
-        Platform.OS === "web" ? completedSessionWeb : completedSession
-      }
+  const isWeb = Platform.OS === "web";
+  const widthClass =
+    isWeb && width < 900 ? "w-[50%]" : isWeb ? "w-[70%]" : "w-full";
+
+  const commonContent = (
+    <View
+      className={`h-full shadow ${widthClass} ${isWeb ? "rounded-2xl " : ""}`}
     >
-      {/* <KeyboardAvoidingView
-        behavior={ios ? "padding" : "height"}
-        style={styles.container}
-        {...kavConfig}
-        contentContainerStyle={{ flexGrow: 1 }}
-      > */}
-      <View
-        className={` h-full bg-[#F0F2F5] shadow ${
-          Platform.OS === "web" && width < 900
-            ? "w-[50%]"
-            : Platform.OS === "web"
-            ? "w-[70%]"
-            : "w-full"
-        } `}
-      >
-        <ChatroomHeader
-          setDisplayConfirmEndOfSessionModal={
-            setDisplayConfirmEndOfSessionModal
-          }
+      <LinearGradient
+        // Background Linear Gradient
+        colors={[
+          "rgba(243, 112, 33,0.3), rgba(240, 242, 245, 0.4)",
+          "rgba(99, 0 ,148,0.4)",
+        ]}
+        className="absolute inset-0"
+        style={styles.background}
+      />
+      <ChatroomHeader
+        setDisplayConfirmEndOfSessionModal={setDisplayConfirmEndOfSessionModal}
+      />
+      {renderModalComponents()}
+      {renderFeedback()}
+      {chatRoomData && (
+        <MessagesList
+          setReplyMessageObj={setReplyMessageObj}
+          setDisplayReportMessageModal={setDisplayReportMessageModal}
+          setDisplayDeleteMessageModal={setDisplayDeleteMessageModal}
+          replyState={replyState}
+          setReplyState={setReplyState}
+          isSendingImage={isSendingImage}
+          setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+          setSelectedMessage={setSelectedMessage}
+          scrollViewRef={scrollViewRef}
+          scrollToEnd={scrollToEnd}
         />
-
-        {renderModalComponents()}
-        {renderFeedback()}
-
-        {chatRoomData && (
-          <MessagesList
+      )}
+      {replyState.displayShowReplyBar && !chatRoomData?.sessionCompleted && (
+        <ShowReplyBar replyState={replyState} setReplyState={setReplyState} />
+      )}
+      {chatRoomData && !chatRoomData?.sessionCompleted && (
+        <View className="relative">
+          <EmojiSelector
+            setText={setText}
+            displayEmojiSelector={displayEmojiSelector}
+          />
+          <LiveComplementSelector />
+          <IsTypingIndicator />
+          <CurrentUserTyping text={text} />
+          <ConversationSuggestions isReply={false} />
+          <MessageInput
+            setDisplayImageCaptionModal={setDisplayImageCaptionModal}
+            image={image}
+            setImage={setImage}
+            handlePickImage={handlePickImage}
             replyState={replyState}
             setReplyState={setReplyState}
-            isSendingImage={isSendingImage}
-            setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-            setSelectedMessage={setSelectedMessage}
-            scrollViewRef={scrollViewRef}
-            scrollToEnd={scrollToEnd}
+            text={text}
+            setText={setText}
+            inputRef={inputRef}
+            setDisplayEmojiSelector={setDisplayEmojiSelector}
           />
-        )}
-        {replyState.displayShowReplyBar && !chatRoomData?.sessionCompleted && (
-          <ShowReplyBar replyState={replyState} setReplyState={setReplyState} />
-        )}
-
-        {chatRoomData && !chatRoomData?.sessionCompleted && (
-          <View className="">
-            <EmojiSelector
-              setText={setText}
-              displayEmojiSelector={displayEmojiSelector}
-            />
-            <LiveComplementSelector />
-            <IsTypingIndicator />
-            <CurrentUserTyping text={text} />
-            <ConversationSuggestions isReply={false} />
-            <MessageInput
-              setDisplayImageCaptionModal={setDisplayImageCaptionModal}
-              image={image}
-              setImage={setImage}
-              handlePickImage={handlePickImage}
-              replyState={replyState}
-              setReplyState={setReplyState}
-              text={text}
-              setText={setText}
-              inputRef={inputRef}
-              setDisplayEmojiSelector={setDisplayEmojiSelector}
-            />
-          </View>
-        )}
-      </View>
-
-      {/* </KeyboardAvoidingView> */}
-    </ChatRoomProvider>
+        </View>
+      )}
+    </View>
   );
 
-  if (Platform.OS === "web" && !roomIdWeb) {
-    content = (
-      <View
-        className={` h-full bg-[#F0F2F5] shadow ${
-          Platform.OS === "web" && width < 900
-            ? "w-[50%]"
-            : Platform.OS === "web"
-            ? "w-[70%]"
-            : "w-full"
-        } `}
-      >
-        <View className=" h-full  pt-20 flex flex-col shadow  bg-neutral   ">
-          <View className="flex  w-full h-full justify-center items-center  ">
-            <Image
-              className="  m-10 rounded-full h-[221px] w-[221px]"
-              source={require("../assets/images/CMlogo.png")}
-            />
-            <Text className="text-2xl m-10 text-center">
-              Select a chat to begin
-            </Text>
-            <Text className="text-base text-center ">
-              Take pictures of your work and get help
-            </Text>
-            <IconButton
-              handlePress={() => {}}
-              containerStyles="w-[200px] h-[40px] mt-10 "
-              title="Download for mobile"
-            ></IconButton>
-          </View>
+  const mobileContent = (
+    <KeyboardAvoidingView
+      behavior={ios ? "padding" : "height"}
+      className="flex-grow"
+      {...kavConfig}
+    >
+      {commonContent}
+    </KeyboardAvoidingView>
+  );
+
+  const noRoomSelectedContent = (
+    <View className={`h-full  rounded-2xl bg-[#F0F2F5] shadow ${widthClass}`}>
+      <LinearGradient
+        // Background Linear Gradient
+        colors={[
+          "rgba(243, 112, 33,0.3), rgba(240, 242, 245, 0.4)",
+          "rgba(99, 0 ,148,0.4)",
+        ]}
+        className="absolute  rounded-2xl"
+        style={styles.background}
+      />
+      <View className="h-full pt-20 flex flex-col shadow bg-neutral rounded-2xl">
+        <View className="flex w-full h-full justify-center items-center overflow-hidden">
+          <Image
+            className="m-10 rounded-full max-h-[221px] max-w-[221px]"
+            source={require("../assets/images/CMlogo.png")}
+          />
+          <Text className="text-2xl m-10 text-center">
+            Select a chat to begin
+          </Text>
+          <Text className="text-base text-center">
+            Take pictures of your work and get help
+          </Text>
+          <IconButton
+            handlePress={() => {}}
+            containerStyles="w-[200px] h-[40px] mt-10"
+            title="Download for mobile"
+          />
         </View>
       </View>
-    );
-  }
+    </View>
+  );
 
-  return content;
+  const content =
+    isWeb && !roomIdWeb
+      ? noRoomSelectedContent
+      : isWeb
+      ? commonContent
+      : mobileContent;
+
+  return (
+    <ChatRoomProvider
+      roomId={isWeb ? roomIdWeb : roomId}
+      completedSession={isWeb ? completedSessionWeb : completedSession}
+    >
+      {content}
+    </ChatRoomProvider>
+  );
 };
 
 export default ChatRoom;
@@ -287,5 +316,17 @@ const styles = StyleSheet.create({
   btnContainer: {
     backgroundColor: "white",
     marginTop: 12,
+  },
+  background: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    height: "100%",
+    pointerEvents: "box-none",
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
 });

@@ -40,7 +40,7 @@ const SelectEmoji = ({ displayEmojiSelector, setText }) => {
           showsHorizontalScrollIndicator={false}
           className="bg-transparent"
         >
-          <View className="flex flex-row bg-transparent">
+          <View className="flex flex-row bg-transparent ">
             {topEmojis.map((emoji, index) => {
               return (
                 <TouchableOpacity
@@ -48,7 +48,7 @@ const SelectEmoji = ({ displayEmojiSelector, setText }) => {
                   key={index}
                   className=" m-2"
                 >
-                  <Text className="text-base">{emoji}</Text>
+                  <Text className="text-xl">{emoji}</Text>
                 </TouchableOpacity>
               );
             })}

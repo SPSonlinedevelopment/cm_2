@@ -17,15 +17,19 @@ import { useAuth } from "@/app/context/authContext";
 import useMessagesListener from "../../../../../hooks/useMessagesListener";
 import { Timestamp } from "firebase/firestore";
 import { platformColor } from "nativewind";
+import FadeInView from "@/app/components/Effects/FadeInView";
 
 const MessagesList = ({
   scrollViewRef,
   scrollToEnd,
   replyState,
+  setReplyMessageObj,
   setReplyState,
   setSelectedMessage,
   setDisplayMessageSelectedModal,
   isSendingImage,
+  setDisplayReportMessageModal,
+  setDisplayDeleteMessageModal,
 }) => {
   const { chatRoomData } = useChatRoom();
   const { userDetails } = useAuth();
@@ -136,7 +140,7 @@ const MessagesList = ({
     return (
       <View className="flex justify-center items-center ">
         <Text className="text-base">
-          Sorry: unable to find message at this time!
+          Sorry: unable to find messages at this time!
         </Text>
       </View>
     );
@@ -150,8 +154,11 @@ const MessagesList = ({
       {messages?.map((message) => {
         return (
           <MessageItem
+            setDisplayReportMessageModal={setDisplayReportMessageModal}
+            setDisplayDeleteMessageModal={setDisplayDeleteMessageModal}
             setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
             setSelectedMessage={setSelectedMessage}
+            setReplyMessageObj={setReplyMessageObj}
             replyState={replyState}
             setReplyState={setReplyState}
             message={message}

@@ -1,10 +1,17 @@
-import { View, Text, Alert, ScrollView, Platform } from "react-native";
+import {
+  View,
+  Text,
+  Alert,
+  ScrollView,
+  Platform,
+  Dimensions,
+  KeyboardAvoidingView,
+} from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "./context/authContext";
 import { useNavigation } from "@react-navigation/native";
 import CustomKeyboardView from "./components/CustomKeyboardView";
-import BackButton from "./components/Profile/EditProfile/Buttons/BackButton";
 import AvatarEdit from "./components/Profile/EditProfile/Avatar/AvatarEdit";
 import InputFieldContainer from "./components/Profile/EditProfile/InputField";
 import EmailContainer from "./components/Profile/EditProfile/Email";
@@ -20,6 +27,7 @@ import GradientNavigation from "./components/Profile/MenteeProfile/GradientNavia
 const EditProfile = () => {
   const { userDetails } = useAuth();
   const [displayUpdatedAlert, setDisplayUpatedAlert] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formField, setFormField] = useState({
     firstName: userDetails?.firstName || "",
@@ -28,15 +36,16 @@ const EditProfile = () => {
     partnership: userDetails?.partnership || "",
     avatarName: userDetails?.avatarName || "",
   });
-  console.log(formField);
 
   const navigation = useNavigation();
 
   const mode = userDetails?.mode === "mentor" ? "mentors" : "mentees";
-  console.log("🚀 ~ EditProfile ~ mode:", mode);
+  const { width } = Dimensions.get("window");
+
   const docRef = doc(db, mode, userDetails?.uid);
 
   const saveChanges = async () => {
+    setIsLoading(true);
     if (!EmailValidator.validate(formField.email)) {
       return Alert.alert("Email is invalid");
     } else if (!formField.firstName.length) {
@@ -57,8 +66,6 @@ const EditProfile = () => {
     if (userDetails?.mode === "mentor") {
       updateData.subjectSelection = userDetails.subjectSelection;
     }
-
-    console.log("updateData", updateData);
 
     try {
       const result = await getDoc(docRef);
@@ -82,73 +89,94 @@ const EditProfile = () => {
       setTimeout(() => {
         setDisplayUpatedAlert("");
       }, 3000);
+      setIsLoading(false);
     }
   };
 
-  return (
-    <CustomKeyboardView containerStyles="h-full">
-      {Platform.OS === "web" && <NavHeaderBar />}
-      <SafeAreaView>
-        <BackButton handlePress={async () => navigation.goBack()} />
-        <ScrollView
-          contentContainerStyle={{
-            width: "100%",
-            height: "100%",
-            marginTop: 30,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+  const content = (
+    <View
+      className={`flex w-full flex-col items-center h-full bg-neutral-50 ${
+        Platform.OS === "web" ? "p-[10px]" : "p-0"
+      } `}
+    >
+      <View className="flex flex-row justify-start">
+        <Text className="text-2xl font-bold ml-2">My Profile</Text>
+      </View>
+
+      <AvatarEdit avatarName={userDetails?.avatarName} />
+
+      {displayUpdatedAlert === "error" && (
+        <FadeInView
+          duration={200}
+          containerStyles="bg-green-400 shadow rounded-full p-2 w-[370px] m-6 flex items-center"
         >
-          <Text className="font-pbold text-lg">My Profile</Text>
-          <AvatarEdit avatarName={userDetails?.avatarName} />
+          <Text className="text-white text-base font-semibold">
+            Details Not updated, try again later.
+          </Text>
+        </FadeInView>
+      )}
 
-          {displayUpdatedAlert === "error" && (
-            <FadeInView
-              duration={200}
-              containerStyles="bg-green-400 shadow rounded-full p-2 w-[370px] m-6 flex items-center"
-            >
-              <Text className="text-white text-base font-semibold">
-                Details Not updated, try again later.
-              </Text>
-            </FadeInView>
-          )}
+      <View className="w-full max-w-[1000px] bg-white rounded-xl justify-center items-center shadow">
+        <InputFieldContainer
+          setFormField={setFormField}
+          currentVal={userDetails?.firstName}
+          field="firstName"
+        />
+        <InputFieldContainer
+          setFormField={setFormField}
+          currentVal={userDetails?.lastName}
+          field="lastName"
+        />
 
-          <View className="w-[95%] bg-white rounded-xl">
-            <InputFieldContainer
-              setFormField={setFormField}
-              currentVal={userDetails?.firstName}
-              field="firstName"
-            />
-            <InputFieldContainer
-              setFormField={setFormField}
-              currentVal={userDetails?.lastName}
-              field="lastName"
-            />
+        {userDetails.mode === "mentor" && <SubjectSelection />}
 
-            {userDetails.mode === "mentor" && <SubjectSelection />}
+        <EmailContainer setFormField={setFormField} />
+        <InputFieldContainer
+          setFormField={setFormField}
+          currentVal={userDetails?.partnership}
+          field="partnership"
+        />
+        {displayUpdatedAlert === "success" && (
+          <FadeInView
+            duration={200}
+            containerStyles="bg-green-400 shadow rounded-full p-2 w-[360px] flex items-center "
+          >
+            <Text className="text-white text-base font-semibold">
+              Details Updated Successfully
+            </Text>
+          </FadeInView>
+        )}
+        <SaveChangesButton
+          isLoading={isLoading}
+          handlePress={() => saveChanges()}
+        />
+        <View className="w-full h-[100px]"></View>
+      </View>
+    </View>
+  );
 
-            <EmailContainer setFormField={setFormField} />
-            <InputFieldContainer
-              setFormField={setFormField}
-              currentVal={userDetails?.partnership}
-              field="partnership"
-            />
-          </View>
-          {displayUpdatedAlert === "success" && (
-            <FadeInView
-              duration={200}
-              containerStyles="bg-green-400 shadow rounded-full p-2 w-[360px] flex items-center "
-            >
-              <Text className="text-white text-base font-semibold">
-                Details Updated Successfully
-              </Text>
-            </FadeInView>
-          )}
-          <SaveChangesButton handlePress={() => saveChanges()} />
-        </ScrollView>
-      </SafeAreaView>
-    </CustomKeyboardView>
+  return (
+    <View className="h-full w-full bg-neutral-50 ">
+      {width > 500 ? <NavHeaderBar /> : <GradientNavigation />}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#fafafa",
+        }}
+      >
+        {Platform.OS === "web" ? (
+          content
+        ) : (
+          <CustomKeyboardView containerStyles="h-full w-full bg-neutral-50 m-0 ">
+            <SafeAreaView>{content}</SafeAreaView>
+          </CustomKeyboardView>
+        )}
+      </ScrollView>
+    </View>
   );
 };
 

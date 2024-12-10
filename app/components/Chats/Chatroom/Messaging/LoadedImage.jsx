@@ -3,8 +3,9 @@ import {
   Text,
   ActivityIndicator,
   Modal,
-  Image,
+  // Image,
   StyleSheet,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 
@@ -12,13 +13,13 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Loading from "@/app/components/Loading/LoadingSpinner";
 import ExitButton from "@/app/components/Buttons/ExitButton";
 import FadeInView from "@/app/components/Effects/FadeInView";
-// import { Image } from "expo-image";
+import { Image } from "expo-image";
 
 export const FullScreenImage = ({ url, onClose }) => {
   const [loading, setLoading] = useState(false);
   return (
-    <Modal visible animationType="slide">
-      <View style={styles.container}>
+    <Modal visible animationType="fade">
+      <View className="h-full w-full flex items-center justify-center">
         <ExitButton toggleDisplay={onClose} />
         {loading && (
           <ActivityIndicator
@@ -46,7 +47,6 @@ const LoadedImage = React.memo(
     const [isFullScreen, setFullScreen] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    console.log("url", url);
     const openFullScreen = () => {
       setFullScreen(true);
     };
@@ -56,7 +56,7 @@ const LoadedImage = React.memo(
     };
 
     return (
-      <View className="flex w-full ">
+      <View className="flex w-full  ">
         {isFullScreen && (
           <FullScreenImage url={url} onClose={closeFullScreen} />
         )}
@@ -66,7 +66,9 @@ const LoadedImage = React.memo(
           }   ${isPreview ? "justify-center" : ""}`}
         >
           <View
-            className={` w-[254px]  rounded-xl  flex  p-[3px] flex-col justify-center items-center  ${
+            className={` w-[254px]  ${
+              Platform.OS === "web" ? "w-[208px]" : "w-[254px]"
+            }    rounded-xl  flex  p-[3px] flex-col justify-center items-center  ${
               thisUsersMessage ? "bg-orange-200  mr-2  " : "bg-purple  ml-2 "
             }  ${isPreview ? "bg-transparent m-0" : ""}`}
           >
@@ -75,13 +77,15 @@ const LoadedImage = React.memo(
               className="flex justify-center items-center"
               onPress={() => openFullScreen()}
             >
-              {/* {loading && (
+              {loading ? (
                 <ActivityIndicator
                   size="large"
                   color="purple"
                   // style={styles.loadingSpinner}
                 />
-              )} */}
+              ) : (
+                <></>
+              )}
               <FadeInView>
                 <Image
                   testID="image_element"
@@ -112,7 +116,6 @@ const LoadedImage = React.memo(
                     thisUsersMessage ? "" : "text-white"
                   } `}
                 >
-                  {" "}
                   {caption}
                 </Text>
               </View>

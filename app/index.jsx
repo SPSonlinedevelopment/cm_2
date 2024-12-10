@@ -4,7 +4,7 @@ NativeWindStyleSheet.setOutput({
   default: "native",
 });
 
-import { Text, View, Button, Alert } from "react-native";
+import { Text, View, Button, Alert, Platform } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import IconButton from "./components/Buttons/IconButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -23,7 +23,6 @@ import { Timestamp } from "firebase/firestore";
 import { ref } from "firebase/storage";
 import { storage } from "@/firebaseConfig";
 import { generateRandomId } from "@/utils/common";
-
 import { screenProfanities } from "@/utils/common";
 import Profile from "./profile";
 import { getObjectAsyncStorage } from "@/utils/common";
@@ -31,8 +30,6 @@ import {
   detectInnapropriateImageContent,
   deleteImagesWithFace,
 } from "./safeguarding/detectInappropriateImages";
-import Navigation from "./components/Navigation/Navigation";
-import NavHeaderBar from "./components/Navigation/NavHeaderBar";
 
 import { CreateRoomIfNotExists } from "../services/CreateRoomIfNotExists";
 
@@ -46,10 +43,7 @@ import {
 } from "@expo-google-fonts/montserrat";
 
 const RootLayout = () => {
-  console.log("index");
-
   const { user, userDetails } = useAuth();
-  console.log("🚀 ~ RootLayout ~ userDetails:", userDetails?.mode);
   const { setNewTextQuestion } = useChat();
   const [permission, requestPermission] = useCameraPermissions();
   const [isSavingtoCloudStorage, setIsSavingtoCloudStorage] = useState(false);
@@ -63,7 +57,6 @@ const RootLayout = () => {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [mode, setMode] = useState(null); // State to hold the mode
   const [menuVisible, setMenuVisible] = useState(false);
-  console.log("🚀 ~ RootLayout ~ mode:", mode);
 
   const [isConnected, setIsConnected] = useState(true);
 
@@ -106,7 +99,7 @@ const RootLayout = () => {
     return <View />;
   }
 
-  if (!permission.granted) {
+  if (!permission.granted && Platform.OS !== "web") {
     return (
       <View className="h-full bg-purple flex flex-col  items-center justify-center">
         <Text className="text-xl text-center text-white">
@@ -247,28 +240,37 @@ const RootLayout = () => {
     const storageRef = ref(storage, `images/${user?.uid}/${Date.now()}.jpg`);
 
     /// if image save image to google cloud storage
-    let url = image
-      ? await sendImageToFirebaseStorageGetDownloadUrl(image, storageRef)
-      : "";
+    let url = "";
+    if (image) {
+      try {
+        url = image
+          ? await sendImageToFirebaseStorageGetDownloadUrl(image, storageRef)
+          : "";
+
+        if (await deleteImagesWithFace(storageRef)) {
+          handleCleanup();
+          return;
+        }
+
+        if (await detectInnapropriateImageContent(storageRef)) {
+          handleCleanup();
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     try {
-      if (await deleteImagesWithFace(storageRef)) {
-        handleCleanup();
-        return;
-      }
-
-      if (await detectInnapropriateImageContent(storageRef)) {
-        handleCleanup();
-        return;
-      }
-
       const roomId = generateRandomId();
 
       // Prepare the question object
       const newQuestionObj = createQuestionObject(url, roomId);
+      console.log("🚀 ~ handleSendQuestion ~ newQuestionObj:", newQuestionObj);
 
       // Set new question in Firebase
       const result = await setNewTextQuestion(newQuestionObj);
+      console.log("🚀 ~ handleSendQuestion ~ result:", result);
 
       if (result.success) {
         // Wrap CreateRoomIfNotExists inside a separate function and call it
@@ -290,7 +292,10 @@ const RootLayout = () => {
   // Async function to handle room creation
   const handleCreateRoom = async (newQuestionObj) => {
     try {
-      const roomResult = await CreateRoomIfNotExists(newQuestionObj);
+      const roomResult = await CreateRoomIfNotExists(
+        newQuestionObj,
+        userDetails
+      );
       console.log("Room creation result:", roomResult);
     } catch (error) {
       console.log("Error creating room:", error);
@@ -380,9 +385,6 @@ const RootLayout = () => {
   return (
     <AuthContextProvider>
       <ChatContextProvider>
-        <Navigation setMenuVisible={setMenuVisible} menuVisible={menuVisible} />
-
-        <MenuButton handlePress={setMenuVisible} />
         {userDetails?.mode === "mentee" ? menteeIndex : <Profile />}
       </ChatContextProvider>
     </AuthContextProvider>

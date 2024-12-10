@@ -24,7 +24,7 @@ const SearchChats = ({ setSearchInput, searchInput }) => {
       <View
         className={`${
           displayCancelSearch ? "w-[75%]" : "w-[95%]"
-        }  px-4 flex-row  pl-4 m-1 h-full border-none rounded-full bg-[#F0F2F5] flex items-center  justify-start shadow fixed  transition ease-in-out`}
+        }  px-4 flex-row  pl-4 mx-2 h-full border-none rounded-full bg-[#F0F2F5] flex items-center  justify-start shadow fixed  transition ease-in-out`}
       >
         <FontAwesome name="search" size={15} color="black" />
         <TextInput
@@ -44,7 +44,7 @@ const SearchChats = ({ setSearchInput, searchInput }) => {
 
       {displayCancelSearch && (
         <TouchableOpacity
-          className="h-[40px] w-[20%] bg-neutral-100 shadow rounded-full  items-center flex justify-center"
+          className="h-[40px] w-[17%] mx-1 bg-[#F0F2F5] shadow rounded-full  items-center flex justify-center"
           title="Cancel"
           onPress={() => {
             setSearchInput("");

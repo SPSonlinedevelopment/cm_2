@@ -3,13 +3,13 @@ import React, { useEffect } from "react";
 import ChatItem from "./ChatItem";
 import { useChat } from "@/app/context/chatContext";
 
-const NewQuestionList = () => {
+const NewQuestionList = ({ setCompletedSessionWeb, setRoomIdWeb }) => {
   const { getWaitingQuestions, questions } = useChat();
 
-  // useEffect(() => {
-  //   const unsubscribe = getWaitingQuestions();
-  //   return () => unsubscribe();
-  // }, []);
+  useEffect(() => {
+    const unsubscribe = getWaitingQuestions();
+    return () => unsubscribe();
+  }, []);
 
   return (
     <FlatList
@@ -19,6 +19,8 @@ const NewQuestionList = () => {
       showsVerticalScrollIndicator={false}
       renderItem={({ item, index }) => (
         <ChatItem
+          setCompletedSessionWeb={setCompletedSessionWeb}
+          setRoomIdWeb={setRoomIdWeb}
           newQuestion={true}
           item={item}
           index={index}

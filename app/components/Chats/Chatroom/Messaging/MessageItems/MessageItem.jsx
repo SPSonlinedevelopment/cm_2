@@ -21,6 +21,11 @@ const MessageItem = React.memo(
     setSelectedMessage,
     setDisplayMessageSelectedModal,
     scrollToEnd,
+    displayDeleteMessageModal,
+    setDisplayDeleteMessageModal,
+    displayReportMessageModal,
+    setDisplayReportMessageModal,
+    setReplyMessageObj,
   }) => {
     const { showReply, handleMessageReplyScroll, triggerHaptics } =
       useReplyScroll(setReplyState, message);
@@ -36,6 +41,7 @@ const MessageItem = React.memo(
       : null;
 
     const handleSelectedMessage = (inputRef) => {
+      console.log("handle selected message clicked");
       const ref = inputRef.current;
 
       setDisplayMessageSelectedModal(true);
@@ -98,6 +104,12 @@ const MessageItem = React.memo(
       }
       return (
         <MessageText
+          setReplyMessageObj={setReplyMessageObj}
+          displayReportMessageModal={displayReportMessageModal}
+          setDisplayReportMessageModal={setDisplayReportMessageModal}
+          displayDeleteMessageModal={displayDeleteMessageModal}
+          setDisplayDeleteMessageModal={setDisplayDeleteMessageModal}
+          setReplyState={setReplyState}
           handleSelectedMessage={handleSelectedMessage}
           time={time}
           thisUsersMessage={thisUsersMessage}

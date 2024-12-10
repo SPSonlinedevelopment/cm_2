@@ -11,13 +11,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState, useRef } from "react";
-
 import { Feather } from "@expo/vector-icons";
-
 import { sendImageToFirebaseStorageGetDownloadUrl } from "../../../../../services/sendImages/sendImageToFirebaseStorageGetDownloadUrl";
-
 import { handleSendImageMessageToChatroom } from "../../../../../services/sendImages/handleSendImageMessageToChatroom";
-
 import { useAuth } from "@/app/context/authContext";
 import {
   detectInnapropriateImageContent,
@@ -51,6 +47,8 @@ const ImageMessageCaption = ({
   };
 
   const handleSend = async () => {
+    console.log("sending image");
+
     setIsSendingImage(true);
     setDisplayImageCaptionModal(false);
 
@@ -72,6 +70,7 @@ const ImageMessageCaption = ({
       if (await deleteImagesWithFace(storageRef)) return;
       if (await detectInnapropriateImageContent(storageRef)) return;
       setIsSendingImage(false);
+
       await handleSendImageMessageToChatroom(
         chatRoomData,
         textRef,
@@ -112,36 +111,39 @@ const ImageMessageCaption = ({
           )}
 
           <View
-            className={`${"pb-[20px]"}  shadow-2xl w-full flex flex-row justify-center absolute bottom-0  items-center `}
+            className={`${"pb-[20px]"}  shadow-2xl w-full flex flex-row  justify-center absolute bottom-0  items-center `}
           >
-            <View className="flex-row justify-around  items-center  w-full  p-2   z-10  ">
+            <View className="flex-row justify-around  items-center  w-full  p-2   z-10   ">
               <TextInput
+                placeholderTextColor={"grey"}
+                testID="text_message_input"
                 ref={inputRef}
-                // onFocus={() => setTextInputFocused(true)}
-                // onBlur={() => setTextInputFocused(false)}
                 onChangeText={(value) => {
-                  (textRef.current = value), handleChangeText();
+                  textRef.current = value;
                 }}
-                placeholderTextColor="white"
                 style={{
+                  backgroundColor: "white",
                   display: "flex",
-                  padding: 4,
+                  padding: 5,
+                  borderWidth: 0,
+                  outline: "none",
                 }}
-                className="flex-1 m-1 mr-3 rounded-full bg-black-200 border placeholder-white border-white text-white  text-base p-2 items-center justify-center"
+                className={`    ${
+                  Platform.OS === "web" && "h-[60px]"
+                }  flex-1 mr-1 text-base rounded-2xl  w-full p-2  m-3  items-center justify-center `}
                 multiline={true}
-                numberOfLines={10}
+                numberOfLines={Platform.OS !== "web" ? 2 : 1}
                 placeholder="Add an optional caption ..."
               />
-              {!inputFieldEmpty && (
-                <TouchableOpacity
-                  onPress={() => {
-                    handleSend();
-                  }}
-                  className="bh-neutral-200  text-base h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
-                >
-                  <Feather size={20} name="send" color="white" />
-                </TouchableOpacity>
-              )}
+
+              <TouchableOpacity
+                onPress={() => {
+                  handleSend();
+                }}
+                className="bh-neutral-200  text-base h-[35px] w-[35px]  flex items-center justify-center rounded-full bg-orange-600 pr-[2px]"
+              >
+                <Feather size={20} name="send" color="white" />
+              </TouchableOpacity>
             </View>
           </View>
         </KeyboardAvoidingView>

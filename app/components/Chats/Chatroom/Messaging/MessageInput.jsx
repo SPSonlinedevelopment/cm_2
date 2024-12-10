@@ -95,10 +95,14 @@ const MessageInput = React.memo(
       <View
         testID="message_input"
         className={`shadow-2xl   ${
-          Platform.OS === "web" ? "mb-[65px]" : "mb-[30px]"
+          Platform.OS === "web" ? "mb-[0px]" : "mb-[0px] pb-2"
         }  bg-neutral-200  shadow flex flex-row  items-center`}
       >
-        <View className="  w-full   flex-row  items-center justify-between">
+        <View
+          className={`w-full   flex-row  items-center justify-between  ${
+            Platform.OS === "web" ? "mb-[0px] " : ""
+          } `}
+        >
           <View className=" flex flex-row p-2">
             <TouchableOpacity
               testID="image_picker_button"
@@ -140,6 +144,8 @@ const MessageInput = React.memo(
             numberOfLines={Platform.OS !== "web" ? 2 : 1}
             placeholder="Type message ..."
           />
+
+          
           <View className="h-[55px] w-[50px]  justify-center items-center">
             {Platform.OS !== "web" ? (
               text.length > 0 ? (

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { View, Text, Modal } from "react-native";
+import { View, Text, Modal, Platform } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import React from "react";
 import IconButton from "@/app/components/Buttons/IconButton";
@@ -36,11 +36,11 @@ const TakePhotoModal = ({
     return <View />;
   }
 
-  if (!permission.granted) {
+  if (!permission.granted && Platform.OS !== "web") {
     return (
       <View className="h-full bg-purple flex flex-col  items-center justify-center">
         <Text className="text-xl text-white">
-          We need your permission to show the camera
+          33We need your permission to show the camera
         </Text>
 
         <IconButton

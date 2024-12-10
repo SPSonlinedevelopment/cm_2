@@ -62,19 +62,31 @@ const ChatItem = ({
   }, [item?.roomId]); // Re-run only if item.roomId changes
 
   const openChatRoom = () => {
-    if (Platform.OS !== "web") {
-      if (newQuestion) {
-        setDisplayPreview(true);
+    // no navigation required for web chat as chats and chatroom are on same page
+    if (Platform.OS === "web") {
+      if (!newQuestion) {
+        setRoomIdWeb(item?.roomId);
+        setCompletedSessionWeb(completedSession);
       } else {
-        navigation.navigate("chat-room", {
-          roomId: item?.roomId,
-          completedSession: completedSession,
-        });
+        setDisplayPreview(true);
       }
     } else {
-      setRoomIdWeb(item?.roomId);
-      setCompletedSessionWeb(completedSession);
+      // mobile
+      navigation.navigate("chat-room", {
+        roomId: item?.roomId,
+        completedSession: completedSession,
+      });
     }
+
+    // else {
+    //   navigation.navigate("chat-room", {
+    //     roomId: item?.roomId,
+    //     completedSession: completedSession,
+    //   });
+    // }
+
+    // setRoomIdWeb(item?.roomId);
+    // setCompletedSessionWeb(completedSession);
   };
 
   return (
@@ -84,6 +96,8 @@ const ChatItem = ({
         message={item}
         displayPreview={displayPreview}
         setDisplayPreview={setDisplayPreview}
+        setRoomIdWeb={setRoomIdWeb}
+        setCompletedSessionWeb={setCompletedSessionWeb}
       />
 
       <TouchableOpacity
@@ -137,7 +151,7 @@ const ChatItem = ({
             <Avatar avatarName={item.menteeAvatar} />
           )}
 
-          <View className="h-full w-[80%] mx-4 flex flex-col justify-between relative">
+          <View className="h-full w-[80%] mx-2 flex flex-col justify-between relative">
             {newQuestion && (
               <Text className="text-white font-bold">New Question</Text>
             )}
@@ -195,7 +209,7 @@ const ChatItem = ({
               </FadeInView>
             )}
 
-            {isMouseInside && Platform.OS === "web" && (
+            {/* {isMouseInside && Platform.OS === "web" && (
               <FadeInView containerStyles="flex absolute bottom-0 right-0">
                 <TouchableOpacity
                   className=" rotate-[-90deg]"
@@ -204,7 +218,7 @@ const ChatItem = ({
                   <Ionicons name="chevron-back" size={20} color="grey" />
                 </TouchableOpacity>
               </FadeInView>
-            )}
+            )} */}
           </View>
         </View>
       </TouchableOpacity>

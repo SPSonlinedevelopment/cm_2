@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, Modal, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  Image,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import ExitButton from "../Buttons/ExitButton";
 import Avatar from "../Profile/EditProfile/Avatar/Avatar";
-import MessageItem from "./Chatroom/Messaging/MessageItems/MessageItem";
 import MessageText from "./Chatroom/Messaging/MessageText";
 import LoadedImage, {
   FullScreenImage,
@@ -19,6 +25,8 @@ const ChatPreviewModal = ({
   displayPreview,
   message,
   roomId,
+  setRoomIdWeb,
+  setCompletedSessionWeb,
 }) => {
   const { userDetails } = useAuth();
   const navigation = useNavigation();
@@ -31,16 +39,13 @@ const ChatPreviewModal = ({
   const openChatRoom = async () => {
     const roomCollectionRef = collection(db, "rooms");
     const roomRef = doc(roomCollectionRef, roomId);
-
     const newQuestionCollectionRef = collection(db, "new_questions");
-
     const newQuestionDocRef = doc(newQuestionCollectionRef, roomId);
 
     try {
-      // delete the new question so cannot be reselected
       await deleteDoc(newQuestionDocRef);
 
-      // / need to handle instances where doc already deleted eg chat room rea
+      console.log("userDetails123", userDetails);
 
       await updateDoc(roomRef, {
         mentorName: userDetails?.firstName,
@@ -49,10 +54,17 @@ const ChatPreviewModal = ({
         connectedMentor: true,
       });
       setDisplayPreview(false);
-      navigation.navigate("chat-room", {
-        roomId: roomId,
-        completedSession: false,
-      });
+
+      if (Platform.OS !== "web") {
+        navigation.navigate("chat-room", {
+          roomId: roomId,
+          completedSession: false,
+        });
+      } else {
+        console.log("roomId222", roomId);
+        setRoomIdWeb(roomId);
+        setCompletedSessionWeb(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +83,7 @@ const ChatPreviewModal = ({
           onClose={setDisplayFullScreenImage}
         />
       )}
-      <View className="bg-black opacity-30 h-full w-full absolute "></View>
+      <View className="bg-black opacity-30 h-full w-full absolute " />
 
       <View className="absolute bottom-0   w-full  bg-white rounded-">
         <ExitButton toggleDisplay={setDisplayPreview} />

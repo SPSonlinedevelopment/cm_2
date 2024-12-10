@@ -1,4 +1,10 @@
-import { View, Text, Dimensions, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import ExitButton from "../../../Buttons/ExitButton";
 import { BlurView } from "expo-blur";
@@ -8,20 +14,22 @@ import Octicons from "@expo/vector-icons/Octicons";
 import MessageGeneralModal from "./MessageGeneralModal";
 import { usePositioning } from "../../../../hooks/usePositioning";
 import FadeInView from "@/app/components/Effects/FadeInView";
+// import { selectionButtons } from "./MessgeSelectOptions";
 
 const MessageSelectedModal = ({
   displayMessageSelectedModal,
   setDisplayMessageSelectedModal,
   selectedMessage,
   setReplyState,
+  displayDeleteMessageModal,
+  setDisplayDeleteMessageModal,
+  displayReportMessageModal,
+  setDisplayReportMessageModal,
+  replyMessageObj,
+  setReplyMessageObj,
 }) => {
   const { thisUsersMessage, message, width, height, time, roomId } =
     selectedMessage;
-  const [messageObj, setMessageObj] = useState({});
-  const [displayReportMessageModal, setDisplayReportMessageModal] =
-    useState(false);
-  const [displayDeleteMessageModal, setDisplayDeleteMessageModal] =
-    useState(false);
 
   const { isOffViewport, position, isReady, setIsReady } =
     usePositioning(selectedMessage);
@@ -41,14 +49,14 @@ const MessageSelectedModal = ({
 
   const handleReport = async () => {
     setDisplayReportMessageModal(true);
-    setMessageObj({
+    setReplyMessageObj({
       message: message,
       roomId,
     });
   };
 
   const handleDelete = () => {
-    setMessageObj({
+    setReplyMessageObj({
       message: message,
       roomId,
     });
@@ -68,11 +76,6 @@ const MessageSelectedModal = ({
       func: handleReport,
       icon: <Octicons name="report" size={24} color="black" />,
     },
-    // {
-    //   title: "Copy",
-    //   func: handleCopy,
-    //   icon: <Ionicons name="copy-outline" size={24} color="black" />,
-    // },
     {
       title: "Delete",
       func: handleDelete,
@@ -80,115 +83,125 @@ const MessageSelectedModal = ({
     },
   ];
 
+  const modals = (
+    <>
+      <MessageGeneralModal
+        setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+        displayModal={displayReportMessageModal}
+        setDisplayModal={setDisplayReportMessageModal}
+        text={{
+          headerText: "Report message",
+          bodyText:
+            " This message will be forwarded to the Collet Mentoring Team and investigated. The sender will not be notified.",
+        }}
+        messageObj={replyMessageObj}
+        type="report"
+      />
+
+      <MessageGeneralModal
+        setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
+        displayModal={displayDeleteMessageModal}
+        setDisplayModal={setDisplayDeleteMessageModal}
+        text={{
+          headerText: "Delete message",
+          bodyText: "This message will be deleted from the chat.",
+        }}
+        type="delete"
+        messageObj={replyMessageObj}
+      />
+    </>
+  );
+
   return (
-    displayMessageSelectedModal && (
-      <BlurView
-        intensity={60}
-        tint="dark"
-        className="w-full h-full absolute z-[200]  "
-      >
-        <ExitButton
-          toggleDisplay={() => {
-            setDisplayMessageSelectedModal(false);
-            setIsReady(false);
-          }}
-        />
+    <>
+      {modals}
 
-        <MessageGeneralModal
-          setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-          displayModal={displayReportMessageModal}
-          setDisplayModal={setDisplayReportMessageModal}
-          text={{
-            headerText: "Report message",
-            bodyText:
-              " This message will be forwarded to the Collet Mentoring Team and investigated. The sender will not be notified.",
-          }}
-          messageObj={messageObj}
-          type="report"
-        />
-
-        <MessageGeneralModal
-          setDisplayMessageSelectedModal={setDisplayMessageSelectedModal}
-          displayModal={displayDeleteMessageModal}
-          setDisplayModal={setDisplayDeleteMessageModal}
-          text={{
-            headerText: "Delete message",
-            bodyText: "This message will be deleted from the chat.",
-          }}
-          type="delete"
-          messageObj={messageObj}
-        />
-
-        {isReady && selectedMessage && (
-          <View
-            style={{
-              zIndex: 100,
-              position: "absolute",
-              left: position.x || null,
-              top: position.y || null,
-              display: "flex",
-              alignItems: thisUsersMessage ? "flex-end" : "flex-start",
-              width: width,
+      {displayMessageSelectedModal && Platform.OS !== "web" && (
+        <BlurView
+          intensity={60}
+          tint="dark"
+          className="w-full h-full absolute z-[200]"
+        >
+          <ExitButton
+            toggleDisplay={() => {
+              setDisplayMessageSelectedModal(false);
+              setIsReady(false);
             }}
-          >
+          />
+
+          {isReady && selectedMessage && (
             <View
-              className={`  ${
-                thisUsersMessage ? "bg-orange-200  " : "bg-purple"
-              }   rounded-xl  opacity-100 p-3 shadow-lg `}
               style={{
-                zIndex: 200,
-                position: "relative",
+                zIndex: 100,
+                position: "absolute",
+                left: position.x || null,
+                top: position.y || null,
+                display: "flex",
+                alignItems: thisUsersMessage ? "flex-end" : "flex-start",
                 width: width,
-                height: height,
               }}
             >
-              <Text
-                className={` ${thisUsersMessage ? "" : "text-white"} text-base`}
-              >
-                {message?.text}
-              </Text>
-              {time && (
-                <View className=" w-full  flex items-end mt-1 ">
-                  <Text
-                    className={` ${
-                      thisUsersMessage ? "" : "text-white"
-                    } text-xs`}
-                  >
-                    {time}
-                  </Text>
-                </View>
-              )}
               <View
-                className={`h-3 w-2   absolute    ${
-                  thisUsersMessage
-                    ? "bg-orange-200 bottom-0 rotate-[-30deg] right-[-2px]  rounded-bl-xl  "
-                    : "bg-purple  bottom-0 rotate-[30deg] left-[-2px]  rounded-br-xl   "
-                }`}
-              />
-            </View>
+                className={`${
+                  thisUsersMessage ? "bg-orange-200" : "bg-purple"
+                } rounded-xl opacity-100 p-3 shadow-lg`}
+                style={{
+                  zIndex: 200,
+                  position: "relative",
+                  width: width,
+                  height: height,
+                }}
+              >
+                <Text
+                  className={`${
+                    thisUsersMessage ? "" : "text-white"
+                  } text-base`}
+                >
+                  {message?.text}
+                </Text>
 
-            <View className={`mt-3 bg-white  rounded-xl  relative  `}>
-              {selectionButtons.map((button) => {
-                return (
+                {time && (
+                  <View className="w-full flex items-end mt-1">
+                    <Text
+                      className={`${
+                        thisUsersMessage ? "" : "text-white"
+                      } text-xs`}
+                    >
+                      {time}
+                    </Text>
+                  </View>
+                )}
+
+                <View
+                  className={`h-3 w-2 absolute ${
+                    thisUsersMessage
+                      ? "bg-orange-200 bottom-0 rotate-[-30deg] right-[-2px] rounded-bl-xl"
+                      : "bg-purple bottom-0 rotate-[30deg] left-[-2px] rounded-br-xl"
+                  }`}
+                />
+              </View>
+
+              <View className="mt-3 bg-white rounded-xl relative">
+                {selectionButtons.map((button) => (
                   <ActionButton
                     key={button.title}
                     handlePress={button.func}
                     icon={button.icon}
                     title={button.title}
                   />
-                );
-              })}
+                ))}
+              </View>
             </View>
-          </View>
-        )}
-      </BlurView>
-    )
+          )}
+        </BlurView>
+      )}
+    </>
   );
 };
 
 export default MessageSelectedModal;
 
-const ActionButton = ({ handlePress, title, icon }) => {
+export const ActionButton = ({ handlePress, title, icon }) => {
   return (
     <TouchableOpacity
       onPress={() => handlePress()}

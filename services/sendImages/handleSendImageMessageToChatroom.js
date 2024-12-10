@@ -2,6 +2,8 @@ import { doc, collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { Alert } from "react-native";
 
+
+
 export const handleSendImageMessageToChatroom = async (
   item,
   textRef,

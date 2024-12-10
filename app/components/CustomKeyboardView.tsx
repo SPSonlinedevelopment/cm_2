@@ -34,7 +34,7 @@ const CustomKeyboardView: React.FC<KavProps> = ({
       behavior={ios ? "padding" : "height"}
       contentContainerStyle={styles.container}
     >
-      <View style={{ height: "100%" }}>
+      <View className={`${containerStyles}`} style={{ height: "100%" }}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           {...scrollViewConfig}

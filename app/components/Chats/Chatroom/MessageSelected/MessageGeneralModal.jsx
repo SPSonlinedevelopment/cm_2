@@ -6,7 +6,7 @@ import IconButton from "@/app/components/Buttons/IconButton";
 import { auth } from "@/firebaseConfig";
 import { useAuth } from "@/app/context/authContext";
 import CustomKeyboardView from "@/app/components/CustomKeyboardView";
-import switchMode from "@/services/switchMode";
+import { switchMode } from "@/services/switchMode";
 
 const MessageGeneralModal = ({
   messageObj,
@@ -28,6 +28,7 @@ const MessageGeneralModal = ({
     try {
       await auth.currentUser.delete();
       Alert.alert("Account delete successful");
+      // needs a web alert
     } catch (error) {
       Alert.alert(
         "Account delete unsuccessful",
